@@ -106,12 +106,14 @@ end
 
 function love.mousepressed(x, y, button)
     if trans.phase then return end
+    if button == 1 and love.keyboard.isDown('lctrl', 'rctrl') then button = 2 end
     local s = screens[current]
     if s.mousepressed then s.mousepressed(x, y, button) end
 end
 
 function love.mousereleased(x, y, button)
     if trans.phase then return end
+    if button == 1 and love.keyboard.isDown('lctrl', 'rctrl') then button = 2 end
     local s = screens[current]
     if s.mousereleased then s.mousereleased(x, y, button) end
 end
