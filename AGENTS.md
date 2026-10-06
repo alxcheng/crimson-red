@@ -1,5 +1,20 @@
 # Crimson Red — Project Memory
 
+## Roles & workflow
+- **Director = the user.** Only talks to the manager. Gives new features + screen-by-screen
+  playtest feedback (what they like/don't), and decides rollbacks/changes.
+- **Manager = the Lead agent** (me). Scopes features, delegates to developer agents
+  (teammates) with disjoint write-scopes, reviews/integrates results, and reports back
+  to the Director. The Director never talks to dev agents directly.
+- **Dev agents = spawned teammates.** Each owns a scoped slice (e.g. `encounter/`, an
+  asset set, a screen) and reports to the manager.
+- **Loop:** Director gives feature/feedback → Manager scopes & delegates → team
+  implements → Manager delivers a playable build → Director playtests → Director
+  writes feedback → Manager iterates/rolls back until "done" → repeat.
+- **Design baseline:** encounters should function like **Battleheart** (CR is a "mod" of
+  it — same underlying systems, new classes/enemies/stages). See
+  `work/battleheart-encounter-parity.md` for the feature-gap roadmap.
+
 ## What this is
 A 2D turn-based tactical/RPG game built in **LÖVE2D (Lua)**. Virtual resolution
 **800×450 (16:9)**, letterboxed to a resizable window. The current focus is the
