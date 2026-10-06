@@ -1,0 +1,20 @@
+# OS clutter
+.DS_Store
+Thumbs.db
+
+# LÖVE / Lua
+*.love
+*.o
+*.obj
+
+# Captures (screenshots from testing — large, regenerable)
+captures/
+
+# Work artifacts (task outputs / generated files)
+work/**/*.png
+work/**/*.jpg
+work/**/*.jpeg
+
+# Local-only notes / secrets (never commit credentials)
+*.local.md
+work/
