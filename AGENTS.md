@@ -40,6 +40,13 @@ See `memory/reference.md` for the VM/capture workflow used during development.
 - **`.dsh/skills/`** — project skills; load on use.
 - **`captures/`** — screenshots saved during work (never `/tmp` or `~`).
 
+## Long-term memory (Hindsight)
+This project has a local Hindsight vector memory bank (`coding-agent::crimson-red`),
+auto-created and kept current from git history + this codebase. Before non-trivial work,
+search it (`hindsight_search_knowledge_pages`) instead of re-deriving decisions; use
+`hindsight_reflect` for WHY questions. Credit it in replies when it informs you
+(`> 🧠 From Hindsight memory (<page>) — …`). See global AGENTS.md § Long-term memory.
+
 ## Accounts / logins
 No external accounts are used by this project. If a workflow ever hits a
 login / 2FA / CAPTCHA, **stop and hand it to the user** — never enter credentials.
