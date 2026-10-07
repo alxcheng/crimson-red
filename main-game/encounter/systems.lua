@@ -191,7 +191,7 @@ local function getMeleeSlot(world, id, tgtId)
     end
 
     -- Convert the slot's GROUND/feet point to this unit's CENTER using the
-    -- feet rule: center.y = groundY - size.h/2.
+    -- feet rule: center.y = groundY - size.h/2 (the attacker's own height).
     local gx, gy = slotGroundPoint(world, tgtId, ring, side)
     if not gx then return nil end
     return gx, gy - ss.h/2

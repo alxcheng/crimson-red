@@ -591,7 +591,7 @@ M.DB.WizardAutoFireball = {
     animListIdx = 3, animLock = 0,
     delay = 15/60,
     effect = {
-        kind = "damage", tags = { "Ranged", "Fire" }, vfx = false,
+        kind = "damage", tags = { "Ranged", "Fire" }, vfx = true,
         ability = { aimedShot = true, falloff = 1.5, canCrit = true },
     },
 }
