@@ -283,9 +283,22 @@ function M.checkMeleeRange(world, srcId, tgtId)
     local sp, ss = world.position[srcId], world.size[srcId]
     local tp, ts = world.position[tgtId], world.size[tgtId]
     if not (sp and ss and tp and ts) then return false end
-    local dx = math.max(0, math.abs(sp.x-tp.x) - (ss.w/2+ts.w/2))
-    local dy = math.max(0, math.abs(sp.y-tp.y) - (ss.h/2+ts.h/2))
-    return dx <= 6 and dy <= 2
+    -- BH's melee gate is a FLAT center-to-center distance test (attack fires
+    -- iff dist <= 1.8 + aoeRadiusBonus); sprite size never enters the test —
+    -- it only enters via the per-target authored slot offsets. We mirror that:
+    -- a per-attacker "reach" (base 6 [tuned] + a fraction of the attacker's
+    -- own body, so bigger melee units swing a bit farther) is compared against
+    -- the horizontal GAP between bodies, instead of one global 6px slack that
+    -- skewed badly when source/target sizes differ (a big boss vs a small
+    -- melee read "in range" from far away; the reverse read "out of range"
+    -- while visually touching). Vertical tolerance is a generous height band
+    -- [tuned] since all units are feet-aligned and 39-78px tall; the old 2px
+    -- was too tight and produced the "near but out / far but in" artifact.
+    local reach = 6 + 0.25 * ss.w   -- [tuned] BH flat-reach analogue
+    local gapX  = math.max(0, math.abs(sp.x - tp.x) - (ss.w/2 + ts.w/2))
+    local inRangeX = gapX <= reach
+    local inRangeY = math.abs(sp.y - tp.y) <= 18  -- [tuned] feet-aligned height band
+    return inRangeX and inRangeY
 end
 
 -- ============================================================================

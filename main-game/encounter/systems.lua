@@ -140,6 +140,11 @@ local function purgePosition(world, tgtId, id)
     if not next(s) then t[tgtId] = nil end
 end
 
+-- Reference half-width the RING table was authored for: a Knight is 30*SCALE
+-- wide → half-width 15*SCALE = 22.5px at the fixed SCALE = VH/300 = 1.5.
+-- [tuned]
+local REF_HALF_W_PX = 22.5
+
 -- Ground/feet point for a slot, relative to the target's current feet.
 local function slotGroundPoint(world, tgtId, ring, side)
     local tp, ts = world.position[tgtId], world.size[tgtId]
@@ -148,8 +153,16 @@ local function slotGroundPoint(world, tgtId, ring, side)
     if not ringData then return nil end   -- defensive: ring out of range
     local off = ringData[side]
     if not off then return nil end        -- defensive: side out of range
+    -- BH widens the melee slot ring for bigger targets (per-prefab authored
+    -- offsets) so melee stand flush OUTSIDE a boss's body while staying
+    -- inside the flat range gate "by construction". We approximate that by
+    -- scaling the authored offset with how much wider the target is than the
+    -- reference (Knight) width: narrower/equal targets → scale 1 (byte-
+    -- identical to before), a 32px-wide Champion → ~1.03, a 2x-width boss →
+    -- ~2.0. [tuned]
+    local scale = 1 + 0.5 * math.max(0, (ts.w/2) - REF_HALF_W_PX) / REF_HALF_W_PX
     local feetX, feetY = tp.x, tp.y + ts.h/2
-    return feetX + off.x, feetY + off.y
+    return feetX + off.x * scale, feetY + off.y * scale
 end
 
 local function hasActiveAction(world, id)
@@ -260,6 +273,12 @@ function M.targetFollow(world)
         local atSlotY = math.abs(sp.y - ty) <= 4
         if atSlotX and atSlotY then
             mt.active = false
+            -- Settle deadzone (BH's 0.07-settle analogue): once within the
+            -- arrival tolerance, snap EXACTLY onto the slot center. Without
+            -- this, the last sub-pixel approach in moveTarget (which stops at
+            -- dist<1) leaves the unit hovering ~1px off and re-triggering the
+            -- follow check every frame — micro-oscillation.
+            sp.x = tx; sp.y = ty
         else
             mt.x = tx; mt.y = ty; mt.active = true
         end
@@ -306,8 +325,15 @@ end
 -- PHYSICS
 -- ============================================================================
 
+-- Feet may not sink below the play area: bottom bound = VH(in) - inset.
+-- VH here is ALREADY the resource-bar-adjusted bottom (call site passes
+-- VH - RESOURCE_BAR_AREA_H), so the inset is a small visual margin above
+-- that line. [tuned]
+local FEET_BOTTOM_INSET = 12
+
 function M.physics(world, dt, VW, VH, BATTLE_LINE_Y, FRICTION, MASS)
     local fric = math.pow(FRICTION, 60 * dt)
+    local feetBottomMax = VH - FEET_BOTTOM_INSET  -- [tuned]
     for id in pairs(world.entities) do
         local pos, ph, sz = world.position[id], world.physics[id], world.size[id]
         if not (pos and ph) then goto continue end
@@ -328,12 +354,12 @@ function M.physics(world, dt, VW, VH, BATTLE_LINE_Y, FRICTION, MASS)
                     if not he.v and mb >= BATTLE_LINE_Y then he.v = true end
                     if he.v then
                         if mb < BATTLE_LINE_Y then pos.y = BATTLE_LINE_Y - sz.h/2 end
-                        if mb > VH then pos.y = VH - sz.h/2 end
+                        if mb > feetBottomMax then pos.y = feetBottomMax - sz.h/2 end
                     end
                 else
                     pos.x = math.max(sz.w/2, math.min(VW - sz.w/2, pos.x))
                     if mb < BATTLE_LINE_Y then pos.y = BATTLE_LINE_Y - sz.h/2 end
-                    if mb > VH then pos.y = VH - sz.h/2 end
+                    if mb > feetBottomMax then pos.y = feetBottomMax - sz.h/2 end
                 end
             elseif sd and sd.s == 1 then
                 local he = world.hasEntered[id]
@@ -344,7 +370,7 @@ function M.physics(world, dt, VW, VH, BATTLE_LINE_Y, FRICTION, MASS)
                 if he and not he.v and mb >= BATTLE_LINE_Y then he.v = true end
                 if he and he.v then
                     if mb < BATTLE_LINE_Y then pos.y = BATTLE_LINE_Y - sz.h/2 end
-                    if mb > VH then pos.y = VH - sz.h/2 end
+                    if mb > feetBottomMax then pos.y = feetBottomMax - sz.h/2 end
                 end
             end
         end
