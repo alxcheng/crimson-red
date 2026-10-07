@@ -3,7 +3,7 @@
 ## Role & loop
 Manager (Lead) of a playtest loop: Director (user) gives features/feedback -> Manager scopes & delegates -> dev teammates implement -> playable build -> Director playtests -> iterate. Director talks only to the Manager. CR = LÖVE2D "mod" of Battleheart: same systems, new content. KEEP the shared Clash-Royale resource bar (max 50) — deliberate deviation.
 
-## What exists (commit be9a043, branch master)
+## What exists (commit f76eeaf, branch master)
 - Encounter P0 foundation (verified ./test_headless PASS): two-stage damage (combat.roll -> combat.resolve; enemies no defense), indexed statuses incl SLOW/SHIELD/DOT-ticks/PARALYZE, 6-slot ring formation, data-driven abilities, pay-at-press queueing, per-unit EXEC_GATE=0.4.
 - 4 ported BH classes (Cleric/Paladin/Wizard/Rogue) — proof-of-port, recolored Knight frames; Cleric NO auto-attack; Paladin specials + Rogue multipliers are approximations; Meteor x2.0.
 - Party select: click-to-move (verified by code read, NOT yet by Director playtest).
@@ -12,6 +12,7 @@ Manager (Lead) of a playtest loop: Director (user) gives features/feedback -> Ma
 - Research: work/battleheart-encounter-parity.md + work/non-encounter-systems-research.md (IL-verified mechanics, divergence plan, Director Qs in §7).
 - [DONE @ 198e6c9] Center-Y alignment fix: unified moveTarget to center-coord convention (targetFollow/moveTarget/right-click/walk-in) — fixed infinite-repositioning + vertical drift. Director: "basically fixed."
 - [DONE @ be9a043] Alignment streamlining (P0+P1+P3) mirroring BH (IL-verified): P0 combat.lua checkMeleeRange now size-aware (per-attacker reach 6+0.25*w vs horizontal body gap + flat 18px center-Y band, was size-blind dx<=6/dy<=2); P1 systems.lua slotGroundPoint scales the 6-slot ring by target width (1+0.5*max(0,(w/2-22.5)/22.5), scale>=1 so normal units byte-identical, bigger targets wider ring → melee stand flush outside boss); P3a targetFollow snaps to exact slot center on arrival (kill micro-osc, BH 0.07-settle analogue); P3b physics bottom feet clamp tightened 12px inset both sides. Headless PASS (errors=0). BH alignment model detail: work/ + Hindsight doc "BH combat alignment model (IL-verified)".
+- [DONE @ f76eeaf] Anti-clumping straddle (BH parity): 2nd+ melee attacker now prefers the OPPOSITE side of the first occupant so two attackers straddle the target (one left/one right) instead of clumping on one side; 3rd+ load-balances to the less-populated side; 1st attacker byte-identical (X-based). systems.lua requestPosition rewritten + fillSide/firstOccupantSide helpers; mirrors BH EnemyScript::requestPosition 2nd-attacker branch (IL L20452-20489). Headless PASS (errors=0).
 
 ## Non-negotiable conventions
 1. Feet-aligned: center stored, feet = pos.y+h/2.
