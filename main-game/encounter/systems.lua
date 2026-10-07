@@ -251,13 +251,13 @@ function M.targetFollow(world)
         local tp = world.position[et.id]
         if not (sp and ss and tp) then goto continue end
 
-        -- Unit must reach its exact slot before it can attack.
-        -- Check X and Y proximity to the assigned slot directly — not just
-        -- "in range" or "on the right side", which both pass while still
-        -- in transit through the target area.
-        local footY  = sp.y + ss.h / 2
+        -- Unit must reach its exact slot before it can attack. Check X and Y
+        -- proximity to the assigned slot CENTER (tx, ty are center coords from
+        -- getMeleeSlot) against the unit's CENTER (sp.x, sp.y). Comparing to
+        -- the unit's FEET (sp.y + h/2) here would be off by half a height and
+        -- the unit would never register as "arrived" → infinite repositioning.
         local atSlotX = math.abs(sp.x - tx) <= 4
-        local atSlotY = math.abs(ty - footY) <= 4
+        local atSlotY = math.abs(sp.y - ty) <= 4
         if atSlotX and atSlotY then
             mt.active = false
         else
@@ -281,7 +281,13 @@ function M.moveTarget(world, dt)
         local sn = world.stun[id]; if sn and sn.stunned then goto continue end
         local pos, sz, ss, ph = world.position[id], world.size[id], world.stats[id], world.physics[id]
         if not (pos and sz and ss and ph) then goto continue end
-        local dx = mt.x - pos.x; local dy = mt.y - (pos.y + sz.h/2)
+        -- mt.x/mt.y are CENTER coordinates (set by targetFollow from
+        -- getMeleeSlot, or by the right-click move which stores the clicked
+        -- point as a center). Compute the direction against the unit's CENTER
+        -- (pos.x, pos.y), NOT its feet. Using the feet here caused a vertical
+        -- drift/oscillation: the unit chased a point that was always half a
+        -- height above/below where it actually was, so it never settled.
+        local dx = mt.x - pos.x; local dy = mt.y - pos.y
         local dist = math.sqrt(dx*dx + dy*dy)
         if dist < 1 then mt.active = false; goto continue end
         dx, dy = dx/dist, dy/dist

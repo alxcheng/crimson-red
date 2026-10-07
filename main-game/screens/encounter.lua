@@ -369,8 +369,11 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
         end
         if id then
             world.hasEntered[id]        = {h=false, v=false}
+            -- pos.x/pos.y is the GROUND/feet point for this slot ("midbottom Y").
+            -- moveTarget treats mt.y as a CENTER coord, so convert: center.y =
+            -- groundY - size.h/2. (size.h equals SLOT_H for all party classes.)
             world.moveTarget[id].x      = pos.x
-            world.moveTarget[id].y      = pos.y
+            world.moveTarget[id].y      = pos.y - SLOT_H / 2
             world.moveTarget[id].active = true
             table.insert(battle.partyIds, id)
         end
@@ -584,8 +587,17 @@ function M.mousepressed(x, y, button)
             world.entityTarget[su] = nil
             world.hasAttacked[su]  = nil
         end
+        -- Right-click move: vmx/vmy is a GROUND/feet point (where the player
+        -- clicked). moveTarget treats mt.x/mt.y as CENTER coords, so convert:
+        -- center.y = groundY - size.h/2 (the feet rule). This makes the unit
+        -- stop with its FEET at the clicked point, matching the old behavior.
         local mt = world.moveTarget[su]
-        if mt then mt.x=vmx; mt.y=vmy; mt.active=true end
+        local suSz = world.size[su]
+        if mt and suSz then
+            mt.x = vmx
+            mt.y = vmy - suSz.h / 2
+            mt.active = true
+        end
         local sk = world.skills[su]
         if sk and sk.list[0] then sk.list[0].cd = 0 end
         effects_mod.cancelActions(world, su)
