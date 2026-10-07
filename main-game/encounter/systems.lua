@@ -144,8 +144,11 @@ end
 local function slotGroundPoint(world, tgtId, ring, side)
     local tp, ts = world.position[tgtId], world.size[tgtId]
     if not (tp and ts) then return nil end
+    local ringData = RING[ring]
+    if not ringData then return nil end   -- defensive: ring out of range
+    local off = ringData[side]
+    if not off then return nil end        -- defensive: side out of range
     local feetX, feetY = tp.x, tp.y + ts.h/2
-    local off = RING[ring][side]
     return feetX + off.x, feetY + off.y
 end
 
