@@ -100,26 +100,70 @@ local function backfillSide(world, tgtId, side)
     end
 end
 
--- Request a slot on the target's ring for `id`. Fills inside-out on the
--- chosen side; a newer attacker displaces an inner occupant outward. Returns
--- the (ring, side) of the slot, or nil when the ring is full on that side.
-local function requestPosition(world, tgtId, id, preferBack)
-    local side = sideOf(world, tgtId, id, preferBack)
-    local s = slotsFor(world, tgtId)
+-- Fill inside-out on one side with newcomer-wins bumping. Returns the ring
+-- taken, or nil when that side is full on every ring.
+local function fillSide(world, tgtId, id, side)
+    local s = world.slots and world.slots[tgtId]
+    if not s then return nil end
     for r = 1, NUM_RINGS do
         local idx = (r-1)*2 + side
         if s[idx] == nil then
             s[idx] = id
-            return r, side
+            return r
         end
         -- Inner slot occupied → try to push that occupant one ring out so we
         -- can take the closer slot (newcomer-wins behavior).
         if displaceOutward(world, tgtId, idx) then
             s[idx] = id
-            return r, side
+            return r
         end
     end
-    return nil -- full: caller falls back to "stay put"
+    return nil
+end
+
+-- The side (1=left, 2=right) on which any current occupant of the target's
+-- ring stands, or nil when no one occupies the ring yet. (All occupants of a
+-- freshly-filled ring are on the same side; once straddling kicks in the two
+-- sides are both populated and either reading gives the "first" side for
+-- straddle purposes, because the 2nd+ path only needs *a* side to flip.)
+local function firstOccupantSide(world, tgtId)
+    local s = world.slots and world.slots[tgtId]
+    if not s then return nil end
+    for idx, owner in pairs(s) do
+        if owner then return idx % 2 == 0 and 2 or 1 end
+    end
+    return nil
+end
+
+-- Request a slot on the target's ring for `id`. Returns the (ring, side) of
+-- the slot, or nil when the ring is full on every side (caller "stays put").
+--
+-- Side selection mirrors Battleheart (EnemyScript::requestPosition):
+--   * 1st attacker on the target: side by horizontal position (X-based,
+--     preferBack honored) — byte-identical to the pre-change behavior.
+--   * 2nd+ attacker: prefer the OPPOSITE side of the first occupant so the
+--     two attackers STRADDLE the target (BH's anti-clumping). Behind-facing
+--     is a tiebreak only: if the opposite side is unavailable, we fall back
+--     to the other side inside-out rather than collapsing onto the same
+--     side as the first occupant.
+local function requestPosition(world, tgtId, id, preferBack)
+    local firstSide = firstOccupantSide(world, tgtId)
+    local s = slotsFor(world, tgtId)
+    if not s or not next(s) then
+        -- First attacker: X-based (or preferBack) side, inside-out.
+        local side = sideOf(world, tgtId, id, preferBack)
+        local r = fillSide(world, tgtId, id, side)
+        if r then return r, side end
+        return nil
+    end
+    -- 2nd+ attacker: straddle the first occupant.
+    local prefSide = (firstSide == 1) and 2 or 1
+    local otherSide = (prefSide == 1) and 2 or 1
+    local r = fillSide(world, tgtId, id, prefSide)
+    if r then return r, prefSide end
+    r = fillSide(world, tgtId, id, otherSide)
+    if r then return r, otherSide end
+    return nil -- full on both sides: caller falls back to "stay put"
 end
 
 -- Release `id`'s slot on target `tgtId` and backfill outer occupants inward.
