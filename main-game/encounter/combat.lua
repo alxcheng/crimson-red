@@ -145,6 +145,16 @@ function M.resolve(world, victimId, baseAmount, srcId, opts)
 
     local final = baseAmount * (1 + buffFrac + debuffFrac)
 
+    -- SHIELD: flat fraction of incoming damage removed (0..0.95, additive,
+    -- clamped by status.getMods). Applies BEFORE the party-side min-3 floor
+    -- per the INTEGRATOR CONTRACT at the top of encounter/status.lua, so a
+    -- shield can never push a hit below the floor — the floor still wins.
+    -- victimMods was already fetched above (nil only when the status system
+    -- is absent, in which case this is a no-op).
+    if victimMods and victimMods.shieldReduction > 0 then
+        final = final * (1 - victimMods.shieldReduction)
+    end
+
     local negated = false
     if party then
         -- Flat armor subtract (BH: -(defense + sentinelDefense); CR has DEF

@@ -80,7 +80,6 @@ local done          = false -- set when goals met (or hard cap reached); prints 
 -- all 12 have actually gone through the enqueue path (success or reject).
 local pendingEnq    = {}    -- list of {id, slot} not yet enqueued
 local pumpCursor    = 1
-local TOPUP_FRAME   = 6     -- top-up window (frames) before each press
 local MAX_PUMP_PASS = 600   -- hard cap on pump retries per press (anti-infinite-loop)
 
 local function aliveCounts()

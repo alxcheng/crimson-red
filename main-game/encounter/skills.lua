@@ -212,7 +212,14 @@ function M.system(world, battle, dt)
                 -- target can never re-fire / double-refund.
                 local ok = skill.use(world, battle, id, skill)
                 table.remove(q, 1)
-                if ok then sk.execGate = M.EXEC_GATE end
+                if ok then
+                    sk.execGate = M.EXEC_GATE
+                    -- Activation camera-punch (shake + chroma + zoom on the
+                    -- caster). Only fires when the ability ACTUALLY activated
+                    -- (use queued the timed effect) — not when a slot was
+                    -- dropped for a dead target.
+                    combat.triggerActivationVFX(battle, id, world)
+                end
             end
             -- Not in range / no valid target yet → leave it queued; it waits
             -- until the unit gets in range (resource already paid at press).

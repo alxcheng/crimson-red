@@ -3,6 +3,7 @@
 local stats_mod  = require("encounter/stats")
 local anim_mod   = require("encounter/anim")
 local combat     = require("encounter/combat")
+local status_mod = require("encounter/status")
 
 local statGet = stats_mod.get
 
@@ -281,7 +282,9 @@ function M.moveTarget(world, dt)
         local dist = math.sqrt(dx*dx + dy*dy)
         if dist < 1 then mt.active = false; goto continue end
         dx, dy = dx/dist, dy/dist
-        local spd = statGet(ss.MOVE_SPEED) * 30
+        -- SLOW debuff: movement speed multiplier (1 = normal, lower = slower).
+        -- See the INTEGRATOR CONTRACT at the top of encounter/status.lua.
+        local spd = statGet(ss.MOVE_SPEED) * 30 * status_mod.getSlowFactor(world, id)
         local moveAmt = math.min(spd * dt, dist)
         pos.x = pos.x + dx * moveAmt; pos.y = pos.y + dy * moveAmt
         local fc = world.facing[id]
