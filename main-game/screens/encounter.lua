@@ -43,6 +43,20 @@ local battle = {
 local iconImages = {}
 local assetsLoaded = false
 
+-- Pause (Director's screenshot aid): freezes ALL simulation + animations.
+-- Toggled by the top-right pause icon or the P key. While paused, M.update
+-- skips every system tick; draw still runs so the screen stays visible.
+local paused = false
+
+-- Pause icon: top-right corner. 28x28 hit area, 4px from the edges.
+local PAUSE_BTN_SIZE = 28
+local PAUSE_BTN_PAD  = 6
+local function pauseBtnRect()
+    return VW - PAUSE_BTN_PAD - PAUSE_BTN_SIZE,
+           PAUSE_BTN_PAD,
+           PAUSE_BTN_SIZE, PAUSE_BTN_SIZE
+end
+
 local switchFn
 local saveData_ref, slot_ref
 
@@ -222,8 +236,47 @@ local function drawScene(dt)
 
     love.graphics.setFont(battle.smallFont)
     love.graphics.setColor(1, 1, 1, 0.55)
-    love.graphics.print("1-2: select  Q/W/E: skills (20 res)  K: spawn  RClick: target/move  Esc: retreat", 5, VH - RESOURCE_BAR_AREA_H - 14)
+    love.graphics.print("1-2: select  Q/W/E: skills (20 res)  K: spawn  RClick: target/move  P: pause  Esc: retreat", 5, VH - RESOURCE_BAR_AREA_H - 14)
     love.graphics.setColor(1, 1, 1, 1)
+
+    -- Pause button (top-right): two bars when running, a play-triangle when
+    -- paused (the universal "click to resume" affordance).
+    do
+        local px, py, pw, ph = pauseBtnRect()
+        love.graphics.setColor(0, 0, 0, 0.45)
+        love.graphics.rectangle("fill", px, py, pw, ph)
+        love.graphics.setColor(1, 1, 1, 0.9)
+        love.graphics.setLineWidth(1)
+        love.graphics.rectangle("line", px + 0.5, py + 0.5, pw - 1, ph - 1)
+        if not paused then
+            -- Two pause bars.
+            local barW, barH = 5, ph * 0.5
+            local gap = 5
+            local bx = px + (pw - (barW * 2 + gap)) / 2
+            love.graphics.rectangle("fill", bx, py + (ph - barH) / 2, barW, barH)
+            love.graphics.rectangle("fill", bx + barW + gap, py + (ph - barH) / 2, barW, barH)
+        else
+            -- Play triangle (resume).
+            local cx, cy = px + pw / 2, py + ph / 2
+            local r = ph * 0.32
+            love.graphics.polygon("fill",
+                cx - r * 0.6, cy - r,
+                cx - r * 0.6, cy + r,
+                cx + r,       cy)
+        end
+    end
+
+    -- PAUSED overlay (subtle dim + label) so the Director knows the sim is
+    -- frozen and the screenshot is stable.
+    if paused then
+        love.graphics.setColor(0, 0, 0, 0.35)
+        love.graphics.rectangle("fill", 0, 0, VW, VH)
+        love.graphics.setFont(battle.font)
+        local txt = "PAUSED"
+        local tw  = battle.font:getWidth(txt)
+        love.graphics.setColor(1, 1, 1, 0.9)
+        love.graphics.print(txt, (VW - tw) / 2, 14)
+    end
 end
 
 -- ============================================================================
@@ -333,6 +386,11 @@ function M.onExit()
 end
 
 function M.update(dt)
+    -- PAUSED: freeze all simulation + animations. Draw still runs (M.draw is
+    -- separate), so the screen stays visible for screenshots. Only the pause
+    -- toggle itself is still handled (in mousepressed/keypressed).
+    if paused then return end
+
     -- Victory timeout → return to map
     if battle.victoryTimer then
         battle.victoryTimer = battle.victoryTimer - dt
@@ -418,10 +476,24 @@ function M.update(dt)
 end
 
 function M.keypressed(key)
+    -- P toggles pause (works even while paused).
+    if key == "p" then
+        paused = not paused
+        common.playClickSound()
+        return
+    end
+
     if key == "escape" then
+        -- Esc unpauses if paused; otherwise retreats to the map.
+        if paused then
+            paused = false
+            return
+        end
         switchFn("map", saveData_ref, slot_ref)
         return
     end
+
+    if paused then return end   -- while paused, ignore combat/selection keys
 
     if key == "1" and battle.partyIds[1] and not battle.deadSlots[1] then battle.selectedUnit = battle.partyIds[1] end
     if key == "2" and battle.partyIds[2] and not battle.deadSlots[2] then battle.selectedUnit = battle.partyIds[2] end
@@ -447,6 +519,19 @@ end
 
 function M.mousepressed(x, y, button)
     local vmx, vmy = common.virtualMouse()
+
+    -- Pause button (top-right): toggles the freeze. Checked FIRST so it works
+    -- even while paused, and never falls through to unit selection.
+    if button == 1 then
+        local px, py, pw, ph = pauseBtnRect()
+        if vmx >= px and vmx < px + pw and vmy >= py and vmy < py + ph then
+            paused = not paused
+            common.playClickSound()
+            return
+        end
+    end
+
+    if paused then return end   -- while paused, ignore all other input
 
     if button == 1 then
         for i, id in ipairs(battle.partyIds) do
