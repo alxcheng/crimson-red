@@ -3,10 +3,11 @@
 ## Role & loop
 Manager (Lead) of a playtest loop: Director (user) gives features/feedback -> Manager scopes & delegates -> dev teammates implement -> playable build -> Director playtests -> iterate. Director talks only to the Manager. CR = LÖVE2D "mod" of Battleheart: same systems, new content. KEEP the shared Clash-Royale resource bar (max 50) — deliberate deviation.
 
-## What exists (commit be7e10a, branch master, pushed)
+## What exists (commit 94a6e99, branch master, pushed)
 - Encounter P0 foundation (verified ./test_headless PASS): two-stage damage (combat.roll -> combat.resolve; enemies no defense), indexed statuses incl SLOW/SHIELD/DOT-ticks/PARALYZE, 6-slot ring formation, data-driven abilities, pay-at-press queueing, per-unit EXEC_GATE=0.4.
 - 4 ported BH classes (Cleric/Paladin/Wizard/Rogue) — proof-of-port, recolored Knight frames; Cleric NO auto-attack; Paladin specials + Rogue multipliers are approximations; Meteor x2.0.
 - Party select: click-to-move (verified by code read, NOT yet by Director playtest).
+- 3 integration lines wired (commit 94a6e99, headless PASS): SLOW now actually slows movement (systems.moveTarget × status.getSlowFactor), SHIELD now actually reduces incoming damage (combat.resolve × shieldReduction, before min-3 floor), activation camera-punch fires on active-ability activation (skills.lua → combat.triggerActivationVFX). Also dropped unused TOPUP_FRAME local in headless_test.lua.
 - Headless: ./test_headless at project root; env CR_HEADLESS/CR_TEST_MODE/CR_TEST_SCENE=headless; never open windows on Director screen; visible path byte-identical without flags.
 - Research: work/battleheart-encounter-parity.md + work/non-encounter-systems-research.md (IL-verified mechanics, divergence plan, Director Qs in §7).
 
@@ -23,7 +24,7 @@ Manager (Lead) of a playtest loop: Director (user) gives features/feedback -> Ma
 - Playtest pending: (a) encounter foundation + 4 classes, (b) party-select click feel.
 - BH DB VALUES PERMANENTLY UNEXTRACTABLE from current datamine (no AssetBundles present; dump census VFX/sprites/audio only at <datamine>/decompiled/resources/assets/bin/Data/_bh_extract_out/json/). Do NOT retry extraction there. Values stay [wiki]/[tuned] until a new source (APK with .assets bundles, or Legacy files). .NET runtimes installed: ~/.dotnet (arm64) + ~/.dotnet-x64 (x86_64 under Rosetta).
 - Director decisions queued (non-encounter report §7): floors replace levels (default yes)? lean item catalog 3 grades/~15 (yes)? hire flat-per-floor vs 10xlevel? choice every 3 vs 5 levels? per-kill gold drip 1-2? stable seed per floor number?
-- VERIFY BEFORE RELYING (flagged unwired, never confirmed): systems.moveTarget multiply speed by status_mod.getSlowFactor(world,id); combat.resolve apply finalDamage*(1-shieldReduction) BEFORE min-3 floor; triggerActivationVFX unreachable via enqueue path (activation camera-punch gone).
+- [DONE @ 94a6e99] 3 flagged integration lines now wired (verified 21345e0 → fixed 94a6e99, headless PASS): SLOW→moveTarget, SHIELD→combat.resolve (before min-3 floor), activation camera-punch on active-ability activation. Previously: flagged unwired, never confirmed.
 - Trivial leftovers: TOPUP_FRAME unused local headless_test.lua L83.
 
 ## Key files
