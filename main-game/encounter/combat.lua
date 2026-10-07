@@ -377,6 +377,23 @@ function M.registerHit(world, battle, srcId, tgtId, keywords, useVFX, SCALE, GRA
 
     effects_mod.readTagSystem(world, battle, {src=srcId, tgt=tgtId, keywords=kw, amount=dmg})
 
+    -- CHAIN LIGHTNING (Paladin Wrath): if the attacker carries an active CHAIN
+    -- buff and this was a MELEE hit, arc lightning to nearby foes and consume
+    -- one charge. The charge count lives in the status magnitude, so each melee
+    -- hit fires exactly one chain until the imbue's charges run out (~10s at the
+    -- paladin's swing cadence). Fully data-driven — no per-ability closure.
+    local sstore = world.status and world.status[srcId]
+    local cidx = status_mod.CHAIN
+    local ce = cidx and sstore and sstore.buffs[cidx]
+    if ce and (ce.magnitude or 0) > 0 and kw.keywords == "Melee" then
+        local abilities_mod = require("encounter/abilities")
+        abilities_mod._applyChain(world, battle, srcId, tgtId, ce.chainParams or {})
+        ce.magnitude = ce.magnitude - 1   -- consume one charge
+        if ce.magnitude <= 0 then
+            status_mod.remove(world, srcId, true, cidx)
+        end
+    end
+
     local tgtMt = world.moveTarget[tgtId]
     if world.targetSide[tgtId] == 1 and not world.entityTarget[tgtId]
        and not (tgtMt and tgtMt.active)

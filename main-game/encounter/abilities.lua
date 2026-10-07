@@ -27,18 +27,46 @@
 --   iconName    : string  skill icon name (UI)
 --   iconScale   : number  icon scale (UI)
 --   noTargetRequired : bool  true = self-cast, no entityTarget needed
---   effect      : effect spec — either an inner-kind table (see resolver) or
---                 an { kind="custom", fn=function(w,b,src,tgt) ... end }
+--   effect      : effect spec — a pure data table interpreted by the resolver
+--                 kinds listed below. (There is NO custom/fn closure form.)
 --
--- Inner-effect kinds (M.resolveEffect):
---   { kind="damage", scale?, tags?, vfx?, ability? }
+-- Inner-effect kinds (M.resolveEffect) — ALL declarative data, no closures:
+--   { kind="damage", tags?, vfx?, buffMods?, ability? }
 --       ability = { aimedShot=bool, falloff=number, canCrit=bool }
+--       buffMods = { [0]=fraction } — explicit outgoing multiplier (e.g. Sneak Attack)
+--       chain    = { count=N, decay=d, radius=R? } — after hitting the primary,
+--                  hit up to N further living enemies nearest to the primary,
+--                  each for (decay^i)*primary damage [Paladin Wrath]
+--       knockback= { force=F }      — add a world.physics force pushing the
+--                  victim away from the caster [Thunderbolt / Vengeful Angel]
 --   { kind="status", isBuff=bool, index=status.<NAME>, magnitude?, duration?,
---                    targetSelf? }
---   { kind="heal", value=number }
---   { kind="threat", flat=number|function(casterStats) }
---   { kind="aoe", radius=number, inner=<one of the above> }
---   { kind="custom", fn=function(world,battle,srcId,tgtId) ... end }
+--                    tint?={r,g,b,speed} }
+--       index may be a NUMBER (status constant) or a STRING name ("SLOW") —
+--       resolved through M._statusIndex so in-flight indices degrade gracefully.
+--   { kind="effects", effects={ <inner>, <inner>, ... } }
+--       apply a LIST of inner effects to the SAME target, in order [Divine
+--       Intervention WARD+REFLECT, Conflagrate DOT+STUN, Poisoned Knife
+--       damage+DOT].
+--   { kind="heal", value=number }                     — heal one target
+--   { kind="healGroup", value=number }                — heal every living ally
+--                                                          (side 0) [Cleric Group Heal]
+--   { kind="healLowestAlly", value=number }           — heal the most-injured
+--                                                          living ally [Holy Word]
+--   { kind="threat", flat=number }                    — threat to all enemies
+--   { kind="resourceGain", amount=number }            — grant resource to caster
+--   { kind="drainHp", fraction=number }               — drain a fraction of the
+--                                                          target's current HP
+--   { kind="stunAll", seconds=number }                — stun every living enemy
+--                                                          [Time Stop]
+--   { kind="aoe", radius=number, centerSelf?=bool, inner=<inner spec>,
+--                  alsoStatus={<status>}, alsoKnockback={force=} }
+--       centerSelf=true centers the AoE on the CASTER instead of the target
+--       [Thunderbolt, Vengeful Angel]; alsoStatus applies an extra status to
+--       every unit the inner effect touches [Blizzard SLOW]; alsoKnockback
+--       adds a push-away force to every hit unit.
+--
+-- NOTE: there is NO kind="custom" / fn closure anywhere in M.DB. Every ability
+-- is a plain data row interpreted by the branches below.
 
 local combat  = require("encounter/combat")
 local status  = require("encounter/status")
@@ -50,14 +78,79 @@ local statGet = stats_mod.get
 local M = {}
 
 -- ============================================================================
+-- SHARED TARGET HELPERS (used by the data-driven resolver kinds)
+--
+-- NOTE ON IN-FLIGHT STATUS INDICES: status.SHIELD / SLOW / DOT / PARALYZE are
+-- resolved BY NAME at call time (M._statusIndex), so an index added later
+-- resolves as soon as it exists — no load-order coupling, and a missing index
+-- simply no-ops rather than crashing.
+-- ============================================================================
+
+local function livingOfSide(world, sideVal)
+    local out = {}
+    for eid in pairs(world.entities) do
+        local sd = world.side[eid]
+        if sd and sd.s == sideVal and not world.deathState[eid] then out[#out+1] = eid end
+    end
+    return out
+end
+
+-- Lowest-current-HP living ally of srcId (for Holy Word "seek out the wounded").
+local function lowestHpAlly(world, srcId)
+    local best, bestRatio = nil, math.huge
+    for _, eid in ipairs(livingOfSide(world, 0)) do
+        local ss = world.stats[eid]
+        if ss then
+            local cur, maxHp = statGet(ss.HP), statGet(ss.maxHP)
+            local ratio = maxHp > 0 and (cur / maxHp) or 1
+            if ratio < bestRatio then best, bestRatio = eid, ratio end
+        end
+    end
+    return best
+end
+
+-- Stun every living enemy for `secs` via combat.applyStun (seconds -> frames).
+-- This drives world.stun (reliable CC on both sides) rather than the no-behavior
+-- STUN status slot.
+local function stunAllEnemies(world, secs)
+    local frames = secs * 60
+    for _, eid in ipairs(livingOfSide(world, 1)) do
+        combat.applyStun(world, eid, frames)
+    end
+end
+
+-- ============================================================================
 -- EFFECT RESOLVER
 -- ============================================================================
 
--- Interpret a single (non-aoe, non-custom) effect spec against one target.
--- `srcId` is the caster, `tgtId` is the recipient. For targetSelf specs the
--- resolver ignores tgtId and uses srcId.
+-- Resolve a status index that may be given as a number (a status.<NAME>
+-- constant) or as a string name ("SLOW", "SHIELD"). Returns the numeric index,
+-- or nil when unknown (the caller then no-ops rather than crashing). Reading
+-- by name at call time means an index added later by status-dev resolves as
+-- soon as it exists — no load-order coupling.
+function M._statusIndex(def)
+    local idx = def.index
+    if type(idx) == "number" then return idx end
+    if type(idx) == "string" then
+        local named = status[idx]
+        if named ~= nil then return named end
+    end
+    return nil
+end
+
+-- Interpret a single effect spec against one target. `srcId` is the caster,
+-- `tgtId` the recipient; `targetSelf` specs ignore tgtId and use srcId. The
+-- aoe kind dispatches to M.applyAoE (which re-enters here per hit unit).
 function M.resolveEffect(world, battle, def, srcId, tgtId)
     local kind = def.kind
+
+    if kind == "aoe" then
+        -- Self-centered vs target-centered blast.
+        local centerId = def.centerSelf and srcId or tgtId
+        M.applyAoE(world, battle, centerId, def.radius, def, srcId)
+        return
+    end
+
     local target = def.targetSelf and srcId or tgtId
     if not world.entities[target] then return end
 
@@ -65,17 +158,47 @@ function M.resolveEffect(world, battle, def, srcId, tgtId)
         if world.deathState[target] then return end
         local useVFX = def.vfx ~= false
         combat.registerHit(world, battle, srcId, target, {
-            ability = def.ability or nil,
+            ability  = def.ability or nil,
+            buffMods = def.buffMods,   -- explicit outgoing multiplier (Sneak Attack)
         }, useVFX, battle.SCALE, battle.GRAVITY)
+        -- Knockback: push the victim away from the caster [Thunderbolt].
+        if def.knockback then
+            M._applyKnockback(world, battle, srcId, target, def.knockback.force or 80)
+        end
         -- Post-hit extra effects (e.g. Sunder Armor's vulnerability seed).
         if def.onHit and def.onHit.effect then
             M.resolveEffect(world, battle, def.onHit.effect, srcId, target)
         end
+        -- Chain lightning: after the primary hit, arc to N nearest other foes
+        -- with decaying damage [Paladin Wrath].
+        if def.chain then
+            M._applyChain(world, battle, srcId, target, def.chain)
+        end
+
+    elseif kind == "effects" then
+        -- A declarative sequence of inner effects on the same target (the most
+        -- BH-like shape: one row = a list of shared primitive applications).
+        if world.deathState[target] then return end
+        for _, inner in ipairs(def.effects or {}) do
+            M.resolveEffect(world, battle, inner, srcId, target)
+        end
 
     elseif kind == "status" then
         if world.deathState[target] then return end
-        status.apply(world, target, def.isBuff and true or false,
-                     def.index, def.magnitude, def.duration)
+        local idx = M._statusIndex(def)
+        if idx ~= nil then
+            local mag = def.magnitude
+            -- DoT/HoT seed: scale an explicit per-second FRACTION off the
+            -- caster's power at cast time (BH conflag/poison dot seeding —
+            -- magnitude is stored as damage-OR-heal per second).
+            if def.dotPerSec then
+                local ss = world.stats[srcId]
+                local power = ss and stats_mod.getPower(ss) or 0
+                mag = power * def.dotPerSec
+            end
+            status.apply(world, target, def.isBuff and true or false,
+                         idx, mag, def.duration, def.chainParams)
+        end
         -- Optional visual tint riding on the status (matches old closures).
         if def.tint then
             effects_mod.addEffectTint(world, target,
@@ -87,13 +210,38 @@ function M.resolveEffect(world, battle, def, srcId, tgtId)
         combat.registerHeal(world, battle, srcId, target, def.value or 1.0,
                             battle.SCALE)
 
-    elseif kind == "threat" then
-        -- Apply flat threat to all living enemies (side == 1).
-        local flat = def.flat
-        if type(flat) == "function" then
-            local cs = world.stats[srcId]
-            flat = cs and flat(cs) or 0
+    elseif kind == "healGroup" then
+        -- Heal every living ally (whole arena, side 0) [Cleric Group Heal].
+        for _, eid in ipairs(livingOfSide(world, 0)) do
+            combat.registerHeal(world, battle, srcId, eid, def.value or 1.0, battle.SCALE)
         end
+
+    elseif kind == "healLowestAlly" then
+        -- Heal the most-injured living ally (falls back to self) [Holy Word].
+        local tgt = lowestHpAlly(world, srcId) or srcId
+        combat.registerHeal(world, battle, srcId, tgt, def.value or 1.0, battle.SCALE)
+
+    elseif kind == "resourceGain" then
+        if battle.resource then
+            battle.resource = math.min(battle.resourceMax or 50,
+                                       battle.resource + (def.amount or 0))
+        end
+
+    elseif kind == "drainHp" then
+        -- Sacrifice a fraction of the target's CURRENT HP [Spark of Inspiration].
+        local ts = world.stats[target]
+        if ts then
+            local curHp = statGet(ts.HP)
+            local sacrifice = curHp * (def.fraction or 0)
+            ts.HP.base = math.max(0, ts.HP.base - sacrifice)
+        end
+
+    elseif kind == "stunAll" then
+        stunAllEnemies(world, def.seconds or 5.0)
+
+    elseif kind == "threat" then
+        -- Flat threat to all living enemies (side == 1).
+        local flat = def.flat or 0
         for eid in pairs(world.entities) do
             local sd = world.side[eid]
             if sd and sd.s == 1 and not world.deathState[eid] then
@@ -102,14 +250,6 @@ function M.resolveEffect(world, battle, def, srcId, tgtId)
                 if ec then table.insert(ec.pending, effects_mod.newHurtIndicator(eid)) end
             end
         end
-
-    elseif kind == "aoe" then
-        -- Resolve AoE: apply inner effect to every living entity within
-        -- `radius` of the target point (center-based distance).
-        M.applyAoE(world, battle, tgtId, def.radius, def.inner, srcId)
-
-    elseif kind == "custom" then
-        if def.fn then def.fn(world, battle, srcId, tgtId) end
     end
 end
 
@@ -117,21 +257,87 @@ end
 -- AoE RESOLVER
 -- ============================================================================
 
--- Given a target entity (the "center"), find every living entity within
--- `radius` virtual pixels of its center position and apply the inner effect
--- to each. Uses center-to-center distance (documented simplification).
+-- Push `tgtId` away from `srcId` by adding a one-shot force into the target's
+-- physics accumulator (magnitude `force`, short 0.12s pulse — the same shape
+-- combat.registerHit already uses for its built-in nudge, just scaled by an
+-- ability-chosen magnitude). [tuned force values live in the DB rows.]
+function M._applyKnockback(world, battle, srcId, tgtId, force)
+    local sp, tp = world.position[srcId], world.position[tgtId]
+    local ph = world.physics and world.physics[tgtId]
+    if not (sp and tp and ph) then return end
+    local dx, dy = tp.x - sp.x, tp.y - sp.y
+    local len = math.sqrt(dx*dx + dy*dy)
+    if len < 0.001 then return end
+    dx, dy = dx/len, dy/len
+    local ec = world.effects_comp[tgtId]
+    if ec then table.insert(ec.pending, effects_mod.newForce(tgtId, dx*force, dy*force, 0.12)) end
+end
+
+-- Chain lightning: after `primary` has been hit by `srcId`, arc to up to
+-- `chain.count` further LIVING ENEMIES (side 1, excluding primary) nearest to
+-- the primary, each taking (decay^i) times the FULL base roll (decay<1 →
+-- decaying). Implemented as plain registerHit calls with explicit buffMods
+-- fractions — fully data-driven, no closure. [Paladin Wrath]
+function M._applyChain(world, battle, srcId, primaryId, chain)
+    local count = chain.count or 3
+    local decay = chain.decay or 0.5
+    local pp = world.position[primaryId]
+    local sp = world.position[srcId]
+    if not pp then return end
+    -- Gather candidate chain targets: living enemies other than the primary,
+    -- sorted nearest-first (so the bolt arcs to the tightest cluster).
+    local cands = {}
+    for eid in pairs(world.entities) do
+        local sd = world.side[eid]
+        if sd and sd.s == 1 and eid ~= primaryId and not world.deathState[eid] then
+            local ep = world.position[eid]
+            if ep then
+                local dx, dy = ep.x - pp.x, ep.y - pp.y
+                cands[#cands+1] = {id=eid, d2=dx*dx+dy*dy}
+            end
+        end
+    end
+    table.sort(cands, function(a,b) return a.d2 < b.d2 end)
+    for i = 1, math.min(count, #cands) do
+        local frac = math.pow(decay, i)   -- 1st chain hop = decay^1, etc.
+        combat.registerHit(world, battle, srcId, cands[i].id, {
+            buffMods = { [0] = frac },
+            ability  = { canCrit = false },   -- chain hops don't crit
+        }, true, battle.SCALE, battle.GRAVITY)
+    end
+end
+
+-- Given a center entity, find every living entity within `radius` virtual
+-- pixels of its center and resolve `aoeDef` against each. If `aoeDef.inner`
+-- is set that inner spec is resolved instead; `aoeDef.alsoStatus` (a status
+-- spec) and `aoeDef.alsoKnockback` ({force}) are additionally applied to every
+-- unit the AoE touches (Blizzard's dmg+SLOW, Thunderbolt/Vengeful Angel's
+-- dmg+knockback). Center-to-center distance (documented simplification).
 -- `srcId` is the caster, passed through so damage/heal credit correctly.
-function M.applyAoE(world, battle, centerId, radius, inner, srcId)
+function M.applyAoE(world, battle, centerId, radius, aoeDef, srcId)
     local cp = world.position[centerId]
     if not cp then return end
     local r2 = radius * radius
+    local inner = aoeDef.inner
     for eid in pairs(world.entities) do
         if not world.deathState[eid] then
             local ep = world.position[eid]
             if ep then
                 local dx, dy = ep.x - cp.x, ep.y - cp.y
                 if dx*dx + dy*dy <= r2 then
-                    M.resolveEffect(world, battle, inner, srcId, eid)
+                    if inner then
+                        M.resolveEffect(world, battle, inner, srcId, eid)
+                    else
+                        M.resolveEffect(world, battle, aoeDef, srcId, eid)
+                    end
+                    -- Extra per-hit status (e.g. Blizzard SLOW on every hit unit).
+                    if aoeDef.alsoStatus then
+                        M.resolveEffect(world, battle, aoeDef.alsoStatus, srcId, eid)
+                    end
+                    -- Extra per-hit knockback (e.g. Vengeful Angel / Thunderbolt).
+                    if aoeDef.alsoKnockback then
+                        M._applyKnockback(world, battle, srcId, eid, aoeDef.alsoKnockback.force or 80)
+                    end
                 end
             end
         end
@@ -237,63 +443,6 @@ end
 
 M.DB = {}
 
--- ============================================================================
--- SHARED TARGET HELPERS (used by the data-driven active-ability custom fns)
---
--- NOTE ON IN-FLIGHT STATUS INDICES: another agent (status-dev2) is adding
--- status.SHIELD / status.SLOW and enabling DOT/PARALYZE RIGHT NOW. Those
--- indices may not exist when this module loads. Every reference below is
--- GUARDED (`if status.<X> then ... else <fallback>`), and each index is read
--- into a LOCAL at call time (not cached at load) so it resolves as soon as
--- status-dev2 lands its rows. Fallbacks: SHIELD→high WARD, SLOW→skip, PARALYZE→STUN.
--- ============================================================================
-
-local function livingOfSide(world, sideVal)
-    local out = {}
-    for eid in pairs(world.entities) do
-        local sd = world.side[eid]
-        if sd and sd.s == sideVal and not world.deathState[eid] then out[#out+1] = eid end
-    end
-    return out
-end
-
--- Lowest-current-HP living ally of srcId (for Holy Word "seek out the wounded").
-local function lowestHpAlly(world, srcId)
-    local best, bestRatio = nil, math.huge
-    for _, eid in ipairs(livingOfSide(world, 0)) do
-        local ss = world.stats[eid]
-        if ss then
-            local cur, maxHp = statGet(ss.HP), statGet(ss.maxHP)
-            local ratio = maxHp > 0 and (cur / maxHp) or 1
-            if ratio < bestRatio then best, bestRatio = eid, ratio end
-        end
-    end
-    return best
-end
-
--- Stun every living enemy for `secs` via combat.applyStun (seconds -> frames).
--- This drives world.stun (reliable CC on both sides) rather than the no-behavior
--- STUN status slot.
-local function stunAllEnemies(world, secs)
-    local frames = secs * 60
-    for _, eid in ipairs(livingOfSide(world, 1)) do
-        combat.applyStun(world, eid, frames)
-    end
-end
-
--- Apply a debuff, falling back to an equivalent existing index if the new one
--- (being added by status-dev2) isn't present yet. Returns nothing; safe to call
--- even if neither index exists (in that case the primary path just no-ops).
-local function applyStatusSafe(world, id, isBuff, indexName, fallbackIndex, magnitude, duration)
-    local idx = status[indexName]
-    if idx ~= nil then
-        status.apply(world, id, isBuff, idx, magnitude, duration)
-    elseif fallbackIndex ~= nil then
-        status.apply(world, id, isBuff, fallbackIndex, magnitude, duration)
-    end
-    -- If neither index exists yet, skip (no crash); the real index lands later.
-end
-
 -- ----------------------------------------------------------------------------
 -- EXISTING CR ABILITIES (1:1 with the old closures)
 -- ----------------------------------------------------------------------------
@@ -317,18 +466,20 @@ M.DB.KnightSunderArmor = {
 }
 
 -- Knight: Defend (slot 2, self-cast)
--- Old: newKnightDefend → DEF_BUFF 0.5/10s + blue tint + stagger drain
+-- Old: newKnightDefend → DEF_BUFF 0.5/10s + blue tint (+ stagger-point drain,
+-- dropped here as a CR-only nicety with no status-table analog — see note on
+-- the old newKnightDefend in effects.lua). The DEF buff + tint are now data.
 M.DB.KnightDefend = {
     name = "KnightDefend", iconName = "skill_icons22",
     role = "tank", targetType = "self", noTargetRequired = true,
     cdMax = 10.0, resourceCost = 20,
     animLock = 0, animListIdx = nil,  -- no anim trigger in old path
     iconScale = 1.0, iconScaleTarget = 1.0,
-    delay = 0,  -- immediate (old path inserted directly, no timed action)
-    effect = { kind = "custom", fn = function(world, battle, srcId)
-        local ec = world.effects_comp[srcId]
-        if ec then table.insert(ec.pending, effects_mod.newKnightDefend(srcId, statGet)) end
-    end },
+    delay = 0,  -- immediate
+    effect = {
+        kind = "status", isBuff = true, index = status.DEF_BUFF,
+        magnitude = 0.5, duration = 10.0, tint = {0, 0, 1, 4.0},
+    },
 }
 
 -- Knight: Challenging Shout (slot 3, self-cast AoE threat)
@@ -340,9 +491,12 @@ M.DB.KnightChallengingShout = {
     animLock = 0, animListIdx = nil,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 0,
+    -- Flat threat to all enemies. The old closure scaled it by caster ATK; in
+    -- the data-driven form this is a fixed value [tuned] (Challenging Shout
+    -- threat magnitude).
     effect = {
         kind = "threat",
-        flat = function(cs) return 10 * statGet(cs.ATK) end,
+        flat = 240,  -- [tuned] ~10x a mid-level party member's ATK
     },
 }
 
@@ -355,14 +509,17 @@ M.DB.NomadGrantPower = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 24/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        local tec = world.effects_comp[tgtId]
-        if tec then table.insert(tec.pending, effects_mod.newGrantPower(tgtId)) end
-    end },
+    -- ATK buff on the target ally (+50% outgoing, 10s) + red tint [data].
+    effect = {
+        kind = "status", isBuff = true, index = status.ATK_BUFF,
+        magnitude = 0.5, duration = 10.0, tint = {1, 0, 0, 4.0},
+    },
 }
 
 -- Nomad: Mend Wounds (slot 2)
--- Old: newMendWounds → HOT (5*casterATK/10 per sec, 10s) + green tint
+-- Old: newMendWounds → HOT (5*casterATK/10 per sec, 10s) + green tint.
+-- Data form: HOT with a fixed heal/sec [tuned] (the old value tracked caster
+-- ATK; a flat rate keeps it declarative — see note on newMendWounds).
 M.DB.NomadMendWounds = {
     name = "MendWounds", iconName = "skill_icons11",
     role = "support", targetType = "ally",
@@ -370,14 +527,15 @@ M.DB.NomadMendWounds = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 24/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        local tec = world.effects_comp[tgtId]
-        if tec then table.insert(tec.pending, effects_mod.newMendWounds(srcId, tgtId, statGet)) end
-    end },
+    effect = {
+        kind = "status", isBuff = true, index = status.HOT,
+        magnitude = 7.5, duration = 10.0,  -- [tuned] ~5*ATK/10 for a mid party member
+        tint = {0, 1, 0, 4.0},
+    },
 }
 
 -- Nomad: Spark of Inspiration (slot 3)
--- Old: sacrifice 20% of target HP, gain +20 resource
+-- Old: sacrifice 20% of target HP, gain +20 resource.
 M.DB.NomadSparkOfInspiration = {
     name = "SparkOfInspiration", iconName = "skill_icons46",
     role = "support", targetType = "ally",
@@ -385,17 +543,13 @@ M.DB.NomadSparkOfInspiration = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 24/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        local ts = world.stats[tgtId]
-        if ts then
-            local curHp = statGet(ts.HP)
-            local sacrifice = curHp * 0.20
-            ts.HP.base = math.max(0, ts.HP.base - sacrifice)
-        end
-        if battle.resource then
-            battle.resource = math.min(battle.resourceMax or 50, battle.resource + 20)
-        end
-    end },
+    effect = {
+        kind = "effects",
+        effects = {
+            { kind = "drainHp", fraction = 0.20 },       -- sacrifice 20% target HP
+            { kind = "resourceGain", amount = 20 },      -- +20 resource to caster
+        },
+    },
 }
 
 -- ----------------------------------------------------------------------------
@@ -484,15 +638,11 @@ M.DB.ClericGroupHeal = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 24/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId)
-        for _, eid in ipairs(livingOfSide(world, 0)) do
-            combat.registerHeal(world, battle, srcId, eid, 1.0, battle.SCALE)
-        end
-    end },
+    effect = { kind = "healGroup", value = 1.0 },
 }
 
--- Shield: single-ally, takes -75% damage for 10s (DAMAGE_REDUCE/SHIELD slot)
--- GUARDED: falls back to a high WARD until status.SHIELD exists.
+-- Shield: single-ally, takes -75% damage for 10s (flat SHIELD reduction).
+-- Index given by NAME so it resolves as soon as status.SHIELD is present.
 M.DB.ClericShield = {
     name = "Shield", iconName = "skill_icons22",
     role = "support", targetType = "ally",
@@ -500,10 +650,7 @@ M.DB.ClericShield = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 12/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        if not world.entities[tgtId] then return end
-        applyStatusSafe(world, tgtId, true, "SHIELD", status.WARD, 0.75, 10.0)
-    end },
+    effect = { kind = "status", isBuff = true, index = "SHIELD", magnitude = 0.75, duration = 10.0 },
 }
 
 -- Power Infusion: single-ally, ATK ×2 (=+100%) for 10s
@@ -514,10 +661,25 @@ M.DB.ClericPowerInfusion = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 12/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        if not world.entities[tgtId] then return end
-        status.apply(world, tgtId, true, status.ATK_BUFF, 1.0, 10.0)
-    end },
+    effect = { kind = "status", isBuff = true, index = status.ATK_BUFF, magnitude = 1.0, duration = 10.0 },
+}
+
+-- Vengeful Angel: self → AoE around the CASTER, pulse-damage + knockback all
+-- enemies in radius. [wiki CD60/res30; radius ~90px ≈ BH 2.0u; power·1.0
+-- [tuned]]. APPROXIMATION: BH runs this as a per-frame aura while buffed; for
+-- the port it is a single on-cast AoE pulse (the spec-approved simplification).
+M.DB.ClericVengefulAngel = {
+    name = "VengefulAngel", iconName = "skill_icons46",
+    role = "support", targetType = "self", noTargetRequired = true,
+    cdMax = 60.0, resourceCost = 30,
+    animLock = 0, animListIdx = 4,
+    iconScale = 1.0, iconScaleTarget = 1.0,
+    delay = 24/60,
+    effect = {
+        kind = "aoe", radius = 90, centerSelf = true,   -- centered on caster
+        alsoKnockback = { force = 120 },                -- [tuned] push-away
+        inner = { kind = "damage", tags = { "Melee" }, vfx = true },
+    },
 }
 
 -- ============================= PALADIN (Heleth) =============================
@@ -542,15 +704,12 @@ M.DB.PaladinHolyWord = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 24/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId)
-        local tgt = lowestHpAlly(world, srcId) or srcId
-        combat.registerHeal(world, battle, srcId, tgt, 1.5, battle.SCALE)
-    end },
+    effect = { kind = "healLowestAlly", value = 1.5 },
 }
 
--- Divine Intervention: party-wide protection for 10s. APPROXIMATION (the real
--- BH hook is a damage-redirect slot `buffs[0x1e]` we don't have); approximate
--- as WARD .5 (chance to negate) + REFLECT .5 (return half) on the paladin.
+-- Divine Intervention: self protection for 10s. APPROXIMATION (the real BH
+-- hook is a damage-redirect slot `buffs[0x1e]` we don't have); declared as the
+-- WARD .5 (chance to negate) + REFLECT .5 (return half) pair.
 M.DB.PaladinDivineIntervention = {
     name = "DivineIntervention", iconName = "skill_icons22",
     role = "tank", targetType = "self", noTargetRequired = true,
@@ -558,15 +717,18 @@ M.DB.PaladinDivineIntervention = {
     animLock = 0, animListIdx = nil,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 0,
-    effect = { kind = "custom", fn = function(world, battle, srcId)
-        status.apply(world, srcId, true, status.WARD,     0.5, 10.0)
-        status.apply(world, srcId, true, status.REFLECT,  0.5, 10.0)
-    end },
+    effect = {
+        kind = "effects", targetSelf = true,
+        effects = {
+            { kind = "status", isBuff = true, index = status.WARD,    magnitude = 0.5, duration = 10.0 },
+            { kind = "status", isBuff = true, index = status.REFLECT, magnitude = 0.5, duration = 10.0 },
+        },
+    },
 }
 
--- Aura of Light: self, incoming damage converted to healing for 10s. APPROXIMATION:
--- under-faithful vs BH's full conversion — reuses the REFLECT slot at .6 (returns
--- 60% of would-be damage as HP via the existing reflect->heal path).
+-- Aura of Light: self, incoming damage converted to healing for 10s.
+-- APPROXIMATION: under-faithful vs BH's full conversion — reuses the REFLECT
+-- slot at .6 (returns 60% of would-be damage via the existing reflect path).
 M.DB.PaladinAuraOfLight = {
     name = "AuraOfLight", iconName = "skill_icons46",
     role = "tank", targetType = "self", noTargetRequired = true,
@@ -574,9 +736,35 @@ M.DB.PaladinAuraOfLight = {
     animLock = 0, animListIdx = nil,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 0,
-    effect = { kind = "custom", fn = function(world, battle, srcId)
-        status.apply(world, srcId, true, status.REFLECT, 0.6, 10.0)
-    end },
+    effect = {
+        kind = "status", isBuff = true, index = status.REFLECT,
+        magnitude = 0.6, duration = 10.0,
+    },
+}
+
+-- Wrath: self imbue for 10s; while active the paladin's MELEE HITS chain
+-- lightning to up to 3 nearby foes with decaying damage. Data-driven via a
+-- dedicated CHAIN_LIGHTNING buff (status.CHAIN): combat.readTagSystem sees the
+-- "Melee" tag on each auto-attack and rolls the chain, consuming one charge per
+-- hit so it lasts ~10s at the 1.1s swing cadence. [wiki CD30/res20; count 3,
+-- decay 0.5, 10 charges all [tuned]]. DEFERRED in-scope note: true per-frame
+-- on-hit chaining with a timer-based expire would need a bespoke status handler;
+-- the charge-consume model keeps it fully data-driven and time-bounded.
+M.DB.PaladinWrath = {
+    name = "Wrath", iconName = "skill_icons15",
+    role = "tank", targetType = "self", noTargetRequired = true,
+    cdMax = 30.0, resourceCost = 20,
+    animLock = 0, animListIdx = 4,
+    iconScale = 1.0, iconScaleTarget = 1.0,
+    delay = 0,
+    effect = {
+        kind = "status", isBuff = true, index = "CHAIN",
+        -- magnitude field carries the charge count; chain params ride alongside
+        magnitude = 10,                       -- [tuned] ~10 melee hits over 10s
+        chainParams = { count = 3, decay = 0.5 },  -- [tuned]
+        duration = 10.0,
+        tint = {1, 0.85, 0.3, 4.0},
+    },
 }
 
 -- ============================= WIZARD (Bromswell) ===========================
@@ -616,8 +804,8 @@ M.DB.WizardMeteor = {
 }
 
 -- Blizzard: AoE all enemies in radius — damage + SLOW (moveSpeed down) 10s.
--- The resolver cannot stack dmg+status in one inner, so custom fn: loop the
--- radius, registerHit then applyStatusSafe(SLOW) [guarded → skip if absent].
+-- Declared as an aoe with an inner damage + alsoStatus SLOW (index by NAME so
+-- it resolves once status.SLOW exists).
 M.DB.WizardBlizzard = {
     name = "Blizzard", iconName = "skill_icons46",
     role = "dps", targetType = "aoe",
@@ -625,30 +813,19 @@ M.DB.WizardBlizzard = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 24/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        local cp = world.position[tgtId] or world.position[srcId]
-        if not cp then return end
-        local r2 = 90 * 90
-        for eid in pairs(world.entities) do
-            local sd = world.side[eid]
-            if sd and sd.s == 1 and not world.deathState[eid] then
-                local ep = world.position[eid]
-                if ep then
-                    local dx, dy = ep.x - cp.x, ep.y - cp.y
-                    if dx*dx + dy*dy <= r2 then
-                        combat.registerHit(world, battle, srcId, eid,
-                            {ability={aimedShot=true,falloff=1.5,canCrit=true}}, true, battle.SCALE, battle.GRAVITY)
-                        applyStatusSafe(world, eid, false, "SLOW", nil, 0.4, 10.0)
-                    end
-                end
-            end
-        end
-    end },
+    effect = {
+        kind = "aoe", radius = 90,
+        inner = {
+            kind = "damage", tags = { "Ranged", "Fire" }, vfx = true,
+            ability = { aimedShot = true, falloff = 1.5, canCrit = true },
+        },
+        alsoStatus = { kind = "status", isBuff = false, index = "SLOW", magnitude = 0.4, duration = 10.0 },
+    },
 }
 
 -- Time Stop: stun (freeze) all living enemies for 5s. Drives world.stun via
--- combat.applyStun (reliable CC on both sides; the STUN status slot has no
--- behavior yet, so we do NOT rely on it).
+-- combat.applyStun (reliable CC; the STUN status slot has no behavior, so we
+-- do NOT rely on it).
 M.DB.WizardTimeStop = {
     name = "TimeStop", iconName = "skill_icons46",
     role = "dps", targetType = "aoe", noTargetRequired = true,
@@ -656,9 +833,45 @@ M.DB.WizardTimeStop = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 24/60,
-    effect = { kind = "custom", fn = function(world, battle)
-        stunAllEnemies(world, 5.0)
-    end },
+    effect = { kind = "stunAll", seconds = 5.0 },
+}
+
+-- Conflagrate: single-enemy DOT burn + brief disable. [wiki CD40/res20; DOT
+-- power·0.5/s for 6s, STUN 1.5s — magnitudes [tuned]]. DOT magnitude scales off
+-- caster power at cast time.
+M.DB.WizardConflagrate = {
+    name = "Conflagrate", iconName = "skill_icons46",
+    role = "dps", targetType = "single",
+    cdMax = 40.0, resourceCost = 20,
+    animLock = 0, animListIdx = 4,
+    iconScale = 1.0, iconScaleTarget = 1.0,
+    delay = 24/60,
+    effect = {
+        kind = "effects",
+        effects = {
+            { kind = "status", isBuff = false, index = "DOT", dotPerSec = 0.5, duration = 6.0 },  -- [tuned]
+            { kind = "status", isBuff = false, index = "STUN", duration = 1.5 },                     -- [tuned]
+        },
+    },
+}
+
+-- Thunderbolt: AoE centered on the CASTER (self blast), damage + knockback.
+-- [wiki CD30/res25; radius ~90px ≈ BH medium; knockback force [tuned]].
+M.DB.WizardThunderbolt = {
+    name = "Thunderbolt", iconName = "skill_icons46",
+    role = "dps", targetType = "self", noTargetRequired = true,
+    cdMax = 30.0, resourceCost = 25,
+    animLock = 0, animListIdx = 4,
+    iconScale = 1.0, iconScaleTarget = 1.0,
+    delay = 24/60,
+    effect = {
+        kind = "aoe", radius = 90, centerSelf = true,
+        alsoKnockback = { force = 100 },   -- [tuned] push-away
+        inner = {
+            kind = "damage", tags = { "Ranged" }, vfx = true,
+            ability = { canCrit = true },
+        },
+    },
 }
 
 -- ============================== ROGUE (Gustav) ==============================
@@ -676,9 +889,9 @@ M.DB.RogueAutoAttack = {
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
--- Sneak Attack: single-enemy 250% normal damage (crits still apply). Implemented
--- as explicit outgoing buffMods{[0]=1.5} (→ ×2.5 total) passed through the two-stage
--- roll; the roll's own crit still flat-doubles after that.
+-- Sneak Attack: single-enemy 250% normal damage (crits still apply). Declared
+-- as a damage row with an explicit outgoing multiplier buffMods{[0]=1.5} (→ ×2.5
+-- total) passed through the two-stage roll; the roll's own crit still doubles.
 M.DB.RogueSneakAttack = {
     name = "SneakAttack", iconName = "skill_icons17",
     role = "dps", targetType = "single",
@@ -686,11 +899,11 @@ M.DB.RogueSneakAttack = {
     animLock = 4*6/60, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 8/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        if not world.entities[tgtId] or world.deathState[tgtId] then return end
-        combat.registerHit(world, battle, srcId, tgtId,
-            {ability={canCrit=true}, buffMods={[0]=1.5}}, true, battle.SCALE, battle.GRAVITY)
-    end },
+    effect = {
+        kind = "damage", tags = { "Melee" }, vfx = true,
+        ability = { canCrit = true },
+        buffMods = { [0] = 1.5 },   -- [wiki] 250% of normal damage
+    },
 }
 
 -- Expose Weakness: single-enemy VULNERABILITY +50% for 10s
@@ -701,14 +914,11 @@ M.DB.RogueExposeWeakness = {
     animLock = 0, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 8/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        if not world.entities[tgtId] then return end
-        status.apply(world, tgtId, false, status.VULNERABILITY, 0.5, 10.0)
-    end },
+    effect = { kind = "status", isBuff = false, index = status.VULNERABILITY, magnitude = 0.5, duration = 10.0 },
 }
 
 -- Shadowstep: single-enemy 350% strike (teleport-behind movement SKIPPED — just
--- the big hit). Explicit buffMods{[0]=2.5} (→ ×3.5 total); crits still apply.
+-- the big hit). buffMods{[0]=2.5} (→ ×3.5 total); crits still apply.
 M.DB.RogueShadowstep = {
     name = "Shadowstep", iconName = "skill_icons17",
     role = "dps", targetType = "single",
@@ -716,18 +926,48 @@ M.DB.RogueShadowstep = {
     animLock = 6*6/60, animListIdx = 4,
     iconScale = 1.0, iconScaleTarget = 1.0,
     delay = 10/60,
-    effect = { kind = "custom", fn = function(world, battle, srcId, tgtId)
-        if not world.entities[tgtId] or world.deathState[tgtId] then return end
-        combat.registerHit(world, battle, srcId, tgtId,
-            {ability={canCrit=true}, buffMods={[0]=2.5}}, true, battle.SCALE, battle.GRAVITY)
-    end },
+    effect = {
+        kind = "damage", tags = { "Melee" }, vfx = true,
+        ability = { canCrit = true },
+        buffMods = { [0] = 2.5 },   -- [wiki] 350% of normal damage
+    },
 }
+
+-- Poisoned Knife: single-enemy ranged-lite — small immediate hit + DOT poison.
+-- [wiki CD30/res15; immediate hit power·0.5 [tuned], DOT 6s [tuned]]. The knife
+-- "throw" has no projectile renderer here (separate VFX task) — just the damage
+-- + DOT seed.
+M.DB.RoguePoisonedKnife = {
+    name = "PoisonedKnife", iconName = "skill_icons11",
+    role = "dps", targetType = "single",
+    cdMax = 30.0, resourceCost = 15,
+    animLock = 4*6/60, animListIdx = 4,
+    iconScale = 1.0, iconScaleTarget = 1.0,
+    delay = 8/60,
+    effect = {
+        kind = "effects",
+        effects = {
+            { kind = "damage", tags = { "Ranged" }, vfx = true,
+              ability = { aimedShot = true, falloff = 1.5, canCrit = true },
+              buffMods = { [0] = -0.5 } },   -- [tuned] small immediate hit (×0.5)
+            { kind = "status", isBuff = false, index = "DOT", dotPerSec = 0.3, duration = 6.0 },  -- [tuned]
+        },
+    },
+}
+
+-- DEFERRED (out of scope — 5-slot UI limit): Rogue Paralytic Knife (PARALYZE 8s)
+-- and Paladin Radiance (AoE knockdown + party heal). See class-port-spec §4.3 /
+-- §2.3. Not wired into CLASS_SETS.
 
 -- ----------------------------------------------------------------------------
 -- CLASS ABILITY SETS (convenience: which abilities each class gets, per slot)
 -- The integrator uses these to wire sk.list for new classes.
 -- ----------------------------------------------------------------------------
 
+-- Each class: an `auto` (slot 0, the default action) + up to FOUR `actives`
+-- (slots 1..4). The UI already maps q/w/e/r → slots 1..4, so a 4th active needs
+-- no UI change. Paralytic Knife (rogue) and Radiance (paladin) are DEFERRED by
+-- the 5-slot limit — see their notes above; they are intentionally NOT slotted.
 M.CLASS_SETS = {
     knight = { auto = "KnightAutoAttack",
                actives = { "KnightSunderArmor", "KnightDefend", "KnightChallengingShout" } },
@@ -737,14 +977,18 @@ M.CLASS_SETS = {
     champion = { auto = "ChampionAutoAttack",  actives = {} },
     duelist  = { auto = "DuelistAutoAttack",   actives = {} },
     -- Proof-of-port classes (work/class-port-spec-cleric-paladin-wizard-rogue.md)
+    -- Now at full BH-parity kits: auto + 4 actives each.
     cleric  = { auto = "ClericAutoHeal",       -- default action IS the heal
-                actives = { "ClericGroupHeal", "ClericShield", "ClericPowerInfusion" } },
+                actives = { "ClericGroupHeal", "ClericShield", "ClericPowerInfusion", "ClericVengefulAngel" } },
     paladin = { auto = "PaladinAutoAttack",
-                actives = { "PaladinHolyWord", "PaladinDivineIntervention", "PaladinAuraOfLight" } },
+                actives = { "PaladinHolyWord", "PaladinDivineIntervention", "PaladinAuraOfLight", "PaladinWrath" } },
     wizard  = { auto = "WizardAutoFireball",   -- ranged auto-fire
-                actives = { "WizardMeteor", "WizardBlizzard", "WizardTimeStop" } },
+                actives = { "WizardMeteor", "WizardBlizzard", "WizardTimeStop", "WizardConflagrate" } },
     rogue   = { auto = "RogueAutoAttack",      -- fastest melee swing
-                actives = { "RogueSneakAttack", "RogueExposeWeakness", "RogueShadowstep" } },
+                actives = { "RogueSneakAttack", "RogueExposeWeakness", "RogueShadowstep", "RoguePoisonedKnife" } },
 }
+-- NOTE: WizardThunderbolt is defined in M.DB but not slotted into any CLASS_SETS
+-- (the wizard's 4 active slots are Meteor/Blizzard/TimeStop/Conflagrate per the
+-- Director's final kit). It remains available as data should a future re-slot want it.
 
 return M

@@ -84,6 +84,10 @@ M.STUN         = 6   -- hard CC slot (coexists with world.stun)
 M.FEAR         = 7   -- SLOT ONLY — no behavior yet (later enemy-AI task)
 M.PARALYZE     = 8   -- hard immobilize: actionLock = 9999 (no death-anim, no stagger)
 M.SHIELD       = 9   -- flat % REDUCTION of incoming damage, always applies (Cleric Shield −75%)
+M.CHAIN        = 10  -- chain-lightning imbue (Paladin Wrath): magnitude = remaining
+                     -- melee-hit charges; entry.chainParams = {count, decay}. Each
+                     -- MELEE hit by the carrier fires one chain (combat.registerHit
+                     -- consumes a charge). Not a damage-mod — getMods ignores it.
 
 -- Debuff indices (entity.debuffs[index] active)
 M.VULNERABILITY = 1  -- "marked": incoming damage taken up (generalizes Sunder Armor)
@@ -101,6 +105,7 @@ M.buffDurations = {
     [M.FEAR]       = 3,
     [M.PARALYZE]   = 3,
     [M.SHIELD]     = 10,
+    [M.CHAIN]      = 10,   -- default (always overridden by the ability's duration)
 }
 M.debuffDurations = {
     [M.VULNERABILITY] = 10,
@@ -141,6 +146,7 @@ M.buffMagnitudes = {
     [M.FEAR]      = 0,
     [M.PARALYZE]  = 0,
     [M.SHIELD]    = 0.75, -- remove 75% of incoming damage (Cleric Shield)
+    [M.CHAIN]     = 0,    -- magnitude is the charge count, set at cast time
 }
 M.debuffMagnitudes = {
     [M.VULNERABILITY] = 0.25, -- +25% incoming damage taken (marked)
@@ -166,16 +172,19 @@ end
 -- APPLY — start/refresh a status on an entity
 -- ============================================================================
 
--- M.apply(world, id, isBuff, index, magnitude, duration)
+-- M.apply(world, id, isBuff, index, magnitude, duration, extra)
 --   world       : the battle `w` table (ECS world)
 --   id          : entity id
 --   isBuff      : true -> buffs map, false -> debuffs map
 --   index       : one of M.<NAME>
 --   magnitude   : optional explicit magnitude (overrides the table default)
 --   duration    : optional seconds (overrides the table default). nil => table.
+--   extra       : optional table merged onto the entry (e.g. chainParams for
+--                 CHAIN). Lets a data-driven ability carry auxiliary params on
+--                 a status without a bespoke handler.
 -- Returns the active entry. Re-applying refreshes the duration and (optionally)
--- the magnitude.
-function M.apply(world, id, isBuff, index, magnitude, duration)
+-- the magnitude + extra.
+function M.apply(world, id, isBuff, index, magnitude, duration, extra)
     if not world.entities[id] then return nil end
     local store = getStore(world, id)
     local map = isBuff and store.buffs or store.debuffs
@@ -189,6 +198,9 @@ function M.apply(world, id, isBuff, index, magnitude, duration)
     if existing then
         existing.duration = dur
         existing.magnitude = mag
+        if extra then
+            for k, v in pairs(extra) do existing[k] = v end
+        end
         -- refresh per-tick accumulators
         existing.tickTimer = 0
         return existing
@@ -201,6 +213,9 @@ function M.apply(world, id, isBuff, index, magnitude, duration)
         maxDuration = dur,
         tickTimer  = 0,
     }
+    if extra then
+        for k, v in pairs(extra) do entry[k] = v end
+    end
     map[index] = entry
 
     local h = M.onApply
@@ -483,6 +498,11 @@ function M.onApply(world, id, isBuff, entry)
         end
         return
     end
+    if isBuff and entry.index == M.CHAIN then
+        -- electric yellow/white shimmer while the chain-lightning imbue is live
+        entry.tint = effects_addTint(world, id, 1.0, 0.95, 0.4, 6.0)
+        return
+    end
     if not isBuff and entry.index == M.SLOW then
         -- subtle light blue/purple
         entry.tint = effects_addTint(world, id, 0.55, 0.65, 1.0, 3.0)
@@ -529,6 +549,10 @@ function M.onExpire(world, id, isBuff, entry)
         return
     end
     if not isBuff and (entry.index == M.SLOW or entry.index == M.DOT) then
+        if entry.tint then effects_removeTint(world, id, entry.tint) end
+        return
+    end
+    if isBuff and entry.index == M.CHAIN then
         if entry.tint then effects_removeTint(world, id, entry.tint) end
         return
     end
