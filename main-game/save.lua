@@ -61,6 +61,11 @@ function M.defaultData()
             nomad    = defaultChar(),
             piper    = defaultChar(),
             witch    = defaultChar(),
+            -- 4 ported BH classes (proof-of-port, see handoff.md)
+            cleric   = defaultChar(),
+            paladin  = defaultChar(),
+            wizard   = defaultChar(),
+            rogue    = defaultChar(),
         },
         inventory = {},
         mapProgression = {

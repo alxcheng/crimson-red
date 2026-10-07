@@ -99,17 +99,37 @@ local function getRosterCellRect(idx)
            ROSTER_CELL_W, ROSTER_CELL_H
 end
 
+-- Title-case a snake_case class name for display (e.g. "cleric" -> "Cleric").
+local function displayName(name)
+    if not name then return "" end
+    local parts = {}
+    for part in name:gmatch("%S+") do
+        parts[#parts + 1] = part:sub(1, 1):upper() .. part:sub(2)
+    end
+    return table.concat(parts, " ")
+end
+
 local function drawIcon(name, x, y, size)
     size = size or ICON_SIZE
     local img = icons[name]
-    -- A class without a charicon (cleric/paladin/wizard/rogue have none yet)
-    -- falls back to a shared existing icon so the cell still renders.
-    if not img and name ~= "knight" then img = icons["knight"] end
-    if not img then return end
-    local iw, ih = img:getDimensions()
-    local sc = math.min(size / iw, size / ih)
+    if img then
+        local iw, ih = img:getDimensions()
+        local sc = math.min(size / iw, size / ih)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.draw(img, x + (size - iw * sc) / 2, y + (size - ih * sc) / 2, 0, sc, sc)
+        return
+    end
+    -- No charicon: render the class name as centred text in the cell.
+    local label = displayName(name)
+    local fw, fh = font:getWidth(label), font:getHeight()
+    local scale = 1
+    if fw > size - 4 then
+        scale = (size - 4) / fw   -- shrink to fit (proportional)
+    end
+    local effW = fw * scale
+    local effH = fh * scale
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(img, x + (size - iw * sc) / 2, y + (size - ih * sc) / 2, 0, sc, sc)
+    love.graphics.print(label, x + (size - effW) / 2, y + (size - effH) / 2, 0, scale, scale)
 end
 
 
