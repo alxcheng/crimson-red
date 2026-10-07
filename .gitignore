@@ -11,10 +11,8 @@ Thumbs.db
 captures/
 
 # Work artifacts (task outputs / generated files)
-work/**/*.png
-work/**/*.jpg
-work/**/*.jpeg
+work/
+!work/*.md
 
 # Local-only notes / secrets (never commit credentials)
 *.local.md
-work/
