@@ -17,7 +17,7 @@ local VH = common.VH
 
 local SLOT_COUNT  = 5
 
--- Rows are full-width bands, evenly spaced, vertically centered as a group.
+-- Rows: full-width visual bands, evenly spaced, vertically centered as a group.
 local ROW_MARGIN_X = 40
 local ROW_W        = VW - ROW_MARGIN_X * 2
 local ROW_H        = 60
@@ -29,6 +29,7 @@ local ROW_START_Y  = math.floor((VH - ROW_TOTAL_H) / 2)
 local DEL_BTN_W = 76
 local DEL_BTN_H = 22
 local DEL_BTN_PAD = 6   -- gap between the button's right edge and the row's right edge
+local ROW_DEL_GAP = 8   -- gap between the row's hit-rect right edge and the button
 
 local AX      = common.ARROW_X
 local AY      = common.ARROW_Y
@@ -46,6 +47,13 @@ local function rowRect(si)
     return ROW_MARGIN_X, ROW_START_Y + (si - 1) * (ROW_H + ROW_GAP), ROW_W, ROW_H
 end
 
+-- Row HIT-rect: stops before the DELETE button (with ROW_DEL_GAP) so the
+-- button stays reachable by the hover loop. Visuals still span the full row.
+local function rowHitRect(si)
+    return ROW_MARGIN_X, ROW_START_Y + (si - 1) * (ROW_H + ROW_GAP),
+           ROW_W - DEL_BTN_PAD - DEL_BTN_W - ROW_DEL_GAP, ROW_H
+end
+
 local function delBtnRect(si)
     local _, ry = rowRect(si)
     return VW - ROW_MARGIN_X - DEL_BTN_PAD - DEL_BTN_W, ry + (ROW_H - DEL_BTN_H) / 2,
@@ -56,7 +64,7 @@ local function getBoxTarget(i)
     if i == 1 then
         return AX - BOX_PAD, AY - BOX_PAD, A_W + BOX_PAD*2, A_H + BOX_PAD*2
     elseif i <= 6 then
-        local sx, sy, sw, sh = rowRect(i - 1)
+        local sx, sy, sw, sh = rowHitRect(i - 1)
         return sx, sy, sw, sh
     else
         local bx, by, bw, bh = delBtnRect(i - 6)
@@ -68,7 +76,7 @@ local function getHitRect(i)
     if i == 1 then
         return AX, AY, A_W, A_H
     elseif i <= 6 then
-        return rowRect(i - 1)
+        return rowHitRect(i - 1)
     else
         return delBtnRect(i - 6)
     end
