@@ -3,13 +3,15 @@
 ## Role & loop
 Manager (Lead) of a playtest loop: Director (user) gives features/feedback -> Manager scopes & delegates -> dev teammates implement -> playable build -> Director playtests -> iterate. Director talks only to the Manager. CR = LÖVE2D "mod" of Battleheart: same systems, new content. KEEP the shared Clash-Royale resource bar (max 50) — deliberate deviation.
 
-## What exists (commit 94a6e99, branch master, pushed)
+## What exists (commit be9a043, branch master)
 - Encounter P0 foundation (verified ./test_headless PASS): two-stage damage (combat.roll -> combat.resolve; enemies no defense), indexed statuses incl SLOW/SHIELD/DOT-ticks/PARALYZE, 6-slot ring formation, data-driven abilities, pay-at-press queueing, per-unit EXEC_GATE=0.4.
 - 4 ported BH classes (Cleric/Paladin/Wizard/Rogue) — proof-of-port, recolored Knight frames; Cleric NO auto-attack; Paladin specials + Rogue multipliers are approximations; Meteor x2.0.
 - Party select: click-to-move (verified by code read, NOT yet by Director playtest).
 - 3 integration lines wired (commit 94a6e99, headless PASS): SLOW now actually slows movement (systems.moveTarget × status.getSlowFactor), SHIELD now actually reduces incoming damage (combat.resolve × shieldReduction, before min-3 floor), activation camera-punch fires on active-ability activation (skills.lua → combat.triggerActivationVFX). Also dropped unused TOPUP_FRAME local in headless_test.lua.
 - Headless: ./test_headless at project root; env CR_HEADLESS/CR_TEST_MODE/CR_TEST_SCENE=headless; never open windows on Director screen; visible path byte-identical without flags.
 - Research: work/battleheart-encounter-parity.md + work/non-encounter-systems-research.md (IL-verified mechanics, divergence plan, Director Qs in §7).
+- [DONE @ 198e6c9] Center-Y alignment fix: unified moveTarget to center-coord convention (targetFollow/moveTarget/right-click/walk-in) — fixed infinite-repositioning + vertical drift. Director: "basically fixed."
+- [DONE @ be9a043] Alignment streamlining (P0+P1+P3) mirroring BH (IL-verified): P0 combat.lua checkMeleeRange now size-aware (per-attacker reach 6+0.25*w vs horizontal body gap + flat 18px center-Y band, was size-blind dx<=6/dy<=2); P1 systems.lua slotGroundPoint scales the 6-slot ring by target width (1+0.5*max(0,(w/2-22.5)/22.5), scale>=1 so normal units byte-identical, bigger targets wider ring → melee stand flush outside boss); P3a targetFollow snaps to exact slot center on arrival (kill micro-osc, BH 0.07-settle analogue); P3b physics bottom feet clamp tightened 12px inset both sides. Headless PASS (errors=0). BH alignment model detail: work/ + Hindsight doc "BH combat alignment model (IL-verified)".
 
 ## Non-negotiable conventions
 1. Feet-aligned: center stored, feet = pos.y+h/2.
