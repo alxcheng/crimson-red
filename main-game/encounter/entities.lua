@@ -232,8 +232,10 @@ end
 -- Spec §1.2: maxHP 300 [tuned], DEF 9 [wiki], ATK 16 [wiki], CRIT 0, MOVE_SPEED 3.0 [tuned].
 function M.createCleric(world, battle, x, y, saveStats, SCALE)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(300, 16, 9, 0.0)
+    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(300, 16,  9, 0.0)
     st.MOVE_SPEED.base = 3.0
+    -- targetSide=0: the Cleric is a support — its auto-heal targets its own
+    -- side (allies). It does NOT approach enemies for auto-attacks.
     applyBaseComponents(world, id, x, y, 29.43*SCALE, 38.97*SCALE, 0, st, {targetSide=0})
     world.tintColor[id] = {R=1, G=0.85, B=0.2}   -- recolor: yellow
     world.anim[id] = knightAnimSet()
