@@ -15,6 +15,11 @@ function M.load(slot)
     local raw = love.filesystem.read(filename(slot))
     if not raw then return nil end
     local ok, data = pcall(json.decode, raw)
+    if ok and type(data) == "table" then
+        -- Floor was added after the initial save format: old saves lack it,
+        -- so normalize to 1 so consumers never see a nil floor.
+        data.floor = data.floor or 1
+    end
     return ok and data or nil
 end
 
@@ -45,6 +50,7 @@ end
 
 function M.defaultData()
     return {
+        floor = 1,
         partyOrder = {"knight", false, false, false},
         unlockedCharacters = {
             knight   = defaultChar(),

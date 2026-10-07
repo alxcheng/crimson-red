@@ -8,6 +8,146 @@ local statGet = stats_mod.get
 
 local M = {}
 
+-- ============================================================================
+-- 6-SLOT RING FORMATION (replaces the old 1D vertical melee column)
+--
+-- Each TARGET owns a symmetric 6-slot ring: 3 rings × 2 sides (left/right),
+-- authored as GROUND/feet-point offsets relative to the TARGET'S FEET.
+--   RING 1 (inner):  ±26  lateral
+--   RING 2 (middle): ±52  lateral, +14 depth
+--   RING 3 (outer):  ±82  lateral, +32 depth
+-- Offsets are authored per the parity spec's Open Q ("author our own" since
+-- BH's were 3D world-space per-prefab). Chosen so 3 party units (~45px wide)
+-- fan out around one enemy without overlapping: ring1 pair 17px apart, ring2
+-- pair 31px apart, ring3 pair 41px apart, and the depth steps (+14, +32) put
+-- outer rings slightly lower on the stage (nearer the viewer) so nothing
+-- stacks vertically. Lateral extremes (±82) keep units well inside the 800px
+-- stage; depth fits the ~VH-60 band.
+--
+-- FEET CONVENTION (critical): world.position[id] is the entity's CENTER.
+-- A sprite is center-anchored, so FEET = position.y + size.h/2. A slot offset
+-- is a GROUND point, so to store it as a unit's moveTarget center we set
+--   position.y = groundY - size.h/2
+-- (and center.x = ground.x). Storing the ground Y directly as position.y would
+-- sink a unit by half its height — the classic bug we must avoid.
+--
+-- State lives in a NEW world table the integrator must create in initWorld:
+--   world.slots = {}    -- [targetId] = { [slotIndex]=ownerId }
+-- slotIndex = (ring-1)*2 + side, ring in {1,2,3}, side in {1=left,2=right};
+-- ownerId is the unit occupying that ring slot (nil = free).
+-- ============================================================================
+
+local NUM_RINGS = 3
+-- Ground/feet offsets relative to the target's feet, per side (1=left,2=right)
+-- and ring (1=inner .. 3=outer). Symmetric: side 2 mirrors side 1 on X, and
+-- both sides share the same depth (the "far" side of the target in stage space).
+local RING = {
+    [1] = { [1] = {x=-26, y=0},  [2] = {x=26,  y=0}  },  -- ring 1 (inner)
+    [2] = { [1] = {x=-52, y=14}, [2] = {x=52,  y=14} },  -- ring 2 (middle)
+    [3] = { [1] = {x=-82, y=32}, [2] = {x=82,  y=32} },  -- ring 3 (outer)
+}
+
+local function slotsFor(world, targetId)
+    local t = world.slots; if not t then return nil end
+    local s = t[targetId]
+    if not s then s = {}; t[targetId] = s end
+    return s
+end
+
+local function sideOf(world, tgtId, id, preferBack)
+    local tp, sp = world.position[tgtId], world.position[id]
+    if preferBack then
+        local fc = world.facing[tgtId]
+        -- preferBack: go to the side BEHIND the target (opposite its facing).
+        return (fc and fc.right) and 1 or 2
+    end
+    if not (tp and sp) then return 2 end
+    return (sp.x < tp.x) and 1 or 2
+end
+
+-- Displace the occupant of slot[tgtId][side] one ring further out (if a free
+-- outer ring exists on that side). Returns true if it was displaced.
+local function displaceOutward(world, tgtId, side)
+    local s = world.slots and world.slots[tgtId]
+    if not s then return false end
+    local owner = s[side]
+    if not owner then return false end
+    for r = 1, NUM_RINGS - 1 do
+        if s[r*2 + side] == nil then
+            s[r*2 + side] = owner
+            s[side] = nil
+            return true
+        end
+    end
+    return false
+end
+
+-- Backfill after a release: pull the innermost occupied outer ring on `side`
+-- inward, one ring at a time, until it sits adjacent to the freed hole.
+local function backfillSide(world, tgtId, side)
+    local s = world.slots and world.slots[tgtId]
+    if not s then return end
+    for r = 1, NUM_RINGS - 1 do
+        local inner, outer = (r-1)*2 + side, r*2 + side
+        if s[inner] == nil and s[outer] ~= nil then
+            s[inner] = s[outer]
+            s[outer] = nil
+        end
+    end
+    if not next(s) then
+        world.slots[tgtId] = nil
+    end
+end
+
+-- Request a slot on the target's ring for `id`. Fills inside-out on the
+-- chosen side; a newer attacker displaces an inner occupant outward. Returns
+-- the (ring, side) of the slot, or nil when the ring is full on that side.
+local function requestPosition(world, tgtId, id, preferBack)
+    local side = sideOf(world, tgtId, id, preferBack)
+    local s = slotsFor(world, tgtId)
+    for r = 1, NUM_RINGS do
+        local idx = (r-1)*2 + side
+        if s[idx] == nil then
+            s[idx] = id
+            return r, side
+        end
+        -- Inner slot occupied → try to push that occupant one ring out so we
+        -- can take the closer slot (newcomer-wins behavior).
+        if displaceOutward(world, tgtId, idx) then
+            s[idx] = id
+            return r, side
+        end
+    end
+    return nil -- full: caller falls back to "stay put"
+end
+
+-- Release `id`'s slot on target `tgtId` and backfill outer occupants inward.
+local function purgePosition(world, tgtId, id)
+    local t = world.slots
+    if not t then return end
+    local s = t[tgtId]
+    if not s then return end
+    local side = nil
+    for idx, owner in pairs(s) do
+        if owner == id then
+            s[idx] = nil
+            side = idx % 2 == 0 and 2 or 1
+            break
+        end
+    end
+    if side then backfillSide(world, tgtId, side) end
+    if not next(s) then t[tgtId] = nil end
+end
+
+-- Ground/feet point for a slot, relative to the target's current feet.
+local function slotGroundPoint(world, tgtId, ring, side)
+    local tp, ts = world.position[tgtId], world.size[tgtId]
+    if not (tp and ts) then return nil end
+    local feetX, feetY = tp.x, tp.y + ts.h/2
+    local off = RING[ring][side]
+    return feetX + off.x, feetY + off.y
+end
+
 local function hasActiveAction(world, id)
     local ec = world.effects_comp[id]; if not ec then return false end
     for _, eff in ipairs(ec.active) do
@@ -17,7 +157,7 @@ local function hasActiveAction(world, id)
 end
 
 -- ============================================================================
--- MELEE SLOT SELECTION
+-- MELEE SLOT SELECTION (6-slot ring)
 -- ============================================================================
 
 local function getMeleeSlot(world, id, tgtId)
@@ -25,97 +165,32 @@ local function getMeleeSlot(world, id, tgtId)
     local sp, ss = world.position[id],    world.size[id]
     if not (tp and ts and sp and ss) then return nil end
 
-    local anchorY = tp.y + ts.h / 2
-    local hOffset = ts.w / 2 + ss.w / 2
-    local leftX   = tp.x - hOffset
-    local rightX  = tp.x + hOffset
-    local SPACING = 20
-    local myFootY = sp.y + ss.h / 2
-
-    -- Anchor = whoever the target is CURRENTLY targeting (checked every frame).
-    -- Only requires the anchor to be a living melee unit; no mutual-targeting check.
-    local et_tgt   = world.entityTarget[tgtId]
-    local anchorId = et_tgt and et_tgt.id
-    if anchorId then
-        if not world.entities[anchorId] or world.deathState[anchorId]
-           or world.isRanged[anchorId] then
-            anchorId = nil
+    -- If this unit's slot on this target was released (e.g. the ring refilled
+    -- around it), request one again. preferBack=false: flank by horizontal
+    -- position, which is the Battleheart default for auto-attackers.
+    local t = world.slots
+    local ring, side
+    if t and t[tgtId] and t[tgtId] then
+        ring, side = nil, nil
+        for idx, owner in pairs(t[tgtId]) do
+            if owner == id then ring, side = math.floor(idx/2)+1, idx % 2 == 0 and 2 or 1 break end
         end
     end
-
-    -- Anchor side is recomputed every frame using the anchor's INTENDED X
-    -- (mt.x when moving, current pos otherwise) so stale values never linger.
-    local ma = world.meleeAnchor
-    if ma then
-        if anchorId then
-            local ap = world.position[anchorId]
-            if ap then
-                local amt    = world.moveTarget[anchorId]
-                local anchorX = (amt and amt.active) and amt.x or ap.x
-                local dL = math.abs(anchorX - leftX)
-                local dR = math.abs(anchorX - rightX)
-                ma[tgtId] = {id = anchorId, left = dL <= dR}
-            end
-        else
-            ma[tgtId] = nil
-        end
+    if not ring then
+        ring, side = requestPosition(world, tgtId, id, false)
     end
 
-    local anchorInfo = ma and ma[tgtId]
-
-    if not anchorInfo then
-        -- Enemy has no valid melee target: go to closest side at anchorY
-        local dL = math.abs(sp.x - leftX)
-        local dR = math.abs(sp.x - rightX)
-        return (dL <= dR) and leftX or rightX, anchorY
+    if not ring then
+        -- Ring is full on our side. Don't stack on top of anyone: stay put
+        -- (keep current position as the movement target) rather than erroring.
+        return sp.x, sp.y + ss.h/2
     end
 
-    if anchorInfo.id == id then
-        -- ── SOLO (anchor) ─────────────────────────────────────────────────────
-        -- Mutual targeting: recompute side from current position with a stable
-        -- ID tiebreaker so both units never pick the same side simultaneously.
-        local tgtEt = world.entityTarget[tgtId]
-        if tgtEt and tgtEt.id == id then
-            local dL = math.abs(sp.x - leftX)
-            local dR = math.abs(sp.x - rightX)
-            local goLeft = (dL < dR) or (dL == dR and id < tgtId)
-            return goLeft and leftX or rightX, anchorY
-        end
-        return anchorInfo.left and leftX or rightX, anchorY
-
-    else
-        -- ── GROUP ─────────────────────────────────────────────────────────────
-        -- Opposite side from anchor, evenly spaced with fixed gap.
-        local groupX = anchorInfo.left and rightX or leftX
-
-        local groupList = {}
-        for oid in pairs(world.entities) do
-            if oid == id or oid == anchorInfo.id then goto gskip end
-            if world.deathState[oid]              then goto gskip end
-            if world.isRanged[oid]               then goto gskip end
-            local et2 = world.entityTarget[oid]
-            if not (et2 and et2.id == tgtId) then goto gskip end
-            local op, os = world.position[oid], world.size[oid]
-            if not (op and os) then goto gskip end
-            local mt2 = world.moveTarget[oid]
-            local cy  = (mt2 and mt2.active) and mt2.y or (op.y + os.h / 2)
-            table.insert(groupList, {id = oid, y = cy})
-            ::gskip::
-        end
-        table.insert(groupList, {id = id, y = myFootY})
-        table.sort(groupList, function(a, b)
-            return a.y < b.y or (a.y == b.y and a.id < b.id)
-        end)
-
-        local n = #groupList
-        for i, u in ipairs(groupList) do
-            if u.id == id then
-                local slotY = anchorY + (i - 1 - (n - 1) / 2) * SPACING
-                return groupX, slotY
-            end
-        end
-        return groupX, myFootY
-    end
+    -- Convert the slot's GROUND/feet point to this unit's CENTER using the
+    -- feet rule: center.y = groundY - size.h/2.
+    local gx, gy = slotGroundPoint(world, tgtId, ring, side)
+    if not gx then return nil end
+    return gx, gy - ss.h/2
 end
 
 -- ============================================================================
@@ -123,10 +198,38 @@ end
 -- ============================================================================
 
 function M.targetFollow(world)
+    -- Release slots for units that no longer target their slot's owner target
+    -- (cleared a target, died, lost aggro). Each stale owner is purged, which
+    -- backfills the freed side. Survivors keep their slot.
+    if world.slots then
+        for tgtId, s in pairs(world.slots) do
+            local stale = {}
+            for _, owner in pairs(s) do
+                if not (world.entities[owner] and not world.deathState[owner]
+                        and world.entityTarget[owner] and world.entityTarget[owner].id == tgtId) then
+                    table.insert(stale, owner)
+                end
+            end
+            for _, owner in ipairs(stale) do
+                purgePosition(world, tgtId, owner)
+            end
+        end
+    end
+
     for id in pairs(world.entities) do
         if world.deathState[id] then goto continue end
         local et = world.entityTarget[id]
-        if not et then goto continue end
+        if not et then
+            -- No target: drop any slot we held on whatever we last targeted.
+            if world.slots then
+                for tgtId, s in pairs(world.slots) do
+                    for _, owner in pairs(s) do
+                        if owner == id then purgePosition(world, tgtId, id) break end
+                    end
+                end
+            end
+            goto continue
+        end
         if not world.entities[et.id] or world.deathState[et.id] then
             world.entityTarget[id] = nil
             goto continue
@@ -387,6 +490,17 @@ function M.death(world, battle, dt)
             world.bar[id] = nil
             local mt = world.moveTarget[id]; if mt then mt.active = false end
             world.entityTarget[id] = nil
+            -- Free any ring slot this unit held (it may have been mid-attack).
+            if world.slots then
+                for tgtId, s in pairs(world.slots) do
+                    for _, owner in pairs(s) do
+                        if owner == id then purgePosition(world, tgtId, id) break end
+                    end
+                end
+            end
+            -- This unit was a TARGET: destroy its whole ring (all occupants
+            -- lose their target and re-pick next frame).
+            if world.slots then world.slots[id] = nil end
             for eid in pairs(world.entities) do
                 local tm = world.threatMap[eid]
                 if tm then tm.map[id] = nil end

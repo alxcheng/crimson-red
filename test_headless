@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Crimson Red — headless smoke-test launcher (for agents)
+#
+# Runs the encounter systems OFFSCREEN — it opens NO window, so background test
+# jobs never pop a window on the Director's screen. It builds a small
+# deterministic battle, ticks the live combat/skill/status/physics systems for
+# ~6s, and prints a one-line PASS/FAIL summary (exit 0 on PASS, 1 on FAIL).
+#
+# Env (all read by conf.lua / main.lua):
+#   CR_HEADLESS=1      run offscreen (no window)
+#   CR_TEST_MODE=1     skip music + guard the fade render
+#   CR_TEST_SCENE=headless  swap the app entry for headless_test.lua
+#
+# Mirrors ./playtest (same love binary resolution via PATH). Usage: ./test_headless
+set -euo pipefail
+cd "$(dirname "$0")/main-game"
+exec env CR_HEADLESS=1 CR_TEST_MODE=1 CR_TEST_SCENE=headless love .

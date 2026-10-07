@@ -40,6 +40,7 @@ Detailed, on-demand specifics (how to run/test, asset conventions, file map) liv
 ```bash
 cd main-game && love .
 ```
+Background smoke test (no window, for agents): `./test_headless` — runs the encounter systems headlessly and prints PASS/FAIL. Never opens a window.
 See `memory/reference.md` for the VM/capture workflow used during development.
 
 ## Top rules

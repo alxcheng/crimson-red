@@ -1,4 +1,9 @@
--- screens/party_select.lua — Party select screen module
+-- screens/party_select.lua — Party select screen module (click-to-move)
+--
+-- Interaction is instant clicks (no drag):
+--   * Click a PARTY member (filled slot)  -> remove it, append to roster bottom.
+--   * Click an INVENTORY (roster) member  -> fill the lowest-index empty party
+--     slot, or (party full) move it to the roster bottom (net no visual change).
 
 local common   = require("common")
 local save     = require("save")
@@ -42,7 +47,6 @@ local PREVIEW_W      = 280
 local PREVIEW_H      = 350
 local PREVIEW_NAME_Y = PREVIEW_Y + PREVIEW_H + 12
 
--- Idle animation data for the preview panel and icon cells.
 -- Idle animation data for the preview panel (scale/offsetY from sprite_values.txt)
 local IDLE_DATA = {
     knight   = { key = "KnightIdle",   path = "assets/characters/Knight/Idle.png",   frames = 10, fw = 135, fh = 135, scale = 1.1000, offsetY =   0, fl = 10/60 },
@@ -68,8 +72,6 @@ local saveData_ref, slot_ref
 local party    = {}   -- [1..4] charName or nil
 local roster   = {}   -- ordered list of charNames not in active party
 local icons    = {}   -- { [charName] = Image }
-local drag     = { active = false }
-local swapAnim = nil  -- animates a displaced icon to its new home
 
 local assetsLoaded  = false
 local font           -- size 14, slot number labels
@@ -100,6 +102,9 @@ end
 local function drawIcon(name, x, y, size)
     size = size or ICON_SIZE
     local img = icons[name]
+    -- A class without a charicon (cleric/paladin/wizard/rogue have none yet)
+    -- falls back to a shared existing icon so the cell still renders.
+    if not img and name ~= "knight" then img = icons["knight"] end
     if not img then return end
     local iw, ih = img:getDimensions()
     local sc = math.min(size / iw, size / ih)
@@ -112,26 +117,19 @@ local function drawArrow()
     common.drawBackArrow(pressedItem == "back")
 end
 
+-- Lowest-index empty party slot, or nil when the party is full.
+local function firstFreeSlot()
+    for s = 1, PARTY_SLOTS do
+        if not party[s] then return s end
+    end
+    return nil
+end
+
 -- ============================================================================
 -- EXIT — saves partyOrder and returns to map
 -- ============================================================================
 
 local function exit()
-    if drag.active then
-        if drag.srcType == "party" then
-            party[drag.srcIdx] = drag.charName
-        end
-        drag.active = false
-    end
-    if swapAnim then
-        if swapAnim.dstType == "party" then
-            party[swapAnim.dstIdx] = swapAnim.charName
-        else
-            table.insert(roster, math.min(swapAnim.dstIdx, #roster + 1), swapAnim.charName)
-        end
-        swapAnim = nil
-    end
-
     local order = {}
     for i = 1, PARTY_SLOTS do
         order[i] = party[i] or false
@@ -139,60 +137,6 @@ local function exit()
     saveData_ref.partyOrder = order
     save.write(slot_ref, saveData_ref)
     switchFn("map", saveData_ref, slot_ref)
-end
-
--- ============================================================================
--- DROP LOGIC
--- ============================================================================
-
-local function completeDrop(vmx, vmy)
-    if not drag.active then return end
-
-    -- Roster drag: item was kept in table for visual continuity; remove it now
-    if drag.srcType == "roster" then
-        table.remove(roster, drag.srcIdx)
-    end
-
-    drag.active = false
-
-    -- Drop onto a party slot
-    for i = 1, PARTY_SLOTS do
-        local sx, sy, sw, sh = getPartySlotRect(i)
-        if vmx >= sx and vmx < sx + sw and vmy >= sy and vmy < sy + sh then
-            local displaced = party[i]
-            party[i] = drag.charName
-            if displaced then
-                swapAnim = {
-                    charName = displaced,
-                    x  = sx,  y  = sy,
-                    tx = drag.srcCX - ICON_SIZE / 2,
-                    ty = drag.srcCY - ICON_SIZE / 2,
-                    t = 0, dur = 0.18,
-                    dstType = drag.srcType,
-                    dstIdx  = drag.srcIdx,
-                }
-            end
-            return
-        end
-    end
-
-    -- Drop onto the roster area
-    if vmx >= ROSTER_X and vmx < ROSTER_X + ROSTER_OUTER_W
-    and vmy >= ROSTER_Y and vmy < ROSTER_Y + ROSTER_OUTER_H then
-        if drag.srcType == "party" then
-            roster[#roster + 1] = drag.charName
-        else
-            table.insert(roster, drag.srcIdx, drag.charName)
-        end
-        return
-    end
-
-    -- No valid target: snap back silently
-    if drag.srcType == "party" then
-        party[drag.srcIdx] = drag.charName
-    else
-        table.insert(roster, drag.srcIdx, drag.charName)
-    end
 end
 
 -- ============================================================================
@@ -249,8 +193,6 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
         end
     end
 
-    drag         = { active = false }
-    swapAnim     = nil
     hoveredBack  = false
     pressedItem  = nil
     hoveredChar  = nil
@@ -263,23 +205,6 @@ end
 function M.update(dt)
     local vmx, vmy = common.virtualMouse()
 
-    if drag.active then
-        drag.x = vmx
-        drag.y = vmy
-    end
-
-    if swapAnim then
-        swapAnim.t = swapAnim.t + dt / swapAnim.dur
-        if swapAnim.t >= 1 then
-            if swapAnim.dstType == "party" then
-                party[swapAnim.dstIdx] = swapAnim.charName
-            else
-                table.insert(roster, math.min(swapAnim.dstIdx, #roster + 1), swapAnim.charName)
-            end
-            swapAnim = nil
-        end
-    end
-
     -- Hover detection
     hoveredBack = false
     if vmx >= AX and vmx < AX + A_W and vmy >= AY and vmy < AY + A_H then
@@ -287,53 +212,42 @@ function M.update(dt)
         common.setBoxTarget(box, AX - BOX_PAD, AY - BOX_PAD, A_W + BOX_PAD * 2, A_H + BOX_PAD * 2)
     end
 
-    -- Box follows dragged icon; otherwise tracks hovered icon cell (always icon-sized)
-    if drag.active then
-        common.setBoxTarget(box,
-            drag.x - ICON_SIZE / 2 - BOX_PAD,
-            drag.y - ICON_SIZE / 2 - BOX_PAD,
-            ICON_SIZE + BOX_PAD * 2, ICON_SIZE + BOX_PAD * 2, true)
-    else
-        local boxHit = false
-        for i = 1, PARTY_SLOTS do
-            local sx, sy, sw, sh = getPartySlotRect(i)
-            if vmx >= sx and vmx < sx + sw and vmy >= sy and vmy < sy + sh then
-                common.setBoxTarget(box, sx - BOX_PAD, sy - BOX_PAD, sw + BOX_PAD * 2, sh + BOX_PAD * 2)
-                boxHit = true; break
-            end
+    -- Red box tracks the hovered icon cell (party slots first, then roster).
+    local boxHit = false
+    for i = 1, PARTY_SLOTS do
+        local sx, sy, sw, sh = getPartySlotRect(i)
+        if vmx >= sx and vmx < sx + sw and vmy >= sy and vmy < sy + sh then
+            common.setBoxTarget(box, sx - BOX_PAD, sy - BOX_PAD, sw + BOX_PAD * 2, sh + BOX_PAD * 2)
+            boxHit = true; break
         end
-        if not boxHit then
-            for idx = 1, #roster do
-                local rx, ry = getRosterCellRect(idx)
-                if vmx >= rx and vmx < rx + ROSTER_CELL_W and vmy >= ry and vmy < ry + ICON_SIZE then
-                    common.setBoxTarget(box, rx - BOX_PAD, ry - BOX_PAD, ROSTER_CELL_W + BOX_PAD * 2, ICON_SIZE + BOX_PAD * 2)
-                    break
-                end
+    end
+    if not boxHit then
+        for idx = 1, #roster do
+            local rx, ry = getRosterCellRect(idx)
+            if vmx >= rx and vmx < rx + ROSTER_CELL_W and vmy >= ry and vmy < ry + ICON_SIZE then
+                common.setBoxTarget(box, rx - BOX_PAD, ry - BOX_PAD, ROSTER_CELL_W + BOX_PAD * 2, ICON_SIZE + BOX_PAD * 2)
+                break
             end
         end
     end
 
     common.updateBox(box, dt)
 
-    -- Track hovered character for preview panel
+    -- Track hovered character for preview panel (hover only).
     hoveredChar = nil
-    if drag.active then
-        hoveredChar = drag.charName
-    else
-        for i = 1, PARTY_SLOTS do
-            local sx, sy, sw, sh = getPartySlotRect(i)
-            if vmx >= sx and vmx < sx + sw and vmy >= sy and vmy < sy + sh then
-                hoveredChar = party[i]
-                break
-            end
+    for i = 1, PARTY_SLOTS do
+        local sx, sy, sw, sh = getPartySlotRect(i)
+        if vmx >= sx and vmx < sx + sw and vmy >= sy and vmy < sy + sh then
+            hoveredChar = party[i]
+            break
         end
-        if not hoveredChar then
-            for idx = 1, #roster do
-                local rx, ry = getRosterCellRect(idx)
-                if vmx >= rx and vmx < rx + ICON_SIZE and vmy >= ry and vmy < ry + ICON_SIZE then
-                    hoveredChar = roster[idx]
-                    break
-                end
+    end
+    if not hoveredChar then
+        for idx = 1, #roster do
+            local rx, ry = getRosterCellRect(idx)
+            if vmx >= rx and vmx < rx + ICON_SIZE and vmy >= ry and vmy < ry + ICON_SIZE then
+                hoveredChar = roster[idx]
+                break
             end
         end
     end
@@ -345,40 +259,36 @@ function M.mousepressed(x, y, button)
     if button ~= 1 then return end
     local vmx, vmy = common.virtualMouse()
 
+    -- Back arrow (handled on release, as before).
     if vmx >= AX and vmx < AX + A_W and vmy >= AY and vmy < AY + A_H then
         pressedItem = "back"
         return
     end
 
+    -- Click a filled PARTY slot: remove it, append to the roster bottom.
     for i = 1, PARTY_SLOTS do
         local sx, sy, sw, sh = getPartySlotRect(i)
         if party[i] and vmx >= sx and vmx < sx + sw and vmy >= sy and vmy < sy + sh then
-            drag = {
-                active   = true,
-                charName = party[i],
-                srcType  = "party",
-                srcIdx   = i,
-                srcCX    = sx + ICON_SIZE / 2,
-                srcCY    = sy + ICON_SIZE / 2,
-                x = vmx, y = vmy,
-            }
-            party[i] = nil
+            local name = table.remove(party, i)
+            roster[#roster + 1] = name
+            common.playClickSound()
             return
         end
     end
 
+    -- Click an INVENTORY (roster) cell: move to the lowest free party slot,
+    -- or (party full) append to the roster bottom (net no visual change).
     for idx, name in ipairs(roster) do
         local rx, ry, rw = getRosterCellRect(idx)
         if vmx >= rx and vmx < rx + rw and vmy >= ry and vmy < ry + ICON_SIZE then
-            drag = {
-                active   = true,
-                charName = name,
-                srcType  = "roster",
-                srcIdx   = idx,
-                srcCX    = rx + ROSTER_CELL_W / 2,
-                srcCY    = ry + ICON_SIZE / 2,
-                x = vmx, y = vmy,
-            }
+            local target = firstFreeSlot()
+            local removed = table.remove(roster, idx)
+            if target then
+                party[target] = removed
+            else
+                roster[#roster + 1] = removed
+            end
+            common.playClickSound()
             return
         end
     end
@@ -386,7 +296,6 @@ end
 
 function M.mousereleased(x, y, button)
     if button ~= 1 then return end
-    local vmx, vmy = common.virtualMouse()
 
     if pressedItem == "back" and hoveredBack then
         pressedItem = nil
@@ -395,8 +304,6 @@ function M.mousereleased(x, y, button)
         return
     end
     pressedItem = nil
-
-    completeDrop(vmx, vmy)
 end
 
 function M.keypressed(key)
@@ -419,9 +326,7 @@ local function drawScene()
     -- Roster icons (no name labels)
     for idx, name in ipairs(roster) do
         local rx, ry = getRosterCellRect(idx)
-        if not (drag.active and drag.srcType == "roster" and drag.srcIdx == idx) then
-            drawIcon(name, rx, ry)
-        end
+        drawIcon(name, rx, ry)
     end
 
     -- Party icons (no name labels)
@@ -430,13 +335,6 @@ local function drawScene()
         if party[i] then
             drawIcon(party[i], sx, sy)
         end
-    end
-
-    -- Swap animation icon (in flight, above other icons)
-    if swapAnim then
-        local ax = swapAnim.x + (swapAnim.tx - swapAnim.x) * swapAnim.t
-        local ay = swapAnim.y + (swapAnim.ty - swapAnim.y) * swapAnim.t
-        drawIcon(swapAnim.charName, ax, ay)
     end
 
     -- 3. Lines and outlines (drawn on top of icons)
@@ -504,11 +402,6 @@ local function drawScene()
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.printf(string.upper(hoveredChar),
             PREVIEW_X, PREVIEW_NAME_Y, PREVIEW_W, "center")
-    end
-
-    -- 8. Dragged icon at cursor (absolute top)
-    if drag.active then
-        drawIcon(drag.charName, drag.x - ICON_SIZE / 2, drag.y - ICON_SIZE / 2)
     end
 
     love.graphics.setColor(1, 1, 1, 1)

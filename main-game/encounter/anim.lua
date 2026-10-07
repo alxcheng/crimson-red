@@ -116,10 +116,18 @@ function M.drawEntities(world, battle, SCALE)
         local dx = pos.x + ox * flipSign
         local dy = pos.y + oy
 
+        -- Persistent class recolor (world.tintColor). Zero/absent = no tint,
+        -- so default entities render exactly white as before.
+        local tc = world.tintColor and world.tintColor[id]
+        local baseR, baseG, baseB = 1, 1, 1
+        if tc and (tc.R ~= 0 or tc.G ~= 0 or tc.B ~= 0) then
+            baseR, baseG, baseB = tc.R, tc.G, tc.B
+        end
+
         -- Draw sprite with effect tints (undulating RGB modifications)
         local etList = world.effectTints[id]
         if etList and #etList > 0 then
-            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.setColor(baseR, baseG, baseB, 1)
             love.graphics.draw(dbEntry.img, q, dx, dy, 0, sx, sy, fw/2, fh/2)
             love.graphics.setBlendMode("add")
             for _, et in ipairs(etList) do
@@ -128,7 +136,7 @@ function M.drawEntities(world, battle, SCALE)
             end
             love.graphics.setBlendMode("alpha")
         else
-            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.setColor(baseR, baseG, baseB, 1)
             love.graphics.draw(dbEntry.img, q, dx, dy, 0, sx, sy, fw/2, fh/2)
         end
 

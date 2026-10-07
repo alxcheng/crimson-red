@@ -4,6 +4,7 @@ local stats_mod  = require("encounter/stats")
 local anim_mod   = require("encounter/anim")
 local skills_mod = require("encounter/skills")
 local effects_mod = require("encounter/effects")
+local abilities_mod = require("encounter/abilities")
 
 local M = {}
 
@@ -188,6 +189,109 @@ function M.createNomad(world, battle, x, y, saveStats, SCALE)
             [3] = skills_mod.newNomadSparkOfInspirationSkill(),
         },
         queue = {}, gcd = 0, pendingActive = nil,
+    }
+    battle.selCircleScales[id] = 0
+    return id
+end
+
+-- ============================================================================
+-- PROOF-OF-PORT CLASSES (Cleric / Paladin / Wizard / Rogue)
+--
+-- Data-driven: stats come from the class-port spec
+-- (work/class-port-spec-cleric-paladin-wizard-rogue.md), abilities are wired
+-- via abilities_mod.make(dbId) + _slot stamping. All four REUSE THE KNIGHT
+-- anim frame set ("recolor" = a persistent world.tintColor, set below — no
+-- new frames). Stats fall back to the spec bases unless saveStats is passed
+-- (matches createKnight's `saveStats and ... or ...` pattern).
+-- ============================================================================
+
+local function buildClassSkills(classSet)
+    local list = {}
+    if classSet.auto then
+        local s = abilities_mod.make(classSet.auto); s._slot = 0; list[0] = s
+    end
+    for i, aid in ipairs(classSet.actives) do
+        local s = abilities_mod.make(aid); s._slot = i; list[i] = s
+    end
+    return list
+end
+
+-- The shared Knight anim frame set, reused verbatim for all four classes.
+local function knightAnimSet()
+    return {list={
+        [1] = anim_mod.newInst("KnightIdle",    10/60, true,  true),
+        [2] = anim_mod.newInst("KnightMove",     6/60, true,  false),
+        [3] = anim_mod.newInst("KnightAttack1",  6/60, false, false),
+        [4] = anim_mod.newInst("KnightAttack2", 12/60, false, false),
+        [5] = anim_mod.newInst("KnightTakeHit",  6/60, false, false),
+        [6] = anim_mod.newInst("KnightDeath",    6/60, false, false),
+    }}
+end
+
+-- CLERIC (Lucille) — support, NO melee auto (default action is the auto-heal).
+-- Spec §1.2: maxHP 300 [tuned], DEF 9 [wiki], ATK 16 [wiki], CRIT 0, MOVE_SPEED 3.0 [tuned].
+function M.createCleric(world, battle, x, y, saveStats, SCALE)
+    local id = world:new()
+    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(300, 16, 9, 0.0)
+    st.MOVE_SPEED.base = 3.0
+    applyBaseComponents(world, id, x, y, 29.43*SCALE, 38.97*SCALE, 0, st, {targetSide=0})
+    world.tintColor[id] = {R=1, G=0.85, B=0.2}   -- recolor: yellow
+    world.anim[id] = knightAnimSet()
+    world.skills[id] = {
+        list  = buildClassSkills(abilities_mod.CLASS_SETS.cleric),
+        queue = {}, abilityQueue = {}, execGate = 0,
+    }
+    battle.selCircleScales[id] = 0
+    return id
+end
+
+-- PALADIN (Heleth) — tank/hybrid, HAS melee auto + draws aggro.
+-- Spec §2.2: maxHP 520 [tuned], DEF 24 [wiki Lv5], ATK 24 [wiki], CRIT 0, MOVE_SPEED 2.8 [tuned].
+function M.createPaladin(world, battle, x, y, saveStats, SCALE, GRAVITY)
+    local id = world:new()
+    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(520, 24, 24, 0.0)
+    st.MOVE_SPEED.base = 2.8
+    applyBaseComponents(world, id, x, y, 30*SCALE, 40*SCALE, 0, st)
+    world.tintColor[id] = {R=0.4, G=1, B=0.4}    -- recolor: green
+    world.anim[id] = knightAnimSet()
+    world.skills[id] = {
+        list  = buildClassSkills(abilities_mod.CLASS_SETS.paladin),
+        queue = {}, abilityQueue = {}, execGate = 0,
+    }
+    world.hasThreateningPresence[id] = true      -- tank: hits draw aggro
+    battle.selCircleScales[id] = 0
+    return id
+end
+
+-- WIZARD (Bromswell) — ranged DPS, isRanged=true, auto-fires fireballs.
+-- Spec §3.2: maxHP 260 [tuned], DEF 5 [wiki], ATK 28 [inferred], CRIT 0, MOVE_SPEED 3.2 [tuned].
+function M.createWizard(world, battle, x, y, saveStats, SCALE, GRAVITY)
+    local id = world:new()
+    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(260, 28, 5, 0.0)
+    st.MOVE_SPEED.base = 3.2
+    applyBaseComponents(world, id, x, y, 29.43*SCALE, 38.97*SCALE, 0, st, {isRanged=true, targetSide=1})
+    world.tintColor[id] = {R=1, G=0.5, B=0.9}    -- recolor: pink
+    world.anim[id] = knightAnimSet()
+    world.skills[id] = {
+        list  = buildClassSkills(abilities_mod.CLASS_SETS.wizard),
+        queue = {}, abilityQueue = {}, execGate = 0,
+    }
+    battle.selCircleScales[id] = 0
+    return id
+end
+
+-- ROGUE (Gustav) — melee burst DPS, fastest swing. Crit base 0.20 [wiki Critical Strikes].
+-- Spec §4.2: maxHP 300 [tuned], DEF 11 [wiki avg 9–13], ATK 31 [wiki Lv1 bare], CRIT 0.20, MOVE_SPEED 3.4 [tuned].
+function M.createRogue(world, battle, x, y, saveStats, SCALE, GRAVITY)
+    local id = world:new()
+    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(300, 31, 11, 0.20)
+    st.MOVE_SPEED.base = 3.4
+    applyBaseComponents(world, id, x, y, 30*SCALE, 40*SCALE, 0, st)
+    world.tintColor[id] = {R=0.63, G=0.09, B=0.14}  -- recolor: dark-crimson #a01824
+    world.anim[id] = knightAnimSet()
+    world.skills[id] = {
+        list  = buildClassSkills(abilities_mod.CLASS_SETS.rogue),
+        queue = {}, abilityQueue = {}, execGate = 0,
     }
     battle.selCircleScales[id] = 0
     return id

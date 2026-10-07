@@ -5,6 +5,11 @@ local M = {}
 function M.newStat(base)  return {base=base, add=0, mult=1} end
 function M.get(s)         return (s.base * s.mult) + s.add end
 
+-- Derived "power" getter: the attacker-side damage base.
+-- Battleheart uses a dedicated `power` stat; CR keeps `ATK` as the
+-- underlying field (other code reads it), so power is derived, not renamed.
+function M.getPower(s) return M.get(s.ATK) end
+
 function M.newStats(hp, atk, def, crit, atkspd)
     return {
         HP          = M.newStat(hp     or 100),

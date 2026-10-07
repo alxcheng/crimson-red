@@ -1,5 +1,7 @@
 -- encounter/effects.lua — Generic effect system + all effect constructors
 
+local status_mod = require("encounter/status")
+
 local M = {}
 
 -- ============================================================================
@@ -123,31 +125,32 @@ function M.newKnightRage(srcId)
     }
 end
 
+-- Migrated to the indexed status system: self-Healing is now the HOT status
+-- (magnitude 6 HP/sec, 10s), driven by status.lua's tick. (Currently unused by
+-- any skill, but kept table-driven for consistency with Mend Wounds.)
 function M.newHealing(srcId, statGet)
     return {
         startFlag=true, endFlag=false, src=srcId, rate=6,
-        start  = function(w, b, eff) eff.startFlag = false end,
-        active = function(w, b, eff, dt)
-            if not w.entities[eff.src] then eff.endFlag = true; return end
-            if w.deathState[eff.src] then return end
-            local ss = w.stats[eff.src]; if not ss then return end
-            local maxHp = statGet(ss.maxHP)
-            if statGet(ss.HP) < maxHp then
-                ss.HP.base = math.min(maxHp, ss.HP.base + eff.rate * dt)
-            end
+        start  = function(w, b, eff)
+            eff.startFlag = false
+            status_mod.apply(w, eff.src, true, status_mod.HOT, 6, 10.0)
         end,
+        active = function(w, b, eff, dt) end,
     }
 end
 
+-- Migrated to the indexed status system: the DEF buff now lives in status.lua
+-- (DEF_BUFF index, magnitude 0.5, 10s). The stagger-point drain is CR-specific
+-- flavor that has no status-table analog, so it is kept as a thin local timer.
 function M.newKnightDefend(srcId, statGet)
     return {
         startFlag=true, endFlag=false, isAction=false, isActionEffect=false, skillSlot=2,
         src=srcId, timer=10.0, drainPerSec=0, tintEntry=nil,
         start = function(w, b, eff)
             eff.startFlag = false
-            local ss = w.stats[eff.src]; if not ss then return end
+            -- DEF buff, now table-driven (DEF.add += 0.5 for 10s)
+            status_mod.apply(w, eff.src, true, status_mod.DEF_BUFF, 0.5, 10.0)
             local sg = w.stagger[eff.src]
-            ss.RES.add = ss.RES.add - 0.5
             eff.drainPerSec = sg and (sg.points / 2 / 10) or 0
             eff.tintEntry = M.addEffectTint(w, eff.src, 0, 0, 1, 4.0)
         end,
@@ -162,8 +165,6 @@ function M.newKnightDefend(srcId, statGet)
             end
         end,
         end_fn = function(w, b, eff)
-            local ss = w.stats[eff.src]; if not ss then return end
-            ss.RES.add = ss.RES.add + 0.5
             if eff.tintEntry then M.removeEffectTint(w, eff.src, eff.tintEntry) end
         end,
     }
@@ -173,14 +174,16 @@ end
 -- GRANT POWER (ATK mult +0.5 for 10 seconds, red undulating tint)
 -- ============================================================================
 
+-- Migrated to the indexed status system: the ATK buff now lives in status.lua
+-- (ATK_BUFF index, magnitude 0.5 = +50% outgoing damage, 10s), consumed by
+-- combat.resolve via getMods().buffMods. The red tint stays here (visual).
 function M.newGrantPower(tgtId)
     return {
         startFlag=true, endFlag=false,
         target=tgtId, timer=10.0, tintEntry=nil,
         start = function(w, b, eff)
             eff.startFlag = false
-            local ss = w.stats[eff.target]; if not ss then return end
-            ss.ATK.mult = ss.ATK.mult + 0.5
+            status_mod.apply(w, eff.target, true, status_mod.ATK_BUFF, 0.5, 10.0)
             eff.tintEntry = M.addEffectTint(w, eff.target, 1, 0, 0, 4.0)
         end,
         active = function(w, b, eff, dt)
@@ -188,8 +191,6 @@ function M.newGrantPower(tgtId)
             if eff.timer <= 0 then eff.endFlag = true end
         end,
         end_fn = function(w, b, eff)
-            local ss = w.stats[eff.target]; if not ss then return end
-            ss.ATK.mult = ss.ATK.mult - 0.5
             if eff.tintEntry then M.removeEffectTint(w, eff.target, eff.tintEntry) end
         end,
     }
@@ -199,6 +200,9 @@ end
 -- MEND WOUNDS (heal over time for 10 seconds, green undulating tint, no particles)
 -- ============================================================================
 
+-- Migrated to the indexed status system: Mend Wounds is now the HOT status
+-- (magnitude = heal/sec = 5 * caster ATK, 10s), driven by status.lua's tick.
+-- The green tint stays here (visual).
 function M.newMendWounds(srcId, tgtId, statGet)
     local ss = statGet and statGet
     return {
@@ -206,20 +210,14 @@ function M.newMendWounds(srcId, tgtId, statGet)
         src=srcId, target=tgtId, timer=10.0, tintEntry=nil, statGet=ss,
         start = function(w, b, eff)
             eff.startFlag = false
+            local srcStats = w.stats[eff.src]
+            local healPerSec = srcStats and (5 * eff.statGet(srcStats.ATK)) / 10 or 0
+            status_mod.apply(w, eff.target, true, status_mod.HOT, healPerSec, 10.0)
             eff.tintEntry = M.addEffectTint(w, eff.target, 0, 1, 0, 4.0)
         end,
         active = function(w, b, eff, dt)
             eff.timer = eff.timer - dt
-            if eff.timer <= 0 then eff.endFlag = true; return end
-            if not w.entities[eff.target] or w.deathState[eff.target] then return end
-            local srcStats = w.stats[eff.src]
-            local tgtStats = w.stats[eff.target]
-            if not (srcStats and tgtStats) then return end
-            local totalHeal = 5 * eff.statGet(srcStats.ATK)
-            local healPerSec = totalHeal / 10
-            local amount = healPerSec * dt
-            local maxHp = eff.statGet(tgtStats.maxHP)
-            tgtStats.HP.base = math.min(maxHp, tgtStats.HP.base + amount)
+            if eff.timer <= 0 then eff.endFlag = true end
         end,
         end_fn = function(w, b, eff)
             if eff.tintEntry then M.removeEffectTint(w, eff.target, eff.tintEntry) end
@@ -231,22 +229,20 @@ end
 -- SUNDER ARMOR (reduces DEF by 1 for 10 seconds, stackable)
 -- ============================================================================
 
+-- Migrated to the indexed status system: Sunder Armor is now the VULNERABILITY
+-- debuff (damage-taken up), the canonical "marked" role in Battleheart.
+-- Magnitude 0.25 = +25% incoming damage for 10s (old effect was DEF.add -1).
 function M.newSunderArmor(tgtId)
     return {
         startFlag=true, endFlag=false,
         target=tgtId, timer=10.0,
         start = function(w, b, eff)
             eff.startFlag = false
-            local ss = w.stats[eff.target]; if not ss then return end
-            ss.DEF.add = ss.DEF.add - 1
+            status_mod.apply(w, eff.target, false, status_mod.VULNERABILITY, 0.25, 10.0)
         end,
         active = function(w, b, eff, dt)
             eff.timer = eff.timer - dt
             if eff.timer <= 0 then eff.endFlag = true end
-        end,
-        end_fn = function(w, b, eff)
-            local ss = w.stats[eff.target]; if not ss then return end
-            ss.DEF.add = ss.DEF.add + 1
         end,
     }
 end

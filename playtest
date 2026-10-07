@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Crimson Red — Director playtest launcher
+# Runs the game live from main-game/ (LÖVE2D). Usage: ./playtest
+set -euo pipefail
+cd "$(dirname "$0")/main-game"
+exec love .

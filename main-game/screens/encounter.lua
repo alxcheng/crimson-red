@@ -8,6 +8,7 @@ local particles    = require("encounter/particles")
 local effects_mod  = require("encounter/effects")
 local combat       = require("encounter/combat")
 local skills_mod   = require("encounter/skills")
+local status_mod   = require("encounter/status")
 local entities_mod = require("encounter/entities")
 local systems      = require("encounter/systems")
 local enc_mgr      = require("encounter/encounter_mgr")
@@ -64,6 +65,7 @@ local function initWorld()
         hasAttacked  = {},
         meleeAnchor  = {},
         hasThreateningPresence = {},
+        slots        = {},
     }
     function world:new()
         local id = self.nextId; self.nextId = id + 1
@@ -78,6 +80,8 @@ local function initWorld()
 end
 
 local function initBattle(c, pfx)
+    battle.SCALE          = SCALE
+    battle.GRAVITY        = GRAVITY
     battle.vfx            = {shake=0, chroma=0, zoom=1.0, zoomTarget=1.0, zoomX=VW/2, zoomY=VH/2}
     battle.bloodParticles  = {}
     battle.healParticles   = {}
@@ -301,6 +305,14 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
             id = entities_mod.createDuelist(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
         elseif charName == "nomad" then
             id = entities_mod.createNomad(world, battle, spawnX, spawnY, ss, SCALE)
+        elseif charName == "cleric" then
+            id = entities_mod.createCleric(world, battle, spawnX, spawnY, ss, SCALE)
+        elseif charName == "paladin" then
+            id = entities_mod.createPaladin(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+        elseif charName == "wizard" then
+            id = entities_mod.createWizard(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+        elseif charName == "rogue" then
+            id = entities_mod.createRogue(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
         end
         if id then
             world.hasEntered[id]        = {h=false, v=false}
@@ -340,6 +352,7 @@ function M.update(dt)
     skills_mod.system(world, battle, dt)
     effects_mod.system(world, battle, dt)
     effects_mod.effectTintSystem(world, dt)
+    status_mod.system(world, battle, dt)
     systems.stagger(world, dt)
     systems.stunSystem(world, dt)
     systems.threat(world, battle, dt)
@@ -426,12 +439,9 @@ function M.keypressed(key)
     local slotMap = {q=1, w=2, e=3, r=4}
     local slot = slotMap[key]
     if slot then
-        local skill = sk.list[slot]
-        local cost  = skill and (skill.resourceCost or 0) or 0
-        if skill and skill.cd <= 0 and (battle.resource or 0) >= cost then
-            skill.cd = skill.cdMax; sk.pendingActive = slot
-            combat.triggerActivationVFX(battle, su, world)
-        end
+        -- enqueue re-checks cd + resource and pays at press; activation is
+        -- deferred to skills_mod.system when the unit is free & in range.
+        skills_mod.enqueue(world, battle, su, slot)
     end
 end
 
