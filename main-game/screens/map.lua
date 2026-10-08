@@ -529,7 +529,12 @@ local function drawTile(c, r)
         elseif t == T_WATER then
             drawIcon(icons.water, sx, sy)
         elseif t == T_ENCOUNTER then
-            drawIcon(icons.encounter, sx, sy)
+            -- Drawn at 80% size (shrunken 20%), centered in the tile.
+            local iw, ih = icons.encounter:getDimensions()
+            local dw, dh = TILE_SIZE * 0.8, TILE_SIZE * 0.8
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.draw(icons.encounter, sx + (TILE_SIZE-dw)/2, sy + (TILE_SIZE-dh)/2,
+                               0, dw/iw, dh/ih)
         elseif t == T_SHOP then
             drawIcon(icons.shop, sx, sy)
         end
