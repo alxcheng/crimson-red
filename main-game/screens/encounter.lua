@@ -236,7 +236,7 @@ local function drawScene(dt)
 
     love.graphics.setFont(battle.smallFont)
     love.graphics.setColor(1, 1, 1, 0.55)
-    love.graphics.print("1-2: select  Q/W/E: skills (20 res)  K: spawn  RClick: target/move  P: pause  Esc: retreat", 5, VH - RESOURCE_BAR_AREA_H - 14)
+    love.graphics.print("1-2: select  Q/W/E: skills (20 res)  K: spawn  RClick: target/move  P/Space: pause  Esc: retreat", 5, VH - RESOURCE_BAR_AREA_H - 14)
     love.graphics.setColor(1, 1, 1, 1)
 
     -- Pause button (top-right): two bars when running, a play-triangle when
@@ -479,8 +479,8 @@ function M.update(dt)
 end
 
 function M.keypressed(key)
-    -- P toggles pause (works even while paused).
-    if key == "p" then
+    -- P or SPACE toggles pause (works even while paused).
+    if key == "p" or key == " " then
         paused = not paused
         common.playClickSound()
         return
