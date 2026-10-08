@@ -44,7 +44,7 @@ local iconImages = {}
 local assetsLoaded = false
 
 -- Pause (Director's screenshot aid): freezes ALL simulation + animations.
--- Toggled by the top-right pause icon or the P key. While paused, M.update
+-- Toggled by the top-right pause icon or the SPACE key. While paused, M.update
 -- skips every system tick; draw still runs so the screen stays visible.
 local paused = false
 
@@ -234,9 +234,6 @@ local function drawScene(dt)
         love.graphics.print(txt, (VW-tw)/2, VH/2 - battle.font:getHeight())
     end
 
-    love.graphics.setFont(battle.smallFont)
-    love.graphics.setColor(1, 1, 1, 0.55)
-    love.graphics.print("1-2: select  Q/W/E: skills (20 res)  K: spawn  RClick: target/move  P/Space: pause  Esc: retreat", 5, VH - RESOURCE_BAR_AREA_H - 14)
     love.graphics.setColor(1, 1, 1, 1)
 
     -- Pause button (top-right): two bars when running, a play-triangle when
@@ -479,8 +476,8 @@ function M.update(dt)
 end
 
 function M.keypressed(key)
-    -- P or SPACE toggles pause (works even while paused).
-    if key == "p" or key == " " then
+    -- SPACE toggles pause (works even while paused).
+    if key == " " then
         paused = not paused
         common.playClickSound()
         return

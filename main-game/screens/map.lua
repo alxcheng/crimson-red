@@ -71,6 +71,12 @@ local saveData_ref, slot_ref
 local grid = {}
 local player = { col=PLAYER_START_COL, row=PLAYER_START_ROW, px=0, py=0,
                  fromCol=PLAYER_START_COL, fromRow=PLAYER_START_ROW }
+-- Visual-only encounter lock: while the player SPRITE sits on an encounter tile
+-- (popup showing), the move data already points at that tile but the encounter
+-- is NOT yet engaged/cleared. The lock keeps the player from straying off
+-- mid-popup and is the ONLY thing that survives a save/quit; it is never
+-- written to the save. Cleared by the ENTER press (engage) or by walking off.
+local standingOnEncounter = false
 
 local canvas_map, vignette_shader
 local font16, font14
@@ -255,8 +261,10 @@ local function tryMove(tc, tr)
     if math.abs(tc-player.col) + math.abs(tr-player.row) ~= 1 then return end
     if isBarrier(tc, tr) then return end
 
-    local here = getCell(player.col, player.row)
-    if here and here.type == T_ENCOUNTER then
+    -- While the player sits on an encounter tile (popup open), they may only
+    -- walk back to where they came from. (The old check read the live grid
+    -- cell, which cleared the moment ENTER pressed — this flag is stable.)
+    if standingOnEncounter then
         if not (tc == player.fromCol and tr == player.fromRow) then return end
     end
 
@@ -271,11 +279,15 @@ local function tryMove(tc, tr)
     dest.revealed = true
 
     if dest.type == T_ENCOUNTER then
+        -- Player now sits ON the encounter tile: the popup opens and the move
+        -- data records this tile, but the encounter is NOT engaged yet.
+        standingOnEncounter = true
         popup.visible      = true
         popup.direction    = 1
         popup.typeProgress = 0
         popup.typing       = true
     else
+        standingOnEncounter = false
         if popup.visible then
             popup.direction = -1
             popup.typing    = false
@@ -285,27 +297,47 @@ local function tryMove(tc, tr)
         end
     end
 
-    -- Autosave on every move
-    updateSaveData()
-    save.write(slot_ref, saveData_ref)
+    -- Autosave on every move EXCEPT when the player is sitting on an
+    -- encounter tile (waiting to enter). Persisting that position would make
+    -- a later quit look like "player is on an encounter" and — combined with
+    -- onEnter re-arming the popup from the saved position — mark the
+    -- encounter cleared without it ever being fought. On-encounter positions
+    -- are visual-only; the last OFF-tile position is what gets saved.
+    if not standingOnEncounter then
+        updateSaveData()
+        save.write(slot_ref, saveData_ref)
+    end
 end
 
 local function onEnterPress()
     local here = getCell(player.col, player.row)
-    if here then
-        -- Record cleared encounter in save data before launching
-        if here.type == T_ENCOUNTER then
-            local mp = saveData_ref.mapProgression
-            local ce = mp.clearedEncounters or {}
-            ce[#ce+1] = {player.col, player.row}
-            mp.clearedEncounters = ce
-        end
-        here.type     = T_EMPTY
-        here.revealed = true
-        clearTile(player.col, player.row)
-    end
+    local onEncounter = here and here.type == T_ENCOUNTER
+
+    -- Dismiss the popup (visual state)
+    standingOnEncounter = false
     popup.direction = -1
     popup.typing    = false
+
+    if not onEncounter then
+        -- ENTER was pressed while standing on a non-encounter tile (the popup
+        -- had already closed): nothing to engage. Reset the autosave to the
+        -- last safe position and stay on the map.
+        updateSaveData()
+        save.write(slot_ref, saveData_ref)
+        return
+    end
+
+    -- ENGAGE the encounter: this is the single moment it is recorded as
+    -- cleared, right before we leave the map. (Never mark it cleared earlier,
+    -- and never on quit — a quit means we never actually fought it.)
+    local mp = saveData_ref.mapProgression
+    local ce = mp.clearedEncounters or {}
+    ce[#ce+1] = {player.col, player.row}
+    mp.clearedEncounters = ce
+
+    here.type     = T_EMPTY
+    here.revealed = true
+    clearTile(player.col, player.row)
 
     updateSaveData()
     save.write(slot_ref, saveData_ref)
@@ -383,6 +415,20 @@ function M.onEnter(canvas, postfx, sw, sd, slot)
     hoveredKey  = nil
     pressedItem = nil
     popup = {visible=false, scale=0, direction=0, typeProgress=0, typing=false}
+
+    -- If the save records the player standing on an encounter tile (possible
+    -- only from a pre-fix save), re-engage the popup instead of leaving a
+    -- ghost encounter that would never be fought or dismissed. (Post-fix,
+    -- on-encounter positions are never saved, so this is a no-op normally.)
+    local here0 = getCell(player.col, player.row)
+    if here0 and here0.type == T_ENCOUNTER then
+        standingOnEncounter = true
+        popup.visible      = true
+        popup.scale        = 1
+        popup.typeProgress = #POPUP_TEXT
+    else
+        standingOnEncounter = false
+    end
 
     buildTopBar()
 
