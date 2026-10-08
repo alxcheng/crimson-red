@@ -142,6 +142,16 @@ function M.enqueue(world, battle, unitId, slot)
         battle.resource = math.max(0, battle.resource - cost)
     end
 
+    -- CAMERA PUNCH on every VALID ability press (Director: shake on any valid
+    -- press, not just on activation). This is the "you committed to casting"
+    -- feedback — fires the instant the press is accepted (cd running + resource
+    -- paid), before the ability necessarily activates. A second, slightly
+    -- stronger punch still fires on actual activation (see M.system below) for
+    -- the "it landed" follow-through. Auto-attacks (slot 0) never reach here —
+    -- they queue in M.autoAttackSystem — so their per-hit shake is governed by
+    -- their own vfx flag (e.g. WizardAutoFireball is vfx=false).
+    combat.triggerActivationVFX(battle, unitId, world)
+
     -- QUEUE: push onto the per-unit ability queue (FIFO, press order).
     if not sk.abilityQueue then sk.abilityQueue = {} end
     table.insert(sk.abilityQueue, slot)

@@ -779,7 +779,11 @@ M.DB.WizardAutoFireball = {
     animListIdx = 3, animLock = 0,
     delay = 15/60,
     effect = {
-        kind = "damage", tags = { "Ranged", "Fire" }, vfx = true,
+        -- vfx=false: the auto-fireball must NOT screen-shake on every hit —
+        -- it fires on a 1.6s loop, so per-hit shake would be constant
+        -- nauseating rattle. Camera shake now comes from VALID ABILITY
+        -- PRESSES instead (see skills.enqueue → combat.triggerActivationVFX).
+        kind = "damage", tags = { "Ranged", "Fire" }, vfx = false,
         ability = { aimedShot = true, falloff = 1.5, canCrit = true },
     },
 }
