@@ -1,69 +1,75 @@
-# Crimson Red — Project Memory
+# Crimson Red — start here
 
-## Roles & workflow
-- **Director = the user.** Only talks to the manager. Gives new features + screen-by-screen
-  playtest feedback (what they like/don't), and decides rollbacks/changes.
-- **Manager = the Lead agent** (me). Scopes features, delegates to developer agents
-  (teammates) with disjoint write-scopes, reviews/integrates results, and reports back
-  to the Director. The Director never talks to dev agents directly.
-- **Dev agents = spawned teammates.** Each owns a scoped slice (e.g. `encounter/`, an
-  asset set, a screen) and reports to the manager.
-- **Loop:** Director gives feature/feedback → Manager scopes & delegates → team
-  implements → Manager delivers a playable build → Director playtests → Director
-  writes feedback → Manager iterates/rolls back until "done" → repeat.
-- **Design baseline:** encounters should function like **Battleheart** (CR is a "mod" of
-  it — same underlying systems, new classes/enemies/stages). See
-  `work/battleheart-encounter-parity.md` for the feature-gap roadmap.
+Crimson Red is a 2D real-time party battler in **LÖVE2D (Lua)**, built as a "mod" of the
+mobile game **Battleheart (BH)**: same systems (party of four, tap-to-target combat, gear,
+skills, shop), new classes, enemies and structure (a floor map instead of BH's level list).
 
-## What this is
-A 2D turn-based tactical/RPG game built in **LÖVE2D (Lua)**. Virtual resolution
-**800×450 (16:9)**, letterboxed to a resizable window. The current focus is the
-title screen → party select → map → encounter flow, with post-processing
-(chromatic aberration + bloom) applied globally.
+This file is the entry point for any agent. Read it fully, then follow the links you need.
 
-Full technical constants (palette, typography, layout, resolution rules) live in
-[`CLAUDE.md`](CLAUDE.md) — read that first for anything visual or structural.
-Detailed, on-demand specifics (how to run/test, asset conventions, file map) live in
-[`memory/reference.md`](memory/reference.md).
+## Who does what
 
-## Code layout
-- **`main-game/`** — the real integrated game. Entry: `main.lua` + `conf.lua`.
-  - `screens/` — one file per screen (title, save_select, party_select, map, encounter, sprite_dev).
-  - `encounter/` — combat module (anim, combat, effects, entities, skills, stats, systems, ui).
-  - `assets/` — sprites, charicons, music/sounds, vfx, font (`dedicool/`).
-  - Top-level helpers: `common.lua`, `json.lua`, `music_mgr.lua`, `save.lua`.
-- **`prototype/`** — self-contained experiments, **no shared state** with `main-game`.
-- **`icon-making/`** — tooling/art for generating map & character icons.
-- **`captures/`** — screenshots from testing (git-ignored).
+- **Director = the user.** Their only job: playtest, report bugs and tweaks, and name new
+  features. They talk only to the Lead.
+- **Lead = you** (the agent in the main session). You turn the Director's words into scoped
+  tasks, do them or delegate them, verify the result, and report back in plain language.
+- **Workers = agents the Lead starts** for one scoped task each. They report to the Lead.
 
-## How to run / test
-```bash
-cd main-game && love .
+The loop: Director feedback → Lead triages and scopes → work is done → tests pass → Lead
+tells the Director exactly what changed and what to try → Director playtests → repeat.
+The step-by-step procedure is in [`docs/LEAD_PLAYBOOK.md`](docs/LEAD_PLAYBOOK.md).
+
+## Where everything is
+
+| You need… | Go to |
+|---|---|
+| How the Lead works: triage, task briefs, delegation, definition of done | [`docs/LEAD_PLAYBOOK.md`](docs/LEAD_PLAYBOOK.md) |
+| What is done, what is in progress, what the Director has not yet seen | [`docs/STATUS.md`](docs/STATUS.md) |
+| Known gaps and next work, in priority order | [`docs/BACKLOG.md`](docs/BACKLOG.md) |
+| Decisions the Director has made (do not reopen them) | [`docs/DECISIONS.md`](docs/DECISIONS.md) |
+| How the code is organised, file by file, and how to add things | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| **Anything about how Battleheart works** (formulas, numbers, behaviour) | [`bh/README.md`](bh/README.md) |
+| Visual constants (resolution, palette, font) | [`CLAUDE.md`](CLAUDE.md) |
+
 ```
-Background smoke test (no window, for agents): `./test_headless` — runs the encounter systems headlessly and prints PASS/FAIL. Never opens a window.
-UI-screen driver (party/equip/shop/talents/map under synthetic input): `./test_ui` — prints UI_SMOKE_PASS/FAIL. Run both; read exit codes.
-See `memory/reference.md` for the VM/capture workflow used during development.
+main-game/     the game (run from here)
+  data/        WHAT exists: classes, enemies, abilities, items, talents, rewards (pure data)
+  encounter/   the battle engine (how fights run)
+  screens/     one file per screen (title, save select, map, party, equip, talents, shop, battle)
+  *.lua        shared modules: common (drawing/UI helpers), save, items, progression, music
+bh/            Battleheart reference library: decoded data + documented source
+docs/          project docs (this table)
+icon-making/   separate small tool that draws the map/character icons
+captures/      screenshots from test runs (not in git)
+```
 
-## Top rules
-1. **Never guess what an asset/text/number says.** Verify against the actual file or DOM; if a screenshot is blurry, re-capture magnified.
-2. **`main-game/` and `prototype/` do not share state.** Don't reach across the boundary.
-3. **All coordinates are virtual pixels at 800×450.** Don't hardcode screen sizes.
-4. **Keep `AGENTS.md` lean.** Detail belongs in `memory/reference.md` and skills.
+## Running and testing
 
-## Memory / token policy
-- **`AGENTS.md`** (this file) — always on; keep short.
-- **`CLAUDE.md`** — project technical constants (always on for this project).
-- **`memory/reference.md`** — loaded on demand for run/test steps, file map, conventions.
-- **`.dsh/skills/`** — project skills; load on use.
-- **`captures/`** — screenshots saved during work (never `/tmp` or `~`).
+```bash
+./playtest         # run the game (for the Director)
+./test_headless    # battle-engine smoke test          -> HEADLESS_PASS, exit code 0
+./test_ui          # drives every screen + full battles -> UI_SMOKE_PASS, exit code 0
+```
 
-## Long-term memory (Hindsight)
-This project has a local Hindsight vector memory bank (`coding-agent::crimson-red`),
-auto-created and kept current from git history + this codebase. Before non-trivial work,
-search it (`hindsight_search_knowledge_pages`) instead of re-deriving decisions; use
-`hindsight_reflect` for WHY questions. Credit it in replies when it informs you
-(`> 🧠 From Hindsight memory (<page>) — …`). See global AGENTS.md § Long-term memory.
+- **Run both tests after every change and read the exit code** (`echo $?`), not just the last
+  line. A change is not done until both exit 0.
+- `./test_ui` saves screenshots (it prints the folder). Copy them to `captures/ui_smoke/` and
+  **look at them** when you changed anything visual.
+- Both tests briefly open a game window; `./test_ui` takes a few minutes. Neither touches real
+  save files.
+- This machine has no standalone `lua`; the tests are also the syntax check.
 
-## Accounts / logins
-No external accounts are used by this project. If a workflow ever hits a
-login / 2FA / CAPTCHA, **stop and hand it to the user** — never enter credentials.
+## Rules
+
+1. **Never guess.** A BH number or behaviour comes from `bh/` (cite the file). A Crimson Red
+   value we invented is tagged `[tuned]` in a comment. If you cannot find something, say so.
+2. **Data in `data/`, logic in the engine.** Adding a class, enemy, ability or item is a data
+   edit. If you find yourself writing `if class == "knight"` in engine code, stop.
+3. **All coordinates are virtual pixels on an 800×450 canvas.** A unit's position is its
+   CENTER; its feet are at `position.y + size.h / 2`.
+4. **The shared resource bar (max 50) stays.** It is a deliberate difference from BH.
+5. **Do not reopen `docs/DECISIONS.md`.** If a decision blocks you, tell the Director.
+6. **Keep the docs true.** When work lands, update `docs/STATUS.md` and `docs/BACKLOG.md` in
+   the same change. Do not create new planning files; these are the only ones.
+7. **Git:** work on a branch, small commits with clear messages, never push or merge to
+   `master` unless the Director says so.
+8. **Never enter passwords, 2FA codes or CAPTCHAs.** Hand those to the Director.

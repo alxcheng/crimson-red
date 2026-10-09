@@ -1,8 +1,9 @@
--- ============================================================================
--- Crimson Red — Shared prototype module
--- Require from any prototype by adding to package.path first:
---   package.path = package.path .. ";../shared/?.lua;../shared/?/init.lua"
--- ============================================================================
+-- common.lua — shared helpers for every screen: virtual resolution, the
+-- post-processing chain, letterboxing, the animated selection box, fonts,
+-- hit-testing, the back arrow and UI sounds.
+--
+-- All drawing happens on an 800x450 canvas (M.VW x M.VH) that is scaled to the
+-- window with letterboxing; M.virtualMouse() converts the mouse to that space.
 
 local M = {}
 
@@ -21,7 +22,7 @@ M.COLOR_BLACK = {0, 0, 0, 1}
 -- MOONSHINE SETUP
 -- ============================================================================
 -- Both chromatic aberration and bloom are handled by Moonshine.
--- Call M.newPostFX() after requiring moonshine in your prototype.
+-- main.lua builds one chain with M.newPostFX(moonshine) and passes it to screens.
 --
 -- Pipeline:
 --   1. Draw scene into canvas (nearest, VW×VH)
@@ -154,25 +155,11 @@ end
 -- FONT HELPER
 -- ============================================================================
 
--- Load Dedicool at the given size (path relative to the calling prototype's dir)
+-- Load the Dedicool font at the given size.
 function M.loadFont(size)
     local ok, f = pcall(love.graphics.newFont, "assets/dedicool/Dedicool.ttf", size)
     if not ok then print("[common] Font load error:", f) end
     return ok and f or love.graphics.newFont(size)
-end
-
--- ============================================================================
--- WINDOW / SCENE SETUP
--- ============================================================================
--- Standard window initialisation shared by all prototypes.
--- Returns canvas, postfx so the caller can store them.
-
-function M.setupWindow(title, moonshine_mod)
-    love.window.setTitle(title)
-    love.window.setMode(M.VW, M.VH, {resizable = true})
-    local c  = M.newSceneCanvas()
-    local fx = M.newPostFX(moonshine_mod)
-    return c, fx
 end
 
 -- ============================================================================
