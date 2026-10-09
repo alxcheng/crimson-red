@@ -33,7 +33,7 @@ function M.fromFlat(flat)
         ATK_SPEED   = M.newStat(1.0),
         STAGGER_RES = M.newStat(1.0),
         MAX_STAGGER = M.newStat(hp * 0.5),
-        STAGGER_DUR = M.newStat(10),
+        STAGGER_DUR = M.newStat(5),    -- seconds a knocked-down unit stays down
     }
 end
 

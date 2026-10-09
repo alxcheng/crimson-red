@@ -409,7 +409,6 @@ function M.onEnter(canvas, postfx, sw, sd, slot)
             }
         ]])
 
-        icons.unknown   = love.graphics.newImage("assets/icons/mapicon-unknown.png")
         icons.tree      = love.graphics.newImage("assets/icons/mapicon-tree.png")
         icons.water     = love.graphics.newImage("assets/icons/mapicon-ocean.png")
         icons.shop      = love.graphics.newImage("assets/icons/mapicon-shop.png")
@@ -552,7 +551,9 @@ local function drawTile(c, r)
     love.graphics.rectangle("fill", sx, sy, TILE_SIZE, TILE_SIZE)
 
     if not cell.revealed then
-        drawIcon(icons.unknown, sx, sy)
+        -- Unexplored: a "?" in the game font, centred in the tile.
+        love.graphics.setColor(1, 1, 1, 1)
+        common.printCentered(common.loadFont(40), "?", sx, sy, TILE_SIZE, TILE_SIZE)
     else
         local t = cell.type
         if t == T_TREE then
