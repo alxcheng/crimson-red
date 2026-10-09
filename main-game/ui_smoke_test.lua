@@ -358,7 +358,7 @@ local function driveEncounter(tag, party)
     switched = nil
     local cfg = { encounterGoal = 9, spawnDelay = 0.5 }
     if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, cfg) then return end
-    local keys = { "q", "w", "e", "r", "1", "2", "3", "4" }
+    local keys = { "q", "w", "e", "r" }
     local maxFrames, frame = 180 * 60, 0
     while frame < maxFrames and not switched do
         frame = frame + 1
@@ -368,9 +368,24 @@ local function driveEncounter(tag, party)
         if frame % 20 == 0 then
             guard(tag .. " keypressed", scr.keypressed, keys[math.random(#keys)])
         end
-        -- Rare right-clicks: a move order cancels the unit's target, so frequent
-        -- ones would keep a solo hero wandering instead of fighting back.
-        if frame % 400 == 0 then
+        -- Play like a person: once a second pick the next hero (keys 1-4) and
+        -- right-click a living enemy so idle heroes get a target. Every 10th
+        -- order is a move to open ground instead.
+        if frame % 60 == 0 then
+            local world = scr.debugState()
+            local order = frame / 60
+            guard(tag .. " keypressed", scr.keypressed, tostring(order % 4 + 1))
+            local tx, ty
+            if order % 10 ~= 0 then
+                for id in pairs(world.entities) do
+                    local sd, pos = world.side[id], world.position[id]
+                    if sd and sd.s == 1 and pos and not world.deathState[id] and pos.x < VW then
+                        tx, ty = pos.x, pos.y; break
+                    end
+                end
+            end
+            if tx then mouseX, mouseY = tx, ty end
+            guard(tag .. " update", scr.update, 1 / 60)   -- refresh hover on the new mouse spot
             guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
             guard(tag .. " mousereleased", scr.mousereleased, mouseX, mouseY, 2)
         end

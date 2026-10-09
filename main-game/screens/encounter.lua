@@ -638,6 +638,9 @@ function M.mousereleased(x, y, button)
     if button == 2 then battle.pressedUnit = nil end
 end
 
+-- Test hook (ui_smoke_test.lua): the live world/battle tables, read-only use.
+function M.debugState() return world, battle end
+
 function M.draw()
     local vfx = battle.vfx
 
