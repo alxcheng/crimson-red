@@ -607,6 +607,8 @@ function M.death(world, battle, dt)
                     end
                 end
             elseif side and side.s == 1 then
+                -- Per-enemy kill counter (Phase 0 economy: per-kill gold drip).
+                battle.enemyDefeated = (battle.enemyDefeated or 0) + 1
                 local mgr = battle.encounterMgr
                 if mgr then
                     local dl = world.dangerLevel[id] or 0

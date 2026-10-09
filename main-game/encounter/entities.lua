@@ -37,9 +37,9 @@ end
 -- KNIGHT
 -- ============================================================================
 
-function M.createKnight(world, battle, x, y, saveStats, SCALE, GRAVITY)
+function M.createKnight(world, battle, x, y, saveStats, SCALE, GRAVITY, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(100, 10, 5, 0.10)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(100, 10, 5, 0.10)
     applyBaseComponents(world, id, x, y, 30*SCALE, 40*SCALE, 0, st)
     world.anim[id] = {list={
         [1] = anim_mod.newInst("KnightIdle",    10/60, true,  true),
@@ -104,9 +104,9 @@ end
 -- BRIGAND
 -- ============================================================================
 
-function M.createBrigand(world, battle, x, y, saveStats, SCALE, GRAVITY)
+function M.createBrigand(world, battle, x, y, saveStats, SCALE, GRAVITY, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(100, 10, 5, 0.10)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(100, 10, 5, 0.10)
     applyBaseComponents(world, id, x, y, 30*SCALE, 40*SCALE, 0, st, {spriteOffsetY=5})
     world.anim[id] = {list={
         [1] = anim_mod.newInst("BrigandIdle",    10/60, true,  true),
@@ -126,9 +126,9 @@ end
 -- CHAMPION
 -- ============================================================================
 
-function M.createChampion(world, battle, x, y, saveStats, SCALE, GRAVITY)
+function M.createChampion(world, battle, x, y, saveStats, SCALE, GRAVITY, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(100, 10, 5, 0.10)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(100, 10, 5, 0.10)
     applyBaseComponents(world, id, x, y, 32*SCALE, 52*SCALE, 0, st, {spriteOffsetY=-35})
     world.anim[id] = {list={
         [1] = anim_mod.newInst("ChampionIdle",    10/60, true,  true),
@@ -148,9 +148,9 @@ end
 -- DUELIST
 -- ============================================================================
 
-function M.createDuelist(world, battle, x, y, saveStats, SCALE, GRAVITY)
+function M.createDuelist(world, battle, x, y, saveStats, SCALE, GRAVITY, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(100, 10, 5, 0.10)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(100, 10, 5, 0.10)
     applyBaseComponents(world, id, x, y, 27.6*SCALE, 41.88*SCALE, 0, st)
     world.anim[id] = {list={
         [1] = anim_mod.newInst("DuelistIdle",    10/60, true,  true),
@@ -170,9 +170,9 @@ end
 -- NOMAD
 -- ============================================================================
 
-function M.createNomad(world, battle, x, y, saveStats, SCALE)
+function M.createNomad(world, battle, x, y, saveStats, SCALE, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(80, 8, 2, 0.05)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(80, 8, 2, 0.05)
     applyBaseComponents(world, id, x, y, 29.43*SCALE, 38.97*SCALE, 0, st, {isRanged=true, targetSide=0, spriteOffsetY=-18})
     world.anim[id] = {list={
         [1] = anim_mod.newInst("NomadIdle",    8/60, true,  true),
@@ -230,9 +230,9 @@ end
 
 -- CLERIC (Lucille) — support, NO melee auto (default action is the auto-heal).
 -- Spec §1.2: maxHP 300 [tuned], DEF 9 [wiki], ATK 16 [wiki], CRIT 0, MOVE_SPEED 3.0 [tuned].
-function M.createCleric(world, battle, x, y, saveStats, SCALE)
+function M.createCleric(world, battle, x, y, saveStats, SCALE, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(300, 16,  9, 0.0)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(300, 16,  9, 0.0)
     st.MOVE_SPEED.base = 3.0
     -- Ranged support (mirrors the Nomad): isRanged=true so the Cleric never
     -- has to pass the melee-range gate for its auto-heal — it faces its target
@@ -251,9 +251,9 @@ end
 
 -- PALADIN (Heleth) — tank/hybrid, HAS melee auto + draws aggro.
 -- Spec §2.2: maxHP 520 [tuned], DEF 24 [wiki Lv5], ATK 24 [wiki], CRIT 0, MOVE_SPEED 2.8 [tuned].
-function M.createPaladin(world, battle, x, y, saveStats, SCALE, GRAVITY)
+function M.createPaladin(world, battle, x, y, saveStats, SCALE, GRAVITY, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(520, 24, 24, 0.0)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(520, 24, 24, 0.0)
     st.MOVE_SPEED.base = 2.8
     applyBaseComponents(world, id, x, y, 30*SCALE, 40*SCALE, 0, st)
     world.tintColor[id] = {R=0.4, G=1, B=0.4}    -- recolor: green
@@ -269,9 +269,9 @@ end
 
 -- WIZARD (Bromswell) — ranged DPS, isRanged=true, auto-fires fireballs.
 -- Spec §3.2: maxHP 260 [tuned], DEF 5 [wiki], ATK 28 [inferred], CRIT 0, MOVE_SPEED 3.2 [tuned].
-function M.createWizard(world, battle, x, y, saveStats, SCALE, GRAVITY)
+function M.createWizard(world, battle, x, y, saveStats, SCALE, GRAVITY, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(260, 28, 5, 0.0)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(260, 28, 5, 0.0)
     st.MOVE_SPEED.base = 3.2
     applyBaseComponents(world, id, x, y, 29.43*SCALE, 38.97*SCALE, 0, st, {isRanged=true, targetSide=1})
     world.tintColor[id] = {R=1, G=0.5, B=0.9}    -- recolor: pink
@@ -286,9 +286,9 @@ end
 
 -- ROGUE (Gustav) — melee burst DPS, fastest swing. Crit base 0.20 [wiki Critical Strikes].
 -- Spec §4.2: maxHP 300 [tuned], DEF 11 [wiki avg 9–13], ATK 31 [wiki Lv1 bare], CRIT 0.20, MOVE_SPEED 3.4 [tuned].
-function M.createRogue(world, battle, x, y, saveStats, SCALE, GRAVITY)
+function M.createRogue(world, battle, x, y, saveStats, SCALE, GRAVITY, gear)
     local id = world:new()
-    local st = saveStats and stats_mod.fromSave(saveStats) or stats_mod.newStats(300, 31, 11, 0.20)
+    local st = saveStats and stats_mod.fromSave(saveStats, gear) or stats_mod.newStats(300, 31, 11, 0.20)
     st.MOVE_SPEED.base = 3.4
     applyBaseComponents(world, id, x, y, 30*SCALE, 40*SCALE, 0, st)
     world.tintColor[id] = {R=0.63, G=0.09, B=0.14}  -- recolor: dark-crimson #a01824

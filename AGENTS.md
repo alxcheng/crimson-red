@@ -41,6 +41,7 @@ Detailed, on-demand specifics (how to run/test, asset conventions, file map) liv
 cd main-game && love .
 ```
 Background smoke test (no window, for agents): `./test_headless` — runs the encounter systems headlessly and prints PASS/FAIL. Never opens a window.
+UI-screen driver (party/equip/shop/talents/map under synthetic input): `./test_ui` — prints UI_SMOKE_PASS/FAIL. Run both; read exit codes.
 See `memory/reference.md` for the VM/capture workflow used during development.
 
 ## Top rules

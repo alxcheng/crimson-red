@@ -89,10 +89,12 @@ local box = common.newBox()
 local topbarItems = {}
 
 local POPUP_TEXT  = "There are a group of enemies here."
+local SHOP_TEXT   = "A merchant has set up stall here."
 local POPUP_SPEED = 0.25
 local TYPE_SPEED  = 40
 
-local popup = { visible=false, scale=0, direction=0, typeProgress=0, typing=false }
+-- `ptype` distinguishes what ENTER engages: "encounter" (default) or "shop".
+local popup = { visible=false, scale=0, direction=0, typeProgress=0, typing=false, ptype="encounter" }
 
 local ENTER_LABEL = "ENTER"
 local enterLabelW = 0
@@ -199,7 +201,7 @@ local function buildTopBar()
     local aY = math.floor((TOP_BAR_H - aH) / 2)
     topbarItems[1] = {isArrow=true, x=aX, y=aY, w=aW, h=aH}
 
-    local labels  = {"PARTY", "TALENTS", "ITEMS"}
+    local labels  = {"PARTY", "TALENTS", "EQUIP"}
     local centers = {100, 205, 300}
     for i, lbl in ipairs(labels) do
         local lw = font16:getWidth(lbl)
@@ -286,6 +288,16 @@ local function tryMove(tc, tr)
         popup.direction    = 1
         popup.typeProgress = 0
         popup.typing       = true
+        popup.ptype        = "encounter"
+    elseif dest.type == T_SHOP then
+        -- Walking onto the shop tile opens a shop popup (same right-side panel
+        -- as the encounter popup, but engaging it enters the SHOP screen).
+        standingOnEncounter = false
+        popup.visible      = true
+        popup.direction    = 1
+        popup.typeProgress = 0
+        popup.typing       = true
+        popup.ptype        = "shop"
     else
         standingOnEncounter = false
         if popup.visible then
@@ -312,11 +324,19 @@ end
 local function onEnterPress()
     local here = getCell(player.col, player.row)
     local onEncounter = here and here.type == T_ENCOUNTER
+    local onShop      = here and here.type == T_SHOP
 
     -- Dismiss the popup (visual state)
     standingOnEncounter = false
     popup.direction = -1
     popup.typing    = false
+
+    if onShop then
+        -- ENTER on the shop tile: open the dedicated SHOP screen.
+        -- The shop tile stays on the map (revisitable; it restocks after wins).
+        switchFn("shop", saveData_ref, slot_ref)
+        return
+    end
 
     if not onEncounter then
         -- ENTER was pressed while standing on a non-encounter tile (the popup
@@ -350,6 +370,10 @@ local function onTopBar(index)
         switchFn("save_select")
     elseif index == 2 then
         switchFn("party_select", saveData_ref, slot_ref)
+    elseif index == 3 then
+        switchFn("talents", saveData_ref, slot_ref)
+    elseif index == 4 then
+        switchFn("equip", saveData_ref, slot_ref)
     end
 end
 
@@ -414,7 +438,7 @@ function M.onEnter(canvas, postfx, sw, sd, slot)
     hoveredItem = nil
     hoveredKey  = nil
     pressedItem = nil
-    popup = {visible=false, scale=0, direction=0, typeProgress=0, typing=false}
+    popup = {visible=false, scale=0, direction=0, typeProgress=0, typing=false, ptype="encounter"}
 
     -- If the save records the player standing on an encounter tile (possible
     -- only from a pre-fix save), re-engage the popup instead of leaving a
@@ -426,6 +450,15 @@ function M.onEnter(canvas, postfx, sw, sd, slot)
         popup.visible      = true
         popup.scale        = 1
         popup.typeProgress = #POPUP_TEXT
+    elseif here0 and here0.type == T_SHOP then
+        -- Back from the SHOP screen (or loading a save made on the shop tile):
+        -- re-open the shop popup so the shop can be re-entered without first
+        -- stepping off the tile and back on.
+        standingOnEncounter = false
+        popup.visible      = true
+        popup.scale        = 1
+        popup.typeProgress = #SHOP_TEXT
+        popup.ptype        = "shop"
     else
         standingOnEncounter = false
     end
@@ -461,7 +494,8 @@ function M.update(dt)
     end
 
     if popup.visible and popup.typing then
-        popup.typeProgress = math.min(#POPUP_TEXT, popup.typeProgress + dt * TYPE_SPEED)
+        local cap = (popup.ptype == "shop") and #SHOP_TEXT or #POPUP_TEXT
+        popup.typeProgress = math.min(cap, popup.typeProgress + dt * TYPE_SPEED)
     end
 
     local vmx, vmy = common.virtualMouse()
@@ -590,7 +624,7 @@ local function drawPopupContent()
     love.graphics.rectangle("line", POPUP_X+1, MAP_Y+1, POPUP_W-2, MAP_H-2)
 
     love.graphics.setFont(font16)
-    local title = "ENCOUNTER"
+    local title = (popup.ptype == "shop") and "SHOP" or "ENCOUNTER"
     local tw    = font16:getWidth(title)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(title, math.floor(POPUP_X + (POPUP_W-tw)/2), MAP_Y+18)
@@ -599,7 +633,8 @@ local function drawPopupContent()
     love.graphics.setLineWidth(1)
     love.graphics.line(POPUP_X+8, MAP_Y+44, POPUP_X+POPUP_W-8, MAP_Y+44)
 
-    local visible = string.sub(POPUP_TEXT, 1, math.floor(popup.typeProgress))
+    local body = (popup.ptype == "shop") and SHOP_TEXT or POPUP_TEXT
+    local visible = string.sub(body, 1, math.floor(popup.typeProgress))
     love.graphics.setFont(font14)
     love.graphics.setColor(1, 0, 0, 1)
     love.graphics.printf(visible, POPUP_X+10, MAP_Y+56, POPUP_W-20, "left")

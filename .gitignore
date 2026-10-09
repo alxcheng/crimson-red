@@ -16,3 +16,6 @@ work/
 
 # Local-only notes / secrets (never commit credentials)
 *.local.md
+
+# Agent-harness session exports (large zips, local only)
+harness-logs/

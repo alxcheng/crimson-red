@@ -31,6 +31,9 @@ local screens = {
     map          = require("screens/map"),
     encounter    = require("screens/encounter"),
     party_select = require("screens/party_select"),
+    equip        = require("screens/equip"),
+    talents      = require("screens/talents"),
+    shop         = require("screens/shop"),
     sprite_dev   = require("screens/sprite_dev"),
 }
 
@@ -73,6 +76,12 @@ function love.load()
         require("headless_test").load()
         return
     end
+    -- CR_TEST_SCENE=ui: drive the UI screens with synthetic input instead of
+    -- the normal app (see main-game/ui_smoke_test.lua, invoked by ./test_ui).
+    if os.getenv("CR_TEST_SCENE") == "ui" then
+        require("ui_smoke_test").load()
+        return
+    end
 
     if headless_on() then
         -- Offscreen: no default framebuffer exists, so common.newPostFX
@@ -100,6 +109,10 @@ function love.update(dt)
     -- CR_TEST_SCENE=headless owns the whole frame; skip normal app logic.
     if os.getenv("CR_TEST_SCENE") == "headless" then
         require("headless_test").update(dt)
+        return
+    end
+    if os.getenv("CR_TEST_SCENE") == "ui" then
+        require("ui_smoke_test").update(dt)
         return
     end
 
@@ -133,6 +146,7 @@ function love.draw()
     -- block (which calls love.graphics.getDimensions(), 0x0 offscreen)
     -- unreachable offscreen.
     if headless_on() and test_mode_on() then return end
+    if os.getenv("CR_TEST_SCENE") == "ui" then return end
 
     screens[current].draw()
 
@@ -168,6 +182,13 @@ function love.mousereleased(x, y, button)
     if button == 1 and love.keyboard.isDown('lctrl', 'rctrl') then button = 2 end
     local s = screens[current]
     if s.mousereleased then s.mousereleased(x, y, button) end
+end
+
+function love.wheelmoved(x, y)
+    if trans.phase then return end
+    local s = screens[current]
+    -- Screens take "positive = scroll down"; LÖVE reports wheel-up as positive.
+    if s.wheel then s.wheel(-y) end
 end
 
 function love.resize(w, h)

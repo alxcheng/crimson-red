@@ -19,6 +19,16 @@ function M.load(slot)
         -- Floor was added after the initial save format: old saves lack it,
         -- so normalize to 1 so consumers never see a nil floor.
         data.floor = data.floor or 1
+        -- Economy & item foundation fields (Phase 0). Old saves predate these,
+        -- so normalize to defaults so consumers never see nil gold/items/shopState.
+        data.gold      = data.gold or 0
+        data.items     = data.items or {}
+        data.shopState = data.shopState or {
+            offers    = {},
+            hireOffer = nil,
+            lastFloor = 1,
+            seeded    = false,
+        }
     end
     return ok and data or nil
 end
@@ -39,12 +49,17 @@ local DEFAULT_STATS = {
 }
 
 local function defaultChar()
+    -- Each character gets its OWN stats table: talents fold passives into
+    -- rec.stats in place, so a shared reference would leak one character's
+    -- picks into every other character until the next save/load round-trip.
+    local stats = {}
+    for k, v in pairs(DEFAULT_STATS) do stats[k] = v end
     return {
         level             = 1,
-        pointsToNextLevel = 100,
-        stats             = DEFAULT_STATS,
+        pointsToNextLevel = 50,   -- = progression.xpToNext(1)
+        stats             = stats,
         equipped          = {},
-        skillTree         = {1, 1, 1, 1, 1},
+        skillTree         = {},
     }
 end
 
@@ -68,6 +83,14 @@ function M.defaultData()
             rogue    = defaultChar(),
         },
         inventory = {},
+        gold = 0,
+        items = {},
+        shopState = {
+            offers    = {},
+            hireOffer = nil,
+            lastFloor = 1,
+            seeded    = false,
+        },
         mapProgression = {
             playerCol         = 9,
             playerRow         = 5,

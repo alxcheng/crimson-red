@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Crimson Red — UI-screen driver smoke test (for agents)
+#
+# ./test_headless only LOADS the UI screens. This DRIVES them: it enters
+# party/equip/shop/talents/map and sweeps synthetic hovers, clicks, keys and
+# wheel ticks over each, catching call-time errors and checking the economy
+# save invariants. Prints UI_SMOKE_PASS/FAIL (exit 0 on PASS, 1 on FAIL).
+#
+# Never touches real save slots (save.write is stubbed) and plays no audio.
+# Screenshots land in the LÖVE save dir under ui_smoke/ (path is printed).
+#
+# Env: CR_TEST_MODE=1 skips music; CR_TEST_SCENE=ui swaps the app entry for
+# ui_smoke_test.lua. Usage: ./test_ui
+set -euo pipefail
+cd "$(dirname "$0")/main-game"
+exec env CR_TEST_MODE=1 CR_TEST_SCENE=ui love .

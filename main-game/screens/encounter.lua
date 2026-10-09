@@ -13,6 +13,8 @@ local entities_mod = require("encounter/entities")
 local systems      = require("encounter/systems")
 local enc_mgr      = require("encounter/encounter_mgr")
 local ui           = require("encounter/ui")
+local items        = require("items")
+local progression  = require("progression")
 
 local VW    = common.VW
 local VH    = common.VH
@@ -47,6 +49,10 @@ local assetsLoaded = false
 -- Toggled by the top-right pause icon or the SPACE key. While paused, M.update
 -- skips every system tick; draw still runs so the screen stays visible.
 local paused = false
+
+-- Phase 0 economy: victory gold is awarded exactly once per encounter win.
+-- Reset on each onEnter; latched true the first time checkVictory fires.
+local goldAwarded = false
 
 -- Pause icon: top-right corner. 28x28 hit area, 4px from the edges.
 local PAUSE_BTN_SIZE = 28
@@ -103,6 +109,7 @@ local function initBattle(c, pfx)
     battle.canvas          = c
     battle.postfx          = pfx
     battle.partyIds        = {}
+    battle.partyNames      = {}
     battle.selectedUnit    = nil
     battle.deadSlots       = {}
     battle.iconScales      = {1.0, 1.0, 1.0, 1.0}
@@ -114,6 +121,7 @@ local function initBattle(c, pfx)
     battle.resource        = 0
     battle.resourceMax     = RESOURCE_MAX
     battle.resourcePops    = {}
+    battle.enemyDefeated   = 0   -- Phase 0 economy: per-enemy kill counter
 end
 
 -- ============================================================================
@@ -286,6 +294,7 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
     switchFn     = sw
     saveData_ref = sd
     slot_ref     = slot
+    goldAwarded  = false
     require("music_mgr").play("battle")
 
     initWorld()
@@ -340,29 +349,33 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
         if type(charName) ~= "string" then goto spawnNext end
         partyRow = partyRow + 1
         local charData = sd and sd.unlockedCharacters and sd.unlockedCharacters[charName]
-        local ss  = charData and charData.stats or nil
+        local ss   = charData and charData.stats or nil
+        -- Phase 0 economy: resolve this character's equipped gear to instance
+        -- tables. resolveGear returns {} when nothing is equipped, which
+        -- fromSave treats as no-gear (byte-identical to today's stats).
+        local gear = sd and items.resolveGear(sd, charName) or nil
         local pos = rhombusPos[partyRow] or {x = x1, y = y_hi}
         local spawnX = pos.x - WALK_IN
         local spawnY = pos.y - SLOT_H / 2
         local id
         if charName == "knight" then
-            id = entities_mod.createKnight(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+            id = entities_mod.createKnight(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
         elseif charName == "brigand" then
-            id = entities_mod.createBrigand(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+            id = entities_mod.createBrigand(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
         elseif charName == "champion" then
-            id = entities_mod.createChampion(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+            id = entities_mod.createChampion(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
         elseif charName == "duelist" then
-            id = entities_mod.createDuelist(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+            id = entities_mod.createDuelist(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
         elseif charName == "nomad" then
-            id = entities_mod.createNomad(world, battle, spawnX, spawnY, ss, SCALE)
+            id = entities_mod.createNomad(world, battle, spawnX, spawnY, ss, SCALE, gear)
         elseif charName == "cleric" then
-            id = entities_mod.createCleric(world, battle, spawnX, spawnY, ss, SCALE)
+            id = entities_mod.createCleric(world, battle, spawnX, spawnY, ss, SCALE, gear)
         elseif charName == "paladin" then
-            id = entities_mod.createPaladin(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+            id = entities_mod.createPaladin(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
         elseif charName == "wizard" then
-            id = entities_mod.createWizard(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+            id = entities_mod.createWizard(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
         elseif charName == "rogue" then
-            id = entities_mod.createRogue(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY)
+            id = entities_mod.createRogue(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
         end
         if id then
             world.hasEntered[id]        = {h=false, v=false}
@@ -373,6 +386,7 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
             world.moveTarget[id].y      = pos.y - SLOT_H / 2
             world.moveTarget[id].active = true
             table.insert(battle.partyIds, id)
+            battle.partyNames[#battle.partyIds] = charName   -- parallel to partyIds
         end
         ::spawnNext::
     end
@@ -472,12 +486,31 @@ function M.update(dt)
             battle.victorySnd:play()
         end
         battle.victoryDelay = 2.0
+        -- Phase 0 economy: award victory gold once. The death tally runs in
+        -- systems.death (enemy side==1) BEFORE this branch in the same update,
+        -- so battle.enemyDefeated (added there) already reflects every kill.
+        -- onEncounterWon = (10 + 5*floor) + 1 per enemy defeated [tuned].
+        if not goldAwarded and saveData_ref then
+            goldAwarded = true
+            items.onEncounterWon(saveData_ref, battle.enemyDefeated or 0)
+            -- The shop restocks after every WON encounter (Director rule):
+            -- flag it so the SHOP screen reshuffles its 3 offers + hire on entry.
+            local ss = saveData_ref.shopState
+            if ss then ss.pendingRestock = true end
+            -- XP: split among the party members still standing (see
+            -- progression.lua). Levels gained unlock TALENTS choices.
+            local survivors = {}
+            for i, name in ipairs(battle.partyNames or {}) do
+                if not battle.deadSlots[i] then survivors[#survivors + 1] = name end
+            end
+            progression.onEncounterWon(saveData_ref, survivors)
+        end
     end
 end
 
 function M.keypressed(key)
     -- SPACE toggles pause (works even while paused).
-    if key == " " then
+    if key == "space" or key == " " then   -- LÖVE 11 reports the spacebar as "space"
         paused = not paused
         common.playClickSound()
         return
