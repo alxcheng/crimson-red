@@ -25,8 +25,6 @@ local MASS          = 70
 local FRICTION      = 0.9
 local BATTLE_LINE_Y = VH * 0.2
 
-local ENEMY_DANGER = { skeleton = 3 }
-
 -- Resource bar layout constants
 local RES_PER_SEG        = 5
 local RES_SEG_COUNT      = 10
@@ -50,7 +48,7 @@ local assetsLoaded = false
 -- skips every system tick; draw still runs so the screen stays visible.
 local paused = false
 
--- Phase 0 economy: victory gold is awarded exactly once per encounter win.
+-- Victory rewards (gold, XP, shop restock) are granted exactly once per win.
 -- Reset on each onEnter; latched true the first time checkVictory fires.
 local goldAwarded = false
 
@@ -71,32 +69,7 @@ local saveData_ref, slot_ref
 -- ============================================================================
 
 local function initWorld()
-    world = {
-        entities     = {},  nextId = 1,
-        position     = {},  size        = {},  facing      = {},
-        physics      = {},  moveTarget  = {},  entityTarget = {},
-        side         = {},  stats       = {},  locks        = {},
-        stagger      = {},  stun        = {},  skills      = {},  effects_comp = {},
-        bar          = {},  tintColor   = {},  threatMap    = {},
-        effectTints  = {},
-        anim         = {},  hasEntered  = {},  deathState   = {},
-        isRanged     = {},  targetSide  = {},  dangerLevel = {},
-        spriteOffset = {},
-        hasAttacked  = {},
-        meleeAnchor  = {},
-        hasThreateningPresence = {},
-        slots        = {},
-    }
-    function world:new()
-        local id = self.nextId; self.nextId = id + 1
-        self.entities[id] = true; return id
-    end
-    function world:destroy(id)
-        self.entities[id] = nil
-        for _, pool in pairs(self) do
-            if type(pool) == "table" then pool[id] = nil end
-        end
-    end
+    world = require("encounter/world").new()
 end
 
 local function initBattle(c, pfx)
@@ -121,7 +94,7 @@ local function initBattle(c, pfx)
     battle.resource        = 0
     battle.resourceMax     = RESOURCE_MAX
     battle.resourcePops    = {}
-    battle.enemyDefeated   = 0   -- Phase 0 economy: per-enemy kill counter
+    battle.enemyDefeated   = 0   -- enemies killed this battle (gold drip)
 end
 
 -- ============================================================================
@@ -148,54 +121,9 @@ local function loadAssets()
     local ok, bg = pcall(love.graphics.newImage, "assets/images/forestbg2.png")
     battle.battlebg = ok and bg or nil
 
-    local C = "assets/characters/"
-    local E = "assets/enemies/"
-    anim_mod.load("KnightIdle",    C.."Knight/Idle.png",      10, 135, 135, 1.1)
-    anim_mod.load("KnightMove",    C.."Knight/Run.png",         6, 135, 135, 1.1)
-    anim_mod.load("KnightAttack1", C.."Knight/Attack1.png",     4, 135, 135, 1.1)
-    anim_mod.load("KnightAttack2", C.."Knight/Attack2.png",     4, 135, 135, 1.1)
-    anim_mod.load("KnightTakeHit", C.."Knight/Take Hit.png",    3, 135, 135, 1.1)
-    anim_mod.load("KnightDeath",   C.."Knight/Death.png",       9, 135, 135, 1.1)
-
-    anim_mod.load("BrigandIdle",    C.."Brigand/Idle.png",      10, 126, 126, 0.9)
-    anim_mod.load("BrigandMove",    C.."Brigand/Run.png",        8, 126, 126, 0.9)
-    anim_mod.load("BrigandAttack1", C.."Brigand/Attack1.png",    7, 126, 126, 0.9)
-    anim_mod.load("BrigandDeath",   C.."Brigand/Death.png",     11, 126, 126, 0.9)
-
-    anim_mod.load("ChampionIdle",    C.."Champion/Idle.png",     8, 160, 111, 1.0)
-    anim_mod.load("ChampionMove",    C.."Champion/Run.png",      8, 160, 111, 1.0)
-    anim_mod.load("ChampionAttack1", C.."Champion/Attack1.png",  4, 160, 111, 1.0)
-    anim_mod.load("ChampionDeath",   C.."Champion/Death.png",    6, 160, 111, 1.0)
-
-    anim_mod.load("DuelistIdle",    C.."Duelist/Idle.png",      8, 200, 200, 0.959)
-    anim_mod.load("DuelistMove",    C.."Duelist/Run.png",       8, 200, 200, 0.959)
-    anim_mod.load("DuelistAttack1", C.."Duelist/Attack1.png",   6, 200, 200, 0.959)
-    anim_mod.load("DuelistDeath",   C.."Duelist/Death.png",     6, 200, 200, 0.959)
-
-    anim_mod.load("SkeletonIdle",   E.."Skeleton/Idle.png",     4, 150, 150, 0.75)
-    anim_mod.load("SkeletonMove",   E.."Skeleton/Walk.png",     4, 150, 150, 0.75)
-    anim_mod.load("SkeletonAttack", E.."Skeleton/Attack.png",   8, 150, 150, 0.75)
-    anim_mod.load("SkeletonDeath",  E.."Skeleton/Death.png",    4, 150, 150, 0.75)
-
-    anim_mod.load("BatIdle",   E.."Bat/Flight.png",  8, 150, 150, 0.75)
-    anim_mod.load("BatAttack", E.."Bat/Attack.png",  8, 150, 150, 0.75)
-    anim_mod.load("BatDeath",  E.."Bat/Death.png",   4, 150, 150, 0.75)
-
-    anim_mod.load("ImpIdle",   E.."Imp/Idle.png",    4, 150, 150, 0.75)
-    anim_mod.load("ImpMove",   E.."Imp/Move.png",    8, 150, 150, 0.75)
-    anim_mod.load("ImpAttack", E.."Imp/Attack.png",  8, 150, 150, 0.75)
-    anim_mod.load("ImpDeath",  E.."Imp/Death.png",   4, 150, 150, 0.75)
-
-    anim_mod.load("MushroomIdle",   E.."Mushroom/Idle.png",    4, 150, 150, 0.75)
-    anim_mod.load("MushroomMove",   E.."Mushroom/Move.png",    8, 150, 150, 0.75)
-    anim_mod.load("MushroomAttack", E.."Mushroom/Attack.png",  8, 150, 150, 0.75)
-    anim_mod.load("MushroomDeath",  E.."Mushroom/Death.png",   4, 150, 150, 0.75)
-
-    anim_mod.load("NomadIdle",    C.."Nomad/Idle.png",     8, 250, 250, 0.72)
-    anim_mod.load("NomadMove",    C.."Nomad/Run.png",       8, 250, 250, 0.72)
-    anim_mod.load("NomadAttack1", C.."Nomad/Attack1.png",   8, 250, 250, 0.72)
-    anim_mod.load("NomadAttack2", C.."Nomad/Attack2.png",   8, 250, 250, 0.72)
-    anim_mod.load("NomadDeath",   C.."Nomad/Death.png",     7, 250, 250, 0.72)
+    for _, sheet in ipairs(require("data/sprites")) do
+        anim_mod.load(sheet[1], "assets/" .. sheet[2], sheet[3], sheet[4], sheet[5], sheet[6])
+    end
 
     for i = 1, 54 do
         local ok2, img = pcall(love.graphics.newImage, "assets/icons/skill_icons"..i..".png")
@@ -295,6 +223,7 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
     saveData_ref = sd
     slot_ref     = slot
     goldAwarded  = false
+    paused       = false
     require("music_mgr").play("battle")
 
     initWorld()
@@ -350,35 +279,12 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
         partyRow = partyRow + 1
         local charData = sd and sd.unlockedCharacters and sd.unlockedCharacters[charName]
         local ss   = charData and charData.stats or nil
-        -- Phase 0 economy: resolve this character's equipped gear to instance
-        -- tables. resolveGear returns {} when nothing is equipped, which
-        -- fromSave treats as no-gear (byte-identical to today's stats).
         local gear = sd and items.resolveGear(sd, charName) or nil
         local pos = rhombusPos[partyRow] or {x = x1, y = y_hi}
         local spawnX = pos.x - WALK_IN
         local spawnY = pos.y - SLOT_H / 2
-        local id
-        if charName == "knight" then
-            id = entities_mod.createKnight(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
-        elseif charName == "brigand" then
-            id = entities_mod.createBrigand(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
-        elseif charName == "champion" then
-            id = entities_mod.createChampion(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
-        elseif charName == "duelist" then
-            id = entities_mod.createDuelist(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
-        elseif charName == "nomad" then
-            id = entities_mod.createNomad(world, battle, spawnX, spawnY, ss, SCALE, gear)
-        elseif charName == "cleric" then
-            id = entities_mod.createCleric(world, battle, spawnX, spawnY, ss, SCALE, gear)
-        elseif charName == "paladin" then
-            id = entities_mod.createPaladin(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
-        elseif charName == "wizard" then
-            id = entities_mod.createWizard(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
-        elseif charName == "rogue" then
-            id = entities_mod.createRogue(world, battle, spawnX, spawnY, ss, SCALE, GRAVITY, gear)
-        end
+        local id = entities_mod.createHero(world, battle, charName, spawnX, spawnY, ss, gear)
         if id then
-            world.hasEntered[id]        = {h=false, v=false}
             -- pos.x/pos.y is the GROUND/feet point for this slot ("midbottom Y").
             -- moveTarget treats mt.y as a CENTER coord, so convert: center.y =
             -- groundY - size.h/2. (size.h equals SLOT_H for all party classes.)
@@ -419,7 +325,6 @@ function M.update(dt)
     particles.updateBlood(battle, dt, GRAVITY)
     particles.updateHeal(battle, dt)
     systems.targetFollow(world)
-    skills_mod.pendingActiveSystem(world, battle)
     skills_mod.autoAttackSystem(world)
     skills_mod.system(world, battle, dt)
     effects_mod.system(world, battle, dt)
@@ -436,7 +341,7 @@ function M.update(dt)
     systems.vfxDecay(battle, dt, common)
     ui.updateIconScaleAnimations(world, battle, dt)
     ui.updateSelCircles(world, battle, dt)
-    enc_mgr.system(world, battle, dt, VW, VH, SCALE, GRAVITY, ENEMY_DANGER)
+    enc_mgr.system(world, battle, dt, VW, VH)
 
     -- Resource regeneration (1 per second) + pop animations
     do
@@ -486,10 +391,8 @@ function M.update(dt)
             battle.victorySnd:play()
         end
         battle.victoryDelay = 2.0
-        -- Phase 0 economy: award victory gold once. The death tally runs in
-        -- systems.death (enemy side==1) BEFORE this branch in the same update,
-        -- so battle.enemyDefeated (added there) already reflects every kill.
-        -- onEncounterWon = (10 + 5*floor) + 1 per enemy defeated [tuned].
+        -- Rewards, once. systems.death ran earlier this frame, so
+        -- battle.enemyDefeated already counts every kill.
         if not goldAwarded and saveData_ref then
             goldAwarded = true
             items.onEncounterWon(saveData_ref, battle.enemyDefeated or 0)
@@ -533,9 +436,10 @@ function M.keypressed(key)
     if key == "3" and battle.partyIds[3] and not battle.deadSlots[3] then battle.selectedUnit = battle.partyIds[3] end
     if key == "4" and battle.partyIds[4] and not battle.deadSlots[4] then battle.selectedUnit = battle.partyIds[4] end
 
+    -- DEBUG: K spawns a skeleton under the mouse.
     if key == "k" then
         local vmx, vmy = common.virtualMouse()
-        entities_mod.createSkeleton(world, battle, vmx, vmy, SCALE, GRAVITY, ENEMY_DANGER)
+        entities_mod.createEnemy(world, battle, "skeleton", vmx, vmy)
     end
 
     local su = battle.selectedUnit; if not su then return end
@@ -602,7 +506,6 @@ function M.mousepressed(x, y, button)
 
     if clicked then
         world.entityTarget[su] = {id=clicked}
-        world.hasAttacked[su]  = nil
         if tSide == 1 then
             for id in pairs(world.entities) do
                 local sd = world.side[id]
@@ -615,12 +518,11 @@ function M.mousepressed(x, y, button)
         local sgSu = world.stagger[su]
         if not (sgSu and sgSu.staggered) then
             world.entityTarget[su] = nil
-            world.hasAttacked[su]  = nil
         end
         -- Right-click move: vmx/vmy is a GROUND/feet point (where the player
         -- clicked). moveTarget treats mt.x/mt.y as CENTER coords, so convert:
         -- center.y = groundY - size.h/2 (the feet rule). This makes the unit
-        -- stop with its FEET at the clicked point, matching the old behavior.
+        -- stop with its FEET at the clicked point.
         local mt = world.moveTarget[su]
         local suSz = world.size[su]
         if mt and suSz then

@@ -1,6 +1,7 @@
 -- encounter/encounter_mgr.lua — Wave spawning and encounter management
 
 local entities_mod = require("encounter/entities")
+local enemies      = require("data/enemies")
 
 local M = {}
 
@@ -16,16 +17,20 @@ function M.queueWave(battle, isSurprise)
     mgr.pendingWave = { timer = 3.0, budget = budget }
 end
 
-function M.flushPendingWave(world, battle, VW, VH, SCALE, GRAVITY, ENEMY_DANGER)
+-- Spend the pending wave's danger budget on enemies and spawn them off the
+-- right edge of the screen.
+function M.flushPendingWave(world, battle, VW, VH)
     local mgr = battle.encounterMgr
-    local pw   = mgr.pendingWave
+    local pw  = mgr.pendingWave
+    local enemyId = enemies.SPAWN_POOL[1]
+    local cost    = enemies.ENEMIES[enemyId].danger
     local count = 0
-    while pw.budget >= ENEMY_DANGER.skeleton do
+    while pw.budget >= cost do
         local spawnX = VW + 400 + count * 120 + math.random(0, 80)
         local spawnY = VH * 0.35 + count * 80
-        entities_mod.createSkeleton(world, battle, spawnX, spawnY, SCALE, GRAVITY, ENEMY_DANGER)
-        mgr.currentDanger = mgr.currentDanger + ENEMY_DANGER.skeleton
-        pw.budget = pw.budget - ENEMY_DANGER.skeleton
+        entities_mod.createEnemy(world, battle, enemyId, spawnX, spawnY)
+        mgr.currentDanger = mgr.currentDanger + cost
+        pw.budget = pw.budget - cost
         count     = count     + 1
     end
     mgr.pendingWave  = nil
@@ -36,7 +41,7 @@ end
 -- ENCOUNTER MANAGER SYSTEM (runs each frame)
 -- ============================================================================
 
-function M.system(world, battle, dt, VW, VH, SCALE, GRAVITY, ENEMY_DANGER)
+function M.system(world, battle, dt, VW, VH)
     local mgr = battle.encounterMgr
     if mgr.spawnTimer > 0 then
         mgr.spawnTimer = mgr.spawnTimer - dt
@@ -45,7 +50,7 @@ function M.system(world, battle, dt, VW, VH, SCALE, GRAVITY, ENEMY_DANGER)
 
     if mgr.pendingWave then
         mgr.pendingWave.timer = mgr.pendingWave.timer - dt
-        if mgr.pendingWave.timer <= 0 then M.flushPendingWave(world, battle, VW, VH, SCALE, GRAVITY, ENEMY_DANGER) end
+        if mgr.pendingWave.timer <= 0 then M.flushPendingWave(world, battle, VW, VH) end
     else
         mgr.waveCooldown = math.max(0, mgr.waveCooldown - dt)
         if mgr.waveCooldown == 0

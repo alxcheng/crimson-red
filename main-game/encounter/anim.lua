@@ -117,7 +117,7 @@ function M.drawEntities(world, battle, SCALE)
         local dy = pos.y + oy
 
         -- Persistent class recolor (world.tintColor). Zero/absent = no tint,
-        -- so default entities render exactly white as before.
+        -- so untinted units render plain white.
         local tc = world.tintColor and world.tintColor[id]
         local baseR, baseG, baseB = 1, 1, 1
         if tc and (tc.R ~= 0 or tc.G ~= 0 or tc.B ~= 0) then

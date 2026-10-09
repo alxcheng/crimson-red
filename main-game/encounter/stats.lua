@@ -28,11 +28,10 @@ function M.newStats(hp, atk, def, crit, atkspd)
     }
 end
 
--- Optional second arg `gear` (Phase 0 economy): a table of equipped item
--- instances keyed by slot, e.g. { weapon=instance, armor=instance, trinket=instance }.
--- When nil/absent the output is byte-identical to the legacy single-arg call.
--- When present, each instance's flat `mods` are folded into the matching stat's
--- .add (gear is folded in at this encounter boundary ONLY — see contract).
+-- Build battle stats from a character's saved stat table (save.lua).
+-- gear (optional): equipped item instances keyed by slot, e.g.
+-- { weapon = inst, armor = inst, trinket = inst }; each instance's flat `mods`
+-- are added to the matching stat. Gear only ever enters stats here.
 function M.fromSave(ss, gear)
     local s = {
         HP          = M.newStat(ss.maxHP or 100),

@@ -15,34 +15,14 @@
 -- Adding a new status = add a row to the magnitude tables (and, only if it has
 -- bespoke behavior, a small handler below). No big per-effect closures.
 --
--- ============================================================================
--- INTEGRATOR CONTRACT — value-exposure only; status.lua does NOT edit other
--- modules. The following two wiring lines are REQUIRED for the new statuses to
--- take effect. status.lua exposes every value they need.
--- ============================================================================
+-- WARD vs SHIELD: WARD is a CHANCE to negate a hit completely; SHIELD always
+-- removes a fixed fraction. PARALYZE is a hard immobilize distinct from stun:
+-- it holds world.locks[id].actionLock at 9999 with no knock-down animation.
 --
--- (1) SLOW (debuff idx 3) — movement speed.
---     systems.lua, M.moveTarget, around the line
---         local spd = statGet(ss.MOVE_SPEED) * 30
---     change it to multiply by the slow factor:
---         local spd = statGet(ss.MOVE_SPEED) * 30 * status_mod.getSlowFactor(world, id)
---     (status_mod is already required in systems.lua for other stats).
---
--- (2) SHIELD (buff idx 9) — flat % incoming-damage reduction.
---     combat.lua, M.resolve, at the point where final damage to the victim is
---     about to be applied, BEFORE the min-3 floor, subtract the shield
---     reduction fraction of the computed damage (it is a FRACTION REMOVED,
---     additive, already clamped to <= 0.95 by getMods):
---         local modsV = status_mod.getMods(world, victimId)
---         finalDamage = finalDamage * (1 - modsV.shieldReduction)
---     Keep the existing min-3 floor AFTER this line, exactly as it is now.
---
--- Note: WARD and SHIELD are distinct on purpose — WARD is a % chance to FULLY
--- negate a hit (probabilistic), SHIELD ALWAYS reduces by a fixed fraction.
--- PARALYZE (buff idx 8) is a hard immobilize distinct from STUN: it locks the
--- entity via world.locks[id].actionLock = 9999, triggers NO death-anim and NO
--- stagger interaction; its lock is released on expire only when the entity is
--- not also stunned/staggered (mirrors systems.stagger's lock release).
+-- Who consumes what:
+--   combat.roll / combat.resolve  <- M.getMods (damage up/down, ward, reflect, shield)
+--   systems.moveTarget            <- M.getSlowFactor
+--   combat.registerHit            <- the CHAIN entry (charges + chainParams)
 
 local stats_mod = require("encounter/stats")
 
@@ -52,7 +32,7 @@ local statGet = stats_mod.get
 
 -- ============================================================================
 -- EFFECT-TINT BRIDGE — status.lua reuses effects.lua's tint helpers so HoT /
--- buffs / debuffs can show the same undulating tint as before. Loaded lazily
+-- buffs / debuffs can show a pulsing sprite tint. Loaded lazily
 -- to avoid a hard require cycle at load time.
 --
 -- ORDERING NOTE: these MUST be defined BEFORE M.onApply / M.onExpire below,
@@ -247,14 +227,11 @@ function M.clear(world, id)
 end
 
 -- ============================================================================
--- TICK / SYSTEM — advance durations, tick HoTs, expire
---
--- M.system(world, battle, dt) is the pipeline hook (same signature as
--- effects_mod.system). It also aliases to M.tick for clarity.
+-- SYSTEM — once per frame: tick HoTs/DoTs, advance durations, expire
 -- ============================================================================
 
--- M.tickHot(world, id, entry, dt) — heal `magnitude` HP/sec, capped at maxHP.
-function M.tickHot(world, id, entry, dt)
+-- Heal `magnitude` HP/sec, capped at maxHP.
+local function tickHot(world, id, entry, dt)
     local ss = world.stats and world.stats[id]
     if not ss then return end
     local maxHp = statGet(ss.maxHP)
@@ -262,9 +239,8 @@ function M.tickHot(world, id, entry, dt)
     ss.HP.base = math.min(maxHp, ss.HP.base + (entry.magnitude or 0) * dt)
 end
 
--- M.tickDot(world, id, entry, dt) — drain `magnitude` HP/sec (floor 0),
--- continuous, the damage-side mirror of M.tickHot.
-function M.tickDot(world, id, entry, dt)
+-- Drain `magnitude` HP/sec (floor 0).
+local function tickDot(world, id, entry, dt)
     local ss = world.stats and world.stats[id]
     if not ss then return end
     if entry.magnitude and entry.magnitude > 0 then
@@ -272,7 +248,7 @@ function M.tickDot(world, id, entry, dt)
     end
 end
 
-function M.tick(world, dt)
+function M.system(world, battle, dt)
     local w = world
     if not w.status then return end
     for id, s in pairs(w.status) do
@@ -285,9 +261,9 @@ function M.tick(world, dt)
             for idx, e in pairs(map) do
                 -- tick DoTs / HoTs (continuous, like CR's existing HoT timing)
                 if idx == M.HOT then
-                    M.tickHot(w, id, e, dt)
+                    tickHot(w, id, e, dt)
                 elseif idx == M.DOT then
-                    M.tickDot(w, id, e, dt)
+                    tickDot(w, id, e, dt)
                 end
                 e.duration = e.duration - dt
                 if e.duration <= 0 then
@@ -301,34 +277,18 @@ function M.tick(world, dt)
     end
 end
 
--- Pipeline-facing entry point. battle is accepted for signature symmetry but
--- unused by the core; handlers may use it.
-function M.system(world, battle, dt)
-    M.tick(world, dt)
-end
-
 -- ============================================================================
--- GET MODS — aggregate the entity's statuses into the table the damage system
--- consumes (see combat.resolve contract in the report).
+-- GET MODS — aggregate an entity's statuses into what the damage math needs.
 --
 -- Returns {
---   buffMods        = { [index] = additiveFraction },  -- OUTGOING dmg up (attacker side)
---   debuffMods      = { [index] = additiveFraction },  -- INCOMING dmg up (victim side, e.g. vuln)
---   defFlat         = number,   -- flat DEF bonus to add before armor subtract
---   negationChance  = number,   -- 0..1 chance to fully negate an incoming hit (Ward)
---   reflectFraction = number,   -- fraction of incoming damage returned to attacker
---   hotPerSec       = number,   -- informational: heal/sec currently ticking
---   shieldReduction = number,   -- NEW: fraction of incoming damage REMOVED (0..0.95)
---   slowFactor      = number,   -- NEW: movement-speed multiplier (1 = normal, lower = slower)
+--   buffMods        = { [index] = fraction },  -- OUTGOING damage up (as attacker)
+--   debuffMods      = { [index] = fraction },  -- INCOMING damage up (as victim)
+--   defFlat         = number,  -- flat DEF from buffs (already applied to DEF.add)
+--   negationChance  = number,  -- 0..1 chance to negate an incoming hit (WARD)
+--   reflectFraction = number,  -- fraction of an incoming hit dealt back (REFLECT)
+--   shieldReduction = number,  -- fraction of incoming damage removed, 0..0.95 (SHIELD)
+--   slowFactor      = number,  -- movement-speed multiplier, 1 = normal (SLOW)
 -- }
--- The damage agent consumes `buffMods` (attacker) and `debuffMods` + the
--- negation/reflect fields (victim), all additively.
---
--- NEW FIELDS (added, existing fields unchanged — see header INTEGRATOR CONTRACT):
---   shieldReduction : consumed by combat.resolve (victim) BEFORE the min-3 floor.
---   slowFactor      : consumed by systems.moveTarget (victim) as a speed multiplier.
---   Both are ALSO exposed via dedicated getters (M.getShieldReduction /
---   M.getSlowFactor) for call sites that don't want a full getMods() table.
 -- ============================================================================
 
 function M.getMods(world, id)
@@ -338,7 +298,6 @@ function M.getMods(world, id)
         defFlat         = 0,
         negationChance  = 0,
         reflectFraction = 0,
-        hotPerSec       = 0,
         shieldReduction = 0,
         slowFactor      = 1,
     }
@@ -356,8 +315,6 @@ function M.getMods(world, id)
             mods.negationChance = math.max(mods.negationChance, mag)
         elseif idx == M.REFLECT then
             mods.reflectFraction = math.max(mods.reflectFraction, mag)
-        elseif idx == M.HOT then
-            mods.hotPerSec = mods.hotPerSec + mag
         elseif idx == M.SHIELD then
             -- additive fraction REMOVED from incoming damage, clamped 0..0.95
             -- so a shield alone can never fully negate a hit
@@ -384,8 +341,6 @@ end
 -- M.getSlowFactor(world, id) -> number in [0..1]
 -- Movement-speed multiplier: 1 = normal speed, lower = slower.
 -- = max(0, 1 - sum of active SLOW magnitudes), clamped to [0, 1].
--- INTEGRATOR: systems.lua M.moveTarget must multiply its `spd` by this
--- (see the INTEGRATOR CONTRACT in the file header).
 function M.getSlowFactor(world, id)
     local s = world.status and world.status[id]
     if not s then return 1 end
@@ -397,64 +352,6 @@ function M.getSlowFactor(world, id)
     end
     if sum <= 0 then return 1 end
     return math.max(0.0, math.min(1.0, 1 - sum))
-end
-
--- M.getShieldReduction(world, id) -> number in [0..0.95]
--- Flat fraction of incoming damage REMOVED (additive stacks, clamped).
--- INTEGRATOR: combat.lua M.resolve must apply finalDamage * (1 - this)
--- BEFORE its min-3 floor (see the INTEGRATOR CONTRACT in the file header).
-function M.getShieldReduction(world, id)
-    local s = world.status and world.status[id]
-    if not s then return 0 end
-    local sum = 0
-    for idx, e in pairs(s.buffs) do
-        if idx == M.SHIELD then
-            sum = sum + (e.magnitude or 0)
-        end
-    end
-    return math.max(0, math.min(0.95, sum))
-end
-
--- ============================================================================
--- DAMAGE-RESOLUTION HELPERS (called by combat.resolve / the damage agent)
---
--- M.resolveNegate(world, id) -> boolean
---   Returns true if the entity's WARD fully negates this hit (roll now).
---   Call once per incoming hit BEFORE applying damage.
--- ============================================================================
-
-function M.resolveNegate(world, id)
-    local mods = M.getMods(world, id)
-    if mods.negationChance > 0 and math.random() < mods.negationChance then
-        return true
-    end
-    return false
-end
-
--- ============================================================================
--- M.reflectDamage(world, attackerId, victimId, amount)
---   After `amount` damage is dealt to `victimId`, the victim's REFLECT returns
---   a fraction of it back to `attackerId`. This does NOT recurse (a reflected
---   hit does not itself reflect). Returns the reflected amount (0 if none).
---   The damage agent calls this inside resolve(); the actual HP subtraction is
---   the damage agent's responsibility (or call M.dealReflectedHP below).
--- ============================================================================
-
-function M.reflectDamage(world, attackerId, victimId, amount)
-    local mods = M.getMods(world, victimId)
-    if mods.reflectFraction <= 0 then return 0 end
-    local reflected = amount * mods.reflectFraction
-    M.dealReflectedHP(world, attackerId, reflected)
-    return reflected
-end
-
--- M.dealReflectedHP(world, targetId, amount) — subtract reflected damage from
--- an entity's HP (capped at 0). Kept separate so the damage agent can reuse it.
-function M.dealReflectedHP(world, targetId, amount)
-    if amount <= 0 then return end
-    local ts = world.stats and world.stats[targetId]
-    if not ts or (world.deathState and world.deathState[targetId]) then return end
-    ts.HP.base = math.max(0, ts.HP.base - amount)
 end
 
 -- ============================================================================

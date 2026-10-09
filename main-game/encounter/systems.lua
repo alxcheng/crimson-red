@@ -10,7 +10,7 @@ local statGet = stats_mod.get
 local M = {}
 
 -- ============================================================================
--- 6-SLOT RING FORMATION (replaces the old 1D vertical melee column)
+-- 6-SLOT RING FORMATION — where melee attackers stand around their target
 --
 -- Each TARGET owns a symmetric 6-slot ring: 3 rings × 2 sides (left/right),
 -- authored as GROUND/feet-point offsets relative to the TARGET'S FEET.
@@ -32,8 +32,7 @@ local M = {}
 -- (and center.x = ground.x). Storing the ground Y directly as position.y would
 -- sink a unit by half its height — the classic bug we must avoid.
 --
--- State lives in a NEW world table the integrator must create in initWorld:
---   world.slots = {}    -- [targetId] = { [slotIndex]=ownerId }
+-- State: world.slots[targetId] = { [slotIndex] = ownerId }
 -- slotIndex = (ring-1)*2 + side, ring in {1,2,3}, side in {1=left,2=right};
 -- ownerId is the unit occupying that ring slot (nil = free).
 -- ============================================================================
@@ -139,8 +138,8 @@ end
 -- the slot, or nil when the ring is full on every side (caller "stays put").
 --
 -- Side selection mirrors Battleheart (EnemyScript::requestPosition):
---   * 1st attacker on the target: side by horizontal position (X-based,
---     preferBack honored) — byte-identical to the pre-change behavior.
+--   * 1st attacker on the target: side by horizontal position (or behind
+--     the target when preferBack).
 --   * 2nd+ attacker: prefer the OPPOSITE side of the first occupant so the
 --     two attackers STRADDLE the target (BH's anti-clumping). Behind-facing
 --     is a tiebreak only: if the opposite side is unavailable, we fall back
@@ -355,7 +354,6 @@ function M.moveTarget(world, dt)
         if dist < 1 then mt.active = false; goto continue end
         dx, dy = dx/dist, dy/dist
         -- SLOW debuff: movement speed multiplier (1 = normal, lower = slower).
-        -- See the INTEGRATOR CONTRACT at the top of encounter/status.lua.
         local spd = statGet(ss.MOVE_SPEED) * 30 * status_mod.getSlowFactor(world, id)
         local moveAmt = math.min(spd * dt, dist)
         pos.x = pos.x + dx * moveAmt; pos.y = pos.y + dy * moveAmt
@@ -544,8 +542,6 @@ function M.threat(world, battle, dt)
             end
         end
         if bestId then
-            local prevEt = world.entityTarget[id]
-            if not prevEt or prevEt.id ~= bestId then world.hasAttacked[id] = nil end
             world.entityTarget[id] = {id=bestId}
         elseif not world.entityTarget[id] then
             for _, pid in ipairs(battle.partyIds) do
@@ -589,7 +585,6 @@ function M.death(world, battle, dt)
                 local et = world.entityTarget[eid]
                 if et and et.id == id then
                     world.entityTarget[eid] = nil
-                    world.hasAttacked[eid]  = nil
                 end
             end
             local side = world.side[id]
@@ -607,7 +602,7 @@ function M.death(world, battle, dt)
                     end
                 end
             elseif side and side.s == 1 then
-                -- Per-enemy kill counter (Phase 0 economy: per-kill gold drip).
+                -- Per-enemy kill counter (per-kill gold drip).
                 battle.enemyDefeated = (battle.enemyDefeated or 0) + 1
                 local mgr = battle.encounterMgr
                 if mgr then

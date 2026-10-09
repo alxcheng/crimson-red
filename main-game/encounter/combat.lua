@@ -8,8 +8,7 @@
 --                      + ward/reflect negation hooks.
 --       enemy victims: NO armor, additive debuff fractions only, no floor.
 --
--- The legacy symmetric entry points (calcNormalDmg / resolveHit / registerHit)
--- are kept with compatible signatures and now route through roll -> resolve.
+-- M.registerHit is the one entry point abilities use: roll -> resolve -> apply.
 
 local stats_mod    = require("encounter/stats")
 local effects_mod  = require("encounter/effects")
@@ -46,9 +45,8 @@ local M = {}
 --     aimedShot  = true   — apply the ranged falloff modifier
 --     falloff    = number  — cap multiplier for aimed shots (BH projectileDamageMod, default 1.0)
 --     canCrit    = bool    — false suppresses crit for this hit (BH apollo-style)
---     buffMods   = { [index]=fraction } — explicit additive offense fractions;
---                 auto-read from the attacker's statuses when omitted
---                 (status_mod.buffMods, see the status system's getMods).
+--     buffMods   = { [index]=fraction } — overrides the attacker's own
+--                 outgoing-damage buffs (default: read from its statuses)
 -- Returns baseAmount, isCrit (crit already flat-doubled into baseAmount).
 function M.roll(world, srcId, tgtId, ability)
     local ss, ts = world.stats[srcId], world.stats[tgtId]
@@ -62,8 +60,7 @@ function M.roll(world, srcId, tgtId, ability)
     if ability and ability.buffMods ~= nil then
         offenseFrac = sumFrac(ability.buffMods)
     else
-        local mods = status_mod.getMods and status_mod.getMods(world, srcId)
-        offenseFrac = mods and sumFrac(mods.buffMods) or 0
+        offenseFrac = sumFrac(status_mod.getMods(world, srcId).buffMods)
     end
     base = base * (1 + offenseFrac)
 
@@ -101,57 +98,33 @@ end
 
 -- Resolve the rolled amount against the VICTIM's defensive side.
 --   opts (optional table; every field optional):
---     buffMods  = { [index]=fraction } — additive fractions of the base roll
---                 (no compounding). For party victims this is the ATTACKER's
---                 outgoing-damage buffs; for enemies it is the victim's
---                 vulnerability/marked debuffs.
---     debuffMods = { [index]=fraction } — ADDITIONAL victim-side incoming-damage
---                 fractions (e.g. vulnerability) applied on top of buffMods.
---     defFlat   = number — flat DEF bonus added to the party armor subtract.
---     negate    = true   — ward / full-negation already rolled (party side):
---                 final damage 0. Callers (status system) can pre-roll via
---                 status.resolveNegate and pass the result.
---     reflect   = fraction — thorns hook (party side): reflect fraction of
---                 final damage back at the attacker as damage.
--- When `opts.buffMods`/`debuffMods` are nil and the status system is live,
--- the matching table is read automatically from status.getMods(world, ...).
--- Returns finalDamage (>=0), flags {crit=false, negated, reflected}.
--- (crit is always false here; the roll owns the crit and registerHit
--- reports it via `damage` doubling — see M.roll.)
+--     buffMods   = { [i]=fraction } — the hit's own damage multiplier, as
+--                  additive fractions (0.5 = +50%, -0.5 = half damage)
+--     debuffMods = { [i]=fraction } — overrides the victim's damage-taken
+--                  debuffs (default: read from its statuses)
+--     negate     = bool     — force / forbid WARD negation (default: rolled)
+--     reflect    = fraction — override the victim's REFLECT fraction
+-- Returns finalDamage (>= 0), flags {negated, reflected}.
 function M.resolve(world, victimId, baseAmount, srcId, opts)
     local vs = world.stats[victimId]
-    if not vs then return 0, {crit=false, negated=false, reflected=0} end
+    if not vs then return 0, {negated=false, reflected=0} end
     opts = opts or {}
 
     local party = isParty(world, victimId)
-    local statusLive = status_mod.getMods ~= nil
-    local victimMods = statusLive and status_mod.getMods(world, victimId) or nil
-    local srcMods    = (party and statusLive) and status_mod.getMods(world, srcId) or nil
+    local victimMods = status_mod.getMods(world, victimId)
 
-    -- Gather additive fractions of the base roll (BH: additive, no
-    -- compounding). Party victims: attacker's outgoing buffs + victim's
-    -- vulnerability debuffs. Enemy victims: victim's vulnerability debuffs.
-    local buffFrac, debuffFrac = 0, 0
-    if opts.buffMods ~= nil then
-        buffFrac = sumFrac(opts.buffMods)
-    elseif party and srcMods then
-        buffFrac = sumFrac(srcMods.buffMods)
-    end
-    if opts.debuffMods ~= nil then
-        debuffFrac = sumFrac(opts.debuffMods)
-    elseif victimMods then
-        debuffFrac = sumFrac(victimMods.debuffMods)
-    end
+    -- Additive fractions of the base roll (BH: additive, never compounding):
+    -- the hit's own multiplier (opts.buffMods, e.g. Sneak Attack) plus the
+    -- victim's damage-taken debuffs (e.g. VULNERABILITY). The attacker's own
+    -- buffs were already applied in M.roll.
+    local buffFrac   = sumFrac(opts.buffMods)
+    local debuffFrac = sumFrac(opts.debuffMods or victimMods.debuffMods)
 
     local final = baseAmount * (1 + buffFrac + debuffFrac)
 
-    -- SHIELD: flat fraction of incoming damage removed (0..0.95, additive,
-    -- clamped by status.getMods). Applies BEFORE the party-side min-3 floor
-    -- per the INTEGRATOR CONTRACT at the top of encounter/status.lua, so a
-    -- shield can never push a hit below the floor — the floor still wins.
-    -- victimMods was already fetched above (nil only when the status system
-    -- is absent, in which case this is a no-op).
-    if victimMods and victimMods.shieldReduction > 0 then
+    -- SHIELD: fraction of incoming damage removed (0..0.95). Applied BEFORE
+    -- the party-side min-3 floor, so the floor still wins.
+    if victimMods.shieldReduction > 0 then
         final = final * (1 - victimMods.shieldReduction)
     end
 
@@ -165,8 +138,13 @@ function M.resolve(world, victimId, baseAmount, srcId, opts)
         -- Minimum-3 floor (party side only).
         final = math.max(3, final)
 
-        -- Ward / full-negation hook.
-        if opts.negate then
+        -- WARD: chance to negate the hit outright (rolled here unless the
+        -- caller already decided via opts.negate).
+        local negate = opts.negate
+        if negate == nil and victimMods.negationChance > 0 then
+            negate = math.random() < victimMods.negationChance
+        end
+        if negate then
             final = 0
             negated = true
         end
@@ -174,59 +152,23 @@ function M.resolve(world, victimId, baseAmount, srcId, opts)
         final = math.max(0, final)  -- no min-3 floor on the enemy side
     end
 
-    -- Reflect / thorns hook (party side only): a fraction of the dealt damage
-    -- is returned as damage to the attacker. status.reflectDamage owns the
-    -- fraction lookup + HP application when available; otherwise we apply a
-    -- flat fraction here.
+    -- REFLECT (party side only): the victim takes nothing and a fraction of
+    -- the hit is dealt back to the attacker.
     local reflected = 0
     if party and final > 0 then
-        local refFrac = opts.reflect
-        if refFrac == nil and victimMods then refFrac = victimMods.reflectFraction or 0 end
-        if refFrac and refFrac > 0 then
-            if status_mod.reflectDamage then
-                reflected = status_mod.reflectDamage(world, srcId, victimId, final)
-            else
-                reflected = final * refFrac
-                local ss = world.stats[srcId]
-                if ss then ss.HP.base = math.max(0, ss.HP.base - reflected) end
+        local refFrac = opts.reflect or victimMods.reflectFraction
+        if refFrac > 0 then
+            reflected = final * refFrac
+            local ss = world.stats[srcId]
+            if ss and not world.deathState[srcId] then
+                ss.HP.base = math.max(0, ss.HP.base - reflected)
             end
             final = 0
             negated = true
         end
     end
 
-    return final, {crit=false, negated=negated, reflected=reflected}
-end
-
--- ============================================================================
--- LEGACY ENTRY POINTS (backward-compatible, route through roll -> resolve)
--- ============================================================================
-
--- Backward-compat damage preview for the simple melee case:
--- attacker ATK vs defender DEF, no buffs, no crit.
---   old: max(0, (value*ATK*BOOST - DEF) * RES)
---   new: max(0, (value*ATK*BOOST - DEF) * RES) for party victims (identical
---        for the no-buff case); enemies take the raw roll (no armor).
-function M.calcNormalDmg(world, srcId, tgtId, value)
-    local ss, ts = world.stats[srcId], world.stats[tgtId]
-    if not (ss and ts) then return 0 end
-    value = value or 1.0
-    local boost = math.max(0.10, statGet(ss.BOOST))
-    local res   = math.max(0.10, statGet(ts.RES))
-    local base  = value * getPower(ss) * boost
-    if isParty(world, tgtId) then
-        return math.max(0, (base - statGet(ts.DEF)) * res)
-    end
-    return base * res
-end
-
--- Backward-compat crit verdict. Only party attackers crit; enemies never do.
-function M.resolveHit(world, srcId, tgtId)
-    local ss, ts = world.stats[srcId], world.stats[tgtId]
-    if not (ss and ts) then return "HIT" end
-    if not isParty(world, srcId) then return "HIT" end
-    local crit = math.max(0, statGet(ss.CRIT) * (1 - statGet(ts.CRIT_DEF)))
-    return math.random() < crit and "CRIT" or "HIT"
+    return final, {negated=negated, reflected=reflected}
 end
 
 -- ============================================================================
@@ -325,26 +267,21 @@ end
 -- REGISTER HIT / HEAL
 -- ============================================================================
 
--- keywords (optional table) may carry:
---   ability = {aimedShot=bool, falloff=number}   — stage-1 roll options
---   buffMods = { [idx]=fraction }                — stage-2 additive fractions
---   negate  = bool                                — ward / full-negation hook
---   reflect = fraction                            — thorns hook (party victims)
-function M.registerHit(world, battle, srcId, tgtId, keywords, useVFX, SCALE, GRAVITY)
+-- Deal one hit from srcId to tgtId and apply everything that follows from it
+-- (HP, stagger, threat, hurt flash, blood, knockback nudge, on-hit passives).
+--   hit (optional table):
+--     tags     = { "Melee", "Fire", ... }  — what kind of hit this is; passives
+--                and on-hit statuses react to these (e.g. "Melee")
+--     ability  = { aimedShot, falloff, canCrit } — roll options (see M.roll)
+--     buffMods = { [idx] = fraction }      — extra outgoing-damage fractions
+--   useVFX: true = screen shake / zoom punch on the target
+function M.registerHit(world, battle, srcId, tgtId, hit, useVFX)
     if not (world.entities[srcId] and world.entities[tgtId]) then return end
-    if world.hasAttacked then world.hasAttacked[srcId] = true end
+    hit = hit or {}
+    local tags = hit.tags or {}
 
-    local kw = keywords or {}
-    local rollOpts = kw.ability
-    local resolveOpts = {
-        buffMods = kw.buffMods,
-        negate   = kw.negate,
-        reflect  = kw.reflect,
-    }
-
-    -- Two-stage: attacker roll -> victim resolve.
-    local baseAmount, isCrit = M.roll(world, srcId, tgtId, rollOpts)
-    local dmg, flags = M.resolve(world, tgtId, baseAmount, srcId, resolveOpts)
+    local baseAmount, isCrit = M.roll(world, srcId, tgtId, hit.ability)
+    local dmg = M.resolve(world, tgtId, baseAmount, srcId, { buffMods = hit.buffMods })
 
     local ts = world.stats[tgtId]
     if ts then ts.HP.base = math.max(0, ts.HP.base - dmg) end
@@ -363,7 +300,7 @@ function M.registerHit(world, battle, srcId, tgtId, keywords, useVFX, SCALE, GRA
     local ec = world.effects_comp[tgtId]
     if ec then table.insert(ec.pending, effects_mod.newHurtIndicator(tgtId)) end
 
-    particles.spawnBlood(world, battle, srcId, tgtId, isCrit, SCALE, GRAVITY)
+    particles.spawnBlood(world, battle, srcId, tgtId, isCrit, battle.SCALE, battle.GRAVITY)
     if useVFX then triggerHitVFX(battle, tgtId, world) end
 
     local sp, tp = world.position[srcId], world.position[tgtId]
@@ -375,23 +312,18 @@ function M.registerHit(world, battle, srcId, tgtId, keywords, useVFX, SCALE, GRA
         if kbEc then table.insert(kbEc.pending, effects_mod.newForce(tgtId, dx*60, dy*25, 0.12)) end
     end
 
-    effects_mod.readTagSystem(world, battle, {src=srcId, tgt=tgtId, keywords=kw, amount=dmg})
+    effects_mod.readTagSystem(world, battle, {src=srcId, tgt=tgtId, tags=tags, amount=dmg})
 
-    -- CHAIN LIGHTNING (Paladin Wrath): if the attacker carries an active CHAIN
-    -- buff and this was a MELEE hit, arc lightning to nearby foes and consume
-    -- one charge. The charge count lives in the status magnitude, so each melee
-    -- hit fires exactly one chain until the imbue's charges run out (~10s at the
-    -- paladin's swing cadence). Fully data-driven — no per-ability closure.
-    local sstore = world.status and world.status[srcId]
-    local cidx = status_mod.CHAIN
-    local ce = cidx and sstore and sstore.buffs[cidx]
-    if ce and (ce.magnitude or 0) > 0 and kw.keywords == "Melee" then
-        local abilities_mod = require("encounter/abilities")
-        abilities_mod._applyChain(world, battle, srcId, tgtId, ce.chainParams or {})
-        ce.magnitude = ce.magnitude - 1   -- consume one charge
-        if ce.magnitude <= 0 then
-            status_mod.remove(world, srcId, true, cidx)
-        end
+    -- CHAIN status (Paladin Wrath): each MELEE hit by the carrier arcs to
+    -- nearby foes and uses up one charge (the status magnitude counts charges).
+    local isMelee = false
+    for _, t in ipairs(tags) do if t == "Melee" then isMelee = true; break end end
+    local store = world.status and world.status[srcId]
+    local chain = store and store.buffs[status_mod.CHAIN]
+    if isMelee and chain and (chain.magnitude or 0) > 0 then
+        chain.magnitude = chain.magnitude - 1
+        if chain.magnitude <= 0 then status_mod.remove(world, srcId, true, status_mod.CHAIN) end
+        M.chainHit(world, battle, srcId, tgtId, chain.chainParams or {})
     end
 
     local tgtMt = world.moveTarget[tgtId]
@@ -402,14 +334,39 @@ function M.registerHit(world, battle, srcId, tgtId, keywords, useVFX, SCALE, GRA
     end
 end
 
-function M.registerHeal(world, battle, srcId, tgtId, value, SCALE)
+-- After `primaryId` was hit by `srcId`, hit up to chain.count other living
+-- enemies nearest to it, each for decay^i of a normal hit. Chain hops carry
+-- no tags, so they can never chain again.
+function M.chainHit(world, battle, srcId, primaryId, chain)
+    local count, decay = chain.count or 3, chain.decay or 0.5
+    local pp = world.position[primaryId]
+    if not pp then return end
+    local cands = {}
+    for eid in pairs(world.entities) do
+        local sd, ep = world.side[eid], world.position[eid]
+        if sd and sd.s == 1 and eid ~= primaryId and ep and not world.deathState[eid] then
+            local dx, dy = ep.x - pp.x, ep.y - pp.y
+            cands[#cands+1] = {id = eid, d2 = dx*dx + dy*dy}
+        end
+    end
+    table.sort(cands, function(a, b) return a.d2 < b.d2 end)
+    for i = 1, math.min(count, #cands) do
+        M.registerHit(world, battle, srcId, cands[i].id, {
+            buffMods = { [0] = decay ^ i - 1 },   -- total multiplier = decay^i
+            ability  = { canCrit = false },
+        }, true)
+    end
+end
+
+-- Heal tgtId for value x the healer's power (capped at max HP).
+function M.registerHeal(world, battle, srcId, tgtId, value)
     if not (world.entities[srcId] and world.entities[tgtId]) then return end
     local ss = world.stats[srcId]; if not ss then return end
     local ts = world.stats[tgtId]; if not ts then return end
     local amount = value * getPower(ss) * math.max(0.10, statGet(ss.BOOST))
     local maxHp  = statGet(ts.maxHP)
     ts.HP.base = math.min(maxHp, ts.HP.base + amount)
-    particles.spawnHeal(world, battle, tgtId, SCALE)
+    particles.spawnHeal(world, battle, tgtId, battle.SCALE)
     local ec = world.effects_comp[tgtId]
     if ec then table.insert(ec.pending, effects_mod.newHealIndicator(tgtId)) end
 end

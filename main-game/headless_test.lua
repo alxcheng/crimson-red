@@ -35,7 +35,6 @@ local GRAVITY       = 9.8 * 30 * SCALE
 local MASS          = 70
 local FRICTION      = 0.9
 local BATTLE_LINE_Y = VH * 0.2
-local ENEMY_DANGER  = { skeleton = 3 }
 local RESOURCE_MAX  = 50
 local RES_BAR_AREA_H = 20   -- RESOURCE_BAR_AREA_H in encounter.lua
 
@@ -44,8 +43,8 @@ local FRAMES = 720          -- ~12 simulated seconds at 60 fps
 local DT     = 1 / 60
 
 -- Combat tuning (applied to live world.stats only — never entities.lua):
--- skeletons start at HP 80 / ATK 8 / DEF 3 (see entities.createSkeleton);
--- party melee classes start at HP 100 / DEF 5 (see entities.createKnight).
+-- skeletons start at HP 80 / ATK 8 / DEF 3 (data/enemies.lua);
+-- party melee classes start at HP 100 / DEF 5 (data/classes.lua).
 --   * boost every skeleton's ATK so they land killing blows on the party
 --     (a party death exercises deadSlots + selectedUnit retarget in death),
 --   * drop one skeleton's HP so the party can kill it back (enemy-death path).
@@ -111,32 +110,7 @@ end
 -- BUILD
 -- ============================================================================
 local function buildWorld()
-    world = {
-        entities     = {}, nextId = 1,
-        position     = {}, size       = {}, facing      = {},
-        physics      = {}, moveTarget = {}, entityTarget = {},
-        side         = {}, stats      = {}, locks       = {},
-        stagger      = {}, stun       = {}, skills      = {}, effects_comp = {},
-        bar          = {}, tintColor  = {}, threatMap   = {},
-        effectTints  = {},
-        anim         = {}, hasEntered = {}, deathState  = {},
-        isRanged     = {}, targetSide = {}, dangerLevel = {},
-        spriteOffset = {},
-        hasAttacked  = {},
-        meleeAnchor  = {},
-        hasThreateningPresence = {},
-        slots        = {},
-    }
-    function world:new()
-        local id = self.nextId; self.nextId = id + 1
-        self.entities[id] = true; return id
-    end
-    function world:destroy(id)
-        self.entities[id] = nil
-        for _, pool in pairs(self) do
-            if type(pool) == "table" then pool[id] = nil end
-        end
-    end
+    world = require("encounter/world").new()
 end
 
 local function buildBattle()
@@ -201,16 +175,7 @@ local function spawnPartyAndEnemies()
         {cls = "rogue",  x = partyX, y = GROUND_Y - 20},
     }
     for _, m in ipairs(party) do
-        local id
-        if m.cls == "knight" then
-            id = entities_mod.createKnight(world, battle, m.x, m.y, nil, SCALE, GRAVITY)
-        elseif m.cls == "cleric" then
-            id = entities_mod.createCleric(world, battle, m.x, m.y, nil, SCALE)
-        elseif m.cls == "wizard" then
-            id = entities_mod.createWizard(world, battle, m.x, m.y, nil, SCALE, GRAVITY)
-        elseif m.cls == "rogue" then
-            id = entities_mod.createRogue(world, battle, m.x, m.y, nil, SCALE, GRAVITY)
-        end
+        local id = entities_mod.createHero(world, battle, m.cls, m.x, m.y, nil)
         if id then
             world.moveTarget[id].active = false
             table.insert(partyIds, id)
@@ -219,7 +184,7 @@ local function spawnPartyAndEnemies()
 
     -- 3 skeletons adjacent on the enemy side, facing the party.
     for i = 1, 3 do
-        local id = entities_mod.createSkeleton(world, battle, enemyX, GROUND_Y - 20, SCALE, GRAVITY, ENEMY_DANGER)
+        local id = entities_mod.createEnemy(world, battle, "skeleton", enemyX, GROUND_Y - 20)
         if id then
             world.targetSide[id] = 0   -- fight the party (side 0)
         end
@@ -238,7 +203,6 @@ local function spawnPartyAndEnemies()
     for pi, pid in ipairs(partyIds) do
         if enemyIds[pi] then
             world.entityTarget[pid] = {id = enemyIds[pi]}
-            world.hasAttacked[pid]  = nil
         end
     end
 

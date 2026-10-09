@@ -1,28 +1,20 @@
--- encounter/skills.lua — Skill system, auto-attack system, ability queueing
+-- encounter/skills.lua — WHEN units act: default-action and ability queues.
 --
--- DATA-DRIVEN ABILITY LAYER: ability definitions live in encounter/abilities.lua
--- (M.DB). This module owns the per-frame SYSTEMS that drive those abilities:
---   - auto-attack queueing + execution (slot 0, unchanged behavior)
---   - active-ability queueing (Director's "pay at press, activate when ready"
---     model — replaces the old single-pendingActive + shared-GCD design)
+-- Each unit has two queues (world.skills[id]):
+--   queue        — the default action (slot 0: auto-attack / auto-heal). Queued
+--                  automatically whenever the unit has a target in range.
+--   abilityQueue — active abilities (slots 1..4) in the order their keys were
+--                  pressed. "Pay at press, activate when ready": the cooldown
+--                  starts and the resource is spent when the key is pressed;
+--                  the ability fires later, once the unit is free and in range.
+-- WHAT an ability does is data (data/abilities.lua) run by encounter/abilities.lua.
 --
--- ANIMATION/LOCK PRESERVATION: the `use` closures in abilities.lua trigger
--- ac.list[N].active=true / .timer=0 exactly as the old hand-coded closures did,
--- and queue effects through effects_mod.newTimedAction with the same delay
--- values. This module does NOT change anim.lua or animation timing.
---
--- CALL ORDER (same as the old pipeline — encounter.lua unchanged):
---   M.pendingActiveSystem(world, battle)  -- legacy no-op shim
---   M.autoAttackSystem(world)             -- queue slot 0 when in range & free
---   M.system(world, battle, dt)           -- tick cds/gate, execute queue fronts
---     (auto-attacks in sk.queue AND actives in sk.abilityQueue both execute
---      here, one unit-action per frame)
+-- Called once per frame from screens/encounter.lua, in this order:
+--   M.autoAttackSystem(world)     -- queue slot 0 when in range & free
+--   M.system(world, battle, dt)   -- tick cooldowns, fire the front of a queue
+--                                    (at most one action per unit per frame)
 
 local combat      = require("encounter/combat")
-local stats_mod   = require("encounter/stats")
-local abilities   = require("encounter/abilities")
-
-local statGet = stats_mod.get
 
 local M = {}
 
@@ -37,90 +29,12 @@ local M = {}
 M.EXEC_GATE = 0.4
 
 -- ============================================================================
--- SKILL FACTORY (data-driven via abilities.DB)
--- ============================================================================
-
--- Create a skill-instance for sk.list[slot]. Delegates to abilities.make(id)
--- and stamps the slot index for timed-action opts.
-local function newSkillFromDB(abilityId, slot)
-    local sk = abilities.make(abilityId)
-    sk._slot = slot or 0
-    return sk
-end
-
--- ============================================================================
--- AUTO-ATTACK SKILL FACTORIES (data-driven wrappers)
+-- ENQUEUE — a player pressed an ability key (screens/encounter.lua)
 --
--- These keep the old signatures so entities.lua works unchanged. Each returns
--- a skill-instance whose `use` closure triggers the correct anim slot +
--- timed-action delay from the DB row.
--- ============================================================================
-
-function M.newKnightAutoAttackSkill(SCALE, GRAVITY)
-    return newSkillFromDB("KnightAutoAttack", 0)
-end
-
-function M.newSkeletonAutoAttackSkill(SCALE, GRAVITY)
-    return newSkillFromDB("SkeletonAutoAttack", 0)
-end
-
-function M.newNomadAutoHealSkill(SCALE)
-    return newSkillFromDB("NomadAutoHeal", 0)
-end
-
-function M.newBrigandAutoAttackSkill(SCALE, GRAVITY)
-    return newSkillFromDB("BrigandAutoAttack", 0)
-end
-
-function M.newChampionAutoAttackSkill(SCALE, GRAVITY)
-    return newSkillFromDB("ChampionAutoAttack", 0)
-end
-
-function M.newDuelistAutoAttackSkill(SCALE, GRAVITY)
-    return newSkillFromDB("DuelistAutoAttack", 0)
-end
-
--- ============================================================================
--- ACTIVE SKILL FACTORIES (data-driven wrappers — same signatures as before)
--- ============================================================================
-
-function M.newKnightSunderArmorSkill(SCALE, GRAVITY)
-    return newSkillFromDB("KnightSunderArmor", 1)
-end
-
-function M.newKnightDefendSkill()
-    return newSkillFromDB("KnightDefend", 2)
-end
-
-function M.newNomadGrantPowerSkill()
-    return newSkillFromDB("NomadGrantPower", 1)
-end
-
-function M.newNomadMendWoundsSkill()
-    return newSkillFromDB("NomadMendWounds", 2)
-end
-
-function M.newNomadSparkOfInspirationSkill()
-    return newSkillFromDB("NomadSparkOfInspiration", 3)
-end
-
-function M.newKnightChallengingShoutSkill()
-    return newSkillFromDB("KnightChallengingShout", 3)
-end
-
--- ============================================================================
--- ENQUEUE (called from screens/encounter.lua keypress handler)
---
--- DIRECTOR'S QUEUEING MODEL — "pay at press, activate when ready":
---   1. Look up the ability for this unit+slot.
---   2. If on cooldown or insufficient resource → reject (no cost, no queue).
---   3. START the cooldown NOW (skill.cd = skill.cdMax).
---   4. DEDUCT resourceCost from battle.resource NOW.
---   5. PUSH the slot onto sk.abilityQueue.
---   6. Do NOT activate yet — activation happens in M.system() when the unit
---      is free, in range of a valid target, and this is the front of queue.
---
--- Returns true if enqueued, false if rejected.
+-- Rejects (returns false, nothing spent) if the ability is on cooldown or the
+-- shared resource is too low. Otherwise starts the cooldown, spends the
+-- resource, queues the ability and returns true. Activation happens later in
+-- M.system when the unit is free, in range, and this press is first in line.
 -- ============================================================================
 
 function M.enqueue(world, battle, unitId, slot)
@@ -142,14 +56,8 @@ function M.enqueue(world, battle, unitId, slot)
         battle.resource = math.max(0, battle.resource - cost)
     end
 
-    -- CAMERA PUNCH on every VALID ability press (Director: shake on any valid
-    -- press, not just on activation). This is the "you committed to casting"
-    -- feedback — fires the instant the press is accepted (cd running + resource
-    -- paid), before the ability necessarily activates. A second, slightly
-    -- stronger punch still fires on actual activation (see M.system below) for
-    -- the "it landed" follow-through. Auto-attacks (slot 0) never reach here —
-    -- they queue in M.autoAttackSystem — so their per-hit shake is governed by
-    -- their own vfx flag (e.g. WizardAutoFireball is vfx=false).
+    -- Camera punch the instant a press is accepted; a second one fires when
+    -- the ability actually goes off (M.system).
     combat.triggerActivationVFX(battle, unitId, world)
 
     -- QUEUE: push onto the per-unit ability queue (FIFO, press order).
@@ -236,7 +144,7 @@ function M.system(world, battle, dt)
             goto continue
         end
 
-        -- ---- 2. AUTO-ATTACK QUEUE (slot 0, old behavior, unchanged cadence) ----
+        -- ---- 2. DEFAULT-ACTION QUEUE (slot 0) ----
         local aq = sk.queue
         if aq and #aq > 0 then
             local slotIdx = table.remove(aq, 1)
@@ -253,13 +161,8 @@ function M.system(world, battle, dt)
 end
 
 -- ============================================================================
--- AUTO-ATTACK SYSTEM (queues slot 0 when in range & unlocked)
---
--- Auto-attacks keep their existing path: they queue slot 0 into sk.queue (the
--- OLD queue, separate from abilityQueue) and are processed in M.system via
--- the same exec-gate-free path. Auto-attacks do NOT pay resource and do NOT
--- go through the queueing model — they fire when the unit is in range,
--- unlocked, and not executing an active ability.
+-- AUTO-ATTACK SYSTEM — queue the default action (slot 0) for every unit that
+-- has a living target in range and is free to act. Costs no resource.
 -- ============================================================================
 
 function M.autoAttackSystem(world)
@@ -297,32 +200,6 @@ function M.autoAttackSystem(world)
         end
         ::continue::
     end
-end
-
--- ============================================================================
--- PENDING ACTIVE SYSTEM (LEGACY SHIM — now a true no-op)
---
--- The old encounter.lua called pendingActiveSystem(world, battle) every frame
--- after setting sk.pendingActive = slot. The queueing model replaces that
--- entirely: the keypress handler now calls M.enqueue(world, battle, su, slot)
--- directly, and execution happens in M.system. This function is kept so the
--- existing pipeline call site does not crash before the integrator removes it.
--- ============================================================================
-
-function M.pendingActiveSystem(world, battle)
-    -- No-op. Kept for pipeline compatibility (integrator may remove the call).
-end
-
--- ============================================================================
--- CLEANUP (called on entity death / reset)
--- ============================================================================
-
-function M.clearQueues(world, id)
-    local sk = world.skills[id]
-    if not sk then return end
-    sk.abilityQueue = {}
-    sk.queue = {}
-    sk.execGate = 0
 end
 
 return M
