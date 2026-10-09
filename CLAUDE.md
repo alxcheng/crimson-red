@@ -16,9 +16,10 @@ how to test, rules). This file only holds the visual/technical constants.
 
 ## Palette
 - Background: pure black.
-- **Crimson red** — primary accent (logo, titles, menu items).
-- **Off-red** (lighter red) — hover.
-- **White** — pressed / active / selected.
+- **Red (255, 0, 0)** and **white (255, 255, 255)** only. No off-white, grey, crimson or
+  light red anywhere in the UI (Director, 2026-10-09). States are shown by red vs white and by
+  filled vs outline, never by a dimmer shade.
+- The one exception is gold, for coins and prices.
 
 ## Typography
 - Font: Dedicool (`main-game/assets/dedicool/Dedicool.ttf`), loaded with `common.loadFont(size)`.
@@ -27,4 +28,4 @@ how to test, rules). This file only holds the visual/technical constants.
 
 ## Title screen layout (800×450)
 - Logo (Sierpinski triangle) centred in the upper third; "crimson red" centred at ~50 %;
-  PLAY / OPTIONS / EXIT left of centre at ~65 %, stacked. Hover → off-red; press → white.
+  PLAY / OPTIONS / EXIT left of centre at ~65 %, stacked. Hover: the red selection box; press: white.

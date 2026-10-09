@@ -9,7 +9,7 @@ local VH = common.VH
 -- LAYOUT
 -- ============================================================================
 
-local MENU_ITEMS = {"PLAY", "OPTIONS", "EXIT"}
+local MENU_ITEMS = {"PLAY", "OPTIONS", "DEV TOOLS", "EXIT"}
 local BOX_PAD_X  = 8
 local BOX_PAD_Y  = 5
 
@@ -52,7 +52,7 @@ local box         = common.newBox()
 local function getButtonRect(i)
     local tw = font:getWidth(MENU_ITEMS[i])
     local th = font:getHeight()
-    return (VW - tw) / 2, VH * 0.67 + (i-1) * (VH * 0.09), tw, th
+    return (VW - tw) / 2, VH * 0.65 + (i-1) * (VH * 0.075), tw, th
 end
 
 -- ============================================================================
@@ -196,6 +196,8 @@ function M.mousereleased(x, y, button)
             if bell then bell:stop(); bell:play() end
             switchFn("save_select")
         elseif item == "OPTIONS" then
+            common.playClickSound()          -- there is no options screen yet
+        elseif item == "DEV TOOLS" then
             common.playClickSound()
             switchFn("sprite_dev")
         elseif item == "EXIT" then

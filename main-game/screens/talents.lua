@@ -15,14 +15,11 @@ local VW = common.VW
 local VH = common.VH
 
 -- ============================================================================
--- PALETTE (project: crimson red / off-red / white on black)
+-- PALETTE (project: pure red / pure white on black - nothing in between)
 -- ============================================================================
 
-local CRIMSON = {0.84, 0.07, 0.16, 1}   -- crimson red  (primary accent)
-local OFFRED  = {1.00, 0.42, 0.42, 1}   -- off-red      (hover accent)
+local RED     = {1, 0, 0, 1}
 local WHITE   = {1.00, 1.00, 1.00, 1}   -- white        (pressed/active/chosen)
-local DIM     = {0.32, 0.12, 0.14, 1}   -- locked/future nodes
-local FAINT   = {0.16, 0.06, 0.07, 1}   -- very dim (empty cells, connectors)
 
 local talents_data = require("data/talents")
 local CHOICE_EVERY = talents_data.CHOICE_EVERY
@@ -497,13 +494,13 @@ local function drawScene()
     for i = 1, PARTY_SLOTS do
         local sx, sy = getPartyRect(i)
         local name = partyNames[i]
-        love.graphics.setColor(0.05, 0.02, 0.02, 1)
+        love.graphics.setColor(0, 0, 0, 1)
         love.graphics.rectangle("fill", sx, sy, ICON_SIZE, ICON_SIZE)
         local isSel = name ~= nil and name == selectedChar
-        love.graphics.setColor(isSel and WHITE or (name and CRIMSON or FAINT))
+        love.graphics.setColor(isSel and WHITE or (name and RED or RED))
         love.graphics.setLineWidth(isSel and 2 or 1)
         love.graphics.rectangle("line", sx, sy, ICON_SIZE, ICON_SIZE)
-        if name then drawIconSmall(name, sx, sy, ICON_SIZE, isSel and 1 or 0.8) end
+        if name then drawIconSmall(name, sx, sy, ICON_SIZE, 1) end
     end
 
     -- Character name + level under the strip.
@@ -512,10 +509,10 @@ local function drawScene()
         local lvl = rec and charLevel(rec) or 1
         local pts = rec and rec.pointsToNextLevel
         love.graphics.setFont(nameFont)
-        love.graphics.setColor(OFFRED)
+        love.graphics.setColor(RED)
         love.graphics.printf(("Lv %d  %s"):format(lvl, displayName(selectedChar)), 0, NAME_Y, VW, "center")
         love.graphics.setFont(smallFont)
-        love.graphics.setColor({0.5,0.5,0.5,1})
+        love.graphics.setColor({1, 1, 1,1})
         local xpTxt = (pts and pts > 0) and ("XP to next level: " .. tostring(pts)) or "Max level"
         love.graphics.printf(xpTxt, 0, XP_Y, VW, "center")
     end
@@ -543,7 +540,7 @@ drawLadder = function()
                              (BRANCH_BOX_W + 24) * 2, LADDER_BOTTOM - LADDER_TOP + 12)
 
     -- Vertical centerline behind the nodes.
-    love.graphics.setColor(FAINT)
+    love.graphics.setColor(RED)
     love.graphics.setLineWidth(2)
     love.graphics.line(CENTERLINE_X, LADDER_TOP - 4, CENTERLINE_X, LADDER_BOTTOM)
 
@@ -564,23 +561,23 @@ drawLadder = function()
         local trackY, trackH = LADDER_TOP, LADDER_BOTTOM - LADDER_TOP
         local thumbH = math.max(20, trackH * scrollInfo.view / scrollInfo.content)
         local thumbY = trackY + (trackH - thumbH) * scrollOff / (scrollInfo.content - scrollInfo.view)
-        love.graphics.setColor(FAINT)
-        love.graphics.rectangle("fill", sx, trackY, 4, trackH)
-        love.graphics.setColor(CRIMSON)
+        love.graphics.setColor(RED)
+        love.graphics.rectangle("fill", sx + 1, trackY, 2, trackH)
+        love.graphics.setColor(WHITE)
         love.graphics.rectangle("fill", sx, thumbY, 4, thumbH)
     end
 end
 
 drawPlainRow = function(nr)
     local reached = (nr.state == "reached")
-    local col = reached and CRIMSON or DIM
-    love.graphics.setColor(0.04, 0.02, 0.02, 1)
+    local col = reached and RED or RED
+    love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", nr.x, nr.y, nr.w, nr.h)
     love.graphics.setColor(col)
     love.graphics.setLineWidth(reached and 2 or 1)
     love.graphics.rectangle("line", nr.x, nr.y, nr.w, nr.h)
     love.graphics.setFont(font)
-    love.graphics.setColor(reached and WHITE or {0.4,0.2,0.22,1})
+    love.graphics.setColor(reached and WHITE or {1, 0, 0,1})
     local lbl = "Lv " .. tostring(nr.level)
     love.graphics.print(lbl, nr.x + (nr.w - font:getWidth(lbl))/2,
                         nr.y + (nr.h - font:getHeight())/2)
@@ -592,14 +589,14 @@ drawForkRow = function(nr, ladder, level, rec)
     local lbox, rbox = nr.left, nr.right
 
     -- Connector stubs from the centerline to each branch box.
-    love.graphics.setColor(DIM)
+    love.graphics.setColor(RED)
     love.graphics.setLineWidth(2)
     local cy = nr.y + FORK_HEIGHT/2
     love.graphics.line(CENTERLINE_X, cy, lbox.x + lbox.w, cy)
     love.graphics.line(CENTERLINE_X, cy, rbox.x, cy)
 
     -- Center diamond marker (the fork).
-    love.graphics.setColor(OFFRED)
+    love.graphics.setColor(RED)
     love.graphics.polygon("fill",
         CENTERLINE_X, cy - 6, CENTERLINE_X + 6, cy,
         CENTERLINE_X, cy + 6, CENTERLINE_X - 6, cy)
@@ -616,17 +613,17 @@ drawBranchBox = function(b, opt, tag)
     --   locked      -> faint border, near-black fill, faint name (future level)
     local borderCol, fillCol, nameCol, descCol
     if b.state == "selectable" then
-        borderCol, fillCol = CRIMSON, {0.10, 0.03, 0.03, 1}
-        nameCol, descCol = WHITE, OFFRED
+        borderCol, fillCol = RED, {0, 0, 0, 1}
+        nameCol, descCol = WHITE, RED
     elseif b.state == "chosen" then
-        borderCol, fillCol = WHITE, {0.55, 0.08, 0.14, 1}
-        nameCol, descCol = WHITE, {1,0.85,0.85,1}
+        borderCol, fillCol = WHITE, {1, 0, 0, 1}
+        nameCol, descCol = WHITE, {1, 1, 1,1}
     elseif b.state == "lockedOther" then
-        borderCol, fillCol = {0.28,0.10,0.12,1}, {0.05,0.02,0.02,1}
-        nameCol, descCol = {0.45,0.2,0.22,1}, {0.35,0.15,0.17,1}
+        borderCol, fillCol = {1, 0, 0,1}, {0, 0, 0,1}
+        nameCol, descCol = {1, 0, 0,1}, {1, 0, 0,1}
     else -- locked
-        borderCol, fillCol = FAINT, {0.03,0.015,0.015,1}
-        nameCol, descCol = {0.30,0.12,0.14,1}, {0.25,0.10,0.12,1}
+        borderCol, fillCol = RED, {0, 0, 0,1}
+        nameCol, descCol = {1, 0, 0,1}, {1, 0, 0,1}
     end
 
     love.graphics.setColor(fillCol)
@@ -650,7 +647,7 @@ drawHoverTooltip = function()
         local name = partyNames[hoveredPartySlot]
         local x, y, w, h = getPartyRect(hoveredPartySlot)
         common.drawTooltip({
-            { text = displayName(name), size = 16, color = OFFRED },
+            { text = displayName(name), size = 16, color = RED },
             { text = "Lv " .. tostring(charLevel(charRecord(name))), color = WHITE },
         }, { x = x, y = y, w = w, h = h })
         return
@@ -662,23 +659,23 @@ drawHoverTooltip = function()
     if nr.kind == "plain" then
         lines = { { text = (nr.state == "reached") and ("Level %d reached"):format(nr.level)
                                                      or ("Reach level %d to unlock"):format(nr.level),
-                    color = (nr.state == "reached") and WHITE or OFFRED } }
+                    color = (nr.state == "reached") and WHITE or RED } }
     else
         local ch  = ladderFor(selectedChar).choices[nr.idx]
         local opt = ch and ch.options[b.opt]
         if not opt then return end
         local status, col
         if b.state == "selectable" then
-            status, col = "Click to choose. The other option locks for good.", OFFRED
+            status, col = "Click to choose. The other option locks for good.", RED
         elseif b.state == "chosen" then
             status, col = "Chosen", WHITE
         elseif b.state == "lockedOther" then
-            status, col = "Unavailable: the other option was chosen", {0.6, 0.6, 0.6, 1}
+            status, col = "Unavailable: the other option was chosen", {1, 1, 1, 1}
         else
-            status, col = ("Reach level %d to choose"):format(nr.level), {0.6, 0.6, 0.6, 1}
+            status, col = ("Reach level %d to choose"):format(nr.level), {1, 1, 1, 1}
         end
         lines = {
-            { text = opt.name, size = 16, color = OFFRED },
+            { text = opt.name, size = 16, color = RED },
             { text = opt.desc, color = WHITE },
             { text = status, color = col },
         }

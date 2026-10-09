@@ -157,3 +157,25 @@ shifting ONE colour and leaving the rest alone (e.g. the Knight's blue clothes -
 `./recolor report <dir>` lists the hues a folder contains; `./recolor shift <src> <dst>
 <fromHue> <toHue> [tolerance] [satScale] [valScale]` writes the copy. Cleric, Paladin, Wizard
 and Rogue are recoloured Knights: see `RECOLOURS` at the bottom of `data/sprites.lua`.
+
+## Unit size and sprite alignment
+- A unit's size is ONE number: `spriteScale` on its row (`data/classes.lua`, `data/enemies.lua`).
+  "This enemy is too small" = raise that number; nothing else needs touching.
+- Sprite frames are much larger than the character in them. `./align_sprites` measures the
+  visible box of every Idle sheet into `data/sprite_bounds.lua` (generated). From it
+  `encounter/entities.lua` sets the body box (`world.size` = visible box x scale) and the
+  sprite offset, so the feet are on the box's bottom edge. Run it after adding/changing an
+  Idle sheet.
+- Check by eye: `./test_ui align` saves `align-lineup.png` (every unit with its box), or press
+  B in a battle.
+- How far apart melee fighters stand: `MELEE_SPACING` in `encounter/systems.lua` (1.0 = boxes
+  touch). It uses both body widths, so it follows `spriteScale` automatically.
+
+## Tools (repo root)
+| Command | What it does |
+|---|---|
+| `./check_syntax` | Parses every .lua file. Run it when the game or a test hangs at start-up. |
+| `./align_sprites` | Measures sprites -> `data/sprite_bounds.lua`. |
+| `./recolor` | Makes a recoloured copy of a sprite folder (one colour shifted). |
+| `./test_ui quick` / `align` | Faster subsets of `./test_ui`. |
+

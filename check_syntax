@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Syntax-check every .lua file (see tools/luacheck/main.lua). Exit 0 = all files parse.
+set -euo pipefail
+root="$(cd "$(dirname "$0")" && pwd)"
+exec love "$root/tools/luacheck" "$root"

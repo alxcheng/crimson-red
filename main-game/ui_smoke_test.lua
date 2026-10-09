@@ -476,6 +476,55 @@ local function driveEncounter(tag, party, level, tier)
 end
 
 -- Combat rules checked on a controlled duel: one knight, one unkillable goblin.
+-- Sprite alignment: every unit type in a row with its body box shown. Checks the
+-- maths (box = measured visible box x spriteScale) and saves a screenshot to LOOK at:
+-- each sprite must stand inside its white box with its feet on the red line.
+local function checkAlignment()
+    local tag = "align"
+    local scr = require("screens/encounter")
+    local classes, enemies, bounds = require("data/classes"), require("data/enemies"), require("data/sprite_bounds")
+    local entities = require("encounter/entities")
+    local sd = fixtureFresh()
+    sd.partyOrder = { false, false, false, false }
+    switched = nil
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { waves = {} , spawnDelay = 1e9 }) then return end
+    local world, battle = scr.debugState()
+    battle.showBoxes = true
+    battle.encounterMgr.done = false          -- no waves: keep the victory check quiet
+    battle.encounterMgr.waves = { { initialDelay = 1e9, spawnDelay = 1e9, maxEnemies = 0, enemies = {} } }
+    battle.encounterMgr.spawnDelay = 1e9
+    local feetY, x, ok = 200, 40, true
+    local function place(id, def)
+        local sz = world.size[id]
+        world.position[id].x, world.position[id].y = x + sz.w / 2, feetY - sz.h / 2
+        world.moveTarget[id].active = false
+        world.hasEntered[id] = { h = true, v = true }
+        world.entityTarget[id] = nil
+        if world.stats[id] then world.stats[id].ATK.base = 0 end
+        local b = bounds[classes.ANIM_SETS[def.anims].sprite]
+        local want = b.w * def.spriteScale * battle.SCALE
+        if math.abs(sz.w - want) > 0.01 then ok = false end
+        x = x + sz.w + 22
+        if x > VW - 90 then x, feetY = 40, feetY + 150 end
+    end
+    for _, key in ipairs({ "knight", "cleric", "paladin", "wizard", "rogue", "brigand", "champion", "duelist", "nomad" }) do
+        place(entities.createHero(world, battle, key, 0, 0), classes.CLASSES[key])
+    end
+    for _, key in ipairs({ "skeleton", "goblin", "bat", "mushroom" }) do
+        local id = entities.createEnemy(world, battle, key, 0, 0)
+        world.threatMap[id] = nil                 -- stand still, target nobody
+        world.spawnFade[id] = nil
+        world.facing[id].right = true
+        place(id, enemies.ENEMIES[key])
+    end
+    mouseX, mouseY = -100, -100
+    guard(tag .. " update", scr.update, 1 / 60)
+    guard(tag .. " draw", scr.draw)
+    screenshot(tag .. "-lineup")
+    check(ok, tag .. ": every unit's body box is its measured sprite box x spriteScale")
+    if scr.onExit then guard(tag .. " onExit", scr.onExit) end
+end
+
 -- The BH wave spawner (encounter/encounter_mgr.lua) and the wave generator.
 local function checkSpawner()
     local tag = "spawner"
@@ -813,6 +862,7 @@ local function runAll()
 
     checkCombatRules()
     checkSpawner()
+    checkAlignment()
 
     -- ENCOUNTER (full battles through to the victory branch). These take minutes;
     -- `./test_ui quick` (CR_UI_QUICK=1) skips them for UI-only work.
@@ -862,7 +912,9 @@ end
 function M.update(dt)
     if ran then return end
     ran = true
-    local ok, err = xpcall(runAll, debug.traceback)
+    -- `./test_ui align` (CR_UI_ONLY=align): only the sprite line-up screenshot (seconds).
+    local job = (os.getenv("CR_UI_ONLY") == "align") and checkAlignment or runAll
+    local ok, err = xpcall(job, debug.traceback)
     if not ok then recordError("driver", err) end
 
     local failed = 0

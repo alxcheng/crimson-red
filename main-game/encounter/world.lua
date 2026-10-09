@@ -24,7 +24,8 @@ function M.new()
         physics      = {},   -- {vx, vy, fx, fy} knockback velocity / pending force
         moveTarget   = {},   -- {x, y, active} where the unit is walking to (center coords)
         hasEntered   = {},   -- {h, v} has walked inside the arena bounds yet
-        spriteOffset = {},   -- {x, y} sprite nudge relative to the body box
+        spriteOffset = {},   -- {x, y} where the frame centre is drawn relative to the body-box centre
+        drawScale    = {},   -- screen pixels per art pixel for this unit's sprite
 
         -- Allegiance & targeting
         side         = {},   -- {s = 0 party | 1 enemy}

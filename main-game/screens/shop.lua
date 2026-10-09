@@ -389,10 +389,9 @@ end
 -- DRAW HELPERS
 -- ============================================================================
 
-local CRIMSON = {0.84, 0.07, 0.16, 1}
-local OFFRED  = {1.00, 0.42, 0.42, 1}
+local RED     = {1, 0, 0, 1}
 local GOLD    = item_ui.GOLD
-local GREY    = {0.5, 0.5, 0.5, 1}
+local GREY    = {1, 1, 1, 1}
 
 local displayName = common.titleCase
 
@@ -432,9 +431,9 @@ local function drawTabs()
         if tab == which then
             love.graphics.setColor(1, 1, 1, 1)
             love.graphics.rectangle("fill", x, y, w, h)
-            love.graphics.setColor(CRIMSON)
+            love.graphics.setColor(RED)
         else
-            love.graphics.setColor(0.45, 0.15, 0.20, 1)
+            love.graphics.setColor(1, 0, 0, 1)
             love.graphics.setLineWidth(2)
             love.graphics.rectangle("line", x, y, w, h)
         end
@@ -446,13 +445,15 @@ end
 local function drawActionButton()
     local action = currentAction()
     if not action then return end
-    love.graphics.setColor(action.enabled and CRIMSON or {0.30, 0.10, 0.12, 1})
-    love.graphics.rectangle("fill", BTN_X, BTN_Y, BTN_W, BTN_H)
+    -- Usable: filled red, white text. Not usable (no gold / no room): outline only, red text.
+    love.graphics.setColor(RED)
+    love.graphics.setLineWidth(1)
+    love.graphics.rectangle(action.enabled and "fill" or "line", BTN_X, BTN_Y, BTN_W, BTN_H)
     local label = action.verb .. " " .. tostring(action.price)
     local startX = math.floor(BTN_X + (BTN_W - (16 + font16:getWidth(label))) / 2)
     drawCoin(startX + 6, BTN_Y + BTN_H / 2, 6)
     love.graphics.setFont(font16)
-    love.graphics.setColor(action.enabled and {1, 1, 1, 1} or {0.5, 0.4, 0.4, 1})
+    love.graphics.setColor(action.enabled and {1, 1, 1, 1} or RED)
     love.graphics.print(label, startX + 16, math.floor(BTN_Y + (BTN_H - font16:getHeight()) / 2))
 end
 
@@ -461,20 +462,20 @@ local function drawGearTab()
     for i = 1, items.SHOP_SLOTS do
         local x, y, w, h = offerSlotRect(i)
         local inst = itemOf(offers[i])
-        love.graphics.setColor(0.35, 0.35, 0.35, 1)
+        love.graphics.setColor(1, 1, 1, 1)
         love.graphics.setLineWidth(1)
         love.graphics.rectangle("line", x, y, w, h)
         if inst then
             item_ui.drawGlyph(inst, x + 6, y + 6, w - 12)
             local affordable = goldValue() >= items.buyPrice(inst)
-            drawPrice(font13, items.buyPrice(inst), x + w / 2, y + h + 4, affordable and GOLD or GREY)
+            drawPrice(font13, items.buyPrice(inst), x + w / 2, y + h + 4, affordable and GOLD or RED)
             if selected and selected.kind == "offer" and selected.idx == i then
                 love.graphics.setColor(1, 1, 1, 1)
                 love.graphics.setLineWidth(2)
                 love.graphics.rectangle("line", x + 1, y + 1, w - 2, h - 2)
             end
         elseif offers[i] == false then
-            love.graphics.setColor(0.4, 0.3, 0.3, 1)
+            love.graphics.setColor(1, 1, 1, 1)
             common.printCentered(font13, "SOLD", x, y, w, h)
         end
     end
@@ -502,7 +503,7 @@ local function drawHireTab()
         return
     end
 
-    love.graphics.setColor(0.10, 0.10, 0.10, 1)
+    love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE, PORTRAIT_SIZE)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(2)
@@ -530,9 +531,9 @@ local function drawHireTab()
     love.graphics.print("Lv " .. tostring(progression.hireLevel(saveData_ref)), tx, PORTRAIT_Y + 18)
     local st = progression.heroStats(saveData_ref, name) or {}
     local statLines = {
-        { "ATK", st.ATK or 0,   {0.95, 0.55, 0.20, 1} },
-        { "DEF", st.DEF or 0,   {0.55, 0.75, 0.95, 1} },
-        { "HP",  st.maxHP or 0, {0.85, 0.30, 0.35, 1} },
+        { "ATK", st.ATK or 0,   {1, 0, 0, 1} },
+        { "DEF", st.DEF or 0,   {1, 1, 1, 1} },
+        { "HP",  st.maxHP or 0, {1, 0, 0, 1} },
     }
     for i, line in ipairs(statLines) do
         local ly = PORTRAIT_Y + 40 + (i - 1) * 19
@@ -586,7 +587,7 @@ local function drawScene()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", PANEL_X, PANEL_Y, PANEL_W, PANEL_H)
-    love.graphics.setColor(0.35, 0.35, 0.35, 1)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(1)
     love.graphics.line(PANEL_X + PAD, DIVIDER_Y, PANEL_X + PANEL_W - PAD, DIVIDER_Y)
     drawTabs()

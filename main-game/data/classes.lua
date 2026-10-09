@@ -6,7 +6,8 @@
 --
 -- Row fields:
 --   name        display name
---   size        {w, h} body box in art pixels (multiplied by the battle SCALE)
+--   spriteScale how big the hero is drawn. THE one size knob: the body box, the
+--               feet and the sprite position all follow from it (data/sprite_bounds.lua)
 --   base        level-1 stats before gear: {hp, power, defense, crit}. hp/power/
 --               defense are Battleheart's values (bh/data/party.json); crit is a
 --               0..1 chance [tuned]
@@ -17,7 +18,6 @@
 --               (data/bh_items.lua)
 --   anims       name of an entry in M.ANIM_SETS (frame timing per action)
 --   tint        optional {r, g, b} persistent recolor of the sprite
---   spriteOffsetY optional vertical sprite nudge in pixels
 --   ranged      true = never walks into melee; acts from where it stands
 --   targetsAllies true = its default action targets its own side (healers)
 --   drawsThreat true = its hits generate double threat (tanks)
@@ -69,7 +69,7 @@ M.HERO_MOVE_SPEED = 2.4
 M.CLASSES = {
     -- ---- Crimson Red originals -------------------------------------------
     knight = {
-        name = "Knight", size = {30, 40}, anims = "knight",
+        name = "Knight", spriteScale = 1.1, anims = "knight",
         base  = {hp = 1000, power = 20, defense = 15, crit = 0.10},   -- BH Knight (Shepherd)
         scale = {power = 1.0, defense = 1.2, hp = 15},
         starterGear = {0, 4},
@@ -78,28 +78,28 @@ M.CLASSES = {
         actives = { "KnightSunderArmor", "KnightDefend", "KnightChallengingShout" },
     },
     brigand = {
-        name = "Brigand", size = {30, 40}, anims = "brigand", spriteOffsetY = 5,
+        name = "Brigand", spriteScale = 0.9, anims = "brigand",
         base  = {hp = 1000, power = 26, defense = 8, crit = 0.10},   -- borrowed from BH Rogue [tuned]
         scale = {power = 1.0, defense = 1.0, hp = 15},
         starterGear = {1, 5},
         auto = "BrigandAutoAttack", actives = {},
     },
     champion = {
-        name = "Champion", size = {32, 52}, anims = "champion", spriteOffsetY = -35,
+        name = "Champion", spriteScale = 1, anims = "champion",
         base  = {hp = 1000, power = 28, defense = 7, crit = 0.10},   -- borrowed from BH Barbarian (Baelrosh) [tuned]
         scale = {power = 1.0, defense = 1.0, hp = 15},
         starterGear = {11, 5},
         auto = "ChampionAutoAttack", actives = {},
     },
     duelist = {
-        name = "Duelist", size = {27.6, 41.88}, anims = "duelist",
+        name = "Duelist", spriteScale = 0.959, anims = "duelist",
         base  = {hp = 1000, power = 20, defense = 15, crit = 0.10},   -- borrowed from BH Monk (Feung) [tuned]
         scale = {power = 1.0, defense = 1.2, hp = 15},
         starterGear = {43, 44},
         auto = "DuelistAutoAttack", actives = {},
     },
     nomad = {
-        name = "Nomad", size = {29.43, 38.97}, anims = "nomad", spriteOffsetY = -18,
+        name = "Nomad", spriteScale = 0.72, anims = "nomad",
         base  = {hp = 1000, power = 12, defense = 6, crit = 0.05},   -- borrowed from BH Bard (Edwardo) [tuned]
         scale = {power = 1.0, defense = 1.0, hp = 15},
         starterGear = {45, 5},
@@ -112,7 +112,7 @@ M.CLASSES = {
     -- These four use recoloured copies of the Knight sheets (made with ./recolor: only
     -- the blue clothes are shifted to another colour; see RECOLOURS in data/sprites.lua).
     cleric = {   -- BH Cleric (Lucille): healer, no attack; default action is a heal
-        name = "Cleric", size = {29.43, 38.97}, anims = "cleric",
+        name = "Cleric", spriteScale = 1.1, anims = "cleric",
         base  = {hp = 1000, power = 65, defense = 4, crit = 0},   -- BH Cleric (Lucille)
         scale = {power = 3.0, defense = 1.0, hp = 15},
         starterGear = {2, 6},
@@ -121,7 +121,7 @@ M.CLASSES = {
         actives = { "ClericGroupHeal", "ClericShield", "ClericPowerInfusion", "ClericVengefulAngel" },
     },
     paladin = {  -- BH Paladin (Heleth): tank / off-healer
-        name = "Paladin", size = {30, 40}, anims = "paladin",
+        name = "Paladin", spriteScale = 1.1, anims = "paladin",
         base  = {hp = 1000, power = 19, defense = 18, crit = 0},   -- BH Paladin (Heleth)
         scale = {power = 1.0, defense = 1.2, hp = 15},
         starterGear = {0, 4},
@@ -130,7 +130,7 @@ M.CLASSES = {
         actives = { "PaladinHolyWord", "PaladinDivineIntervention", "PaladinAuraOfLight", "PaladinWrath" },
     },
     wizard = {   -- BH Wizard (Bromswell): ranged damage + crowd control
-        name = "Wizard", size = {29.43, 38.97}, anims = "wizard",
+        name = "Wizard", spriteScale = 1.1, anims = "wizard",
         base  = {hp = 1000, power = 33, defense = 0, crit = 0},   -- BH Wizard (Bromswell)
         scale = {power = 1.0, defense = 1.0, hp = 15},
         starterGear = {3, 6},
@@ -139,7 +139,7 @@ M.CLASSES = {
         actives = { "WizardMeteor", "WizardBlizzard", "WizardTimeStop", "WizardConflagrate" },
     },
     rogue = {    -- BH Rogue (Gustav): fast melee burst
-        name = "Rogue", size = {30, 40}, anims = "rogue",
+        name = "Rogue", spriteScale = 1.1, anims = "rogue",
         base  = {hp = 1000, power = 26, defense = 8, crit = 0.20},   -- BH Rogue (Gustav)
         scale = {power = 1.0, defense = 1.0, hp = 15},
         starterGear = {1, 5},

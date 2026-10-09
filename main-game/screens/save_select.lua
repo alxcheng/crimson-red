@@ -254,7 +254,7 @@ local function drawScene()
         if slot.empty then
             -- EMPTY prompt, accent red (white when the row is pressed)
             love.graphics.setFont(descFont)
-            love.graphics.setColor(pressedItem == item and 1 or 0.85, 0, 0, 1)
+            love.graphics.setColor(1, 0, 0, 1)
             love.graphics.print("EMPTY", rx + 90, ry + (ROW_H - descFont:getHeight()) / 2)
         else
             -- Floor, then party summary
@@ -267,7 +267,7 @@ local function drawScene()
             if pressedItem == item then
                 love.graphics.setColor(0, 0, 0, 1)
             else
-                love.graphics.setColor(0.75, 0.75, 0.75, 1)
+                love.graphics.setColor(1, 1, 1, 1)
             end
             local maxW = delBtnRect(si) - ROW_DEL_GAP - (rx + 90)   -- stop short of DELETE
             love.graphics.print(common.fitText(smallFont, summary, maxW), rx + 90, ry + 32)
@@ -282,7 +282,7 @@ local function drawScene()
             local bx, by = delBtnRect(si)
             local isPressed = pressedItem == item
             love.graphics.setLineWidth(1)
-            love.graphics.setColor(isPressed and 0.85 or 0.5, 0, 0, 1)
+            love.graphics.setColor(1, 0, 0, 1)
             love.graphics.rectangle("line", bx, by, DEL_BTN_W, DEL_BTN_H)
             local lbl = "DELETE"
             love.graphics.setFont(smallFont)

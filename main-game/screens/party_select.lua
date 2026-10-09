@@ -16,11 +16,10 @@ local VW = common.VW
 local VH = common.VH
 
 -- ============================================================================
--- PALETTE (project: crimson red / off-red / white on black)
+-- PALETTE (project: pure red / pure white on black - nothing in between)
 -- ============================================================================
 
-local CRIMSON = {0.84, 0.07, 0.16, 1}   -- crimson red  (primary accent)
-local OFFRED  = {1.00, 0.42, 0.42, 1}   -- off-red      (hover accent)
+local RED     = {1, 0, 0, 1}
 local WHITE   = {1.00, 1.00, 1.00, 1}   -- white        (pressed/active)
 
 -- ============================================================================
@@ -324,24 +323,24 @@ local function drawTooltip()
     local rec   = charRecord(hoveredChar)
     local stats = require("progression").heroStats(saveData_ref, hoveredChar)
     common.drawTooltip({
-        { text = displayName(hoveredChar), size = 16, color = OFFRED },
+        { text = displayName(hoveredChar), size = 16, color = RED },
         { text = ("Lv %d    ATK %s    DEF %s    HP %s"):format((rec and rec.level) or 1,
               stats and tostring(stats.ATK) or "?", stats and tostring(stats.DEF) or "?",
               stats and tostring(stats.maxHP) or "?"), color = WHITE },
         { text = hoveredInParty and "IN PARTY - click to remove"
-                                 or "RESERVE - click to add", color = CRIMSON },
+                                 or "RESERVE - click to add", color = RED },
     }, hoveredRect)
 end
 
 -- A white frame with a crimson inner line, and a caption above its top-left corner.
 local function drawFrame(caption, x, y, w, h)
     love.graphics.setFont(font)
-    love.graphics.setColor(CRIMSON)
+    love.graphics.setColor(RED)
     love.graphics.print(caption, x, y - LABEL_H)
     love.graphics.setColor(WHITE)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", x, y, w, h)
-    love.graphics.setColor(CRIMSON)
+    love.graphics.setColor(RED)
     love.graphics.setLineWidth(1)
     love.graphics.rectangle("line", x + 3, y + 3, w - 6, h - 6)
 end
@@ -361,9 +360,9 @@ local function drawScene()
         local sx, sy = getPartySlotRect(i)
 
         -- Portrait background: dim black, crimson edge.
-        love.graphics.setColor(0.05, 0.02, 0.02, 1)
+        love.graphics.setColor(0, 0, 0, 1)
         love.graphics.rectangle("fill", sx, sy, ICON_SIZE, ICON_SIZE)
-        love.graphics.setColor(CRIMSON)
+        love.graphics.setColor(RED)
         love.graphics.setLineWidth(2)
         love.graphics.rectangle("line", sx, sy, ICON_SIZE, ICON_SIZE)
 
@@ -374,7 +373,7 @@ local function drawScene()
         -- Slot number in the band below the portrait
         local lbl = tostring(i)
         love.graphics.setFont(font)
-        love.graphics.setColor(CRIMSON)
+        love.graphics.setColor(RED)
         love.graphics.print(lbl, sx + (ICON_SIZE - font:getWidth(lbl)) / 2,
             sy + ICON_SIZE + 5)
     end
@@ -387,9 +386,9 @@ local function drawScene()
     for idx = 1, ROSTER_COLS * ROSTER_ROWS do
         local rx, ry = getRosterCellRect(idx)
         local name = roster[idx]
-        love.graphics.setColor(0.04, 0.02, 0.02, 1)
+        love.graphics.setColor(0, 0, 0, 1)
         love.graphics.rectangle("fill", rx, ry, ROSTER_CELL_W, ROSTER_CELL_H)
-        love.graphics.setColor(name and CRIMSON or {0.20, 0.05, 0.06, 1})
+        love.graphics.setColor(name and RED or {0, 0, 0, 1})
         love.graphics.setLineWidth(1)
         love.graphics.rectangle("line", rx, ry, ROSTER_CELL_W, ROSTER_CELL_H)
         if name then

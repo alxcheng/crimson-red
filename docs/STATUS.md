@@ -12,6 +12,17 @@ Knight and a Cleric, 15 gold, and Battleheart's numbers throughout. Nine classes
 (knight, brigand, champion, duelist, nomad, cleric, paladin, wizard, rogue); one enemy type.
 
 ## Done on this branch (newest first)
+- **Sprite alignment, spacing, palette, background (2026-10-09)**:
+  - *One size knob*: each unit row has `spriteScale`; body box, feet and sprite position are
+    derived from the sprite's measured visible box (`./align_sprites` writes
+    `data/sprite_bounds.lua`). Hand-typed `size` / `spriteOffsetY` are gone. Key B in battle
+    shows the boxes; `./test_ui align` saves the line-up screenshot.
+  - *Melee spacing*: attackers stand `MELEE_SPACING` (0.8) x the two body widths from their
+    target (`encounter/systems.lua`), farther apart than before; range is checked at the feet.
+  - *Palette*: menus use only pure red, pure white and black (gold for coins). `CLAUDE.md`.
+  - *Battle background*: BH's spider-boss battlefield (`assets/images/bh_spider_forest.png`).
+  - *Title*: OPTIONS no longer opens the sprite viewer; new DEV TOOLS item does.
+  - `./check_syntax` (both tests run it first: a syntax error used to hang them silently).
 - **BH battles, rewards, shop, enemies, recolours (2026-10-09)**:
   - *Enemies*: goblin (BH bat stats), bat (BH skeleton-archer stats: ranged, stands still,
     random target each shot, fades in inside the arena), mushroom (BH ogre stats). The
@@ -84,6 +95,15 @@ Confirmed by the Director (2026-10-09): hero move speed 2.4 (`HERO_MOVE_SPEED`);
 Nomad abilities on the 15 s / 3 bar default.
 
 ## Director said (verbatim, newest first)
+- 2026-10-09: "Search for the spider boss background in BH and make that the ... battle
+  background for dark forest" / "I dont like how some of the UI elements are this off white
+  or off red color. It should be full red or full white, or not at all" / "unbind the options
+  button in menu from the dev tool; there should just be a DEV TOOLS button under it (above
+  exit)" / "make a sprite alignment tool for your own use ... feet touch the bottom of the box
+  and box fits around the visual sprite" / "so i can say 'this enemy looks too small or too
+  big' and you can change one value (the scale)" / "the x distance between melee fighting
+  enemies is too short, they should be a little farther away (the y distance is fine)".
+- 2026-10-09: map generation is to be DISCUSSED first, not implemented yet.
 - 2026-10-09: "Look in Battleheart for feature implementations like how enemies spawn and also
   the victory screen which shows you getting 1 item and coins as well as experience for the
   whole party" / "more things should be sold in the shop ... around 6 slots (not large boxes),

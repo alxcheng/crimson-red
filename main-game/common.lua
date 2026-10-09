@@ -342,9 +342,9 @@ function M.drawTooltip(lines, anchor)
     tx = math.max(6, math.min(tx, M.VW - 6 - tw))
     ty = math.max(6, ty)
 
-    love.graphics.setColor(0.04, 0.02, 0.02, 1)
+    love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", tx, ty, tw, th)
-    love.graphics.setColor(1.00, 0.42, 0.42, 1)
+    love.graphics.setColor(1, 0, 0, 1)
     love.graphics.setLineWidth(1)
     love.graphics.rectangle("line", tx, ty, tw, th)
     local ly = ty + pad

@@ -7,7 +7,8 @@
 --
 -- Row fields:
 --   name       display name
---   size       {w, h} body box in art pixels (multiplied by the battle SCALE)
+--   spriteScale how big it is drawn. THE one size knob: its body box, feet and
+--              sprite position all follow from it (see data/sprite_bounds.lua)
 --   stats      {hp, power}. Enemies have no defense and never crit (BH rule).
 --   moveSpeed  MOVE_SPEED = BH moveSpeed x SPEED_SCALE (x30 = pixels/second)
 --   anims      entry in data/classes.lua ANIM_SETS
@@ -33,21 +34,21 @@ M.SPEED_SCALE = 1.667   -- BH moveSpeed -> CR MOVE_SPEED (BH goblin 0.9 -> 1.5) 
 
 M.ENEMIES = {
     skeleton = {
-        name = "Skeleton", size = {40, 40}, anims = "skeleton",
+        name = "Skeleton", spriteScale = 0.75, anims = "skeleton",
         stats = {hp = 500, power = 70},          -- BH basic1: attacks every 1.3 s
         moveSpeed = 1.5, spawn = "right",
         danger = 2, minTier = 1,
         auto = "SkeletonAutoAttack",
     },
     goblin = {
-        name = "Goblin", size = {36, 36}, anims = "goblin",
+        name = "Goblin", spriteScale = 0.75, anims = "goblin",
         stats = {hp = 375, power = 80},          -- BH basic2 (bat): fast and frail, every 1.16 s
         moveSpeed = 1.83, spawn = "right",       -- BH 1.1
         danger = 2, minTier = 1,
         auto = "GoblinAutoAttack",
     },
     bat = {
-        name = "Bat", size = {30, 30}, anims = "bat",
+        name = "Bat", spriteScale = 0.75, anims = "bat",
         stats = {hp = 600, power = 95},          -- BH basic4 (skeleton archer): shoots every 1.8 s
         moveSpeed = 1.0, spawn = "inside",       -- never moves: appears in the arena and shoots
         ranged = true, chaotic = true,
@@ -55,7 +56,7 @@ M.ENEMIES = {
         auto = "BatAutoShot",
     },
     mushroom = {
-        name = "Mushroom", size = {50, 50}, anims = "mushroom",
+        name = "Mushroom", spriteScale = 1.25, anims = "mushroom",
         stats = {hp = 2200, power = 165},        -- BH basic3 (ogre): slow and heavy, every 1.5 s
         moveSpeed = 0.83, spawn = "right",       -- BH 0.5
         danger = 8, minTier = 3,                 -- costly: one per wave until late battles

@@ -139,7 +139,7 @@ function M.onEnter(canvas, postfx, sw)
         local key = "dev_" .. ch.name
         ch.devKey = key
         if not anim_mod.db[key] then
-            pcall(anim_mod.load, key, ch.path, ch.frames, ch.fw, ch.fh, 1.0)
+            pcall(anim_mod.load, key, ch.path, ch.frames, ch.fw, ch.fh)
         end
     end
 

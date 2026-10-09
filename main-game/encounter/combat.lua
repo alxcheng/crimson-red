@@ -236,10 +236,11 @@ function M.checkMeleeRange(world, srcId, tgtId)
     -- while visually touching). Vertical tolerance is a generous height band
     -- [tuned] since all units are feet-aligned and 39-78px tall; the old 2px
     -- was too tight and produced the "near but out / far but in" artifact.
-    local reach = 6 + 0.25 * ss.w   -- [tuned] BH flat-reach analogue
+    local reach = 10 + 0.25 * ss.w   -- [tuned] BH flat-reach analogue (covers slot rings 1 and 2)
     local gapX  = math.max(0, math.abs(sp.x - tp.x) - (ss.w/2 + ts.w/2))
     local inRangeX = gapX <= reach
-    local inRangeY = math.abs(sp.y - tp.y) <= 18  -- [tuned] feet-aligned height band
+    -- Depth is compared at the FEET (units of different heights stand on the same ground).
+    local inRangeY = math.abs((sp.y + ss.h/2) - (tp.y + ts.h/2)) <= 18  -- [tuned]
     return inRangeX and inRangeY
 end
 

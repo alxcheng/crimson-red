@@ -30,8 +30,7 @@ local SPOILS_TIME  = 3.8     -- BH: 3.0 s after the item
 local BARS_AT      = 1.0     -- seconds into "xp" before the bars start to fill
 local BAR_SPEED    = 0.9     -- bar lengths filled per second
 
-local CRIMSON = {0.84, 0.07, 0.16, 1}
-local OFFRED  = {1.00, 0.42, 0.42, 1}
+local RED     = {1, 0, 0, 1}
 local GOLD    = item_ui.GOLD
 
 function M.start(battle, result, partyNames, deadSlots)
@@ -104,14 +103,14 @@ end
 
 local function panel(w, h, title)
     local x, y = math.floor((VW - w) / 2), math.floor((VH - h) / 2)
-    love.graphics.setColor(0.04, 0.02, 0.02, 0.95)
+    love.graphics.setColor(0, 0, 0, 0.95)
     love.graphics.rectangle("fill", x, y, w, h)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", x, y, w, h)
     love.graphics.setColor(common.COLOR_RED)
     common.printCentered(common.loadFont(20), title, x, y + 8, w, 28)
-    love.graphics.setColor(0.35, 0.35, 0.35, 1)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(1)
     love.graphics.line(x + 14, y + 42, x + w - 14, y + 42)
     return x, y
@@ -153,7 +152,7 @@ local function drawSpoils(v)
             love.graphics.print(common.fitText(f13, common.titleCase(inst.itemType or "") .. "   " .. item_ui.modsText(inst), tw),
                 tx, by + 32)
         else
-            love.graphics.setColor(0.6, 0.6, 0.6, 1)
+            love.graphics.setColor(1, 1, 1, 1)
             common.printCentered(f13, res.lootLost and "Inventory full - the item was lost" or "No item this time",
                 x, y + 96, w, 60)
         end
@@ -171,25 +170,25 @@ local function drawXP(v)
         local ry = y + 52 + (i - 1) * rowH
         local midY = ry + rowH / 2
         love.graphics.setFont(f16)
-        love.graphics.setColor(r.fallen and {0.45, 0.45, 0.45, 1} or {1, 1, 1, 1})
+        love.graphics.setColor(r.fallen and {1, 1, 1, 1} or {1, 1, 1, 1})
         love.graphics.print(common.fitText(f16, common.titleCase(r.name), 110), x + 20, midY - 9)
         if r.fallen then
             love.graphics.setFont(f13)
-            love.graphics.setColor(0.45, 0.45, 0.45, 1)
+            love.graphics.setColor(1, 1, 1, 1)
             love.graphics.print("fell in battle - no XP", barX - 54, midY - 7)
         else
             local level = math.floor(r.pos)
             local frac  = r.pos - level
             if r.pos >= r.to and r.to == math.floor(r.to) and r.to > r.from then frac = 0 end
             love.graphics.setFont(f13)
-            love.graphics.setColor(OFFRED)
+            love.graphics.setColor(RED)
             love.graphics.print("Lv " .. tostring(level), barX - 54, midY - 7)
             -- Bar: dark track, crimson fill; flashes white on a level-up.
-            love.graphics.setColor(0.15, 0.05, 0.06, 1)
+            love.graphics.setColor(0, 0, 0, 1)
             love.graphics.rectangle("fill", barX, midY - 5, barW, 10)
-            love.graphics.setColor(r.flash and {1, 1, 1, 1} or CRIMSON)
+            love.graphics.setColor(r.flash and {1, 1, 1, 1} or RED)
             love.graphics.rectangle("fill", barX, midY - 5, barW * frac, 10)
-            love.graphics.setColor(0.5, 0.5, 0.5, 1)
+            love.graphics.setColor(1, 1, 1, 1)
             love.graphics.setLineWidth(1)
             love.graphics.rectangle("line", barX, midY - 5, barW, 10)
             if r.flash then
@@ -203,7 +202,7 @@ local function drawXP(v)
     end
 
     if barsDone(v) then
-        love.graphics.setColor(0.6, 0.6, 0.6, 1)
+        love.graphics.setColor(1, 1, 1, 1)
         common.printCentered(f13, "Click to continue", x, y + h - 30, w, 22)
     end
 end

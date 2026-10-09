@@ -12,39 +12,32 @@ local M = {}
 -- ============================================================================
 -- 6-SLOT RING FORMATION — where melee attackers stand around their target
 --
--- Each TARGET owns a symmetric 6-slot ring: 3 rings × 2 sides (left/right),
--- authored as GROUND/feet-point offsets relative to the TARGET'S FEET.
---   RING 1 (inner):  ±26  lateral
---   RING 2 (middle): ±52  lateral, +14 depth
---   RING 3 (outer):  ±82  lateral, +32 depth
--- Offsets are authored per the parity spec's Open Q ("author our own" since
--- BH's were 3D world-space per-prefab). Chosen so 3 party units (~45px wide)
--- fan out around one enemy without overlapping: ring1 pair 17px apart, ring2
--- pair 31px apart, ring3 pair 41px apart, and the depth steps (+14, +32) put
--- outer rings slightly lower on the stage (nearer the viewer) so nothing
--- stacks vertically. Lateral extremes (±82) keep units well inside the 800px
--- stage; depth fits the ~VH-60 band.
+-- Each TARGET owns a symmetric 6-slot ring: 3 rings x 2 sides (left/right).
+-- A slot is a GROUND (feet) point relative to the TARGET'S FEET:
+--   x: the two bodies side by side — half the target's width + half the
+--      attacker's width, times MELEE_SPACING — plus the ring's extra distance;
+--   y: the ring's depth (outer rings stand a little lower on the stage).
+-- Because x comes from the two body widths, changing a unit's spriteScale
+-- moves its attackers in or out with it; nothing here needs retuning.
+--
+-- MELEE_SPACING is THE knob for how far apart two fighting units stand:
+--   1.0 = their body boxes exactly touch, less = they overlap, more = a gap.
 --
 -- FEET CONVENTION (critical): world.position[id] is the entity's CENTER.
--- A sprite is center-anchored, so FEET = position.y + size.h/2. A slot offset
--- is a GROUND point, so to store it as a unit's moveTarget center we set
---   position.y = groundY - size.h/2
--- (and center.x = ground.x). Storing the ground Y directly as position.y would
--- sink a unit by half its height — the classic bug we must avoid.
+-- FEET = position.y + size.h/2. A slot is a GROUND point, so to store it as a
+-- unit's moveTarget center we set position.y = groundY - size.h/2.
 --
 -- State: world.slots[targetId] = { [slotIndex] = ownerId }
--- slotIndex = (ring-1)*2 + side, ring in {1,2,3}, side in {1=left,2=right};
--- ownerId is the unit occupying that ring slot (nil = free).
+-- slotIndex = (ring-1)*2 + side, ring in {1,2,3}, side in {1=left,2=right}.
 -- ============================================================================
 
 local NUM_RINGS = 3
--- Ground/feet offsets relative to the target's feet, per side (1=left,2=right)
--- and ring (1=inner .. 3=outer). Symmetric: side 2 mirrors side 1 on X, and
--- both sides share the same depth (the "far" side of the target in stage space).
+local MELEE_SPACING = 0.8                                               -- [tuned]
+-- Per ring: extra sideways distance beyond ring 1, and depth.
 local RING = {
-    [1] = { [1] = {x=-26, y=0},  [2] = {x=26,  y=0}  },  -- ring 1 (inner)
-    [2] = { [1] = {x=-52, y=14}, [2] = {x=52,  y=14} },  -- ring 2 (middle)
-    [3] = { [1] = {x=-82, y=32}, [2] = {x=82,  y=32} },  -- ring 3 (outer)
+    [1] = { extraX = 0,  y = 0  },   -- inner
+    [2] = { extraX = 26, y = 14 },   -- middle
+    [3] = { extraX = 56, y = 32 },   -- outer
 }
 
 local function slotsFor(world, targetId)
@@ -183,29 +176,13 @@ local function purgePosition(world, tgtId, id)
     if not next(s) then t[tgtId] = nil end
 end
 
--- Reference half-width the RING table was authored for: a Knight is 30*SCALE
--- wide → half-width 15*SCALE = 22.5px at the fixed SCALE = VH/300 = 1.5.
--- [tuned]
-local REF_HALF_W_PX = 22.5
-
--- Ground/feet point for a slot, relative to the target's current feet.
-local function slotGroundPoint(world, tgtId, ring, side)
+-- Ground/feet point of a slot for an attacker `attackerW` pixels wide.
+local function slotGroundPoint(world, tgtId, ring, side, attackerW)
     local tp, ts = world.position[tgtId], world.size[tgtId]
-    if not (tp and ts) then return nil end
-    local ringData = RING[ring]
-    if not ringData then return nil end   -- defensive: ring out of range
-    local off = ringData[side]
-    if not off then return nil end        -- defensive: side out of range
-    -- BH widens the melee slot ring for bigger targets (per-prefab authored
-    -- offsets) so melee stand flush OUTSIDE a boss's body while staying
-    -- inside the flat range gate "by construction". We approximate that by
-    -- scaling the authored offset with how much wider the target is than the
-    -- reference (Knight) width: narrower/equal targets → scale 1 (byte-
-    -- identical to before), a 32px-wide Champion → ~1.03, a 2x-width boss →
-    -- ~2.0. [tuned]
-    local scale = 1 + 0.5 * math.max(0, (ts.w/2) - REF_HALF_W_PX) / REF_HALF_W_PX
-    local feetX, feetY = tp.x, tp.y + ts.h/2
-    return feetX + off.x * scale, feetY + off.y * scale
+    local r = RING[ring]
+    if not (tp and ts and r) then return nil end
+    local dx = (ts.w / 2 + (attackerW or ts.w) / 2) * MELEE_SPACING + r.extraX
+    return tp.x + ((side == 1) and -dx or dx), tp.y + ts.h / 2 + r.y
 end
 
 local function hasActiveAction(world, id)
@@ -248,7 +225,7 @@ local function getMeleeSlot(world, id, tgtId)
 
     -- Convert the slot's GROUND/feet point to this unit's CENTER using the
     -- feet rule: center.y = groundY - size.h/2 (the attacker's own height).
-    local gx, gy = slotGroundPoint(world, tgtId, ring, side)
+    local gx, gy = slotGroundPoint(world, tgtId, ring, side, ss.w)
     if not gx then return nil end
     return gx, gy - ss.h/2
 end

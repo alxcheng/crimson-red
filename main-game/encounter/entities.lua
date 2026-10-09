@@ -14,6 +14,7 @@ local effects_mod = require("encounter/effects")
 local abilities   = require("encounter/abilities")
 local classes     = require("data/classes")
 local enemies     = require("data/enemies")
+local bounds      = require("data/sprite_bounds")
 
 local M = {}
 
@@ -21,8 +22,19 @@ local SIDE_PARTY, SIDE_ENEMY = 0, 1
 
 -- Components every unit has.
 local function addBaseComponents(world, id, def, x, y, scale, side, st)
+    -- Size and sprite placement: everything follows from the sprite's measured
+    -- visible box (data/sprite_bounds.lua, made by ./align_sprites) and the ONE
+    -- number def.spriteScale. The body box is the visible box at draw size, and
+    -- the sprite is shifted so its visible box lies exactly on the body box
+    -- (feet on the bottom edge). `scale` here is the battle's global SCALE.
+    local set = classes.ANIM_SETS[def.anims]
+    local b = bounds[set.sprite]
+    local drawScale = (def.spriteScale or 1) * scale
     world.position[id]     = {x = x, y = y}
-    world.size[id]         = {w = def.size[1] * scale, h = def.size[2] * scale}
+    world.size[id]         = {w = b.w * drawScale, h = b.h * drawScale}
+    world.drawScale[id]    = drawScale
+    world.spriteOffset[id] = {x = (b.fw / 2 - (b.x + b.w / 2)) * drawScale,
+                              y = (b.fh / 2 - (b.y + b.h / 2)) * drawScale}
     world.facing[id]       = {right = side == SIDE_PARTY}
     world.physics[id]      = {vx = 0, vy = 0, fx = 0, fy = 0}
     world.moveTarget[id]   = {x = x, y = y, active = false}
@@ -37,11 +49,9 @@ local function addBaseComponents(world, id, def, x, y, scale, side, st)
     world.tintColor[id]    = {R = tint and tint[1] or 0, G = tint and tint[2] or 0, B = tint and tint[3] or 0}
     world.bar[id]          = {hpColor = side == SIDE_PARTY and {0, 1, 0} or {1, 1, 0}, hpPrevRatio = 1, timer = 0}
     world.effects_comp[id] = {pending = {}, active = {}}
-    world.spriteOffset[id] = {x = 0, y = def.spriteOffsetY or 0}
     world.hasEntered[id]   = {h = false, v = false}
     if def.ranged then world.isRanged[id] = true end
 
-    local set = classes.ANIM_SETS[def.anims]
     local list = {}
     for i, a in ipairs(set.list) do
         list[i] = anim_mod.newInst(set.sprite .. a[1], a[2], a[3] or false, a[4] or false)

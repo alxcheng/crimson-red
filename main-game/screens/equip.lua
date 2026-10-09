@@ -440,9 +440,7 @@ end
 -- DRAW HELPERS
 -- ============================================================================
 
-local CRIMSON = {0.84, 0.07, 0.16, 1}
-local OFFRED  = {1.00, 0.42, 0.42, 1}
-local DIMRED  = {0.55, 0.20, 0.25, 1}
+local RED     = {1, 0, 0, 1}
 
 local displayName = common.titleCase
 
@@ -460,7 +458,7 @@ end
 
 -- Dashed empty slot.
 local function drawDashedSlot(x, y, size, label)
-    love.graphics.setColor(0.55, 0.20, 0.25, 1)
+    love.graphics.setColor(1, 0, 0, 1)
     love.graphics.setLineWidth(1)
     local dash = 4
     local step = dash * 2
@@ -493,7 +491,7 @@ local function drawDashedSlot(x, y, size, label)
         cy = cy + step
     end
 
-    love.graphics.setColor(DIMRED)
+    love.graphics.setColor(RED)
     common.printCentered(font14, label, x, y, size, size)
 end
 
@@ -529,7 +527,7 @@ local function drawHoverTooltip()
                 local cd = getCharData(hoveredChar)
                 local x, y, w, h = chipRect(i)
                 common.drawTooltip({
-                    { text = displayName(hoveredChar), size = 16, color = OFFRED },
+                    { text = displayName(hoveredChar), size = 16, color = RED },
                     { text = "Lv " .. tostring(cd and cd.level or 1), color = common.COLOR_WHITE },
                 }, { x = x, y = y, w = w, h = h })
             end
@@ -550,7 +548,7 @@ local function drawScene()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", CHAR_PANEL_X, CHAR_PANEL_Y, CHAR_PANEL_W, CHAR_PANEL_H)
-    love.graphics.setColor(0.35, 0.35, 0.35, 1)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(1)
     love.graphics.line(CHAR_PANEL_X + PAD, DIVIDER_Y, CHAR_PANEL_X + CHAR_PANEL_W - PAD, DIVIDER_Y)
 
@@ -560,7 +558,7 @@ local function drawScene()
         local name = party[i]
         if name then
             local isSel = (name == selectedChar)
-            love.graphics.setColor(isSel and common.COLOR_WHITE or {0.45, 0.15, 0.20, 1})
+            love.graphics.setColor(isSel and common.COLOR_WHITE or {1, 0, 0, 1})
             love.graphics.setLineWidth(isSel and 2 or 1)
             love.graphics.rectangle("line", cx, cy, cw, ch)
             drawCharIcon(name, cx, cy, cw)
@@ -571,7 +569,7 @@ local function drawScene()
 
     if selectedChar then
         local cd = getCharData(selectedChar)
-        love.graphics.setColor(0.10, 0.10, 0.10, 1)
+        love.graphics.setColor(0, 0, 0, 1)
         love.graphics.rectangle("fill", PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE, PORTRAIT_SIZE)
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.setLineWidth(2)
@@ -588,9 +586,9 @@ local function drawScene()
 
         local st = computeCharStats(selectedChar)
         local statLines = {
-            { label = "ATK", value = st.atk, color = {0.95, 0.55, 0.20, 1} },
-            { label = "DEF", value = st.def, color = {0.55, 0.75, 0.95, 1} },
-            { label = "HP",  value = st.hp,  color = {0.85, 0.30, 0.35, 1} },
+            { label = "ATK", value = st.atk, color = {1, 0, 0, 1} },
+            { label = "DEF", value = st.def, color = {1, 1, 1, 1} },
+            { label = "HP",  value = st.hp,  color = {1, 0, 0, 1} },
         }
         for i, line in ipairs(statLines) do
             local ly = STATS_Y + (i - 1) * 19
@@ -611,19 +609,19 @@ local function drawScene()
                 drawDashedSlot(sx, sy, sh, s.label:sub(1, 1))
             end
             love.graphics.setFont(font13)
-            love.graphics.setColor(CRIMSON)
+            love.graphics.setColor(RED)
             love.graphics.print(s.label, SLOT_TEXT_X, sy + 7)
             love.graphics.setFont(font14)
             if type(inst) == "table" then
                 love.graphics.setColor(1, 1, 1, 1)
                 love.graphics.print(common.fitText(font14, inst.name or "(unnamed)", SLOT_TEXT_W), SLOT_TEXT_X, sy + 24)
             else
-                love.graphics.setColor(0.45, 0.45, 0.45, 1)
+                love.graphics.setColor(1, 1, 1, 1)
                 love.graphics.print("empty", SLOT_TEXT_X, sy + 24)
             end
         end
     else
-        love.graphics.setColor(0.6, 0.6, 0.6, 1)
+        love.graphics.setColor(1, 1, 1, 1)
         common.printCentered(font16, "No character", CHAR_PANEL_X, DIVIDER_Y, CHAR_PANEL_W, CHAR_PANEL_Y + CHAR_PANEL_H - DIVIDER_Y)
     end
 
@@ -631,7 +629,7 @@ local function drawScene()
     local selInst = selectedItemId and getItems()[selectedItemId]
     if type(selInst) == "table" then
         item_ui.drawInventory(saveData_ref, selectedItemId,
-            "Now click the " .. tostring(selInst.itemType) .. " slot to equip it", OFFRED)
+            "Now click the " .. tostring(selInst.itemType) .. " slot to equip it", RED)
     else
         item_ui.drawInventory(saveData_ref, nil, "Click an item, then its slot")
     end

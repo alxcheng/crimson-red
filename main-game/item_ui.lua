@@ -16,14 +16,14 @@ local items  = require("items")
 local M = {}
 
 M.GRADE_COLORS = {
-    [1] = {0.55, 0.55, 0.55, 1},   -- low: grey
-    [2] = {0.95, 0.55, 0.20, 1},   -- mid: orange
-    [3] = {0.95, 0.20, 0.35, 1},   -- high: crimson
+    [1] = {1, 1, 1, 1},              -- low: white
+    [2] = {0.95, 0.78, 0.20, 1},     -- mid: gold
+    [3] = {1, 0, 0, 1},              -- high: red
 }
 M.GOLD   = {0.95, 0.78, 0.20, 1}
-M.BONUS  = {0.95, 0.55, 0.20, 1}
-M.GREY   = {0.75, 0.75, 0.75, 1}
-M.BAD    = {0.85, 0.30, 0.35, 1}
+M.BONUS  = {1, 0, 0, 1}
+M.GREY   = {1, 1, 1, 1}
+M.BAD    = {1, 0, 0, 1}
 
 local GLYPHS = { weapon = "W", armor = "A", trinket = "T" }
 
@@ -120,11 +120,11 @@ function M.drawInventory(saveData, selectedId, hint, hintColor)
     if hint then
         hint = common.fitText(f13, hint, INV.w - INV.pad * 2 - f16:getWidth("INVENTORY") - 16)
         love.graphics.setFont(f13)
-        love.graphics.setColor(hintColor or {0.5, 0.5, 0.5, 1})
+        love.graphics.setColor(hintColor or {1, 1, 1, 1})
         love.graphics.print(hint, INV.x + INV.w - INV.pad - f13:getWidth(hint), headY + 2)
     end
 
-    love.graphics.setColor(0.35, 0.35, 0.35, 1)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(1)
     for idx = 1, INV.cols * INV.rows do
         love.graphics.rectangle("line", M.invCellRect(idx))

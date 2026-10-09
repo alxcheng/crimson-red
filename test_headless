@@ -13,5 +13,7 @@
 #
 # Mirrors ./playtest (same love binary resolution via PATH). Usage: ./test_headless
 set -euo pipefail
+# A syntax error would hang LÖVE at start-up with no message: check first.
+"$(dirname "$0")/check_syntax" || exit 1
 cd "$(dirname "$0")/main-game"
 exec env CR_HEADLESS=1 CR_TEST_MODE=1 CR_TEST_SCENE=headless love .

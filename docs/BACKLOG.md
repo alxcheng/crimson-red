@@ -51,7 +51,12 @@ of the right section.
 12. **Ability visuals are missing**: projectiles, meteor, blizzard tint, time-stop pulse,
     heal/shield indicators. The logic exists; only presentation is missing. (Director asked
     for this earlier and it was deferred.)
-14. **OPTIONS on the title screen opens the developer sprite viewer.**
+14. **OPTIONS on the title screen does nothing yet** (DEV TOOLS opens the sprite viewer, which
+    predates `./align_sprites` and still has its own hand-typed numbers - update or remove it).
+14a. **The 5th and 6th melee attackers on one target cannot reach it**: slot ring 3 is outside
+    `combat.checkMeleeRange`. Only matters with more than 4 attackers on one unit.
+14c. **The map's fog tiles and the battle HUD were not part of the red/white palette pass**
+    (the map fades "?" tiles by distance; battle bars are green/yellow).
 
 ## D. Cleanup (safe, good first tasks)
 15. **Duplicate hero-icon loader.** Each of `screens/equip.lua`, `shop.lua`, `talents.lua`,

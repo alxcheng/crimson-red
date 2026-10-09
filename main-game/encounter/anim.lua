@@ -5,20 +5,18 @@ local M = {}
 -- Shared animation database (populated by loadAnim, persists across onEnter calls)
 M.db = {}
 
-function M.load(name, path, frames, fw, fh, defaultScale)
+function M.load(name, path, frames, fw, fh)
     local ok, img = pcall(love.graphics.newImage, path)
     if not ok then
         print("[anim] missing: " .. path)
-        M.db[name] = {img=nil, frames=frames, fw=fw, fh=fh,
-                      defaultScale=defaultScale or 1.0, quads={}}
+        M.db[name] = {img=nil, frames=frames, fw=fw, fh=fh, quads={}}
         return
     end
     local quads = {}
     for i = 0, frames-1 do
         quads[i] = love.graphics.newQuad(i*fw, 0, fw, fh, img:getWidth(), img:getHeight())
     end
-    M.db[name] = {img=img, frames=frames, fw=fw, fh=fh,
-                  defaultScale=defaultScale or 1.0, quads=quads}
+    M.db[name] = {img=img, frames=frames, fw=fw, fh=fh, quads=quads}
 end
 
 function M.newInst(name, frameLen, repeating, startActive)
@@ -93,7 +91,7 @@ function M.drawEntities(world, battle, SCALE)
         if not (dbEntry and dbEntry.img) then goto continue end
 
         local fw, fh = dbEntry.fw, dbEntry.fh
-        local drawScale = dbEntry.defaultScale * SCALE
+        local drawScale = world.drawScale[id] or SCALE
         local rawFrame = math.floor(chosen.timer / chosen.frameLength)
         local frame
         if chosen.reverse then

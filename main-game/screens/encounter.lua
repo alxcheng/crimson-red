@@ -87,6 +87,7 @@ local function initBattle(c, pfx)
     battle.victoryDelay    = nil   -- short pause between the last kill and the victory screens
     battle.victorySnd      = nil
     battle.score           = {}    -- [unitId] = performance score (combat.addScore)
+    battle.showBoxes       = false -- debug: draw body boxes (key B)
     battle.hoveredUnit     = nil
     battle.pressedUnit     = nil
     battle.resource        = 0
@@ -116,11 +117,12 @@ local function loadAssets()
     battle.font      = common.loadFont(16)
     battle.smallFont = common.loadFont(10)
 
-    local ok, bg = pcall(love.graphics.newImage, "assets/images/forestbg2.png")
+    -- BH's "spider" battlefield (The Silken Wildwood), cropped to 16:9.
+    local ok, bg = pcall(love.graphics.newImage, "assets/images/bh_spider_forest.png")
     battle.battlebg = ok and bg or nil
 
     for _, sheet in ipairs(require("data/sprites")) do
-        anim_mod.load(sheet[1], "assets/" .. sheet[2], sheet[3], sheet[4], sheet[5], sheet[6])
+        anim_mod.load(sheet[1], "assets/" .. sheet[2], sheet[3], sheet[4], sheet[5])
     end
 
     for i = 1, 54 do
@@ -155,6 +157,21 @@ local function drawScene(dt)
     ui.barSystem(world, battle)
     ui.skillIconSystem(world, battle, dt)
     ui.drawResourceBar(battle)
+
+    -- DEBUG (key B): every unit's body box (white) and feet line (red). The
+    -- sprite should stand exactly inside its box; see ./align_sprites.
+    if battle.showBoxes then
+        love.graphics.setLineWidth(1)
+        for id in pairs(world.entities) do
+            local pos, sz = world.position[id], world.size[id]
+            if pos and sz then
+                love.graphics.setColor(1, 1, 1, 1)
+                love.graphics.rectangle("line", pos.x - sz.w/2, pos.y - sz.h/2, sz.w, sz.h)
+                love.graphics.setColor(1, 0, 0, 1)
+                love.graphics.line(pos.x - sz.w/2 - 4, pos.y + sz.h/2, pos.x + sz.w/2 + 4, pos.y + sz.h/2)
+            end
+        end
+    end
 
     victory.draw(battle)
 
@@ -400,6 +417,9 @@ function M.keypressed(key)
     if key == "2" and battle.partyIds[2] and not battle.deadSlots[2] then battle.selectedUnit = battle.partyIds[2] end
     if key == "3" and battle.partyIds[3] and not battle.deadSlots[3] then battle.selectedUnit = battle.partyIds[3] end
     if key == "4" and battle.partyIds[4] and not battle.deadSlots[4] then battle.selectedUnit = battle.partyIds[4] end
+
+    -- DEBUG: B shows / hides the body boxes.
+    if key == "b" then battle.showBoxes = not battle.showBoxes end
 
     -- DEBUG: K / J / L / M spawn a skeleton / goblin / bat / mushroom under the mouse.
     local debugSpawn = ({ k = "skeleton", j = "goblin", l = "bat", m = "mushroom" })[key]

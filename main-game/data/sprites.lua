@@ -1,59 +1,62 @@
 -- data/sprites.lua — sprite sheets loaded for battle.
--- Each row: {sheet name, file under assets/, frame count, frame w, frame h, draw scale}.
+-- Each row: {sheet name, file under assets/, frame count, frame w, frame h}.
+-- How big a unit is drawn is NOT here: it is the one `scale` number on the unit's
+-- row in data/classes.lua / data/enemies.lua. After adding or changing an Idle
+-- sheet run ./align_sprites (it measures where the sprite is inside its frame).
 -- A sheet is one horizontal strip of equally sized frames. The sheet name is
 -- what data/classes.lua ANIM_SETS refers to (<sprite><suffix>).
 
 local C, E = "characters/", "enemies/"
 
 local SHEETS = {
-    {"KnightIdle",    C.."Knight/Idle.png",     10, 135, 135, 1.1},
-    {"KnightMove",    C.."Knight/Run.png",       6, 135, 135, 1.1},
-    {"KnightAttack1", C.."Knight/Attack1.png",   4, 135, 135, 1.1},
-    {"KnightAttack2", C.."Knight/Attack2.png",   4, 135, 135, 1.1},
-    {"KnightTakeHit", C.."Knight/Take Hit.png",  3, 135, 135, 1.1},
-    {"KnightDeath",   C.."Knight/Death.png",     9, 135, 135, 1.1},
+    {"KnightIdle",    C.."Knight/Idle.png",     10, 135, 135},
+    {"KnightMove",    C.."Knight/Run.png",       6, 135, 135},
+    {"KnightAttack1", C.."Knight/Attack1.png",   4, 135, 135},
+    {"KnightAttack2", C.."Knight/Attack2.png",   4, 135, 135},
+    {"KnightTakeHit", C.."Knight/Take Hit.png",  3, 135, 135},
+    {"KnightDeath",   C.."Knight/Death.png",     9, 135, 135},
 
-    {"BrigandIdle",    C.."Brigand/Idle.png",    10, 126, 126, 0.9},
-    {"BrigandMove",    C.."Brigand/Run.png",      8, 126, 126, 0.9},
-    {"BrigandAttack1", C.."Brigand/Attack1.png",  7, 126, 126, 0.9},
-    {"BrigandDeath",   C.."Brigand/Death.png",   11, 126, 126, 0.9},
+    {"BrigandIdle",    C.."Brigand/Idle.png",    10, 126, 126},
+    {"BrigandMove",    C.."Brigand/Run.png",      8, 126, 126},
+    {"BrigandAttack1", C.."Brigand/Attack1.png",  7, 126, 126},
+    {"BrigandDeath",   C.."Brigand/Death.png",   11, 126, 126},
 
-    {"ChampionIdle",    C.."Champion/Idle.png",    8, 160, 111, 1.0},
-    {"ChampionMove",    C.."Champion/Run.png",     8, 160, 111, 1.0},
-    {"ChampionAttack1", C.."Champion/Attack1.png", 4, 160, 111, 1.0},
-    {"ChampionDeath",   C.."Champion/Death.png",   6, 160, 111, 1.0},
+    {"ChampionIdle",    C.."Champion/Idle.png",    8, 160, 111},
+    {"ChampionMove",    C.."Champion/Run.png",     8, 160, 111},
+    {"ChampionAttack1", C.."Champion/Attack1.png", 4, 160, 111},
+    {"ChampionDeath",   C.."Champion/Death.png",   6, 160, 111},
 
-    {"DuelistIdle",    C.."Duelist/Idle.png",    8, 200, 200, 0.959},
-    {"DuelistMove",    C.."Duelist/Run.png",     8, 200, 200, 0.959},
-    {"DuelistAttack1", C.."Duelist/Attack1.png", 6, 200, 200, 0.959},
-    {"DuelistDeath",   C.."Duelist/Death.png",   6, 200, 200, 0.959},
+    {"DuelistIdle",    C.."Duelist/Idle.png",    8, 200, 200},
+    {"DuelistMove",    C.."Duelist/Run.png",     8, 200, 200},
+    {"DuelistAttack1", C.."Duelist/Attack1.png", 6, 200, 200},
+    {"DuelistDeath",   C.."Duelist/Death.png",   6, 200, 200},
 
-    {"NomadIdle",    C.."Nomad/Idle.png",    8, 250, 250, 0.72},
-    {"NomadMove",    C.."Nomad/Run.png",     8, 250, 250, 0.72},
-    {"NomadAttack1", C.."Nomad/Attack1.png", 8, 250, 250, 0.72},
-    {"NomadAttack2", C.."Nomad/Attack2.png", 8, 250, 250, 0.72},
-    {"NomadDeath",   C.."Nomad/Death.png",   7, 250, 250, 0.72},
+    {"NomadIdle",    C.."Nomad/Idle.png",    8, 250, 250},
+    {"NomadMove",    C.."Nomad/Run.png",     8, 250, 250},
+    {"NomadAttack1", C.."Nomad/Attack1.png", 8, 250, 250},
+    {"NomadAttack2", C.."Nomad/Attack2.png", 8, 250, 250},
+    {"NomadDeath",   C.."Nomad/Death.png",   7, 250, 250},
 
-    {"SkeletonIdle",   E.."Skeleton/Idle.png",   4, 150, 150, 0.75},
-    {"SkeletonMove",   E.."Skeleton/Walk.png",   4, 150, 150, 0.75},
-    {"SkeletonAttack", E.."Skeleton/Attack.png", 8, 150, 150, 0.75},
-    {"SkeletonDeath",  E.."Skeleton/Death.png",  4, 150, 150, 0.75},
+    {"SkeletonIdle",   E.."Skeleton/Idle.png",   4, 150, 150},
+    {"SkeletonMove",   E.."Skeleton/Walk.png",   4, 150, 150},
+    {"SkeletonAttack", E.."Skeleton/Attack.png", 8, 150, 150},
+    {"SkeletonDeath",  E.."Skeleton/Death.png",  4, 150, 150},
 
-    {"GoblinIdle",   E.."Goblin/Idle.png",   4, 150, 150, 0.75},
-    {"GoblinMove",   E.."Goblin/Move.png",   8, 150, 150, 0.75},
-    {"GoblinAttack", E.."Goblin/Attack.png", 8, 150, 150, 0.75},
-    {"GoblinDeath",  E.."Goblin/Death.png",  4, 150, 150, 0.75},
+    {"GoblinIdle",   E.."Goblin/Idle.png",   4, 150, 150},
+    {"GoblinMove",   E.."Goblin/Move.png",   8, 150, 150},
+    {"GoblinAttack", E.."Goblin/Attack.png", 8, 150, 150},
+    {"GoblinDeath",  E.."Goblin/Death.png",  4, 150, 150},
 
     -- The bat only has a flight loop: it is both its idle and its move sheet.
-    {"BatIdle",   E.."Bat/Flight.png", 8, 150, 150, 0.75},
-    {"BatMove",   E.."Bat/Flight.png", 8, 150, 150, 0.75},
-    {"BatAttack", E.."Bat/Attack.png", 8, 150, 150, 0.75},
-    {"BatDeath",  E.."Bat/Death.png",  4, 150, 150, 0.75},
+    {"BatIdle",   E.."Bat/Flight.png", 8, 150, 150},
+    {"BatMove",   E.."Bat/Flight.png", 8, 150, 150},
+    {"BatAttack", E.."Bat/Attack.png", 8, 150, 150},
+    {"BatDeath",  E.."Bat/Death.png",  4, 150, 150},
 
-    {"MushroomIdle",   E.."Mushroom/Idle.png",   4, 150, 150, 1.25},
-    {"MushroomMove",   E.."Mushroom/Move.png",   8, 150, 150, 1.25},
-    {"MushroomAttack", E.."Mushroom/Attack.png", 8, 150, 150, 1.25},
-    {"MushroomDeath",  E.."Mushroom/Death.png",  4, 150, 150, 1.25},
+    {"MushroomIdle",   E.."Mushroom/Idle.png",   4, 150, 150},
+    {"MushroomMove",   E.."Mushroom/Move.png",   8, 150, 150},
+    {"MushroomAttack", E.."Mushroom/Attack.png", 8, 150, 150},
+    {"MushroomDeath",  E.."Mushroom/Death.png",  4, 150, 150},
 }
 
 -- Recoloured copies of the Knight: same frames, clothes shifted to another
@@ -71,7 +74,7 @@ local RECOLOURS = {
 for _, name in ipairs(RECOLOURS) do
     for _, row in ipairs(SHEETS) do
         if row[1]:sub(1, 6) == "Knight" then
-            SHEETS[#SHEETS + 1] = { name .. row[1]:sub(7), (row[2]:gsub("Knight/", name .. "/")), row[3], row[4], row[5], row[6] }
+            SHEETS[#SHEETS + 1] = { name .. row[1]:sub(7), (row[2]:gsub("Knight/", name .. "/")), row[3], row[4], row[5] }
         end
     end
 end

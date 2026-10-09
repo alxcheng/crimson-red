@@ -12,8 +12,13 @@
 # Env: CR_TEST_MODE=1 skips music; CR_TEST_SCENE=ui swaps the app entry for
 # ui_smoke_test.lua.
 # Usage: ./test_ui         full run (about 10 minutes: three whole battles)
-#        ./test_ui quick   skips the whole battles (under a minute) - for UI-only work
+#        ./test_ui quick   skips the whole battles (about 3 minutes) - for UI-only work
+#        ./test_ui align   only the sprite line-up screenshot (align-lineup.png): every unit
+#                          with its body box, to check sprite alignment by eye (seconds)
 set -euo pipefail
+# A syntax error would hang LÖVE at start-up with no message: check first.
+"$(dirname "$0")/check_syntax" || exit 1
 cd "$(dirname "$0")/main-game"
 quick=0; [ "${1:-}" = "quick" ] && quick=1
-exec env CR_TEST_MODE=1 CR_TEST_SCENE=ui CR_UI_QUICK=$quick love .
+only=""; [ "${1:-}" = "align" ] && only=align
+exec env CR_TEST_MODE=1 CR_TEST_SCENE=ui CR_UI_QUICK=$quick CR_UI_ONLY=$only love .
