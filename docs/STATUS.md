@@ -55,10 +55,11 @@ Everything above. In particular, choices the Lead made that the Director has not
    ~1000-HP heroes (`data/talents.lua`).
 6. **Stagger** (knock-down) now triggers after a unit takes half its max HP (`encounter/stats.lua`).
 7. Old item instances in existing saves are dropped on load (they predate the BH catalog).
-8. **Hero move speed is 2.4** (72 px/s). The Director said "80% of the BH value"; BH heroes range
-   1.3–1.65 units/s, so this takes BH's standard 1.5 at the old ports' 2× conversion (3.0) × 0.8.
-9. **Knight and Nomad abilities now use the default 15 s / 3 bars** (were 10 s / 4 bars);
-   Spark of Inspiration stays free.
+8. **Spark of Inspiration (Nomad) is free** (0 bars, 15 s cooldown): it trades HP for
+   resource, so a bar cost would cancel it out. Every other Knight/Nomad ability is 15 s / 3 bars.
+
+Confirmed by the Director (2026-10-09): hero move speed 2.4 (`HERO_MOVE_SPEED`); Knight and
+Nomad abilities on the 15 s / 3 bar default.
 
 ## Director said (verbatim, newest first)
 - 2026-10-09: "Remove description text at the bottom of talents, shop, and equip and put it as
