@@ -20,6 +20,16 @@
 
 local ALPHA_MIN, MIN_PIXELS = 0.3, 2
 
+-- Hand corrections, by sprite name, for sprites whose pixels do not tell the whole story:
+--   top   = first frame row that belongs to the BODY. Everything above it (a tall staff,
+--           a banner) is ignored, so the box ends at the head like everyone else's.
+--   float = empty art pixels to leave under the sprite: a flying unit hovers that far
+--           above its feet line (its shadow and its place in the fight stay on the ground).
+local OVERRIDES = {
+    Nomad = { top = 113 },   -- the witch: her staff's flame rises far above her hood
+    Bat   = { float = 14 },  -- flies
+}
+
 local function readImage(path)
     local f = assert(io.open(path, "rb"), "cannot read " .. path)
     local bytes = f:read("*a"); f:close()
@@ -27,11 +37,11 @@ local function readImage(path)
 end
 
 -- Visible box of a sheet of `frames` frames, each fw x fh: x, y, w, h in frame pixels.
-local function measure(path, frames, fw, fh)
+local function measure(path, frames, fw, fh, fix)
     local img = readImage(path)
     local cols, rows = {}, {}
     for f = 0, frames - 1 do
-        for y = 0, fh - 1 do
+        for y = fix.top or 0, fh - 1 do
             for x = 0, fw - 1 do
                 local _, _, _, a = img:getPixel(f * fw + x, y)
                 if a > ALPHA_MIN then
@@ -45,7 +55,7 @@ local function measure(path, frames, fw, fh)
     for x = 0, fw - 1 do if (cols[x] or 0) >= MIN_PIXELS then x0 = x0 or x; x1 = x end end
     for y = 0, fh - 1 do if (rows[y] or 0) >= MIN_PIXELS then y0 = y0 or y; y1 = y end end
     if not x0 then return nil end
-    return x0, y0, x1 - x0 + 1, y1 - y0 + 1
+    return x0, y0, x1 - x0 + 1, y1 - y0 + 1 + (fix.float or 0)
 end
 
 function love.load(args)
@@ -65,7 +75,7 @@ function love.load(args)
             local name = row[1]:match("^(.*)Idle$")
             if name then
                 local fw, fh = row[4], row[5]
-                local x, y, w, h = measure(root .. "/main-game/assets/" .. row[2], row[3], fw, fh)
+                local x, y, w, h = measure(root .. "/main-game/assets/" .. row[2], row[3], fw, fh, OVERRIDES[name] or {})
                 assert(x, "no visible pixels in " .. row[2])
                 out[#out + 1] = ("    %-9s = { fw = %d, fh = %d, x = %d, y = %d, w = %d, h = %d },"):format(name, fw, fh, x, y, w, h)
                 print(("%-10s %3dx%-5d %3d %3d %3d %3d %12d / %.1f"):format(name, fw, fh, x, y, w, h, y + h, x + w / 2))

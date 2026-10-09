@@ -95,6 +95,9 @@ Confirmed by the Director (2026-10-09): hero move speed 2.4 (`HERO_MOVE_SPEED`);
 Nomad abilities on the 15 s / 3 bar default.
 
 ## Director said (verbatim, newest first)
+- 2026-10-09: "the health bar distance buffer should be halved for everyone" / "Witch: The box
+  should fit to its head like everyone else" / "Bat: this unit flies so the bottom is
+  deceptive. move it up a bit and have empty space" (all done; the "witch" is the Nomad sprite).
 - 2026-10-09: "Search for the spider boss background in BH and make that the ... battle
   background for dark forest" / "I dont like how some of the UI elements are this off white
   or off red color. It should be full red or full white, or not at all" / "unbind the options

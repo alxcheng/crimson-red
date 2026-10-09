@@ -166,6 +166,9 @@ and Rogue are recoloured Knights: see `RECOLOURS` at the bottom of `data/sprites
   `encounter/entities.lua` sets the body box (`world.size` = visible box x scale) and the
   sprite offset, so the feet are on the box's bottom edge. Run it after adding/changing an
   Idle sheet.
+- Hand corrections live in `OVERRIDES` at the top of `tools/align/main.lua`: `top` (ignore
+  what is above the head, e.g. the witch's staff) and `float` (a flying unit hovers above its
+  feet line, e.g. the bat). Change them there, then re-run `./align_sprites`.
 - Check by eye: `./test_ui align` saves `align-lineup.png` (every unit with its box), or press
   B in a battle.
 - How far apart melee fighters stand: `MELEE_SPACING` in `encounter/systems.lua` (1.0 = boxes

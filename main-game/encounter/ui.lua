@@ -59,7 +59,7 @@ end
 -- ============================================================================
 
 function M.barSystem(world, battle)
-    local BAR_W = 40; local BAR_H = 4; local BAR_GAP = 2; local ABOVE = 20
+    local BAR_W = 40; local BAR_H = 4; local BAR_GAP = 2; local ABOVE = 10
     for id in pairs(world.entities) do
         if world.deathState[id] then goto continue end
         local pos, sz, bar, ss, sg = world.position[id], world.size[id],
