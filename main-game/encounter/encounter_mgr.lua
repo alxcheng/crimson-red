@@ -1,90 +1,109 @@
--- encounter/encounter_mgr.lua — Wave spawning and encounter management
+-- encounter/encounter_mgr.lua — spawns a battle's enemies, wave by wave.
+--
+-- This is Battleheart's spawner (MotherBrain.enemySpawn — see
+-- bh/systems/battle-director-setup-input-spawning.md section 9). A battle is a
+-- list of WAVES; each wave is
+--   { initialDelay = s, spawnDelay = s, maxEnemies = n, enemies = { enemyId, ... } }
+-- and the rules are:
+--   * a wave's first enemy appears `initialDelay` seconds after the wave starts;
+--   * its enemies appear one at a time, in list order, `spawnDelay` seconds apart;
+--   * never more than `maxEnemies` alive at once — and the timer does NOT run
+--     while the field is full, so the rest of the delay still has to pass after
+--     a kill frees a place;
+--   * the next wave starts once every enemy of this one has been spawned AND killed;
+--   * the battle is won when the last wave is finished and a hero is still alive.
+-- The waves themselves come from encounter/wave_gen.lua.
+--
+--   M.new(waves, firstDelay)  -> the manager state kept in battle.encounterMgr
+--   M.system(world, battle, dt, VW, VH)   call once per frame
+--   M.checkVictory(world, battle)
 
 local entities_mod = require("encounter/entities")
 local enemies      = require("data/enemies")
 
 local M = {}
 
--- ============================================================================
--- WAVE SPAWNING
--- ============================================================================
-
-function M.queueWave(battle, isSurprise)
-    local mgr = battle.encounterMgr
-    if mgr.pendingWave then return end
-    if not isSurprise and mgr.dangerDefeated >= mgr.encounterGoal then return end
-    local budget = math.random(mgr.waveMinThreat, mgr.waveMaxThreat)
-    mgr.pendingWave = { timer = 3.0, budget = budget }
+-- firstDelay (optional) replaces the first wave's initialDelay (tests use it).
+function M.new(waves, firstDelay)
+    local first = waves[1]
+    return {
+        waves         = waves,
+        currentWave   = 1,
+        wavePosition  = 1,                                   -- next entry of the wave's `enemies`
+        spawnDelay    = firstDelay or (first and first.initialDelay) or 0,
+        spawnCooldown = first and first.spawnDelay or 0,
+        maxEnemies    = first and first.maxEnemies or 0,
+        done          = #waves == 0,                         -- every wave spawned and killed
+    }
 end
 
--- Spend the pending wave's danger budget on enemies and spawn them off the
--- right edge of the screen.
-function M.flushPendingWave(world, battle, VW, VH)
-    local mgr = battle.encounterMgr
-    local pw  = mgr.pendingWave
-    local enemyId = enemies.SPAWN_POOL[1]
-    local cost    = enemies.ENEMIES[enemyId].danger
-    local count = 0
-    while pw.budget >= cost do
-        local spawnX = VW + 400 + count * 120 + math.random(0, 80)
-        local spawnY = VH * 0.35 + count * 80
-        entities_mod.createEnemy(world, battle, enemyId, spawnX, spawnY)
-        mgr.currentDanger = mgr.currentDanger + cost
-        pw.budget = pw.budget - cost
-        count     = count     + 1
+local function livingEnemies(world)
+    local n = 0
+    for id in pairs(world.entities) do
+        local sd = world.side[id]
+        if sd and sd.s == 1 and not world.deathState[id] then n = n + 1 end
     end
-    mgr.pendingWave  = nil
-    mgr.waveCooldown = 2.0
+    return n
 end
 
--- ============================================================================
--- ENCOUNTER MANAGER SYSTEM (runs each frame)
--- ============================================================================
+-- Where a new enemy appears (x, y = its centre). BH spawningStyle 1 / 4 / 2-3.
+local function spawnPoint(def, VW, VH)
+    local y = VH * (0.32 + 0.45 * math.random())
+    if def.spawn == "inside" then
+        return VW * (0.15 + 0.70 * math.random()), y
+    elseif def.spawn == "left" then
+        return -60, y
+    end
+    return VW + 60, y
+end
 
 function M.system(world, battle, dt, VW, VH)
+    -- Units that appeared inside the arena fade in over ~0.7 s (BH colorSpeed 1.5).
+    for id, f in pairs(world.spawnFade) do
+        f = f + 1.5 * dt
+        world.spawnFade[id] = (f < 1) and f or nil
+    end
+
     local mgr = battle.encounterMgr
-    if mgr.spawnTimer > 0 then
-        mgr.spawnTimer = mgr.spawnTimer - dt
+    if not mgr or mgr.done then return end
+    local wave   = mgr.waves[mgr.currentWave]
+    local active = livingEnemies(world)
+
+    if mgr.spawnDelay > 0 then
+        if active < mgr.maxEnemies then mgr.spawnDelay = mgr.spawnDelay - dt end
         return
     end
 
-    if mgr.pendingWave then
-        mgr.pendingWave.timer = mgr.pendingWave.timer - dt
-        if mgr.pendingWave.timer <= 0 then M.flushPendingWave(world, battle, VW, VH) end
-    else
-        mgr.waveCooldown = math.max(0, mgr.waveCooldown - dt)
-        if mgr.waveCooldown == 0
-           and mgr.currentDanger  < mgr.dangerThreshold
-           and mgr.dangerDefeated < mgr.encounterGoal then
-            M.queueWave(battle)
+    if mgr.wavePosition > #wave.enemies and active == 0 then
+        -- Wave cleared: start the next one.
+        mgr.currentWave  = mgr.currentWave + 1
+        mgr.wavePosition = 1
+        local nextWave = mgr.waves[mgr.currentWave]
+        if nextWave then
+            mgr.spawnDelay    = nextWave.initialDelay
+            mgr.maxEnemies    = nextWave.maxEnemies
+            mgr.spawnCooldown = nextWave.spawnDelay
+        else
+            mgr.done = true
         end
-    end
-
-    mgr.surpriseTimer = mgr.surpriseTimer - dt
-    if mgr.surpriseTimer <= 0 then
-        mgr.surpriseTimer = mgr.surpriseInterval
-        if mgr.dangerDefeated < mgr.encounterGoal and math.random() < mgr.surpriseChance then
-            M.queueWave(battle, true)
+    elseif active < mgr.maxEnemies and mgr.wavePosition <= #wave.enemies then
+        -- Spawn one enemy, then wait spawnDelay before the next.
+        local enemyId = wave.enemies[mgr.wavePosition]
+        local def = enemies.ENEMIES[enemyId]
+        if def then
+            local x, y = spawnPoint(def, VW, VH)
+            entities_mod.createEnemy(world, battle, enemyId, x, y)
         end
+        mgr.wavePosition = mgr.wavePosition + 1
+        mgr.spawnDelay   = mgr.spawnCooldown
     end
 end
 
--- ============================================================================
--- VICTORY CHECK
--- ============================================================================
-
 function M.checkVictory(world, battle)
     local mgr = battle.encounterMgr
-    if not mgr or mgr.dangerDefeated < mgr.encounterGoal then return false end
-    local hasEnemy = false
-    for id in pairs(world.entities) do
-        local sd = world.side[id]
-        if sd and sd.s == 1 and not world.deathState[id] then hasEnemy=true; break end
-    end
-    if not hasEnemy and #battle.partyIds > 0 then
-        for _, pid in ipairs(battle.partyIds) do
-            if not world.deathState[pid] then return true end
-        end
+    if not (mgr and mgr.done) or livingEnemies(world) > 0 then return false end
+    for _, pid in ipairs(battle.partyIds) do
+        if not world.deathState[pid] then return true end
     end
     return false
 end

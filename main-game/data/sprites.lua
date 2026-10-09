@@ -5,7 +5,7 @@
 
 local C, E = "characters/", "enemies/"
 
-return {
+local SHEETS = {
     {"KnightIdle",    C.."Knight/Idle.png",     10, 135, 135, 1.1},
     {"KnightMove",    C.."Knight/Run.png",       6, 135, 135, 1.1},
     {"KnightAttack1", C.."Knight/Attack1.png",   4, 135, 135, 1.1},
@@ -38,6 +38,42 @@ return {
     {"SkeletonMove",   E.."Skeleton/Walk.png",   4, 150, 150, 0.75},
     {"SkeletonAttack", E.."Skeleton/Attack.png", 8, 150, 150, 0.75},
     {"SkeletonDeath",  E.."Skeleton/Death.png",  4, 150, 150, 0.75},
-    -- Bat, Imp and Mushroom sheets exist under assets/enemies/ but no enemy
-    -- row uses them yet; add them here when their rows are added.
+
+    {"GoblinIdle",   E.."Goblin/Idle.png",   4, 150, 150, 0.75},
+    {"GoblinMove",   E.."Goblin/Move.png",   8, 150, 150, 0.75},
+    {"GoblinAttack", E.."Goblin/Attack.png", 8, 150, 150, 0.75},
+    {"GoblinDeath",  E.."Goblin/Death.png",  4, 150, 150, 0.75},
+
+    -- The bat only has a flight loop: it is both its idle and its move sheet.
+    {"BatIdle",   E.."Bat/Flight.png", 8, 150, 150, 0.75},
+    {"BatMove",   E.."Bat/Flight.png", 8, 150, 150, 0.75},
+    {"BatAttack", E.."Bat/Attack.png", 8, 150, 150, 0.75},
+    {"BatDeath",  E.."Bat/Death.png",  4, 150, 150, 0.75},
+
+    {"MushroomIdle",   E.."Mushroom/Idle.png",   4, 150, 150, 1.25},
+    {"MushroomMove",   E.."Mushroom/Move.png",   8, 150, 150, 1.25},
+    {"MushroomAttack", E.."Mushroom/Attack.png", 8, 150, 150, 1.25},
+    {"MushroomDeath",  E.."Mushroom/Death.png",  4, 150, 150, 1.25},
 }
+
+-- Recoloured copies of the Knight: same frames, clothes shifted to another
+-- colour. The files were generated with
+--   ./recolor shift main-game/assets/characters/Knight main-game/assets/characters/<Name> 225 <hue> 30 <sat> <val>
+-- (225 = the Knight's blue). To add another: run that, add a row here, add an
+-- ANIM_SETS entry in data/classes.lua.
+local RECOLOURS = {
+    -- name      hue  sat  val   (the arguments used)
+    "Cleric",  -- 48  0.9  1.9   yellow
+    "Paladin", -- 130 1.0  1.35  green
+    "Wizard",  -- 290 1.0  1.4   purple
+    "Rogue",   -- 355 1.1  1.15  dark red
+}
+for _, name in ipairs(RECOLOURS) do
+    for _, row in ipairs(SHEETS) do
+        if row[1]:sub(1, 6) == "Knight" then
+            SHEETS[#SHEETS + 1] = { name .. row[1]:sub(7), (row[2]:gsub("Knight/", name .. "/")), row[3], row[4], row[5], row[6] }
+        end
+    end
+end
+
+return SHEETS

@@ -97,33 +97,103 @@ end
 
 -- BH: each survivor gets the level's XP times this, by how many survived.
 local SURVIVOR_XP_MULT = { 4, 2, 1.33, 1 }
+-- BH: the best / 2nd / 3rd performers among the survivors get this much extra.
+local RANK_BONUS = { 0.25, 0.16, 0.08 }
 
-local function floorRewards(floor)
-    local rows = rewards.LEVELS
-    return rows[math.max(1, math.min(floor or 1, #rows))]
+-- Which battle of the floor is being fought: 1 for the first, 2 for the second...
+-- (the map records an encounter as cleared the moment it is entered). It picks the
+-- reward row and how hard the waves are (encounter/wave_gen.lua).
+function M.battleTier(saveData)
+    local mp = saveData and saveData.mapProgression
+    local cleared = mp and mp.clearedEncounters and #mp.clearedEncounters or 0
+    return math.max(1, cleared) + ((saveData and saveData.floor or 1) - 1) * 4
 end
 
--- Grant the rewards for a WON battle. `survivors` = hero names still standing,
--- `kills` = enemies defeated. Returns { gold = n, levelUps = { [name] = n } }.
---   gold: BH level gold x random 0.85..1.15, + 1 per kill [tuned]
---   XP:   BH level XP x survivor multiplier, to each survivor
-function M.onEncounterWon(saveData, survivors, kills)
-    local row = floorRewards(saveData.floor)
-    local gold = math.floor(row.gold * (0.85 + 0.30 * math.random()) + 0.5) + (kills or 0)
-    items.addGold(saveData, gold)
+local function tierRewards(tier)
+    local rows = rewards.LEVELS
+    return rows[math.max(1, math.min(tier or 1, #rows))]
+end
 
-    local levelUps = {}
-    local n = #survivors
-    if n > 0 then
-        local share = math.floor(row.xp * (SURVIVOR_XP_MULT[n] or 1) + 0.5)
-        for _, name in ipairs(survivors) do
-            local gained = M.addXP(saveData.unlockedCharacters[name], share)
-            if gained > 0 then levelUps[name] = gained end
+-- Where a hero stands on the way to the next level: { level, frac = 0..1 }.
+local function xpState(rec)
+    local level = rec.level or 1
+    if level >= M.MAX_LEVEL then return { level = level, frac = 0 } end
+    local need = M.xpToNext(level)
+    local left = rec.pointsToNextLevel
+    if type(left) ~= "number" or left <= 0 then left = need end
+    return { level = level, frac = math.max(0, math.min(1, 1 - left / need)) }
+end
+
+-- The one item a won battle drops (BH loot roll): a random entry of the tier's
+-- loot table, or of the next table up on a "rare" roll. Returns a catalog id.
+local function rollLoot(row)
+    local tables = require("data/bh_items").LOOT_TABLES
+    local idx = (row.lootTable or 0) + 1
+    if (row.rareChance or 0) > 0 and math.random(0, 100) <= row.rareChance then idx = idx + 1 end
+    local tbl = tables[math.min(idx, #tables)]
+    for _ = 1, 20 do                                  -- skip trinkets the game cannot apply yet
+        local bhId = tbl.items[math.random(#tbl.items)]
+        if items.isSupported(bhId) then return bhId end
+    end
+    return nil
+end
+
+-- Grant the rewards for a WON battle and return what was granted, for the
+-- victory screen (encounter/victory.lua).
+--   survivors = hero names still standing, in party order
+--   kills     = enemies defeated
+--   scores    = { [name] = performance score } (optional; ranks the XP bonus)
+-- Returns {
+--   gold  = n,                         BH level gold x random 0.85..1.15
+--   loot  = item instance | nil,       exactly one item if the inventory has room
+--   lootLost = true                    when it was full (BH: the item is lost)
+--   kills = n,
+--   xp    = { { name, gained, before = {level, frac}, after = {level, frac}, levelUps }, ... }
+-- }
+-- XP per survivor: level XP x survivor-count multiplier x (1 + rank bonus).
+function M.onEncounterWon(saveData, survivors, kills, scores)
+    local row = tierRewards(M.battleTier(saveData))
+    local result = { kills = kills or 0, xp = {} }
+
+    result.gold = math.floor(row.gold * (0.85 + 0.30 * math.random()) + 0.5)
+    items.addGold(saveData, result.gold)
+
+    if items.inventoryFull(saveData) then
+        result.lootLost = true
+    else
+        local bhId = rollLoot(row)
+        local id = bhId and items.mint(saveData, bhId)
+        if id then
+            saveData.inventory[#saveData.inventory + 1] = id
+            result.loot = saveData.items[id]
         end
     end
+
+    -- Rank the survivors by score (ties: later party slot first, as in BH).
+    local ranked = {}
+    for i, name in ipairs(survivors) do ranked[i] = { name = name, slot = i, score = scores and scores[name] or 0 } end
+    table.sort(ranked, function(a, b)
+        if a.score ~= b.score then return a.score > b.score end
+        return a.slot > b.slot
+    end)
+    local bonus = {}
+    for rank, r in ipairs(ranked) do bonus[r.name] = RANK_BONUS[rank] or 0 end
+
+    local mult = SURVIVOR_XP_MULT[#survivors] or 1
+    for _, name in ipairs(survivors) do
+        local rec = saveData.unlockedCharacters[name]
+        if rec then
+            local before = xpState(rec)
+            local gained = math.floor(row.xp * mult * (1 + bonus[name]) + 0.5)
+            local ups = M.addXP(rec, gained)
+            result.xp[#result.xp + 1] = { name = name, gained = gained, before = before,
+                                          after = xpState(rec), levelUps = ups }
+        end
+    end
+
     -- The shop restocks after every won battle (BH rule).
     if saveData.shopState then saveData.shopState.pendingRestock = true end
-    return { gold = gold, levelUps = levelUps }
+    return result
 end
 
 -- ============================================================================

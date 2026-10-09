@@ -11,7 +11,8 @@ of the right section.
    next to the victory branch; `encounter_mgr.checkVictory`.
 2. **Floors never advance.** `saveData.floor` is always 1 and there is one hand-made map
    (`RAW_MAP` in `screens/map.lua`). Nothing happens when every encounter is cleared.
-   Needs a Director decision on what a "floor clear" is, then: floor +1, new map, harder waves.
+   Needs a Director decision on what a "floor clear" is, then: floor +1, new map. (Battles
+   already get harder one by one within the floor: `progression.battleTier`.)
 3. **Idle heroes do not pick targets.** A hero only fights when ordered or when hit. BH heroes
    auto-acquire nearby enemies (`bh/systems/party-member-stats-ai-damage.md` §7 "Idle").
    Code: `encounter/systems.lua` (`threat`, `targetFollow`).
@@ -20,10 +21,14 @@ of the right section.
    (BH Ranger, —, Bard, Witch: `bh/systems/hero-abilities-part1.md` / `part2.md`) or remove them.
 
 ## B. Makes the game shallow
-5. **One enemy type.** BH has 30 (`bh/data/prefabs/EnemyScript.json`, behaviour in
-   `bh/systems/enemy-*.md`). Bat, Imp and Mushroom sprites already exist in `assets/enemies/`.
-   The spawner (`encounter/encounter_mgr.lua`) only uses the first `SPAWN_POOL` entry — make it
-   pick by danger budget, or port BH's authored waves (`bh/data/maps.json`).
+5. **Four enemy types; BH has 30** (`bh/data/prefabs/EnemyScript.json`, behaviour in
+   `bh/systems/enemy-*.md`). Not ported yet from BH's first map: basic5 (skeleton warrior),
+   basic6 (goblins entering from the left: `spawn = "left"` already works), basic7 (healer that
+   teleports), basic8 (cyclops), and the bosses. Add rows to `data/enemies.lua`.
+5b. **The ranged enemy (bat) draws no projectile** — its target just takes the hit. Same for
+   the Wizard. Needs the projectile renderer of item 12.
+5c. **Wave generator tuning is a first guess** (`TUNING` in `encounter/wave_gen.lua`, `danger`
+   and `minTier` in `data/enemies.lua`). Adjust from playtests.
 6. **Ported ability numbers are still estimates.** Cooldowns match BH; magnitudes and
    durations in `data/abilities.lua` (Cleric, Paladin, Wizard, Rogue) are the old wiki/tuned
    guesses. Exact values: `bh/data/prefabs/MotherBrain.json` (`buffMagnitudes`, `buffDurations`,
@@ -34,21 +39,18 @@ of the right section.
    regen, moveSpeed, ward, haste, noCooldown, bonusGold, bonusXP, lifeDrain, bonusHealing.
    Add each to `TRINKET_STATS` in `items.lua` once the engine supports it
    (rules: `bh/systems/party-member-stats-ai-damage.md` §4.2).
-8. **No loot and no item upgrades.** BH gives one item per win (`bh/systems/battle-end-rewards-xp-loot.md`)
-   and lets you upgrade gear in the Armory for 1.5 × the upgraded item's price
-   (`bh/systems/menu-armory-and-merchant.md`). `data/bh_items.lua` already has `upgrade` ids.
+8. **No item upgrades.** BH lets you upgrade gear in the Armory for 1.5 x the upgraded item's
+   price (`bh/systems/menu-armory-and-merchant.md`). `data/bh_items.lua` already has `upgrade` ids.
+8b. **Shop has no better/worse arrows.** BH shows, per party hero, whether the selected item
+   beats what they wear (`bh/systems/menu-armory-and-merchant.md` 3.5). The tooltip only says who can use it.
 9. **BH has two trinket slots; we have one** (`equipped.trinket`).
 
 ## C. Feedback and feel
-10. **No feedback for rewards.** Gold shows only in the SHOP; nothing announces gold, XP or a
-    level-up after a win. Show gold on the map bar and a results panel on victory
-    (`progression.onEncounterWon` already returns `{gold, levelUps}`).
+10. **Gold is only visible in the SHOP and on the victory screen.** Show it on the map bar.
 11. **EQUIP needs two clicks** (item, then slot). Consider one click to equip into the item's slot.
 12. **Ability visuals are missing**: projectiles, meteor, blizzard tint, time-stop pulse,
     heal/shield indicators. The logic exists; only presentation is missing. (Director asked
     for this earlier and it was deferred.)
-13. **Movement speeds are not BH's.** BH speeds are in world units/second
-    (`bh/data/prefabs/PartyMember.json` `moveSpeed`); pick a pixels-per-unit factor first.
 14. **OPTIONS on the title screen opens the developer sprite viewer.**
 
 ## D. Cleanup (safe, good first tasks)

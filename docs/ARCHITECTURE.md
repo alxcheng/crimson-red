@@ -61,7 +61,9 @@ Flow: `title` → `save_select` → `map` ⇄ `party_select` / `talents` / `equi
 | `status.lua` | Buffs/debuffs (ATK_BUFF, SHIELD, WARD, DOT, SLOW, …) and `getMods`. |
 | `effects.lua` | Timed effects on units (hurt flash, knockback, delayed ability impact, passives, tints). |
 | `systems.lua` | Per-frame systems: melee slot ring, target following, movement, physics, stagger, stun, threat targeting, death. |
-| `encounter_mgr.lua` | Wave spawning by danger budget, victory check. |
+| `encounter_mgr.lua` | BH's wave spawner (one enemy at a time, `maxEnemies` cap, wave after wave) and the victory check. The rules are at the top of the file. |
+| `wave_gen.lua` | Makes up a battle's waves (procedural). All difficulty knobs are in its `TUNING` table. |
+| `victory.lua` | The three screens after a win: VICTORY, SPOILS (gold + the one item), EXPERIENCE (bars, level-ups). |
 | `anim.lua`, `particles.lua`, `ui.lua` | Sprite animation, blood/heal particles, health bars + skill icons + resource bar. |
 
 `screens/encounter.lua` owns one battle: it creates the world, spawns the party, calls the
@@ -139,3 +141,19 @@ Every menu screen (party, talents, equip, shop, save select, map) follows the sa
   drawn last. It places itself under the hovered thing and stays on the canvas.
 - **Text never leaves its box**: one-line labels inside a box go through `common.fitText` or
   `common.printCentered`. The font has ASCII glyphs only.
+
+## Battles: waves and rewards
+- `progression.battleTier(saveData)`: 1 for a floor's first battle, 2 for the second, ...
+  It picks how hard the waves are and which BH reward row applies (`data/bh_rewards.lua`).
+- `wave_gen.generate(tier)` returns the waves; `encounter_mgr` spawns them by BH's rules.
+- On a win `progression.onEncounterWon` grants gold, one item (if the inventory has room) and
+  XP to the survivors (BH's survivor multiplier, plus a bonus for the best performers — the
+  score is kept by `combat.addScore`), and `victory.lua` shows what it returned.
+- Debug keys in battle: K / J / L / M spawn a skeleton / goblin / bat / mushroom at the mouse.
+
+## Recolouring sprites
+`./recolor` (code in `tools/recolor/`) makes a new sprite folder from an existing one by
+shifting ONE colour and leaving the rest alone (e.g. the Knight's blue clothes -> green).
+`./recolor report <dir>` lists the hues a folder contains; `./recolor shift <src> <dst>
+<fromHue> <toHue> [tolerance] [satScale] [valScale]` writes the copy. Cleric, Paladin, Wizard
+and Rogue are recoloured Knights: see `RECOLOURS` at the bottom of `data/sprites.lua`.

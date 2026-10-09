@@ -61,19 +61,8 @@ local SLOT_Y0      = PORTRAIT_Y + PORTRAIT_SIZE + 12
 local SLOT_TEXT_X  = SLOT_X + SLOT_SIZE + 12
 local SLOT_TEXT_W  = CHAR_PANEL_X + CHAR_PANEL_W - PAD - SLOT_TEXT_X
 
--- Right panel: inventory grid
-local INV_X        = CHAR_PANEL_X + CHAR_PANEL_W + 16
-local INV_Y        = PANEL_Y
-local INV_W        = VW - MARGIN - INV_X
-local INV_H        = PANEL_H
-local INV_HEAD_H   = 34                       -- "INVENTORY" caption band
-local INV_COLS     = 7
-local INV_ROWS     = 5
-local INV_CELL     = 64
-local INV_GRID_W   = INV_COLS * INV_CELL
-local INV_GRID_H   = INV_ROWS * INV_CELL
-local INV_GRID_X   = INV_X + math.floor((INV_W - INV_GRID_W) / 2)
-local INV_GRID_Y   = INV_Y + INV_HEAD_H + math.floor((INV_H - INV_HEAD_H - INV_GRID_H) / 2)
+-- Right panel: the shared inventory panel (item_ui.lua).
+local invCellRect = item_ui.invCellRect
 
 -- ============================================================================
 -- MODULE STATE
@@ -224,14 +213,6 @@ local function slotRect(i)
     return x, y, SLOT_SIZE, SLOT_SIZE
 end
 
-local function invCellRect(idx)
-    local col = (idx - 1) % INV_COLS
-    local row = math.floor((idx - 1) / INV_COLS)
-    return INV_GRID_X + col * INV_CELL,
-           INV_GRID_Y + row * INV_CELL,
-           INV_CELL, INV_CELL
-end
-
 -- ============================================================================
 -- HIT TESTING
 -- ============================================================================
@@ -265,13 +246,10 @@ local function detectHover(vmx, vmy)
         end
     end
 
-    for idx, id in ipairs(getInventory()) do
-        if idx > INV_COLS * INV_ROWS then break end
-        local ix, iy, iw, ih = invCellRect(idx)
-        if vmx >= ix and vmx < ix + iw and vmy >= iy and vmy < iy + ih then
-            hoveredItemId = id
-            return "inv"
-        end
+    local invIdx = item_ui.invIndexAt(vmx, vmy, saveData_ref)
+    if invIdx then
+        hoveredItemId = getInventory()[invIdx]
+        return "inv"
     end
 
     return nil
@@ -480,12 +458,6 @@ local function drawCharIcon(name, x, y, size)
     common.printCentered(font14, displayName(name), x, y, size, size)
 end
 
--- An item instance drawn into a square cell.
-local function drawItemInCell(id, x, y, size)
-    local inst = getItems()[id]
-    if type(inst) == "table" then item_ui.drawGlyph(inst, x, y, size) end
-end
-
 -- Dashed empty slot.
 local function drawDashedSlot(x, y, size, label)
     love.graphics.setColor(0.55, 0.20, 0.25, 1)
@@ -655,43 +627,13 @@ local function drawScene()
         common.printCentered(font16, "No character", CHAR_PANEL_X, DIVIDER_Y, CHAR_PANEL_W, CHAR_PANEL_Y + CHAR_PANEL_H - DIVIDER_Y)
     end
 
-    -- 4. Inventory panel
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", INV_X, INV_Y, INV_W, INV_H)
-
-    love.graphics.setFont(font16)
-    love.graphics.setColor(common.COLOR_RED)
-    local headY = math.floor(INV_Y + (INV_HEAD_H - font16:getHeight()) / 2) + 2
-    love.graphics.print("INVENTORY", INV_X + PAD, headY)
-
-    -- What a click will do next, right-aligned in the caption band.
+    -- 4. Inventory panel, with what a click will do next as its hint.
     local selInst = selectedItemId and getItems()[selectedItemId]
-    local hint = type(selInst) == "table"
-        and ("Now click the " .. tostring(selInst.itemType) .. " slot to equip it")
-        or "Click an item, then its slot"
-    local hintW = INV_W - PAD * 2 - font16:getWidth("INVENTORY") - 16
-    hint = common.fitText(font13, hint, hintW)
-    love.graphics.setFont(font13)
-    love.graphics.setColor(type(selInst) == "table" and OFFRED or {0.5, 0.5, 0.5, 1})
-    love.graphics.print(hint, INV_X + INV_W - PAD - font13:getWidth(hint), headY + 2)
-
-    love.graphics.setColor(0.35, 0.35, 0.35, 1)
-    love.graphics.setLineWidth(1)
-    for idx = 1, INV_COLS * INV_ROWS do
-        love.graphics.rectangle("line", invCellRect(idx))
-    end
-
-    local inv = getInventory()
-    for idx, id in ipairs(inv) do
-        if idx > INV_COLS * INV_ROWS then break end
-        local ix, iy, iw, ih = invCellRect(idx)
-        drawItemInCell(id, ix + 6, iy + 6, iw - 12)
-        if id == selectedItemId then
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.setLineWidth(2)
-            love.graphics.rectangle("line", ix + 1, iy + 1, iw - 2, ih - 2)
-        end
+    if type(selInst) == "table" then
+        item_ui.drawInventory(saveData_ref, selectedItemId,
+            "Now click the " .. tostring(selInst.itemType) .. " slot to equip it", OFFRED)
+    else
+        item_ui.drawInventory(saveData_ref, nil, "Click an item, then its slot")
     end
 
     -- 5. Red hover box (white when BACK is pressed), BACK on top, tooltip last

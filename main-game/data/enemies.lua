@@ -1,33 +1,66 @@
 -- data/enemies.lua — every enemy type, as data.
 --
 -- To add an enemy: add a row here (and its sprite sheets in data/sprites.lua,
--- its attack in data/abilities.lua). encounter/entities.lua builds the unit;
--- encounter/encounter_mgr.lua spawns it by spending the wave's danger budget.
+-- its attack in data/abilities.lua, its animation set in data/classes.lua
+-- ANIM_SETS). encounter/entities.lua builds the unit; encounter/wave_gen.lua
+-- decides which ones a battle contains; encounter/encounter_mgr.lua spawns them.
 --
 -- Row fields:
 --   name       display name
 --   size       {w, h} body box in art pixels (multiplied by the battle SCALE)
 --   stats      {hp, power}. Enemies have no defense and never crit (BH rule).
---   moveSpeed  MOVE_SPEED
+--   moveSpeed  MOVE_SPEED = BH moveSpeed x SPEED_SCALE (x30 = pixels/second)
 --   anims      entry in data/classes.lua ANIM_SETS
---   danger     how much of a wave's danger budget one of these costs, and how
---              much it adds to the encounter's progress when killed
 --   auto       ability id of its attack
--- BH's real enemy stats are in bh/data/prefabs/EnemyScript.json.
+--   ranged     true = stands where it spawned and shoots (BH AIType 2)
+--   chaotic    true = picks a new random hero before every attack (BH `chaotic`)
+--   spawn      where it appears (BH spawningStyle):
+--                "right"  walks in from the right edge (style 1)
+--                "left"   walks in from the left edge  (style 4)
+--                "inside" appears at a random spot inside the arena (styles 2/3)
+--   danger     its weight when encounter/wave_gen.lua fills a wave's budget
+--   minTier    first battle tier (1 = a floor's first battle) it can appear in
+--
+-- CONFUSING NAMES (the Director's mapping, 2026-10-09): the STATS come from one
+-- BH monster and the SPRITE from another.
+--   CR skeleton = BH goblin (basic1)          CR goblin   = BH bat (basic2)
+--   CR bat      = BH skeleton archer (basic4) CR mushroom = BH ogre (basic3)
+-- BH's numbers are in bh/data/prefabs/EnemyScript.json.
 
 local M = {}
+
+M.SPEED_SCALE = 1.667   -- BH moveSpeed -> CR MOVE_SPEED (BH goblin 0.9 -> 1.5)   [tuned]
 
 M.ENEMIES = {
     skeleton = {
         name = "Skeleton", size = {40, 40}, anims = "skeleton",
-        -- BH's basic goblin ("basic1"): 500 health, 70 power, attacks every 1.3 s.
-        stats = {hp = 500, power = 70},
-        moveSpeed = 1.5, danger = 3,
+        stats = {hp = 500, power = 70},          -- BH basic1: attacks every 1.3 s
+        moveSpeed = 1.5, spawn = "right",
+        danger = 2, minTier = 1,
         auto = "SkeletonAutoAttack",
     },
+    goblin = {
+        name = "Goblin", size = {36, 36}, anims = "goblin",
+        stats = {hp = 375, power = 80},          -- BH basic2 (bat): fast and frail, every 1.16 s
+        moveSpeed = 1.83, spawn = "right",       -- BH 1.1
+        danger = 2, minTier = 1,
+        auto = "GoblinAutoAttack",
+    },
+    bat = {
+        name = "Bat", size = {30, 30}, anims = "bat",
+        stats = {hp = 600, power = 95},          -- BH basic4 (skeleton archer): shoots every 1.8 s
+        moveSpeed = 1.0, spawn = "inside",       -- never moves: appears in the arena and shoots
+        ranged = true, chaotic = true,
+        danger = 4, minTier = 2,
+        auto = "BatAutoShot",
+    },
+    mushroom = {
+        name = "Mushroom", size = {50, 50}, anims = "mushroom",
+        stats = {hp = 2200, power = 165},        -- BH basic3 (ogre): slow and heavy, every 1.5 s
+        moveSpeed = 0.83, spawn = "right",       -- BH 0.5
+        danger = 8, minTier = 3,                 -- costly: one per wave until late battles
+        auto = "MushroomAutoAttack",
+    },
 }
-
--- Enemy ids the wave spawner may pick from, cheapest first.
-M.SPAWN_POOL = { "skeleton" }
 
 return M

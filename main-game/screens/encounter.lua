@@ -12,6 +12,8 @@ local status_mod   = require("encounter/status")
 local entities_mod = require("encounter/entities")
 local systems      = require("encounter/systems")
 local enc_mgr      = require("encounter/encounter_mgr")
+local wave_gen     = require("encounter/wave_gen")
+local victory      = require("encounter/victory")
 local ui           = require("encounter/ui")
 local progression  = require("progression")
 
@@ -47,10 +49,6 @@ local assetsLoaded = false
 -- skips every system tick; draw still runs so the screen stays visible.
 local paused = false
 
--- Victory rewards (gold, XP, shop restock) are granted exactly once per win.
--- Reset on each onEnter; latched true the first time checkVictory fires.
-local goldAwarded = false
-
 -- Pause icon: top-right corner. 28x28 hit area, 4px from the edges.
 local PAUSE_BTN_SIZE = 28
 local PAUSE_BTN_PAD  = 6
@@ -85,9 +83,10 @@ local function initBattle(c, pfx)
     battle.selectedUnit    = nil
     battle.deadSlots       = {}
     battle.iconScales      = {1.0, 1.0, 1.0, 1.0}
-    battle.victoryTimer    = nil
-    battle.victoryDelay    = nil
+    battle.victory         = nil   -- encounter/victory.lua state once the battle is won
+    battle.victoryDelay    = nil   -- short pause between the last kill and the victory screens
     battle.victorySnd      = nil
+    battle.score           = {}    -- [unitId] = performance score (combat.addScore)
     battle.hoveredUnit     = nil
     battle.pressedUnit     = nil
     battle.resource        = 0
@@ -157,17 +156,7 @@ local function drawScene(dt)
     ui.skillIconSystem(world, battle, dt)
     ui.drawResourceBar(battle)
 
-    -- Victory overlay
-    if battle.victoryTimer then
-        local alpha = math.min(1, (2.0 - battle.victoryTimer) / 0.5)
-        love.graphics.setColor(0, 0, 0, alpha * 0.5)
-        love.graphics.rectangle("fill", 0, 0, VW, VH)
-        love.graphics.setFont(battle.font)
-        local txt = "VICTORY"
-        local tw  = battle.font:getWidth(txt)
-        love.graphics.setColor(1, 0, 0, alpha)
-        love.graphics.print(txt, (VW-tw)/2, VH/2 - battle.font:getHeight())
-    end
+    victory.draw(battle)
 
     love.graphics.setColor(1, 1, 1, 1)
 
@@ -221,7 +210,6 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
     switchFn     = sw
     saveData_ref = sd
     slot_ref     = slot
-    goldAwarded  = false
     paused       = false
     require("music_mgr").play("battle")
 
@@ -233,23 +221,10 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
     battle.getIconImage = getIconImage
 
 
-    -- Initialize encounter manager from config
+    -- The battle's waves: generated for how far into the floor the party is.
+    -- encounterConfig (tests only): { waves = {...}, spawnDelay = seconds before the first enemy }.
     local cfg = encounterConfig or {}
-    local spawnDelay = cfg.spawnDelay or 4.0
-    battle.encounterMgr = {
-        dangerThreshold  = cfg.dangerThreshold  or 3,
-        waveMinThreat    = cfg.waveMinThreat    or 3,
-        waveMaxThreat    = cfg.waveMaxThreat    or 6,    -- at most 2 goblins per wave [tuned]
-        encounterGoal    = cfg.encounterGoal    or 36,   -- 12 kills to win            [tuned]
-        spawnTimer       = spawnDelay,
-        waveCooldown     = 0,
-        currentDanger    = 0,
-        dangerDefeated   = 0,
-        surpriseTimer    = 30,
-        surpriseInterval = 30,
-        surpriseChance   = 0.15,
-        pendingWave      = nil,
-    }
+    battle.encounterMgr = enc_mgr.new(cfg.waves or wave_gen.generate(progression.battleTier(sd)), cfg.spawnDelay)
 
     -- Spawn party walking in — rhombus formation.
     -- Members are 100px apart horizontally; vertical position alternates every
@@ -308,10 +283,9 @@ function M.update(dt)
     -- toggle itself is still handled (in mousepressed/keypressed).
     if paused then return end
 
-    -- Victory timeout → return to map
-    if battle.victoryTimer then
-        battle.victoryTimer = battle.victoryTimer - dt
-        if battle.victoryTimer <= 0 then
+    -- Victory screens (gold, item, XP); back to the map when dismissed.
+    if battle.victory then
+        if victory.update(battle, dt) then
             switchFn("map", saveData_ref, slot_ref)
             return
         end
@@ -378,8 +352,17 @@ function M.update(dt)
         battle.victoryDelay = battle.victoryDelay - dt
         if battle.victoryDelay <= 0 then
             battle.victoryDelay = nil
-            local dur = (battle.victorySnd and battle.victorySnd:getDuration() or 4.0)
-            battle.victoryTimer = math.max(1.0, dur - 2.0)
+            -- Grant the rewards (once) and show them.
+            local survivors, scores = {}, {}
+            for i, name in ipairs(battle.partyNames or {}) do
+                if not battle.deadSlots[i] then survivors[#survivors + 1] = name end
+                scores[name] = battle.score[battle.partyIds[i]] or 0
+            end
+            local result = saveData_ref
+                and progression.onEncounterWon(saveData_ref, survivors, battle.enemyDefeated, scores)
+                or { gold = 0, kills = battle.enemyDefeated, xp = {} }
+            if saveData_ref and slot_ref then require("save").write(slot_ref, saveData_ref) end
+            victory.start(battle, result, battle.partyNames, battle.deadSlots)
         end
     elseif enc_mgr.checkVictory(world, battle) then
         require("music_mgr").stop()
@@ -387,17 +370,7 @@ function M.update(dt)
             battle.victorySnd:stop()
             battle.victorySnd:play()
         end
-        battle.victoryDelay = 2.0
-        -- Rewards, once. systems.death ran earlier this frame, so
-        -- battle.enemyDefeated already counts every kill.
-        if not goldAwarded and saveData_ref then
-            goldAwarded = true
-            local survivors = {}
-            for i, name in ipairs(battle.partyNames or {}) do
-                if not battle.deadSlots[i] then survivors[#survivors + 1] = name end
-            end
-            progression.onEncounterWon(saveData_ref, survivors, battle.enemyDefeated)
-        end
+        battle.victoryDelay = 1.7   -- BH: VICTORY appears 1.7 s after the last kill
     end
 end
 
@@ -421,15 +394,18 @@ function M.keypressed(key)
 
     if paused then return end   -- while paused, ignore combat/selection keys
 
+    if battle.victory then victory.advance(battle); return end
+
     if key == "1" and battle.partyIds[1] and not battle.deadSlots[1] then battle.selectedUnit = battle.partyIds[1] end
     if key == "2" and battle.partyIds[2] and not battle.deadSlots[2] then battle.selectedUnit = battle.partyIds[2] end
     if key == "3" and battle.partyIds[3] and not battle.deadSlots[3] then battle.selectedUnit = battle.partyIds[3] end
     if key == "4" and battle.partyIds[4] and not battle.deadSlots[4] then battle.selectedUnit = battle.partyIds[4] end
 
-    -- DEBUG: K spawns a skeleton under the mouse.
-    if key == "k" then
+    -- DEBUG: K / J / L / M spawn a skeleton / goblin / bat / mushroom under the mouse.
+    local debugSpawn = ({ k = "skeleton", j = "goblin", l = "bat", m = "mushroom" })[key]
+    if debugSpawn then
         local vmx, vmy = common.virtualMouse()
-        entities_mod.createEnemy(world, battle, "skeleton", vmx, vmy)
+        entities_mod.createEnemy(world, battle, debugSpawn, vmx, vmy)
     end
 
     local su = battle.selectedUnit; if not su then return end
@@ -459,6 +435,11 @@ function M.mousepressed(x, y, button)
     end
 
     if paused then return end   -- while paused, ignore all other input
+
+    if battle.victory then
+        if button == 1 then victory.advance(battle) end
+        return
+    end
 
     if button == 1 then
         for i, id in ipairs(battle.partyIds) do

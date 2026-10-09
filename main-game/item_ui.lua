@@ -7,6 +7,8 @@
 --                                   bonuses, who can use it, price
 --       opts.price    = { label = "costs" | "sells for", amount = n }   (optional)
 --       opts.charName = class key; adds a red "X cannot use this" line when true
+--   The shared INVENTORY panel (same place and look on EQUIP and SHOP): see the
+--   bottom of this file.
 
 local common = require("common")
 local items  = require("items")
@@ -69,6 +71,76 @@ function M.tooltipLines(inst, opts)
         lines[#lines + 1] = { text = opts.price.label .. " " .. tostring(opts.price.amount) .. " gold", color = M.GOLD }
     end
     return lines
+end
+
+-- ============================================================================
+-- THE INVENTORY PANEL (identical on the EQUIP and SHOP screens)
+-- ============================================================================
+-- A framed panel on the right of the screen: "INVENTORY", a hint line, and a
+-- 7 x 5 grid of the party's carried items (items.INVENTORY_SIZE cells).
+--   M.INV                         its geometry
+--   M.invCellRect(index)          -> x, y, w, h of cell `index` (1-based)
+--   M.invIndexAt(x, y, saveData)  -> index of the ITEM under the point, or nil
+--   M.drawInventory(saveData, selectedId, hint, hintColor)
+
+local INV = { x = 306, y = common.TOP_BAR_H + 12, cols = 7, rows = 5, cell = 64, headH = 34, pad = 14 }
+INV.w = common.VW - 20 - INV.x
+INV.h = common.VH - 20 - INV.y
+INV.gridX = INV.x + math.floor((INV.w - INV.cols * INV.cell) / 2)
+INV.gridY = INV.y + INV.headH + math.floor((INV.h - INV.headH - INV.rows * INV.cell) / 2)
+M.INV = INV
+
+function M.invCellRect(idx)
+    local col = (idx - 1) % INV.cols
+    local row = math.floor((idx - 1) / INV.cols)
+    return INV.gridX + col * INV.cell, INV.gridY + row * INV.cell, INV.cell, INV.cell
+end
+
+function M.invIndexAt(px, py, saveData)
+    local inv = saveData.inventory or {}
+    for idx = 1, math.min(#inv, INV.cols * INV.rows) do
+        local x, y, w, h = M.invCellRect(idx)
+        if px >= x and px < x + w and py >= y and py < y + h then return idx end
+    end
+    return nil
+end
+
+function M.drawInventory(saveData, selectedId, hint, hintColor)
+    local f16, f13 = common.loadFont(16), common.loadFont(13)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", INV.x, INV.y, INV.w, INV.h)
+
+    love.graphics.setFont(f16)
+    love.graphics.setColor(common.COLOR_RED)
+    local headY = math.floor(INV.y + (INV.headH - f16:getHeight()) / 2) + 2
+    love.graphics.print("INVENTORY", INV.x + INV.pad, headY)
+
+    -- What a click will do next, right-aligned in the caption band.
+    if hint then
+        hint = common.fitText(f13, hint, INV.w - INV.pad * 2 - f16:getWidth("INVENTORY") - 16)
+        love.graphics.setFont(f13)
+        love.graphics.setColor(hintColor or {0.5, 0.5, 0.5, 1})
+        love.graphics.print(hint, INV.x + INV.w - INV.pad - f13:getWidth(hint), headY + 2)
+    end
+
+    love.graphics.setColor(0.35, 0.35, 0.35, 1)
+    love.graphics.setLineWidth(1)
+    for idx = 1, INV.cols * INV.rows do
+        love.graphics.rectangle("line", M.invCellRect(idx))
+    end
+
+    for idx, id in ipairs(saveData.inventory or {}) do
+        if idx > INV.cols * INV.rows then break end
+        local x, y, w, h = M.invCellRect(idx)
+        local inst = saveData.items and saveData.items[id]
+        if type(inst) == "table" then M.drawGlyph(inst, x + 6, y + 6, w - 12) end
+        if id == selectedId then
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.setLineWidth(2)
+            love.graphics.rectangle("line", x + 1, y + 1, w - 2, h - 2)
+        end
+    end
 end
 
 return M

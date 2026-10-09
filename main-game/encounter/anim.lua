@@ -123,6 +123,9 @@ function M.drawEntities(world, battle, SCALE)
         if tc and (tc.R ~= 0 or tc.G ~= 0 or tc.B ~= 0) then
             baseR, baseG, baseB = tc.R, tc.G, tc.B
         end
+        -- A unit that appeared inside the arena fades in from black.
+        local fade = world.spawnFade and world.spawnFade[id]
+        if fade then baseR, baseG, baseB = baseR * fade, baseG * fade, baseB * fade end
 
         -- Draw sprite with effect tints (undulating RGB modifications)
         local etList = world.effectTints[id]

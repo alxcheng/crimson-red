@@ -138,6 +138,32 @@ DB.SkeletonAutoAttack = {
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
+-- The three below follow the skeleton's shape (8-frame attack sheet, hit on frame 4).
+DB.GoblinAutoAttack = {
+    name = "GoblinAutoAttack",
+    cdMax = 1.16,  -- BH basic2 primaryActionCooldown
+    animListIdx = 3, animLock = 8*7/60,
+    delay = 24.5/60,
+    effect = { kind = "damage", tags = { "Melee" }, vfx = false },
+}
+
+DB.MushroomAutoAttack = {
+    name = "MushroomAutoAttack",
+    cdMax = 1.5,   -- BH basic3 primaryActionCooldown
+    animListIdx = 3, animLock = 8*7/60,
+    delay = 31.5/60,
+    effect = { kind = "damage", tags = { "Melee" }, vfx = false },
+}
+
+-- Ranged: hits its target wherever it stands (BH skeleton archer; no arrow is drawn yet).
+DB.BatAutoShot = {
+    name = "BatAutoShot",
+    cdMax = 1.8,   -- BH basic4 primaryActionCooldown
+    animListIdx = 3, animLock = 8*7/60,
+    delay = 38.5/60,
+    effect = { kind = "damage", tags = { "Ranged" }, vfx = false },
+}
+
 DB.NomadAutoHeal = {
     name = "NomadAutoHeal",
     cdMax = 2.8,

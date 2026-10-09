@@ -139,32 +139,50 @@ function M.spendGold(saveData, n)
 end
 
 -- ============================================================================
--- SHOP STOCK  (BH: Database.populateMerchant — bh/systems/effects-database-pets-misc.md)
+-- INVENTORY
 -- ============================================================================
 
--- Catalog ids the shop may offer when the party's best hero is `level`:
--- every item of every loot table whose level range contains `level`.
-local function eligibleItems(level)
-    local out, seen = {}, {}
+-- How many unequipped items the party can carry (the grid on the EQUIP and SHOP
+-- screens is 7 x 5). BH's backpack holds 20.                          [tuned]
+M.INVENTORY_SIZE = 35
+
+function M.inventoryFull(saveData)
+    return #(saveData.inventory or {}) >= M.INVENTORY_SIZE
+end
+
+-- True if catalog item `bhId` exists and the game can apply its effect.
+function M.isSupported(bhId)
+    return supported(bh.ITEMS[bhId]) and true or false
+end
+
+-- ============================================================================
+-- SHOP STOCK  (BH: Database.populateMerchant — bh/systems/effects-database-pets-misc.md B.6)
+-- ============================================================================
+
+M.SHOP_SLOTS = 6   -- BH has 8 slots; the Director asked for about 6
+
+-- Loot tables whose level range contains `level` (the party's best hero).
+local function eligibleTables(level)
+    local out = {}
     for _, t in ipairs(bh.LOOT_TABLES) do
-        if level >= t.minLevel and level <= t.maxLevel then
-            for _, bhId in ipairs(t.items) do
-                if not seen[bhId] and supported(bh.ITEMS[bhId]) then
-                    seen[bhId] = true
-                    out[#out + 1] = bhId
-                end
-            end
-        end
+        if level >= t.minLevel and level <= t.maxLevel then out[#out + 1] = t end
     end
     return out
 end
 
--- Roll `count` distinct catalog ids for the shop (fewer if not enough exist).
-function M.rollOffers(level, count)
-    local pool = eligibleItems(level or 1)
+-- Roll the shop's stock: 3..SHOP_SLOTS catalog ids. Each is an independent
+-- draw - a random eligible table, then a random item of it - so duplicates can
+-- happen, exactly as in BH. Trinkets the game cannot apply yet are re-rolled.
+function M.rollOffers(level)
+    local tables = eligibleTables(level or 1)
     local offers = {}
-    for _ = 1, math.min(count or 3, #pool) do
-        offers[#offers + 1] = table.remove(pool, math.random(#pool))
+    if #tables == 0 then return offers end
+    for _ = 1, math.random(3, M.SHOP_SLOTS) do
+        for _ = 1, 20 do
+            local t = tables[math.random(#tables)]
+            local bhId = t.items[math.random(#t.items)]
+            if supported(bh.ITEMS[bhId]) then offers[#offers + 1] = bhId; break end
+        end
     end
     return offers
 end

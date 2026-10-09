@@ -12,6 +12,20 @@ Knight and a Cleric, 15 gold, and Battleheart's numbers throughout. Nine classes
 (knight, brigand, champion, duelist, nomad, cleric, paladin, wizard, rogue); one enemy type.
 
 ## Done on this branch (newest first)
+- **BH battles, rewards, shop, enemies, recolours (2026-10-09)**:
+  - *Enemies*: goblin (BH bat stats), bat (BH skeleton-archer stats: ranged, stands still,
+    random target each shot, fades in inside the arena), mushroom (BH ogre stats). The
+    skeleton keeps BH's goblin stats. `data/enemies.lua`.
+  - *Spawning*: BH's wave rules (`encounter/encounter_mgr.lua`) fed by a procedural generator
+    (`encounter/wave_gen.lua`). Battles get harder one by one (`progression.battleTier`).
+  - *Victory*: VICTORY -> SPOILS (gold, one item) -> EXPERIENCE (per-hero XP, bars, level-ups);
+    BH's loot roll and XP split incl. best-performer bonus (`encounter/victory.lua`,
+    `progression.onEncounterWon`). Gold no longer has the +1 per kill.
+  - *Shop*: up to 6 small slots (BH stock rule: 3-6 random items, duplicates possible), select
+    then BUY/SELL; the inventory panel is the same one as on EQUIP (`item_ui.drawInventory`).
+    Inventory holds 35 items.
+  - *Recolours*: `./recolor` shifts one colour of a sprite folder; Cleric / Paladin / Wizard /
+    Rogue are now recoloured Knight sheets instead of whole-sprite tints.
 - **Menu clean-up (2026-10-09)**: the description bars at the bottom of TALENTS, SHOP and EQUIP
   are gone; details now show in a hover tooltip (`common.drawTooltip`), as on the PARTY screen.
   The back arrow is the word BACK everywhere. All menu screens share one top bar
@@ -49,19 +63,34 @@ Everything above. In particular, choices the Lead made that the Director has not
 2. **Classes without a BH original borrow BH base stats**: champion ← Barbarian, duelist ←
    Monk, nomad ← Bard, brigand ← Rogue (`data/classes.lua`).
 3. **Hire rule**: the recruit joins one level below your best hero; cost 10 × (that level + 1).
-4. **Floor-1 battle pacing**: waves of at most 2 goblins, 12 kills to win. With attack
-   intervals now real, the test bot needs ~6.5 minutes with the starting pair — probably too long. Set in `screens/encounter.lua` (`waveMaxThreat`, `encounterGoal`).
+4. **Battle size and difficulty** come from the wave generator's first-guess numbers
+   (`TUNING` in `encounter/wave_gen.lua`): 5 waves, ~8-10 enemies in the first battle; the bat
+   appears from the 2nd battle of a floor, the mushroom from the 3rd.
 5. **Talent bonuses** keep their old sizes except HP, which was multiplied by 10 to match BH's
    ~1000-HP heroes (`data/talents.lua`).
 6. **Stagger** (knock-down) now triggers after a unit takes half its max HP (`encounter/stats.lua`).
 7. Old item instances in existing saves are dropped on load (they predate the BH catalog).
 8. **Spark of Inspiration (Nomad) is free** (0 bars, 15 s cooldown): it trades HP for
    resource, so a bar cost would cancel it out. Every other Knight/Nomad ability is 15 s / 3 bars.
+9. **Battle tier = how many encounters you have entered on the floor** (1st battle easiest).
+   It also picks the BH reward row, so later battles pay more gold / XP and drop better items.
+10. **The CR goblin walks in from the right edge** like the skeleton, although the BH bat whose
+    stats it has appears inside the arena; only the CR bat (ranged) appears inside.
+11. **Shop is select-then-BUY/SELL** (one button at the bottom of the left panel), and the
+    inventory is capped at 35 items (BH: 20); a won battle's item is lost if it is full (BH rule).
+12. **Recolour choices**: Cleric yellow, Paladin green, Wizard purple, Rogue dark red.
 
 Confirmed by the Director (2026-10-09): hero move speed 2.4 (`HERO_MOVE_SPEED`); Knight and
 Nomad abilities on the 15 s / 3 bar default.
 
 ## Director said (verbatim, newest first)
+- 2026-10-09: "Look in Battleheart for feature implementations like how enemies spawn and also
+  the victory screen which shows you getting 1 item and coins as well as experience for the
+  whole party" / "more things should be sold in the shop ... around 6 slots (not large boxes),
+  on the left, and your inventory on the right that looks the same as the equip screen" /
+  "Map BH bat stats to CR goblin, and BH skeleton archer to CR bat ... BH ogre stats to CR
+  mushroom" / "work on a procedural enemy spawning system" / "reusing sprites for characters
+  ... targeting a specific color and then shifting the color instead of a whole tint shift".
 - 2026-10-09: "Remove description text at the bottom of talents, shop, and equip and put it as
   hover text similar to the party screen when members are hovered" / "go through each screen
   (encounter looks fine) and fix text clipping issues / also make it so that the dimensions

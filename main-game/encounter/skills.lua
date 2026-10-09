@@ -61,6 +61,7 @@ function M.enqueue(world, battle, unitId, slot)
     -- Camera punch the instant a press is accepted; a second one fires when
     -- the ability actually goes off (M.system).
     combat.triggerActivationVFX(battle, unitId, world)
+    combat.addScore(battle, unitId, 20)
 
     -- QUEUE: push onto the per-unit ability queue (FIFO, press order).
     if not sk.abilityQueue then sk.abilityQueue = {} end
@@ -186,6 +187,7 @@ function M.autoAttackSystem(world)
         if world.deathState[et.id] then goto continue end
         local lk, sk = world.locks[id], world.skills[id]
         if not (lk and sk) then goto continue end
+        if world.spawnFade[id] then goto continue end   -- still appearing
 
         -- Don't queue auto if an active ability is being queued/executing.
         local aq = sk.abilityQueue

@@ -275,6 +275,14 @@ end
 --     ability  = { aimedShot, falloff, canCrit } — roll options (see M.roll)
 --     buffMods = { [idx] = fraction }      — extra outgoing-damage fractions
 --   useVFX: true = screen shake / zoom punch on the target
+-- Performance score per hero unit (BH `browniePoints`): the best scorers get
+-- bonus XP on the victory screen. +4 per damaging hit, +20 per kill, +5 per
+-- heal, +20 per ability used.
+function M.addScore(battle, unitId, points)
+    battle.score = battle.score or {}
+    battle.score[unitId] = (battle.score[unitId] or 0) + points
+end
+
 function M.registerHit(world, battle, srcId, tgtId, hit, useVFX)
     if not (world.entities[srcId] and world.entities[tgtId]) then return end
     hit = hit or {}
@@ -284,12 +292,15 @@ function M.registerHit(world, battle, srcId, tgtId, hit, useVFX)
     local dmg = M.resolve(world, tgtId, baseAmount, srcId, { buffMods = hit.buffMods })
 
     local ts = world.stats[tgtId]
+    local wasAlive = ts and ts.HP.base > 0
     if ts then ts.HP.base = math.max(0, ts.HP.base - dmg) end
 
     M.applyStagger(world, tgtId, dmg)
 
     local srcSide = world.side[srcId]
     if srcSide and srcSide.s == 0 then
+        -- Performance score: +4 a hit, +20 a kill (BH browniePoints).
+        M.addScore(battle, srcId, (wasAlive and ts.HP.base <= 0) and 24 or 4)
         local threatAmt = dmg * 0.5
         if world.hasThreateningPresence[srcId] then threatAmt = threatAmt * 2 end
         if world.threatMap[tgtId] then
@@ -366,6 +377,7 @@ function M.registerHeal(world, battle, srcId, tgtId, value)
     local amount = value * getPower(ss) * math.max(0.10, statGet(ss.BOOST))
     local maxHp  = statGet(ts.maxHP)
     ts.HP.base = math.min(maxHp, ts.HP.base + amount)
+    M.addScore(battle, srcId, 5)
     particles.spawnHeal(world, battle, tgtId, battle.SCALE)
     local ec = world.effects_comp[tgtId]
     if ec then table.insert(ec.pending, effects_mod.newHealIndicator(tgtId)) end

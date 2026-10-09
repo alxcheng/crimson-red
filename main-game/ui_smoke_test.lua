@@ -349,10 +349,16 @@ end
 -- ability keys, retarget with right-clicks, toggle pause, and run until the
 -- screen asks to leave (victory -> "map") or `maxSeconds` of game time pass.
 -- `level` (default 1) is every hero's level; heroes carry their starter gear.
-local function driveEncounter(tag, party, level)
+-- tier: which battle of the floor this is (1 = first; later ones are harder and
+-- bring in the bat and the mushroom).
+local function driveEncounter(tag, party, level, tier)
     local scr = require("screens/encounter")
     local sd = fixtureFresh()
     sd.partyOrder = party
+    sd.mapProgression = sd.mapProgression or {}
+    sd.mapProgression.clearedEncounters = {}
+    for i = 1, tier or 1 do sd.mapProgression.clearedEncounters[i] = { i, 1 } end
+    local inv0 = #sd.inventory
     local names = {}
     for _, name in ipairs(party) do
         if type(name) == "string" then names[#names + 1] = name end
@@ -369,10 +375,32 @@ local function driveEncounter(tag, party, level)
     if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { spawnDelay = 0.5 }) then return end
     local keys = { "q", "w", "e", "r" }
     local maxFrames, frame = 420 * 60, 0
+    local seenTypes, shotStage, result = {}, {}, nil
     while frame < maxFrames and not switched do
         frame = frame + 1
         mouseX, mouseY = math.random(300, VW - 40), math.random(120, VH - 60)
         guard(tag .. " update", scr.update, 1 / 60)
+        do
+            local world, battle = scr.debugState()
+            for id in pairs(world.entities) do
+                if world.side[id] and world.side[id].s == 1 and world.chaotic[id] then seenTypes.ranged = true end
+            end
+            -- Victory screens: let each stage show, screenshot it, then click through.
+            local v = battle.victory
+            if v then
+                result = v.result
+                local wait = ({ victory = 1.0, spoils = 2.0, xp = 3.5 })[v.stage]
+                if v.t >= wait and not shotStage[v.stage] then
+                    shotStage[v.stage] = true
+                    guard(tag .. " draw", scr.draw)
+                    screenshot(tag .. "-3-" .. v.stage)
+                    guard(tag .. " mousepressed", scr.mousepressed, 400, 225, 1)
+                elseif v.stage == "xp" and shotStage.xp then
+                    guard(tag .. " keypressed", scr.keypressed, "return")
+                end
+                goto nextFrame
+            end
+        end
         if frame % 30 == 0 then guard(tag .. " draw", scr.draw) end   -- drawing dominates the run time
         if frame % 20 == 0 then
             guard(tag .. " keypressed", scr.keypressed, keys[math.random(#keys)])
@@ -419,6 +447,7 @@ local function driveEncounter(tag, party, level)
             guard(tag .. " keypressed(space)", scr.keypressed, "space")
         end
         if frame == 200 then screenshot(tag .. "-1-fighting") end
+        ::nextFrame::
     end
     screenshot(tag .. "-2-end")
     do  -- how it ended, for the log
@@ -439,9 +468,88 @@ local function driveEncounter(tag, party, level)
         if rec.level > (level or 1) or rec.pointsToNextLevel < xp0[name] then leveled = true end
     end
     check(leveled, tag .. ": victory grants XP to survivors")
+    check(shotStage.victory and shotStage.spoils and shotStage.xp, tag .. ": the VICTORY, SPOILS and XP screens were all shown")
+    check(result ~= nil and result.loot ~= nil and #sd.inventory == inv0 + 1
+          and sd.items[sd.inventory[#sd.inventory]] == result.loot,
+          tag .. ": victory drops exactly one item into the inventory (" .. tostring(result and result.loot and result.loot.name) .. ")")
+    if (tier or 1) >= 2 then check(seenTypes.ranged, tag .. ": a ranged enemy (bat) appeared at tier " .. tier) end
 end
 
 -- Combat rules checked on a controlled duel: one knight, one unkillable goblin.
+-- The BH wave spawner (encounter/encounter_mgr.lua) and the wave generator.
+local function checkSpawner()
+    local tag = "spawner"
+    local scr = require("screens/encounter")
+    local enemies = require("data/enemies")
+    local sd = fixtureFresh()
+    switched = nil
+    local waves = {
+        { initialDelay = 1.0, spawnDelay = 0.5, maxEnemies = 2, enemies = { "skeleton", "goblin", "bat" } },
+        { initialDelay = 1.0, spawnDelay = 0.1, maxEnemies = 1, enemies = { "mushroom" } },
+    }
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { waves = waves }) then return end
+    local world, battle = scr.debugState()
+    mouseX, mouseY = -100, -100
+    local function step(seconds) for _ = 1, math.floor(seconds * 60 + 0.5) do guard(tag .. " update", scr.update, 1 / 60) end end
+    local function living()
+        local list = {}
+        for id in pairs(world.entities) do
+            if world.side[id].s == 1 and not world.deathState[id] then list[#list + 1] = id end
+        end
+        table.sort(list)
+        return list
+    end
+    -- Heroes must not interfere: make them harmless and unkillable.
+    for _, id in ipairs(battle.partyIds) do
+        world.stats[id].ATK.base, world.stats[id].HP.base, world.stats[id].maxHP.base = 0, 1e9, 1e9
+    end
+    step(0.9);  check(#living() == 0, tag .. ": nothing spawns before the wave's initialDelay")
+    step(0.2);  check(#living() == 1, tag .. ": the first enemy appears after initialDelay")
+    step(0.5);  check(#living() == 2, tag .. ": the next follows spawnDelay later")
+    step(3.0);  check(#living() == 2, tag .. ": never more than maxEnemies alive at once")
+    local first = living()[1]
+    world.stats[first].HP.base = 0
+    step(0.2)
+    check(#living() == 1, tag .. ": the spawn timer was frozen while the field was full (nothing right after a kill)")
+    step(0.5)
+    local l = living()
+    check(#l == 2, tag .. ": the next enemy appears once the rest of spawnDelay has passed")
+    local bat = l[#l]
+    local bp = world.position[bat]
+    check(world.isRanged[bat] and bp.x > 0 and bp.x < VW, tag .. ": the ranged enemy appears inside the arena (x=" .. math.floor(bp.x) .. ")")
+    local bx = bp.x
+    step(2.0)
+    guard(tag .. " draw", scr.draw); screenshot(tag .. "-1-goblin-and-bat")
+    check(math.abs(world.position[bat].x - bx) < 1, tag .. ": the ranged enemy stays where it appeared")
+    for _, id in ipairs(living()) do world.stats[id].HP.base = 0 end
+    step(0.9);  check(#living() == 0, tag .. ": the next wave waits for its own initialDelay")
+    step(0.9);  check(#living() == 1, tag .. ": the next wave starts once the last one is dead")
+    step(4.0)
+    guard(tag .. " draw", scr.draw); screenshot(tag .. "-2-mushroom")
+    check(battle.victory == nil and battle.victoryDelay == nil, tag .. ": no victory while a wave is still alive")
+    for _, id in ipairs(living()) do world.stats[id].HP.base = 0 end
+    step(2.5);  check(battle.victory ~= nil, tag .. ": the battle is won when the last wave is dead")
+    if scr.onExit then guard(tag .. " onExit", scr.onExit) end
+
+    -- The generator: BH-shaped waves, only enemies allowed at that tier.
+    local gen = require("encounter/wave_gen")
+    local ok = true
+    for tier = 1, 12 do
+        for _ = 1, 20 do
+            local w = gen.generate(tier)
+            if #w ~= gen.TUNING.waves or #w[1].enemies ~= 1 then ok = false end
+            for _, wave in ipairs(w) do
+                if #wave.enemies < 1 or wave.maxEnemies < 1 or wave.maxEnemies > gen.TUNING.maxOnField then ok = false end
+                for _, id in ipairs(wave.enemies) do
+                    local def = enemies.ENEMIES[id]
+                    if not def or (def.minTier or 1) > tier then ok = false end
+                end
+            end
+        end
+    end
+    check(ok, tag .. ": generated battles have " .. gen.TUNING.waves .. " waves, open with one enemy, and respect minTier")
+end
+
 local function checkCombatRules()
     local tag = "combat-rules"
     local abilities = require("encounter/abilities")
@@ -611,7 +719,7 @@ local function runAll()
     -- SHOP
     sd = fixtureRich()
     local gold0, inv0 = sd.gold, #sd.inventory
-    local exits = drive("shop-rich", "shop", sd, { hover = { {95, 200}, {420, 410}, {650, 250} } })
+    local exits = drive("shop-rich", "shop", sd, { hover = { {66, 150}, {350, 130}, {150, 80} } })
     invariants("shop-rich", sd)
     check(sd.shopState.seeded == true and sd.shopState.pendingRestock ~= true, "shop-rich: shop stocked on entry")
     check(sd.gold ~= gold0 or #sd.inventory ~= inv0, "shop-rich: fuzz bought or sold something (gold "
@@ -665,8 +773,28 @@ local function runAll()
     local r = progression.onEncounterWon(sd, { "knight" }, 3)
     check(sd.unlockedCharacters.knight.level > 1 and sd.unlockedCharacters.cleric.level == 1,
           "progression: only survivors get the win's XP")
-    check(sd.gold == 15 + r.gold and r.gold >= 23 + 3 and r.gold <= 31 + 3,
-          "progression: floor-1 win pays BH's 27 gold +/-15% plus 1 per kill (got " .. r.gold .. ")")
+    check(r.xp[1].gained == 175, "progression: a lone survivor gets 35 x 4 x 1.25 = 175 XP (got " .. r.xp[1].gained .. ")")
+    check(sd.gold == 15 + r.gold and r.gold >= 23 and r.gold <= 31,
+          "progression: the first battle pays BH's 27 gold +/-15% (got " .. r.gold .. ")")
+    check(r.loot ~= nil and #sd.inventory == 1 and sd.items[sd.inventory[1]] == r.loot,
+          "progression: a win drops exactly one item (" .. tostring(r.loot and r.loot.name) .. ")")
+    sd = fixtureFresh()
+    r = progression.onEncounterWon(sd, { "knight", "cleric" }, 3, { knight = 10, cleric = 50 })
+    check(r.xp[1].gained == 81 and r.xp[2].gained == 88,
+          "progression: 2 survivors get 35 x 2, the best scorer +25%, the other +16% (knight " ..
+          r.xp[1].gained .. ", cleric " .. r.xp[2].gained .. ")")
+    sd = fixtureFresh()
+    for i = 1, items.INVENTORY_SIZE do sd.inventory[i] = items.mint(sd, 0) end
+    r = progression.onEncounterWon(sd, { "knight" }, 3)
+    check(r.loot == nil and r.lootLost and #sd.inventory == items.INVENTORY_SIZE,
+          "progression: with a full inventory the dropped item is lost (BH rule)")
+    for level = 1, 30 do
+        local offers = items.rollOffers(level)
+        if #offers < 3 or #offers > items.SHOP_SLOTS then
+            check(false, "shop stock: 3.." .. items.SHOP_SLOTS .. " items at level " .. level .. " (got " .. #offers .. ")")
+        end
+    end
+    check(true, "shop stock: 3.." .. items.SHOP_SLOTS .. " items at every hero level")
     sd = fixtureFresh()
     local st = progression.heroStats(sd, "knight")
     check(st.maxHP == 1000 and st.ATK == 20 + 15 and st.DEF == 15 + 20,
@@ -684,13 +812,14 @@ local function runAll()
           "progression: a recruit joins with starter gear (" .. tostring(hireName) .. ")")
 
     checkCombatRules()
+    checkSpawner()
 
     -- ENCOUNTER (full battles through to the victory branch). These take minutes;
     -- `./test_ui quick` (CR_UI_QUICK=1) skips them for UI-only work.
     if os.getenv("CR_UI_QUICK") ~= "1" then
         driveEncounter("battle-new-game", { "knight", "cleric", false, false })       -- the fresh-save party, level 1
-        driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" }, 3)
-        driveEncounter("battle-cr-classes", { "knight", "champion", "duelist", "nomad" }, 3)
+        driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" }, 4, 3)
+        driveEncounter("battle-cr-classes", { "knight", "champion", "duelist", "nomad" }, 3, 2)
     end
 
     -- PARTY

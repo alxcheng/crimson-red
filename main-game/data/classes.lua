@@ -37,6 +37,7 @@ M.ANIM_SETS = {
     knight = { sprite = "Knight", list = {
         {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 7/60},
         {"Attack2", 13/60}, {"TakeHit", 6/60}, {"Death", 6/60} } },
+    -- cleric / paladin / wizard / rogue: the knight's set on their own sheets (added below).
     brigand = { sprite = "Brigand", list = {
         {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 7/60}, {"Death", 6/60} } },
     champion = { sprite = "Champion", list = {
@@ -48,7 +49,17 @@ M.ANIM_SETS = {
         {"Attack2", 7/60}, {"Death", 6/60} } },
     skeleton = { sprite = "Skeleton", list = {
         {"Idle", 8/60, true, true}, {"Move", 8/60, true}, {"Attack", 7/60}, {"Death", 6/60} } },
+    goblin = { sprite = "Goblin", list = {
+        {"Idle", 8/60, true, true}, {"Move", 6/60, true}, {"Attack", 7/60}, {"Death", 6/60} } },
+    bat = { sprite = "Bat", list = {
+        {"Idle", 6/60, true, true}, {"Move", 6/60, true}, {"Attack", 7/60}, {"Death", 6/60} } },
+    mushroom = { sprite = "Mushroom", list = {
+        {"Idle", 8/60, true, true}, {"Move", 8/60, true}, {"Attack", 7/60}, {"Death", 6/60} } },
 }
+
+for key, sprite in pairs({ cleric = "Cleric", paladin = "Paladin", wizard = "Wizard", rogue = "Rogue" }) do
+    M.ANIM_SETS[key] = { sprite = sprite, list = M.ANIM_SETS.knight.list }
+end
 
 -- Every hero walks at the same speed (MOVE_SPEED units; x30 = pixels/second).
 -- 2.4 = 80% of 3.0, which is BH's standard hero speed (1.5 world units/s) at
@@ -98,9 +109,10 @@ M.CLASSES = {
     },
 
     -- ---- Ported from Battleheart (see bh/README.md) ------------------------
-    -- These four reuse the Knight sprite with a tint until they get their own art.
+    -- These four use recoloured copies of the Knight sheets (made with ./recolor: only
+    -- the blue clothes are shifted to another colour; see RECOLOURS in data/sprites.lua).
     cleric = {   -- BH Cleric (Lucille): healer, no attack; default action is a heal
-        name = "Cleric", size = {29.43, 38.97}, anims = "knight", tint = {1, 0.85, 0.2},
+        name = "Cleric", size = {29.43, 38.97}, anims = "cleric",
         base  = {hp = 1000, power = 65, defense = 4, crit = 0},   -- BH Cleric (Lucille)
         scale = {power = 3.0, defense = 1.0, hp = 15},
         starterGear = {2, 6},
@@ -109,7 +121,7 @@ M.CLASSES = {
         actives = { "ClericGroupHeal", "ClericShield", "ClericPowerInfusion", "ClericVengefulAngel" },
     },
     paladin = {  -- BH Paladin (Heleth): tank / off-healer
-        name = "Paladin", size = {30, 40}, anims = "knight", tint = {0.4, 1, 0.4},
+        name = "Paladin", size = {30, 40}, anims = "paladin",
         base  = {hp = 1000, power = 19, defense = 18, crit = 0},   -- BH Paladin (Heleth)
         scale = {power = 1.0, defense = 1.2, hp = 15},
         starterGear = {0, 4},
@@ -118,7 +130,7 @@ M.CLASSES = {
         actives = { "PaladinHolyWord", "PaladinDivineIntervention", "PaladinAuraOfLight", "PaladinWrath" },
     },
     wizard = {   -- BH Wizard (Bromswell): ranged damage + crowd control
-        name = "Wizard", size = {29.43, 38.97}, anims = "knight", tint = {1, 0.5, 0.9},
+        name = "Wizard", size = {29.43, 38.97}, anims = "wizard",
         base  = {hp = 1000, power = 33, defense = 0, crit = 0},   -- BH Wizard (Bromswell)
         scale = {power = 1.0, defense = 1.0, hp = 15},
         starterGear = {3, 6},
@@ -127,7 +139,7 @@ M.CLASSES = {
         actives = { "WizardMeteor", "WizardBlizzard", "WizardTimeStop", "WizardConflagrate" },
     },
     rogue = {    -- BH Rogue (Gustav): fast melee burst
-        name = "Rogue", size = {30, 40}, anims = "knight", tint = {0.63, 0.09, 0.14},
+        name = "Rogue", size = {30, 40}, anims = "rogue",
         base  = {hp = 1000, power = 26, defense = 8, crit = 0.20},   -- BH Rogue (Gustav)
         scale = {power = 1.0, defense = 1.0, hp = 15},
         starterGear = {1, 5},

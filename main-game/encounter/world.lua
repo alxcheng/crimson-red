@@ -34,7 +34,8 @@ function M.new()
         hasThreateningPresence = {},  -- true = generates double threat
         isRanged     = {},   -- true = acts from range, never walks into melee
         slots        = {},   -- [targetId] = {[slotIndex] = attackerId} melee standing spots
-        dangerLevel  = {},   -- enemies only: danger budget value
+        chaotic      = {},   -- enemies only: true = re-picks a random hero before each attack
+        spawnFade    = {},   -- 0..1 fade-in of a unit that appeared inside the arena (nil = done)
 
         -- Combat state
         stats        = {},   -- stat table (encounter/stats.lua)

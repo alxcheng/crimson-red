@@ -129,10 +129,6 @@ local function buildBattle()
         resourcePops = {},
         getIconImage = function() return nil end,
     }
-    -- encounterMgr: systems.death clears defeated enemies' danger here; provide
-    -- a minimal one so that branch runs (the live game's enc_mgr is not
-    -- exercised in this test).
-    battle.encounterMgr = {currentDanger = 0, dangerDefeated = 0}
 end
 
 -- Instrument combat.registerHit / registerHeal exactly once (no module edit):

@@ -84,7 +84,12 @@ function M.createEnemy(world, battle, enemyId, x, y)
     local id = world:new()
     addBaseComponents(world, id, def, x, y, battle.SCALE, SIDE_ENEMY, st)
     world.threatMap[id]   = {map = {}, decayTimer = 0}
-    world.dangerLevel[id] = def.danger
+    if def.chaotic then world.chaotic[id] = true end
+    if def.spawn == "inside" then
+        -- Appears inside the arena: already "entered", and fades in from black (BH style 3).
+        world.hasEntered[id] = {h = true, v = true}
+        world.spawnFade[id]  = 0
+    end
 
     -- Start by going after a random hero.
     if #battle.partyIds > 0 then

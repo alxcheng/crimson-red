@@ -425,7 +425,8 @@ function M.physics(world, dt, VW, VH, BATTLE_LINE_Y, FRICTION, MASS)
                 end
             elseif sd and sd.s == 1 then
                 local he = world.hasEntered[id]
-                if he and not he.h and pos.x <= VW - sz.w/2 then he.h = true end
+                -- (enemies walk in from either edge)
+                if he and not he.h and pos.x >= sz.w/2 and pos.x <= VW - sz.w/2 then he.h = true end
                 if he and he.h then
                     pos.x = math.max(sz.w/2, math.min(VW - sz.w/2, pos.x))
                 end
@@ -550,6 +551,20 @@ function M.threat(world, battle, dt)
     for id in pairs(world.entities) do
         local sd = world.side[id]; if not (sd and sd.s == 1) then goto continue end
         local tm = world.threatMap[id]; if not tm then goto continue end
+        if world.chaotic[id] then
+            -- BH `chaotic`: ignores threat; a new random hero each time its attack is ready.
+            local sk, et = world.skills[id], world.entityTarget[id]
+            local ready  = sk and sk.list[0] and sk.list[0].cd <= 0 and not hasActiveAction(world, id)
+            local lost   = not et or not world.entities[et.id] or world.deathState[et.id]
+            if ready or lost then
+                local alive = {}
+                for _, pid in ipairs(battle.partyIds) do
+                    if not world.deathState[pid] then alive[#alive + 1] = pid end
+                end
+                if #alive > 0 then world.entityTarget[id] = {id = alive[math.random(#alive)]} end
+            end
+            goto continue
+        end
         tm.decayTimer = tm.decayTimer + dt
         if tm.decayTimer >= 1.0 then
             tm.decayTimer = 0
@@ -622,14 +637,8 @@ function M.death(world, battle, dt)
                     end
                 end
             elseif side and side.s == 1 then
-                -- Per-enemy kill counter (per-kill gold drip).
+                -- Kill counter (shown on the victory screen).
                 battle.enemyDefeated = (battle.enemyDefeated or 0) + 1
-                local mgr = battle.encounterMgr
-                if mgr then
-                    local dl = world.dangerLevel[id] or 0
-                    mgr.currentDanger  = math.max(0, mgr.currentDanger - dl)
-                    mgr.dangerDefeated = mgr.dangerDefeated + dl
-                end
             end
         elseif ds.phase == "dying" then
             ds.timer = ds.timer - dt

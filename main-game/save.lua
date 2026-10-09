@@ -12,7 +12,8 @@
 --   } },
 --   items       = { [instanceId] = instance },   -- every owned item (items.lua)
 --   inventory   = { instanceId, ... },           -- carried, unequipped items
---   shopState   = { offers = {instanceId..}, hireOffer = name|nil, seeded, pendingRestock },
+--   shopState   = { offers = { instanceId | false (sold), ... },   -- one entry per shop slot
+--                   hireOffer = name|nil, seeded, pendingRestock },
 --   mapProgression = { playerCol, playerRow, revealedTiles, clearedEncounters },
 -- }
 -- Stats are NOT saved; progression.heroStats derives them.
@@ -76,8 +77,8 @@ local function migrate(data)
         end
     end
     local offers = {}
-    for _, id in ipairs(data.shopState.offers or {}) do
-        if data.items[id] then offers[#offers + 1] = id end
+    for i, id in ipairs(data.shopState.offers or {}) do
+        offers[i] = (id and data.items[id]) and id or false   -- false = that slot was sold
     end
     data.shopState.offers = offers
     return data

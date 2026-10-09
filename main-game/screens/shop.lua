@@ -1,17 +1,21 @@
 -- screens/shop.lua — SHOP screen (BH's "Merchant" + "Tavern").
 --
--- Two tabs:
---   GEAR: 3 items for sale (shopState.offers) with BUY buttons, plus a SELL
---         list of the party's carried (unequipped) items. Buy at the item's
---         value, sell for half (BH rule). Stock comes from items.rollOffers.
---         Hovering a card or a sell row shows the item's details in a tooltip.
+-- Left panel, two tabs:
+--   GEAR: up to items.SHOP_SLOTS items for sale (shopState.offers), as small
+--         slots. Click one to select it, then BUY (at the bottom of the panel).
 --   HIRE: one hero for hire (shopState.hireOffer). Hiring pays
 --         progression.hireCost, recruits the hero with starter gear, and puts
 --         them in the first free party slot (or leaves them in reserve).
+-- Right panel: the party's inventory, the same panel as on the EQUIP screen
+-- (item_ui.drawInventory). Click an item to select it, then SELL.
+--
+-- Rules (BH): buy at the item's value, sell for half; a bought slot stays empty
+-- until the shop restocks; no buying with a full inventory; equipped items
+-- cannot be sold here. Hovering any item shows its details in a tooltip.
 --
 -- Restock: on entry, if the shop was never stocked or a battle was won since
--- (shopState.pendingRestock), the 3 offers and the hire are re-rolled.
--- Re-entering without a new win does not reshuffle.
+-- (shopState.pendingRestock), the stock and the hire are re-rolled
+-- (items.rollOffers). Re-entering without a new win does not reshuffle.
 --
 -- On exit the save is written and the game returns to the map.
 
@@ -26,50 +30,46 @@ local VW = common.VW
 local VH = common.VH
 
 -- ============================================================================
--- LAYOUT (800x450 virtual px)
+-- LAYOUT (800x450 virtual px) — the left panel mirrors the EQUIP screen's
 -- ============================================================================
 
 local TOP_BAR_H = common.TOP_BAR_H
-local MARGIN    = 20                         -- gap between the content and the screen edges
+local MARGIN    = 20
 local BOX_PAD   = common.BOX_PAD
+local PAD       = 14                         -- padding inside the panel
 
--- Tab switcher (below the top bar)
-local TAB_Y   = TOP_BAR_H + 12
-local TAB_H   = 26
-local TAB_W   = 110
-local TAB1_X  = MARGIN                       -- GEAR
-local TAB2_X  = TAB1_X + TAB_W + 12          -- HIRE
+local PANEL_X   = MARGIN
+local PANEL_Y   = TOP_BAR_H + 12
+local PANEL_W   = 270
+local PANEL_H   = VH - MARGIN - PANEL_Y
+local INNER_W   = PANEL_W - PAD * 2
 
-local CONTENT_Y = TAB_Y + TAB_H + 14         -- everything under the tabs
-local CONTENT_H = VH - MARGIN - CONTENT_Y
+-- Tabs across the top of the panel
+local TAB_GAP   = 10
+local TAB_W     = math.floor((INNER_W - TAB_GAP) / 2)
+local TAB_H     = 28
+local TAB_Y     = PANEL_Y + PAD
+local DIVIDER_Y = TAB_Y + TAB_H + 12
 
--- GEAR tab: 3 offer cards on the left
-local OFFER_X     = MARGIN
-local OFFER_Y     = CONTENT_Y
-local OFFER_W     = 150
-local OFFER_H     = CONTENT_H
-local OFFER_GAP   = 12
-local OFFER_BTN_H = 34
-local OFFER_BTN_Y = OFFER_Y + OFFER_H - OFFER_BTN_H - 8
+-- GEAR tab: 3 x 2 slots, each with its price underneath
+local SLOT_COLS  = 3
+local SLOT_SIZE  = 64                         -- same cell size as the inventory grid
+local SLOT_GAP_X = math.floor((INNER_W - SLOT_COLS * SLOT_SIZE) / (SLOT_COLS - 1))
+local SLOT_ROW_H = SLOT_SIZE + 24             -- cell + price line
+local SLOT_Y0    = DIVIDER_Y + 14
 
--- GEAR tab: SELL list filling the rest of the row
-local SELL_X      = OFFER_X + 3 * OFFER_W + 2 * OFFER_GAP + 16
-local SELL_Y      = OFFER_Y
-local SELL_W      = VW - MARGIN - SELL_X
-local SELL_H      = OFFER_H
-local SELL_HEAD_H = 30                       -- "SELL" caption band
-local SELL_ROW_H  = 30
-local SELL_ROWS   = math.floor((SELL_H - SELL_HEAD_H - 24) / SELL_ROW_H)   -- rows shown; 24 px left for "+N more"
+-- Action button (BUY / SELL / HIRE) at the bottom of the panel; the selected
+-- item's name sits just above it.
+local BTN_H     = 36
+local BTN_X     = PANEL_X + PAD
+local BTN_W     = INNER_W
+local BTN_Y     = PANEL_Y + PANEL_H - PAD - BTN_H
+local DETAIL_Y  = BTN_Y - 46
 
--- HIRE tab: one recruit card centred in the content area
-local HIRE_W      = 360
-local HIRE_H      = 200
-local HIRE_X      = math.floor((VW - HIRE_W) / 2)
-local HIRE_Y      = CONTENT_Y + math.floor((CONTENT_H - HIRE_H) / 2)
-local HIRE_BTN_H  = 40
-local HIRE_BTN_Y  = HIRE_Y + HIRE_H - HIRE_BTN_H - 14
-
-local PARTS_SIZE = 56   -- recruit portrait
+-- HIRE tab: recruit portrait
+local PORTRAIT_SIZE = 96
+local PORTRAIT_X    = PANEL_X + PAD
+local PORTRAIT_Y    = DIVIDER_Y + 14
 
 -- ============================================================================
 -- MODULE STATE
@@ -78,19 +78,14 @@ local PARTS_SIZE = 56   -- recruit portrait
 local canvas_ref, postfx_ref, switchFn
 local saveData_ref, slot_ref
 
-local tab            = "gear"   -- "gear" | "hire"
-local hoveredTab     = nil      -- "gear" | "hire"
-local hoveredBack    = false
-local hoveredBuy     = nil      -- 1..3 offer index whose BUY button is hovered (GEAR)
-local hoveredCard    = nil      -- 1..3 offer index whose card is hovered (tooltip)
-local hoveredHireCard = false   -- recruit card hovered (tooltip)
-local hoveredSell    = nil      -- 1..N owned-item index (GEAR)
-local hoveredHire    = false    -- HIRE button (HIRE tab)
-local pressedItem    = nil      -- {zone=...} while mouse is down
-local box            = common.newBox()
+local tab          = "gear"   -- "gear" | "hire"
+local selected     = nil      -- { kind = "offer", idx = n } | { kind = "inv", id = instanceId }
+local hover        = {}       -- what the mouse is over this frame (see detectHover)
+local pressedItem  = nil      -- copy of `hover` taken at mouse-down
+local box          = common.newBox()
+local recruitIcon  = { name = nil, img = nil }   -- cached portrait of the hero for hire
 
-local assetsLoaded = false
-local font16, font14
+local font16, font14, font13
 
 -- ============================================================================
 -- DATA HELPERS
@@ -98,19 +93,9 @@ local font16, font14
 
 local function getShopState()
     local sd = saveData_ref
-    sd.shopState = sd.shopState or {
-        offers    = {},
-        hireOffer = nil,
-        seeded    = false,
-    }
-    local ss = sd.shopState
-    ss.offers = ss.offers or {}
-    return ss
-end
-
-local function getItemsTable()
-    saveData_ref.items = saveData_ref.items or {}
-    return saveData_ref.items
+    sd.shopState = sd.shopState or { offers = {}, hireOffer = nil, seeded = false }
+    sd.shopState.offers = sd.shopState.offers or {}
+    return sd.shopState
 end
 
 local function getInventory()
@@ -118,34 +103,12 @@ local function getInventory()
     return saveData_ref.inventory
 end
 
-local function goldValue()
-    return saveData_ref.gold or 0
+local function itemOf(id)
+    local inst = id and saveData_ref.items and saveData_ref.items[id]
+    return type(inst) == "table" and inst or nil
 end
 
--- Remove an item id from the offers array. Returns true if removed.
-local function removeFromOffers(id)
-    local offers = getShopState().offers
-    for i, v in ipairs(offers) do
-        if v == id then
-            table.remove(offers, i)
-            return true
-        end
-    end
-    return false
-end
-
--- Remove an item id from the inventory array. Returns true if removed.
-local function removeFromInventory(id)
-    if not id then return false end
-    local inv = getInventory()
-    for i, v in ipairs(inv) do
-        if v == id then
-            table.remove(inv, i)
-            return true
-        end
-    end
-    return false
-end
+local function goldValue() return saveData_ref.gold or 0 end
 
 -- Lowest-index empty party slot (1..4), or nil if full.
 local function firstFreePartySlot()
@@ -156,23 +119,33 @@ local function firstFreePartySlot()
     return nil
 end
 
+-- The selected thing as an item instance (nil if the selection went stale).
+local function selectedItem()
+    if not selected then return nil end
+    if selected.kind == "offer" then return itemOf(getShopState().offers[selected.idx]) end
+    for _, id in ipairs(getInventory()) do
+        if id == selected.id then return itemOf(id) end
+    end
+    return nil
+end
+
 -- ============================================================================
 -- RESTOCK
 -- ============================================================================
 
-local OFFER_COUNT = 3
-
+-- shopState.offers is a FIXED-POSITION list: offers[i] is the instance id in
+-- slot i, or false once it has been bought.
 local function restockIfNeeded()
     local sd = saveData_ref
     local ss = getShopState()
     if ss.seeded and not ss.pendingRestock then return end
 
     -- Unsold offers from the previous stock are discarded with it.
-    for _, oldId in ipairs(ss.offers or {}) do
-        sd.items[oldId] = nil
+    for _, oldId in ipairs(ss.offers) do
+        if oldId then sd.items[oldId] = nil end
     end
     ss.offers = {}
-    for _, bhId in ipairs(items.rollOffers(progression.highestLevel(sd), OFFER_COUNT)) do
+    for _, bhId in ipairs(items.rollOffers(progression.highestLevel(sd))) do
         ss.offers[#ss.offers + 1] = items.mint(sd, bhId)
     end
     ss.hireOffer      = progression.rollHire(sd)
@@ -181,72 +154,79 @@ local function restockIfNeeded()
 end
 
 -- ============================================================================
--- TRANSACTIONS (all gold via the items API)
+-- TRANSACTIONS (all gold goes through the items API)
 -- ============================================================================
 
-local flash = { text = nil, t = 0 }   -- transient "not enough gold" state
+local flash = { text = nil, t = 0 }   -- transient message ("NOT ENOUGH GOLD")
 
 local function setFlash(text)
-    flash.text, flash.t = text, 1.2
+    flash.text, flash.t = text, 1.4
 end
 
--- BUY an offer (GEAR tab): cost = the item's VALUE.
--- Value = 2 * sellPrice (sellPrice is 50% of value per contract).
--- On success: spend gold, move the id out of offers into inventory.
--- On failure: flash "not enough gold" (no purchase).
-local function buyOffer(idx)
-    local ss = getShopState()
+-- BUY the selected offer: pay its value, move it to the inventory, leave the slot empty.
+local function buySelected()
+    local ss, idx = getShopState(), selected.idx
     local id = ss.offers[idx]
-    if not id then return end
-    local inst = getItemsTable()[id]
-    if type(inst) ~= "table" then return end
-
-    if items.spendGold(saveData_ref, items.buyPrice(inst)) then
-        removeFromOffers(id)
-        getInventory()[#getInventory() + 1] = id
-        -- Item instance stays in saveData.items (now owned by the party).
-        common.playClickSound()
-    else
-        setFlash("NOT ENOUGH GOLD")
-    end
-end
-
--- SELL an owned item (GEAR tab): pays sellValue(inst) = 50% of value.
--- On success: add gold, remove the id from inventory AND from items.
-local function sellOwned(idx)
-    local id = getInventory()[idx]
-    if not id then return end
-    local inst = getItemsTable()[id]
-    if type(inst) ~= "table" then
-        -- Stale id: drop it from the list, no gold.
-        removeFromInventory(id)
-        return
-    end
-
-    local pay = items.sellValue(inst)
-    if pay < 0 then pay = 0 end
-    items.addGold(saveData_ref, pay)
-    removeFromInventory(id)
-    getItemsTable()[id] = nil   -- item no longer owned
+    local inst = itemOf(id)
+    if not inst then return end
+    if items.inventoryFull(saveData_ref) then setFlash("INVENTORY FULL"); return end
+    if not items.spendGold(saveData_ref, items.buyPrice(inst)) then setFlash("NOT ENOUGH GOLD"); return end
+    ss.offers[idx] = false
+    getInventory()[#getInventory() + 1] = id
+    selected = nil
     common.playClickSound()
 end
 
--- HIRE the offered hero: pay the cost, recruit them (level + starter gear),
--- and put them in the first free party slot. With a full party they go to
--- the reserves and can be swapped in on the PARTY screen.
+-- SELL the selected inventory item for half its value; it leaves the save.
+local function sellSelected()
+    local inst = selectedItem()
+    if not inst then return end
+    local inv = getInventory()
+    for i, id in ipairs(inv) do
+        if id == selected.id then
+            table.remove(inv, i)
+            items.addGold(saveData_ref, math.max(0, items.sellValue(inst)))
+            saveData_ref.items[id] = nil
+            break
+        end
+    end
+    selected = nil
+    common.playClickSound()
+end
+
+-- HIRE the offered hero: pay, recruit (level + starter gear), first free party
+-- slot — or the reserves when the party is full.
 local function hire()
     local ss = getShopState()
     local name = ss.hireOffer
     if not name then return end
-    if items.spendGold(saveData_ref, progression.hireCost(saveData_ref)) then
-        progression.recruit(saveData_ref, name)
-        local slot = firstFreePartySlot()
-        if slot then saveData_ref.partyOrder[slot] = name end
-        ss.hireOffer = nil
-        common.playClickSound()
-    else
+    if not items.spendGold(saveData_ref, progression.hireCost(saveData_ref)) then
         setFlash("NOT ENOUGH GOLD")
+        return
     end
+    progression.recruit(saveData_ref, name)
+    local slot = firstFreePartySlot()
+    if slot then saveData_ref.partyOrder[slot] = name end
+    ss.hireOffer = nil
+    common.playClickSound()
+end
+
+-- What the action button does right now: nil (hidden) or
+-- { verb = "BUY"|"SELL"|"HIRE", price = n, enabled = bool, run = fn }.
+local function currentAction()
+    if tab == "hire" then
+        if not getShopState().hireOffer then return nil end
+        local cost = progression.hireCost(saveData_ref)
+        return { verb = "HIRE", price = cost, enabled = goldValue() >= cost, run = hire }
+    end
+    local inst = selectedItem()
+    if not inst then return nil end
+    if selected.kind == "offer" then
+        local price = items.buyPrice(inst)
+        return { verb = "BUY", price = price, run = buySelected,
+                 enabled = goldValue() >= price and not items.inventoryFull(saveData_ref) }
+    end
+    return { verb = "SELL", price = items.sellValue(inst), enabled = true, run = sellSelected }
 end
 
 -- ============================================================================
@@ -254,86 +234,59 @@ end
 -- ============================================================================
 
 local function tabRect(which)
-    if which == "hire" then return TAB2_X, TAB_Y, TAB_W, TAB_H end
-    return TAB1_X, TAB_Y, TAB_W, TAB_H
+    local x = PANEL_X + PAD + ((which == "hire") and (TAB_W + TAB_GAP) or 0)
+    return x, TAB_Y, TAB_W, TAB_H
 end
 
-local function offerCardRect(idx)
-    return OFFER_X + (idx - 1) * (OFFER_W + OFFER_GAP), OFFER_Y, OFFER_W, OFFER_H
+local function offerSlotRect(idx)
+    local col = (idx - 1) % SLOT_COLS
+    local row = math.floor((idx - 1) / SLOT_COLS)
+    return PANEL_X + PAD + col * (SLOT_SIZE + SLOT_GAP_X), SLOT_Y0 + row * SLOT_ROW_H, SLOT_SIZE, SLOT_SIZE
 end
 
-local function offerBuyRect(idx)
-    local cx = OFFER_X + (idx - 1) * (OFFER_W + OFFER_GAP)
-    return cx + 8, OFFER_BTN_Y, OFFER_W - 16, OFFER_BTN_H
-end
-
-local function sellRowRect(idx)
-    return SELL_X, SELL_Y + SELL_HEAD_H + (idx - 1) * SELL_ROW_H, SELL_W, SELL_ROW_H
-end
-
-local function hireBtnRect()
-    return HIRE_X + 24, HIRE_BTN_Y, HIRE_W - 48, HIRE_BTN_H
+local function inside(px, py, x, y, w, h)
+    return px >= x and px < x + w and py >= y and py < y + h
 end
 
 -- ============================================================================
 -- HIT TESTING
 -- ============================================================================
 
+-- Fills `hover` = { zone = "back"|"tab"|"offer"|"inv"|"button"|"recruit", ... } and
+-- returns the rectangle the red box should surround (or nil).
 local function detectHover(vmx, vmy)
-    hoveredBack    = false
-    hoveredTab     = nil
-    hoveredBuy     = nil
-    hoveredSell    = nil
-    hoveredHire    = false
-    hoveredCard    = nil
-    hoveredHireCard = false
-
+    hover = {}
     if common.overBack(vmx, vmy) then
-        hoveredBack = true
-        return "back"
+        hover.zone = "back"
+        return common.backBoxRect()
     end
-
-    local t1x, t1y, t1w, t1h = tabRect("gear")
-    if vmx >= t1x and vmx < t1x + t1w and vmy >= t1y and vmy < t1y + t1h then
-        hoveredTab = "gear"
-        return "tab"
+    for _, which in ipairs({ "gear", "hire" }) do
+        local x, y, w, h = tabRect(which)
+        if inside(vmx, vmy, x, y, w, h) then
+            hover.zone, hover.tab = "tab", which
+            return x - BOX_PAD, y - BOX_PAD, w + BOX_PAD * 2, h + BOX_PAD * 2
+        end
     end
-    local t2x, t2y, t2w, t2h = tabRect("hire")
-    if vmx >= t2x and vmx < t2x + t2w and vmy >= t2y and vmy < t2y + t2h then
-        hoveredTab = "hire"
-        return "tab"
+    if currentAction() and inside(vmx, vmy, BTN_X, BTN_Y, BTN_W, BTN_H) then
+        hover.zone = "button"
+        return BTN_X - BOX_PAD, BTN_Y - BOX_PAD, BTN_W + BOX_PAD * 2, BTN_H + BOX_PAD * 2
     end
-
     if tab == "gear" then
-        for i = 1, 3 do
-            local cx, cy, cw, ch = offerCardRect(i)
-            if getShopState().offers[i] and vmx >= cx and vmx < cx + cw and vmy >= cy and vmy < cy + ch then
-                hoveredCard = i
-            end
-            local bx, by, bw, bh = offerBuyRect(i)
-            if getShopState().offers[i] and vmx >= bx and vmx < bx + bw and vmy >= by and vmy < by + bh then
-                hoveredBuy = i
-                return "buy"
+        for i = 1, items.SHOP_SLOTS do
+            local x, y, w, h = offerSlotRect(i)
+            if getShopState().offers[i] and inside(vmx, vmy, x, y, w, h) then
+                hover.zone, hover.idx = "offer", i
+                return x, y, w, h
             end
         end
-        for i = 1, #getInventory() do
-            if i > SELL_ROWS then break end
-            local sx, sy, sw, sh = sellRowRect(i)
-            if vmx >= sx and vmx < sx + sw and vmy >= sy and vmy < sy + sh then
-                hoveredSell = i
-                return "sell"
-            end
+        local invIdx = item_ui.invIndexAt(vmx, vmy, saveData_ref)
+        if invIdx then
+            hover.zone, hover.idx, hover.id = "inv", invIdx, getInventory()[invIdx]
+            return item_ui.invCellRect(invIdx)
         end
-        return nil
-    end
-
-    -- HIRE tab
-    hoveredHireCard = getShopState().hireOffer ~= nil
-        and vmx >= HIRE_X and vmx < HIRE_X + HIRE_W and vmy >= HIRE_Y and vmy < HIRE_Y + HIRE_H
-    local hx, hy, hw, hh = hireBtnRect()
-    if getShopState().hireOffer and vmx >= hx and vmx < hx + hw and vmy >= hy and vmy < hy + hh then
-        hoveredHire = true
-        return "hire"
+    elseif getShopState().hireOffer
+       and inside(vmx, vmy, PORTRAIT_X, PORTRAIT_Y, INNER_W, PORTRAIT_SIZE) then
+        hover.zone = "recruit"
     end
     return nil
 end
@@ -363,113 +316,59 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
 
     postfx_ref.chromasep.radius = common.CHROMA_RADIUS
 
-    if not assetsLoaded then
-        assetsLoaded = true
-        font16    = common.loadFont(16)
-        font14    = common.loadFont(14)
-    end
+    font16 = common.loadFont(16)
+    font14 = common.loadFont(14)
+    font13 = common.loadFont(13)
 
-    -- Restock if a battle was won since the last visit.
     restockIfNeeded()
 
-    tab           = "gear"
-    hoveredTab    = nil
-    hoveredBack   = false
-    hoveredBuy    = nil
-    hoveredSell   = nil
-    hoveredHire   = false
-    pressedItem   = nil
-    flash.text    = nil
-    flash.t       = 0
+    tab         = "gear"
+    selected    = nil
+    hover       = {}
+    pressedItem = nil
+    flash.text, flash.t = nil, 0
 
-    -- Snap the red box to the first tab.
     local tx, ty, tw, th = tabRect("gear")
     common.initBox(box, tx - BOX_PAD, ty - BOX_PAD, tw + BOX_PAD * 2, th + BOX_PAD * 2)
 end
 
 function M.update(dt)
-    local vmx, vmy = common.virtualMouse()
-    local zone = detectHover(vmx, vmy)
-
-    if zone == "back" then
-        common.setBoxTarget(box, common.backBoxRect())
-    elseif zone == "tab" then
-        local tx, ty, tw, th = tabRect(hoveredTab)
-        common.setBoxTarget(box, tx - BOX_PAD, ty - BOX_PAD, tw + BOX_PAD * 2, th + BOX_PAD * 2)
-    elseif zone == "buy" then
-        local bx, by, bw, bh = offerBuyRect(hoveredBuy)
-        common.setBoxTarget(box, bx - BOX_PAD, by - BOX_PAD, bw + BOX_PAD * 2, bh + BOX_PAD * 2)
-    elseif zone == "sell" then
-        local sx, sy, sw2, sh = sellRowRect(hoveredSell)
-        common.setBoxTarget(box, sx - BOX_PAD, sy - BOX_PAD, sw2 + BOX_PAD * 2, sh + BOX_PAD * 2)
-    elseif zone == "hire" then
-        local hx, hy, hw, hh = hireBtnRect()
-        common.setBoxTarget(box, hx - BOX_PAD, hy - BOX_PAD, hw + BOX_PAD * 2, hh + BOX_PAD * 2)
-    end
-
+    local x, y, w, h = detectHover(common.virtualMouse())
+    if x then common.setBoxTarget(box, x, y, w, h) end
     common.updateBox(box, dt)
-
-    -- Decay the transient "not enough gold" flash.
-    if flash.t > 0 then
-        flash.t = flash.t - dt
-        if flash.t < 0 then flash.t = 0 end
-    end
+    if flash.t > 0 then flash.t = math.max(0, flash.t - dt) end
 end
 
 function M.mousepressed(x, y, button)
     if button ~= 1 then return end
-    local zone = detectHover(common.virtualMouse())
-    if zone then
-        pressedItem = {
-            zone = zone,
-            tab  = hoveredTab,
-            buy  = hoveredBuy,
-            sell = hoveredSell,
-            hire = hoveredHire,
-            back = hoveredBack,
-        }
-    end
+    detectHover(common.virtualMouse())
+    pressedItem = hover.zone and hover or nil
 end
 
 function M.mousereleased(x, y, button)
-    if button ~= 1 then return end
-    if not pressedItem then return end
+    if button ~= 1 or not pressedItem then return end
     local p = pressedItem
     pressedItem = nil
+    detectHover(common.virtualMouse())
+    if hover.zone ~= p.zone then return end          -- dragged off: no click
 
-    if p.back then
-        if hoveredBack then
-            common.playClickSound()
-            exit()
-        end
-        return
-    end
-
-    if p.zone == "tab" then
-        if hoveredTab then
-            tab = hoveredTab
-            local tx, ty, tw, th = tabRect(hoveredTab)
-            common.initBox(box, tx - BOX_PAD, ty - BOX_PAD, tw + BOX_PAD * 2, th + BOX_PAD * 2)
-            common.playClickSound()
-        end
-        return
-    end
-
-    if tab == "gear" then
-        if p.zone == "buy" and p.buy then
-            if hoveredBuy == p.buy then buyOffer(p.buy) end
-            return
-        end
-        if p.zone == "sell" and p.sell then
-            if hoveredSell == p.sell then sellOwned(p.sell) end
-            return
-        end
-        return
-    end
-
-    if tab == "hire" and p.zone == "hire" then
-        if hoveredHire then hire() end
-        return
+    if p.zone == "back" then
+        common.playClickSound()
+        exit()
+    elseif p.zone == "tab" and hover.tab == p.tab then
+        tab, selected = p.tab, nil
+        common.playClickSound()
+    elseif p.zone == "offer" and hover.idx == p.idx then
+        local same = selected and selected.kind == "offer" and selected.idx == p.idx
+        selected = (not same) and { kind = "offer", idx = p.idx } or nil
+        common.playClickSound()
+    elseif p.zone == "inv" and hover.id == p.id then
+        local same = selected and selected.kind == "inv" and selected.id == p.id
+        selected = (not same) and { kind = "inv", id = p.id } or nil
+        common.playClickSound()
+    elseif p.zone == "button" then
+        local action = currentAction()
+        if action then action.run() end
     end
 end
 
@@ -479,9 +378,7 @@ function M.keypressed(key)
     end
 end
 
--- onExit: changes are already persisted in saveData; save.write happens in
--- exit() before the switch. main.lua also calls onExit before onEnter of the
--- next screen, so this is a no-op guard for that path.
+-- main.lua calls onExit before the next screen's onEnter; keep the save current.
 function M.onExit()
     if saveData_ref and slot_ref then
         save.write(slot_ref, saveData_ref)
@@ -495,292 +392,215 @@ end
 local CRIMSON = {0.84, 0.07, 0.16, 1}
 local OFFRED  = {1.00, 0.42, 0.42, 1}
 local GOLD    = item_ui.GOLD
+local GREY    = {0.5, 0.5, 0.5, 1}
 
 local displayName = common.titleCase
 
--- Small drawn coin glyph (Dedicool has no emoji). A gold circle + inner ring.
+-- Small drawn coin (the font has no coin glyph).
 local function drawCoin(cx, cy, r)
-    love.graphics.setColor(0.95, 0.78, 0.20, 1)
+    love.graphics.setColor(GOLD)
     love.graphics.circle("fill", cx, cy, r)
     love.graphics.setColor(0.70, 0.52, 0.10, 1)
     love.graphics.setLineWidth(1)
     love.graphics.circle("line", cx, cy, r - 2)
 end
 
--- A filled button with a coin and "<verb> <price>" centred in it; dimmed when unaffordable.
-local function drawPriceButton(verb, price, bx, by, bw, bh)
-    local canAfford = goldValue() >= price
-    love.graphics.setColor(canAfford and CRIMSON or {0.30, 0.10, 0.12, 1})
-    love.graphics.rectangle("fill", bx, by, bw, bh)
-    local label = verb .. " " .. tostring(price)
-    local lw = font16:getWidth(label)
-    local startX = math.floor(bx + (bw - (16 + lw)) / 2)       -- coin (12) + gap (4) + label
-    drawCoin(startX + 6, by + bh / 2, 6)
-    love.graphics.setFont(font16)
-    love.graphics.setColor(canAfford and {1, 1, 1, 1} or {0.5, 0.4, 0.4, 1})
-    love.graphics.print(label, startX + 16, math.floor(by + (bh - font16:getHeight()) / 2))
-end
-
--- Recruit portrait: charicon image, or a name-fallback if absent.
-local function drawRecruitPortrait(name, x, y, size)
-    local ok, img = pcall(love.graphics.newImage, "assets/charicons/icon-" .. name .. ".png")
-    if ok and img then
-        local iw, ih = img:getDimensions()
-        local sc = math.min(size / iw, size / ih)
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.draw(img, x + (size - iw * sc) / 2, y + (size - ih * sc) / 2, 0, sc, sc)
-        return
-    end
-    love.graphics.setColor(1, 1, 1, 1)
-    common.printCentered(font16, displayName(name), x, y, size, size)
+-- A coin and a number, centred on cx.
+local function drawPrice(font, amount, cx, y, color)
+    local str = tostring(amount)
+    local w = 14 + font:getWidth(str)
+    local x = math.floor(cx - w / 2)
+    drawCoin(x + 5, y + font:getHeight() / 2, 5)
+    love.graphics.setFont(font)
+    love.graphics.setColor(color or GOLD)
+    love.graphics.print(str, x + 14, y)
 end
 
 local function drawGoldDisplay()
-    local g = goldValue()
-    love.graphics.setFont(font16)
-    local str = tostring(math.floor(g))
+    local str = tostring(math.floor(goldValue()))
     local w = font16:getWidth(str)
-    local cx = VW - MARGIN - w
-    drawCoin(cx - 8, math.floor(TOP_BAR_H / 2), 7)
+    local x = VW - MARGIN - w
+    drawCoin(x - 10, math.floor(TOP_BAR_H / 2), 7)
+    love.graphics.setFont(font16)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(str, cx, math.floor((TOP_BAR_H - font16:getHeight()) / 2))
+    love.graphics.print(str, x, math.floor((TOP_BAR_H - font16:getHeight()) / 2))
 end
 
 local function drawTabs()
     for _, which in ipairs({ "gear", "hire" }) do
-        local tx, ty, tw, th = tabRect(which)
-        local selected = (tab == which)
-        love.graphics.setLineWidth(2)
-        if selected then
+        local x, y, w, h = tabRect(which)
+        if tab == which then
             love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.rectangle("fill", tx, ty, tw, th)
+            love.graphics.rectangle("fill", x, y, w, h)
             love.graphics.setColor(CRIMSON)
-            love.graphics.setFont(font16)
-            local lbl = which:upper()
-            love.graphics.print(lbl, tx + (tw - font16:getWidth(lbl)) / 2, ty + (th - font16:getHeight()) / 2)
         else
             love.graphics.setColor(0.45, 0.15, 0.20, 1)
-            love.graphics.rectangle("line", tx, ty, tw, th)
-            love.graphics.setFont(font16)
-            local lbl = which:upper()
-            love.graphics.print(lbl, tx + (tw - font16:getWidth(lbl)) / 2, ty + (th - font16:getHeight()) / 2)
+            love.graphics.setLineWidth(2)
+            love.graphics.rectangle("line", x, y, w, h)
         end
+        common.printCentered(font16, which:upper(), x, y, w, h)
     end
 end
 
--- One offer card: grade-tinted frame, glyph, name, type, bonuses, BUY button.
--- Everything is centred in the card; the full description is in the hover tooltip.
-local function drawOfferCard(idx)
-    local id = getShopState().offers[idx]
-    local cx, cy, cw, ch = offerCardRect(idx)
+-- The action button: a coin and "<VERB> <price>" centred; dimmed when it cannot be used.
+local function drawActionButton()
+    local action = currentAction()
+    if not action then return end
+    love.graphics.setColor(action.enabled and CRIMSON or {0.30, 0.10, 0.12, 1})
+    love.graphics.rectangle("fill", BTN_X, BTN_Y, BTN_W, BTN_H)
+    local label = action.verb .. " " .. tostring(action.price)
+    local startX = math.floor(BTN_X + (BTN_W - (16 + font16:getWidth(label))) / 2)
+    drawCoin(startX + 6, BTN_Y + BTN_H / 2, 6)
+    love.graphics.setFont(font16)
+    love.graphics.setColor(action.enabled and {1, 1, 1, 1} or {0.5, 0.4, 0.4, 1})
+    love.graphics.print(label, startX + 16, math.floor(BTN_Y + (BTN_H - font16:getHeight()) / 2))
+end
 
-    love.graphics.setColor(0.04, 0.02, 0.02, 1)
-    love.graphics.rectangle("fill", cx, cy, cw, ch)
+local function drawGearTab()
+    local offers = getShopState().offers
+    for i = 1, items.SHOP_SLOTS do
+        local x, y, w, h = offerSlotRect(i)
+        local inst = itemOf(offers[i])
+        love.graphics.setColor(0.35, 0.35, 0.35, 1)
+        love.graphics.setLineWidth(1)
+        love.graphics.rectangle("line", x, y, w, h)
+        if inst then
+            item_ui.drawGlyph(inst, x + 6, y + 6, w - 12)
+            local affordable = goldValue() >= items.buyPrice(inst)
+            drawPrice(font13, items.buyPrice(inst), x + w / 2, y + h + 4, affordable and GOLD or GREY)
+            if selected and selected.kind == "offer" and selected.idx == i then
+                love.graphics.setColor(1, 1, 1, 1)
+                love.graphics.setLineWidth(2)
+                love.graphics.rectangle("line", x + 1, y + 1, w - 2, h - 2)
+            end
+        elseif offers[i] == false then
+            love.graphics.setColor(0.4, 0.3, 0.3, 1)
+            common.printCentered(font13, "SOLD", x, y, w, h)
+        end
+    end
 
-    local inst = id and getItemsTable()[id]
-    if type(inst) == "table" then
-        love.graphics.setColor(item_ui.gradeColor(inst))
-        love.graphics.setLineWidth(2)
-        love.graphics.rectangle("line", cx, cy, cw, ch)
-
-        item_ui.drawGlyph(inst, cx + (cw - 48) / 2, cy + 20, 48)
-
-        -- Name: up to two centred lines.
+    -- The selected item, named above the button.
+    local inst = selectedItem()
+    if inst then
         love.graphics.setFont(font14)
         love.graphics.setColor(1, 1, 1, 1)
-        local _, nameLines = font14:getWrap(inst.name or "(unnamed)", cw - 16)
-        for i = 1, math.min(2, #nameLines) do
-            local ln = (i == 2 and #nameLines > 2) and common.fitText(font14, nameLines[2] .. " " .. nameLines[3], cw - 16) or nameLines[i]
-            love.graphics.printf(ln, cx + 8, cy + 82 + (i - 1) * 18, cw - 16, "center")
-        end
-
-        love.graphics.setColor(item_ui.GREY)
-        love.graphics.printf(displayName(inst.itemType or "?"), cx + 8, cy + 128, cw - 16, "center")
+        love.graphics.printf(common.fitText(font14, inst.name or "(unnamed)", INNER_W), PANEL_X + PAD, DETAIL_Y, INNER_W, "center")
+        love.graphics.setFont(font13)
         love.graphics.setColor(item_ui.BONUS)
-        love.graphics.printf(item_ui.modsText(inst, "\n"), cx + 8, cy + 150, cw - 16, "center")
-
-        local bx, by, bw, bh = offerBuyRect(idx)
-        drawPriceButton("BUY", items.buyPrice(inst), bx, by, bw, bh)
+        love.graphics.printf(common.fitText(font13, item_ui.modsText(inst), INNER_W), PANEL_X + PAD, DETAIL_Y + 18, INNER_W, "center")
     else
-        -- Empty slot.
-        love.graphics.setColor(0.20, 0.05, 0.06, 1)
-        love.graphics.setLineWidth(1)
-        love.graphics.rectangle("line", cx, cy, cw, ch)
-        love.graphics.setColor(0.4, 0.3, 0.3, 1)
-        common.printCentered(font14, "SOLD OUT", cx, cy, cw, ch)
+        love.graphics.setColor(GREY)
+        common.printCentered(font13, "Click an item to buy or sell it", PANEL_X + PAD, BTN_Y, INNER_W, BTN_H)
     end
 end
 
-local function drawSellSection()
-    -- Frame + title.
-    love.graphics.setColor(0.04, 0.02, 0.02, 1)
-    love.graphics.rectangle("fill", SELL_X, SELL_Y, SELL_W, SELL_H)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", SELL_X, SELL_Y, SELL_W, SELL_H)
-
-    love.graphics.setFont(font16)
-    love.graphics.setColor(CRIMSON)
-    love.graphics.print("SELL", SELL_X + 12, math.floor(SELL_Y + (SELL_HEAD_H - font16:getHeight()) / 2) + 1)
-
-    local inv = getInventory()
-    local count = math.min(#inv, SELL_ROWS)
-    if count == 0 then
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.5, 0.5, 0.5, 1)
-        local lbl = "No items to sell"
-        love.graphics.print(lbl, SELL_X + 12, SELL_Y + SELL_HEAD_H + 8)
-        return
-    end
-
-    for i = 1, count do
-        local id = inv[i]
-        local inst = getItemsTable()[id]
-        local sx, sy, sw, sh = sellRowRect(i)
-
-        love.graphics.setLineWidth(1)
-        love.graphics.setColor(0.30, 0.30, 0.30, 1)
-        love.graphics.rectangle("line", sx, sy, sw, sh)
-
-        if type(inst) == "table" then
-            love.graphics.setColor(item_ui.gradeColor(inst))
-            love.graphics.setLineWidth(2)
-            love.graphics.rectangle("line", sx + 5, sy + 5, sh - 10, sh - 10)
-
-            -- Sell price right-aligned; the name gets whatever width is left.
-            local textY = math.floor(sy + (sh - font14:getHeight()) / 2)
-            local pstr  = tostring(items.sellValue(inst))
-            local priceX = sx + sw - 10 - font14:getWidth(pstr)
-            love.graphics.setFont(font14)
-            love.graphics.setColor(GOLD)
-            love.graphics.print(pstr, priceX, textY)
-            love.graphics.setColor(1, 1, 1, 1)
-            local nameX = sx + sh + 4
-            love.graphics.print(common.fitText(font14, inst.name or "(unnamed)", priceX - 10 - nameX), nameX, textY)
-        end
-    end
-
-    if #inv > SELL_ROWS then
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.5, 0.5, 0.5, 1)
-        love.graphics.print("+" .. tostring(#inv - SELL_ROWS) .. " more", SELL_X + 12,
-            SELL_Y + SELL_HEAD_H + SELL_ROWS * SELL_ROW_H + 5)
-    end
-end
-
-local function drawHireCard()
-    local ss = getShopState()
-    local name = ss.hireOffer
-
-    love.graphics.setColor(0.04, 0.02, 0.02, 1)
-    love.graphics.rectangle("fill", HIRE_X, HIRE_Y, HIRE_W, HIRE_H)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", HIRE_X, HIRE_Y, HIRE_W, HIRE_H)
-
-    love.graphics.setFont(font16)
-    love.graphics.setColor(CRIMSON)
-    love.graphics.print("RECRUIT", HIRE_X + 14, HIRE_Y + 10)
-
+local function drawHireTab()
+    local name = getShopState().hireOffer
     if not name then
-        love.graphics.setColor(0.5, 0.5, 0.5, 1)
-        common.printCentered(font16, "No recruits available", HIRE_X, HIRE_Y, HIRE_W, HIRE_H)
+        love.graphics.setColor(GREY)
+        common.printCentered(font14, "No one is looking for work", PANEL_X, DIVIDER_Y, PANEL_W, PANEL_Y + PANEL_H - DIVIDER_Y)
         return
     end
 
-    local stats = progression.heroStats(saveData_ref, name)
-    local px, py = HIRE_X + 20, HIRE_Y + 42
-    local tx = px + PARTS_SIZE + 14
-    love.graphics.setColor(0.45, 0.15, 0.20, 1)
-    love.graphics.setLineWidth(1)
-    love.graphics.rectangle("line", px, py, PARTS_SIZE, PARTS_SIZE)
-    drawRecruitPortrait(name, px, py, PARTS_SIZE)
-
-    love.graphics.setFont(font16)
+    love.graphics.setColor(0.10, 0.10, 0.10, 1)
+    love.graphics.rectangle("fill", PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE, PORTRAIT_SIZE)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(displayName(name), tx, py)
-    love.graphics.setFont(font14)
-    love.graphics.setColor(OFFRED)
-    love.graphics.print("Lv " .. tostring(progression.hireLevel(saveData_ref)), tx, py + 20)
-    if stats then
-        love.graphics.setColor(item_ui.BONUS)
-        love.graphics.print(common.fitText(font14, ("ATK %d  DEF %d  HP %d"):format(stats.ATK or 0, stats.DEF or 0, stats.maxHP or 0),
-            HIRE_X + HIRE_W - 14 - tx), tx, py + 40)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE, PORTRAIT_SIZE)
+    if recruitIcon.name ~= name then
+        local ok, img = pcall(love.graphics.newImage, "assets/charicons/icon-" .. name .. ".png")
+        recruitIcon.name, recruitIcon.img = name, ok and img or nil
+    end
+    love.graphics.setColor(1, 1, 1, 1)
+    if recruitIcon.img then
+        local iw, ih = recruitIcon.img:getDimensions()
+        local sc = math.min(PORTRAIT_SIZE / iw, PORTRAIT_SIZE / ih)
+        love.graphics.draw(recruitIcon.img, PORTRAIT_X + (PORTRAIT_SIZE - iw * sc) / 2,
+            PORTRAIT_Y + (PORTRAIT_SIZE - ih * sc) / 2, 0, sc, sc)
+    else
+        common.printCentered(font14, displayName(name), PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE, PORTRAIT_SIZE)
     end
 
-    local hx, hy, hw, hh = hireBtnRect()
-    drawPriceButton("HIRE", progression.hireCost(saveData_ref), hx, hy, hw, hh)
+    -- Name, level, stats to the right of the portrait (as on the EQUIP screen).
+    local tx = PORTRAIT_X + PORTRAIT_SIZE + 14
+    love.graphics.setFont(font16)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(common.fitText(font16, displayName(name), PANEL_X + PANEL_W - PAD - tx), tx, PORTRAIT_Y)
+    love.graphics.setColor(common.COLOR_RED)
+    love.graphics.print("Lv " .. tostring(progression.hireLevel(saveData_ref)), tx, PORTRAIT_Y + 18)
+    local st = progression.heroStats(saveData_ref, name) or {}
+    local statLines = {
+        { "ATK", st.ATK or 0,   {0.95, 0.55, 0.20, 1} },
+        { "DEF", st.DEF or 0,   {0.55, 0.75, 0.95, 1} },
+        { "HP",  st.maxHP or 0, {0.85, 0.30, 0.35, 1} },
+    }
+    for i, line in ipairs(statLines) do
+        local ly = PORTRAIT_Y + 40 + (i - 1) * 19
+        love.graphics.setColor(line[3])
+        love.graphics.print(line[1], tx, ly)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print(tostring(line[2]), tx + 44, ly)
+    end
+
+    love.graphics.setFont(font13)
+    love.graphics.setColor(GREY)
+    love.graphics.printf("Joins with starter gear. " ..
+        (firstFreePartySlot() and "Goes straight into the party." or "The party is full: goes to the reserves."),
+        PANEL_X + PAD, PORTRAIT_Y + PORTRAIT_SIZE + 16, INNER_W, "left")
 end
 
--- Tooltip for whatever is under the mouse: an item for sale, an item to sell, the recruit.
+-- Tooltip for the item under the mouse (for sale, or in the inventory).
 local function drawHoverTooltip()
-    if tab == "gear" then
-        if hoveredSell then
-            local inst = getItemsTable()[getInventory()[hoveredSell]]
-            if type(inst) == "table" then
-                local x, y, w, h = sellRowRect(hoveredSell)
-                common.drawTooltip(item_ui.tooltipLines(inst, { price = { label = "Sells for", amount = items.sellValue(inst) } }),
-                    { x = x, y = y, w = w, h = h })
-            end
-        elseif hoveredCard then
-            local inst = getItemsTable()[getShopState().offers[hoveredCard]]
-            if type(inst) == "table" then
-                -- The card is large, so this one hangs under the mouse instead of under the card.
-                local vmx, vmy = common.virtualMouse()
-                common.drawTooltip(item_ui.tooltipLines(inst, { price = { label = "Costs", amount = items.buyPrice(inst) } }),
-                    { x = vmx, y = vmy, w = 12, h = 14 })
-            end
+    if hover.zone == "offer" then
+        local inst = itemOf(getShopState().offers[hover.idx])
+        if inst then
+            local x, y, w, h = offerSlotRect(hover.idx)
+            common.drawTooltip(item_ui.tooltipLines(inst, { price = { label = "Costs", amount = items.buyPrice(inst) } }),
+                { x = x, y = y, w = w, h = h + 20 })
         end
-    elseif hoveredHireCard then
-        local name = getShopState().hireOffer
-        local lines = {
-            { text = displayName(name), size = 16, color = OFFRED },
-            { text = "Joins at Lv " .. tostring(progression.hireLevel(saveData_ref)) .. " with starter gear.", color = {1, 1, 1, 1} },
-            { text = firstFreePartySlot() and "Goes straight into the party." or "Party is full: goes to the reserves.", color = item_ui.GREY },
-            { text = "Costs " .. tostring(progression.hireCost(saveData_ref)) .. " gold", color = GOLD },
-        }
-        common.drawTooltip(lines, { x = HIRE_X, y = HIRE_Y, w = HIRE_W, h = HIRE_H })
+    elseif hover.zone == "inv" then
+        local inst = itemOf(hover.id)
+        if inst then
+            local x, y, w, h = item_ui.invCellRect(hover.idx)
+            common.drawTooltip(item_ui.tooltipLines(inst, { price = { label = "Sells for", amount = items.sellValue(inst) } }),
+                { x = x, y = y, w = w, h = h })
+        end
     end
 end
 
 local function drawFlash()
     if flash.t <= 0 or not flash.text then return end
-    local a = math.min(1, flash.t / 0.4)
-    love.graphics.setColor(0.95, 0.2, 0.3, a)
-    love.graphics.setFont(font16)
-    local w = font16:getWidth(flash.text)
-    love.graphics.print(flash.text, (VW - w) / 2, TAB_Y + math.floor((TAB_H - font16:getHeight()) / 2))
+    love.graphics.setColor(0.95, 0.2, 0.3, math.min(1, flash.t / 0.4))
+    common.printCentered(font14, flash.text, PANEL_X + PAD, BTN_Y - 24, INNER_W, 20)
 end
 
 local function drawScene()
-    -- 1. Background
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", 0, 0, VW, VH)
 
-    -- 2. Top bar
-    local backPressed = pressedItem ~= nil and pressedItem.back and hoveredBack
+    local backPressed = pressedItem ~= nil and pressedItem.zone == "back" and hover.zone == "back"
     common.drawTopBar("SHOP", backPressed)
     drawGoldDisplay()
 
-    -- 3. Tabs
+    -- Left panel
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", PANEL_X, PANEL_Y, PANEL_W, PANEL_H)
+    love.graphics.setColor(0.35, 0.35, 0.35, 1)
+    love.graphics.setLineWidth(1)
+    love.graphics.line(PANEL_X + PAD, DIVIDER_Y, PANEL_X + PANEL_W - PAD, DIVIDER_Y)
     drawTabs()
+    if tab == "gear" then drawGearTab() else drawHireTab() end
+    drawActionButton()
+    drawFlash()
 
-    -- 4. Content
-    if tab == "gear" then
-        for i = 1, 3 do
-            drawOfferCard(i)
-        end
-        drawSellSection()
-    else
-        drawHireCard()
-    end
+    -- Right panel: the inventory, exactly as on the EQUIP screen
+    local sel = selected and selected.kind == "inv" and selected.id or nil
+    item_ui.drawInventory(saveData_ref, sel, (tab == "gear") and "Click an item to sell it" or nil)
 
-    -- 5. Red hover box (white when BACK is pressed), then BACK again on top of it
+    -- Red hover box (white when BACK is pressed), BACK on top, tooltip last
     common.drawBox(box, backPressed)
     common.drawBackButton(backPressed)
-
-    -- 6. Transient flash, hover tooltip
-    drawFlash()
     drawHoverTooltip()
 
     love.graphics.setColor(1, 1, 1, 1)

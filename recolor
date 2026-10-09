@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Recolour a sprite folder by shifting one colour. See tools/recolor/main.lua.
+#   ./recolor report <srcDir>
+#   ./recolor shift <srcDir> <dstDir> <fromHue> <toHue> [tolerance] [satScale] [valScale]
+set -euo pipefail
+root="$(cd "$(dirname "$0")" && pwd)"
+exec love "$root/tools/recolor" "$root" "$@"

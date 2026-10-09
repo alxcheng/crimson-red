@@ -6,20 +6,96 @@ return {
     FIRST_LEVEL_XP = 30,
     XP_TABLE = { 1.35, 1.35, 1.35, 1.35, 1.35, 1.35, 1.33, 1.3, 1.28, 1.25, 1.23, 1.2, 1.18, 1.15, 1.13, 1.1, 1.09, 1.09, 1.08, 1.08, 1.07, 1.07, 1.07, 1.06, 1.06, 1.06, 1.05 },
 
-    -- Per-battle rewards of BH's first map, in order. Crimson Red floor N uses
-    -- row N (the last row repeats). gold is +/-15% random; xp is per survivor
-    -- after the survivor-count multiplier.
+    -- BH's first map, battle by battle, in order. Crimson Red's Nth battle of a floor
+    -- uses row N (the last row repeats) for its REWARDS:
+    --   gold       x random 0.85..1.15
+    --   xp         per survivor, after the survivor-count multiplier
+    --   lootTable  0-based index into bh_items LOOT_TABLES for the one item dropped;
+    --   rareChance if > 0, (rareChance+1)/101 chance the drop comes from the next table up
+    -- `waves` is what BH spawned there (enemy ids are per `enemySet`; for "basic":
+    -- 1 goblin, 2 bat, 3 ogre, 4 skeleton archer, 5 skeleton, 6 goblin from the left).
+    -- Crimson Red generates its own waves (encounter/wave_gen.lua); these are kept as
+    -- the reference the generator was tuned against.
     LEVELS = {
-        { name = "The Gobwood", gold = 27, xp = 35 },
-        { name = "Westwylde Fields", gold = 32, xp = 43 },
-        { name = "Eston Farmstead", gold = 35, xp = 50 },
-        { name = "Summersong Ruins", gold = 40, xp = 58 },
-        { name = "The Squealing Bog", gold = 45, xp = 78 },
-        { name = "Chillwind Field", gold = 45, xp = 85 },
-        { name = "St. Argus Cemetery", gold = 45, xp = 94 },
-        { name = "The Royal Crypt", gold = 45, xp = 103 },
-        { name = "Marrowstone Ruins", gold = 45, xp = 112 },
-        { name = "The Silken Wildwood", gold = 50, xp = 150 },
-        { name = "Shalestone Caverns", gold = 45, xp = 92 },
+        { name = "The Gobwood", gold = 27, xp = 35, lootTable = 0, rareChance = 20, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.5, spawnDelay = 1.2, maxEnemies = 1, enemies = {1} },
+            { initialDelay = 2, spawnDelay = 0.3, maxEnemies = 2, enemies = {1, 1} },
+            { initialDelay = 2, spawnDelay = 2.4, maxEnemies = 2, enemies = {2, 1, 1, 1} },
+            { initialDelay = 2, spawnDelay = 0.1, maxEnemies = 2, enemies = {2, 2} },
+            { initialDelay = 2, spawnDelay = 1.9, maxEnemies = 2, enemies = {1, 2, 1, 2, 1} },
+          } },
+        { name = "Westwylde Fields", gold = 32, xp = 43, lootTable = 0, rareChance = 25, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.5, spawnDelay = 2.2, maxEnemies = 2, enemies = {1, 1, 2} },
+            { initialDelay = 2.8, spawnDelay = 0.3, maxEnemies = 2, enemies = {2, 2} },
+            { initialDelay = 2.8, spawnDelay = 2.4, maxEnemies = 2, enemies = {1, 2, 1, 1, 2} },
+            { initialDelay = 3, spawnDelay = 4, maxEnemies = 3, enemies = {1, 1, 2, 1, 2} },
+            { initialDelay = 4, spawnDelay = 0.1, maxEnemies = 3, enemies = {2, 2, 2} },
+          } },
+        { name = "Eston Farmstead", gold = 35, xp = 50, lootTable = 0, rareChance = 40, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.5, spawnDelay = 2.1, maxEnemies = 3, enemies = {1, 1, 2, 2, 1} },
+            { initialDelay = 3, spawnDelay = 1.5, maxEnemies = 3, enemies = {2, 2, 2} },
+            { initialDelay = 4, spawnDelay = 0.1, maxEnemies = 3, enemies = {1, 1, 1} },
+            { initialDelay = 3, spawnDelay = 0.4, maxEnemies = 4, enemies = {1, 6, 1, 6} },
+            { initialDelay = 3.5, spawnDelay = 4, maxEnemies = 2, enemies = {6, 3} },
+          } },
+        { name = "Summersong Ruins", gold = 40, xp = 58, lootTable = 0, rareChance = 50, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.5, spawnDelay = 1, maxEnemies = 3, enemies = {1, 6, 1} },
+            { initialDelay = 4, spawnDelay = 2, maxEnemies = 3, enemies = {1, 1, 2, 6, 2, 1, 2, 6, 1, 1} },
+            { initialDelay = 2, spawnDelay = 0.1, maxEnemies = 3, enemies = {2, 2, 2} },
+            { initialDelay = 4, spawnDelay = 3.5, maxEnemies = 3, enemies = {3, 2, 2, 6, 6} },
+          } },
+        { name = "The Squealing Bog", gold = 45, xp = 78, lootTable = 1, rareChance = 0, enemySet = "boar",
+          waves = {
+            { initialDelay = 1, spawnDelay = 1, maxEnemies = 1, enemies = {1} },
+          } },
+        { name = "Chillwind Field", gold = 45, xp = 85, lootTable = 1, rareChance = 10, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.5, spawnDelay = 1, maxEnemies = 1, enemies = {5} },
+            { initialDelay = 2, spawnDelay = 0.1, maxEnemies = 2, enemies = {5, 5} },
+            { initialDelay = 2, spawnDelay = 2, maxEnemies = 3, enemies = {5, 4, 4} },
+            { initialDelay = 2, spawnDelay = 3, maxEnemies = 3, enemies = {3, 2, 4, 2, 4} },
+            { initialDelay = 4.5, spawnDelay = 1.8, maxEnemies = 3, enemies = {1, 6, 5, 5, 4, 4, 1, 6, 3, 4} },
+          } },
+        { name = "St. Argus Cemetery", gold = 45, xp = 94, lootTable = 1, rareChance = 10, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.5, spawnDelay = 2.9, maxEnemies = 3, enemies = {4, 4, 4, 4} },
+            { initialDelay = 3, spawnDelay = 0.1, maxEnemies = 3, enemies = {2, 2, 2} },
+            { initialDelay = 2, spawnDelay = 2, maxEnemies = 3, enemies = {5, 5, 4, 6, 6, 4} },
+            { initialDelay = 3, spawnDelay = 2.5, maxEnemies = 3, enemies = {3, 4, 4, 4} },
+            { initialDelay = 3, spawnDelay = 0.1, maxEnemies = 4, enemies = {2, 2, 2, 2} },
+            { initialDelay = 3, spawnDelay = 1, maxEnemies = 3, enemies = {5, 5, 5} },
+          } },
+        { name = "The Royal Crypt", gold = 45, xp = 103, lootTable = 1, rareChance = 10, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.5, spawnDelay = 0.1, maxEnemies = 2, enemies = {3, 3} },
+            { initialDelay = 3, spawnDelay = 1.5, maxEnemies = 3, enemies = {4, 4, 2, 1, 6} },
+            { initialDelay = 2, spawnDelay = 0.1, maxEnemies = 3, enemies = {5, 5, 5} },
+            { initialDelay = 3, spawnDelay = 1.4, maxEnemies = 3, enemies = {4, 5, 4, 2, 2} },
+            { initialDelay = 3, spawnDelay = 3, maxEnemies = 3, enemies = {3, 4, 4, 5, 5, 3, 4} },
+          } },
+        { name = "Marrowstone Ruins", gold = 45, xp = 112, lootTable = 1, rareChance = 10, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.1, spawnDelay = 1.2, maxEnemies = 4, enemies = {4, 4, 4, 4} },
+            { initialDelay = 1, spawnDelay = 0.1, maxEnemies = 3, enemies = {5, 5, 5} },
+            { initialDelay = 3, spawnDelay = 2.2, maxEnemies = 3, enemies = {4, 5, 3, 4, 4, 5, 3} },
+            { initialDelay = 3.5, spawnDelay = 0.1, maxEnemies = 3, enemies = {4, 4, 4} },
+            { initialDelay = 3, spawnDelay = 3.4, maxEnemies = 3, enemies = {3, 5, 5, 4, 4, 3, 4} },
+          } },
+        { name = "The Silken Wildwood", gold = 50, xp = 150, lootTable = 2, rareChance = 0, enemySet = "spider",
+          waves = {
+            { initialDelay = 3, spawnDelay = 1, maxEnemies = 1, enemies = {1} },
+          } },
+        { name = "Shalestone Caverns", gold = 45, xp = 92, lootTable = 1, rareChance = 10, enemySet = "basic",
+          waves = {
+            { initialDelay = 3.2, spawnDelay = 0.5, maxEnemies = 5, enemies = {2, 2, 2, 2, 2} },
+            { initialDelay = 3, spawnDelay = 2.2, maxEnemies = 3, enemies = {5, 2, 1, 6} },
+            { initialDelay = 2, spawnDelay = 0.1, maxEnemies = 5, enemies = {1, 6, 1, 6, 5} },
+            { initialDelay = 3, spawnDelay = 3, maxEnemies = 3, enemies = {3, 5, 5} },
+            { initialDelay = 3.4, spawnDelay = 3, maxEnemies = 3, enemies = {2, 5, 1, 3, 2, 5, 6, 2} },
+          } },
     },
 }
