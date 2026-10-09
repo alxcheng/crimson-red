@@ -1,0 +1,3538 @@
+[
+ {
+  "id": 0,
+  "mapName": "Haggerdom",
+  "mapScale": 0.9,
+  "whichLevel": [
+   {
+    "levelName": "The Gobwood",
+    "description": "Once a peaceful forest, it is now home to\ngoblins and other foul creatures.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": -1,
+    "prereqLoc": 0,
+    "myPositionX": 2.68,
+    "myPositionY": -0.6,
+    "waves": [
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 1.2,
+      "maxEnemies": 1,
+      "enemies": [
+       1
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 0.3,
+      "maxEnemies": 2,
+      "enemies": [
+       1,
+       1
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 2.4,
+      "maxEnemies": 2,
+      "enemies": [
+       2,
+       1,
+       1,
+       1
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 2,
+      "enemies": [
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 1.9,
+      "maxEnemies": 2,
+      "enemies": [
+       1,
+       2,
+       1,
+       2,
+       1
+      ]
+     }
+    ],
+    "whichMap": "forest1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 2,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme",
+    "goldReward": 27,
+    "XPReward": 35,
+    "lootTable": 0,
+    "rareChance": 20,
+    "highScore": 0
+   },
+   {
+    "levelName": "Westwylde Fields",
+    "description": "Much of the kingdom's sprawling farmland\nhas been claimed by roving goblin hordes.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 0,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 2.2,
+      "maxEnemies": 2,
+      "enemies": [
+       1,
+       1,
+       2
+      ]
+     },
+     {
+      "initialDelay": 2.8,
+      "spawnDelay": 0.3,
+      "maxEnemies": 2,
+      "enemies": [
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 2.8,
+      "spawnDelay": 2.4,
+      "maxEnemies": 2,
+      "enemies": [
+       1,
+       2,
+       1,
+       1,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 4.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       2,
+       1,
+       2
+      ]
+     },
+     {
+      "initialDelay": 4.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2
+      ]
+     }
+    ],
+    "whichMap": "plain1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 2,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme",
+    "goldReward": 32,
+    "XPReward": 43,
+    "lootTable": 0,
+    "rareChance": 25,
+    "highScore": 0
+   },
+   {
+    "levelName": "Eston Farmstead",
+    "description": "You've heard rumors of a huge cyclops that\nroams these fields at sundown...",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 1,
+    "prereqLoc": 1,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 2.1,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       2,
+       2,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 4.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.4,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       6,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 4.0,
+      "maxEnemies": 2,
+      "enemies": [
+       6,
+       3
+      ]
+     }
+    ],
+    "whichMap": "plain2",
+    "enemySet": "basic",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme",
+    "goldReward": 35,
+    "XPReward": 50,
+    "lootTable": 0,
+    "rareChance": 40,
+    "highScore": 0
+   },
+   {
+    "levelName": "Summersong Ruins",
+    "description": "All that lies here are the sun-bleached\nremains of an ancient culture.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 2,
+    "prereqLoc": 1,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       6,
+       1
+      ]
+     },
+     {
+      "initialDelay": 4.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       2,
+       6,
+       2,
+       1,
+       2,
+       6,
+       1,
+       1
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 4.0,
+      "spawnDelay": 3.5,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       2,
+       2,
+       6,
+       6
+      ]
+     }
+    ],
+    "whichMap": "ruin1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme3",
+    "goldReward": 40,
+    "XPReward": 58,
+    "lootTable": 0,
+    "rareChance": 50,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Squealing Bog",
+    "description": "The leader of the goblin horde makes his\nhome in this squalid wetland.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 2,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 1.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 1,
+      "enemies": [
+       1
+      ]
+     }
+    ],
+    "whichMap": "hovel",
+    "enemySet": "boar",
+    "totalEnemyTypes": 3,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/bossTheme",
+    "goldReward": 45,
+    "XPReward": 78,
+    "lootTable": 1,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Chillwind Field",
+    "description": "Few living souls have ventured across this\nglade in recent years.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 4,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 1,
+      "enemies": [
+       5
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 2,
+      "enemies": [
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       2,
+       4,
+       2,
+       4
+      ]
+     },
+     {
+      "initialDelay": 4.5,
+      "spawnDelay": 1.8,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       6,
+       5,
+       5,
+       4,
+       4,
+       1,
+       6,
+       3,
+       4
+      ]
+     }
+    ],
+    "whichMap": "plain3",
+    "enemySet": "basic",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme3",
+    "goldReward": 45,
+    "XPReward": 85,
+    "lootTable": 1,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "St. Argus Cemetery",
+    "description": "These once sacred grounds have been\ndefiled by necromancers.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 5,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 2.9,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       5,
+       4,
+       6,
+       6,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.5,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 4,
+      "enemies": [
+       2,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       5,
+       5
+      ]
+     }
+    ],
+    "whichMap": "graveyard1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme2",
+    "goldReward": 45,
+    "XPReward": 94,
+    "lootTable": 1,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Royal Crypt",
+    "description": "Houses the remains of kings, heroes, and\nmore than a few adventurers.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 6,
+    "prereqLoc": 1,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 2,
+      "enemies": [
+       3,
+       3
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       2,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.4,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       5,
+       4,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       4,
+       4,
+       5,
+       5,
+       3,
+       4
+      ]
+     }
+    ],
+    "whichMap": "catacombs1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme2",
+    "goldReward": 45,
+    "XPReward": 103,
+    "lootTable": 1,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "Marrowstone Ruins",
+    "description": "These ruins echo quietly with the creaks and\nclatters of walking skeletons.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 7,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.1,
+      "spawnDelay": 1.2,
+      "maxEnemies": 4,
+      "enemies": [
+       4,
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.2,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       5,
+       3,
+       4,
+       4,
+       5,
+       3
+      ]
+     },
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.4,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       5,
+       5,
+       4,
+       4,
+       3,
+       4
+      ]
+     }
+    ],
+    "whichMap": "ruin2",
+    "enemySet": "basic",
+    "totalEnemyTypes": 5,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme3",
+    "goldReward": 45,
+    "XPReward": 112,
+    "lootTable": 1,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Silken Wildwood",
+    "description": "The trees here are draped ominously with\ndisturbingly large spider webs...",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 8,
+    "prereqLoc": 0,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 1,
+      "enemies": [
+       1
+      ]
+     }
+    ],
+    "whichMap": "spider",
+    "enemySet": "spider",
+    "totalEnemyTypes": 3,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/bossTheme",
+    "goldReward": 50,
+    "XPReward": 150,
+    "lootTable": 2,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Shalestone Caverns",
+    "description": "The southern road leads directly through the\ndank recesses of this unstable cave.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 5,
+    "prereqLoc": 0,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.2,
+      "spawnDelay": 0.5,
+      "maxEnemies": 5,
+      "enemies": [
+       2,
+       2,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.2,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       2,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 5,
+      "enemies": [
+       1,
+       6,
+       1,
+       6,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.4,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       5,
+       1,
+       3,
+       2,
+       5,
+       6,
+       2
+      ]
+     }
+    ],
+    "whichMap": "cave1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme3",
+    "goldReward": 45,
+    "XPReward": 92,
+    "lootTable": 1,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "Haggerdom Monster Arena",
+    "description": "Test your might!  How long can you survive?\nHigh Score: ",
+    "complete": false,
+    "arena": true,
+    "arenaTable": [
+     {
+      "requiredKills": 0,
+      "whichTable": 1
+     },
+     {
+      "requiredKills": 40,
+      "whichTable": 2
+     },
+     {
+      "requiredKills": 70,
+      "whichTable": 3
+     },
+     {
+      "requiredKills": 85,
+      "whichTable": 4
+     },
+     {
+      "requiredKills": 100,
+      "whichTable": 5
+     },
+     {
+      "requiredKills": 115,
+      "whichTable": 6
+     }
+    ],
+    "prereq": 10,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.8,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       3,
+       1,
+       6,
+       3
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.2,
+      "maxEnemies": 5,
+      "enemies": [
+       2,
+       2,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.5,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.2,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       1,
+       6,
+       3,
+       5,
+       5,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.5,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       1,
+       6,
+       3,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.6,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       2,
+       5,
+       4,
+       3,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.3,
+      "maxEnemies": 6,
+      "enemies": [
+       1,
+       6,
+       1,
+       6,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.2,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       6,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       1,
+       2,
+       4,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.6,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       3,
+       2,
+       2,
+       6,
+       3,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       4,
+       5,
+       3,
+       6,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       5,
+       3,
+       5,
+       4
+      ]
+     }
+    ],
+    "whichMap": "arena",
+    "enemySet": "basic",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme",
+    "goldReward": 0,
+    "XPReward": 0,
+    "lootTable": 0,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Transition to Map 1",
+    "description": "No Description.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 9,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [],
+    "whichMap": "catacombs1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 4,
+    "transition": 1,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme",
+    "goldReward": 0,
+    "XPReward": 0,
+    "lootTable": 0,
+    "rareChance": 0,
+    "highScore": 0
+   }
+  ]
+ },
+ {
+  "id": 1,
+  "mapName": "Brightstone",
+  "mapScale": 0.9,
+  "whichLevel": [
+   {
+    "levelName": "Transition to Map 0",
+    "description": "No Description.",
+    "complete": true,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": -1,
+    "prereqLoc": 0,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [],
+    "whichMap": "catacombs1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 4,
+    "transition": 0,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 0,
+    "XPReward": 0,
+    "lootTable": 0,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Carrion Canyon",
+    "description": "This hostile ravine was a dangerous place\neven before monsters moved in.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 0,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       1,
+       1,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.9,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       7,
+       5,
+       5,
+       7
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       4,
+       7,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       4,
+       3,
+       3,
+       4,
+       1,
+       6,
+       4
+      ]
+     },
+     {
+      "initialDelay": 0.2,
+      "spawnDelay": 0.1,
+      "maxEnemies": 4,
+      "enemies": [
+       2,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 4.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       7,
+       3,
+       7
+      ]
+     }
+    ],
+    "whichMap": "ravine",
+    "enemySet": "basic",
+    "totalEnemyTypes": 7,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme3",
+    "goldReward": 45,
+    "XPReward": 170,
+    "lootTable": 2,
+    "rareChance": 5,
+    "highScore": 0
+   },
+   {
+    "levelName": "Dusthide Badlands",
+    "description": "An arid, lifeless wasteland.  Why monsters\ninsist on living here is anyone's guess.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 1,
+    "prereqLoc": 0,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.7,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       5,
+       7,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.5,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       4,
+       7,
+       5,
+       5,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.3,
+      "maxEnemies": 4,
+      "enemies": [
+       4,
+       7,
+       5,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 3.5,
+      "maxEnemies": 4,
+      "enemies": [
+       3,
+       4,
+       7,
+       5,
+       7,
+       5
+      ]
+     }
+    ],
+    "whichMap": "desert",
+    "enemySet": "basic",
+    "totalEnemyTypes": 7,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme",
+    "goldReward": 45,
+    "XPReward": 184,
+    "lootTable": 2,
+    "rareChance": 5,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Lost Grotto",
+    "description": "This cave is said to house living slimes that\ncan devour even the most stalwart hero.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 2,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       5,
+       8
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.8,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       5,
+       7,
+       5,
+       4,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.2,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       7,
+       7,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 4.0,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       8,
+       3
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       5,
+       5,
+       4,
+       4,
+       8,
+       5
+      ]
+     }
+    ],
+    "whichMap": "cave3",
+    "enemySet": "basic",
+    "totalEnemyTypes": 8,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme2",
+    "goldReward": 45,
+    "XPReward": 200,
+    "lootTable": 2,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "Darkmoon Forest",
+    "description": "Oozes and the living dead have defiled this\nonce proud forest.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 3,
+    "prereqLoc": 0,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.5,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       8,
+       8
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       3,
+       5,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.2,
+      "maxEnemies": 3,
+      "enemies": [
+       5,
+       4,
+       7,
+       7,
+       5,
+       8,
+       7
+      ]
+     },
+     {
+      "initialDelay": 2.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       8,
+       7,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       7,
+       7,
+       8,
+       5,
+       7,
+       5
+      ]
+     }
+    ],
+    "whichMap": "forest1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 8,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme",
+    "goldReward": 45,
+    "XPReward": 218,
+    "lootTable": 2,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "Bloodrose Ruins",
+    "description": "Yet another shattered husk of a civilization,\nnow overgrown and lost to the ages.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 4,
+    "prereqLoc": 2,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       4,
+       4,
+       7,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       3
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.8,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       7,
+       5,
+       4,
+       5,
+       7,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 6,
+      "enemies": [
+       1,
+       6,
+       1,
+       6,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.7,
+      "maxEnemies": 4,
+      "enemies": [
+       3,
+       3,
+       3,
+       7
+      ]
+     }
+    ],
+    "whichMap": "ruin1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 8,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme",
+    "goldReward": 45,
+    "XPReward": 230,
+    "lootTable": 2,
+    "rareChance": 15,
+    "highScore": 0
+   },
+   {
+    "levelName": "St. Byron Sepulcher",
+    "description": "Not even looters have dared to visit these\nhaunted grounds in recent years.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 5,
+    "prereqLoc": 2,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       5,
+       8
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 4,
+      "enemies": [
+       3,
+       8,
+       4,
+       3,
+       8,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.8,
+      "spawnDelay": 0.3,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       4,
+       5,
+       4,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.5,
+      "spawnDelay": 1.8,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       5,
+       7,
+       7,
+       4,
+       4,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 4,
+      "enemies": [
+       8,
+       8,
+       3,
+       7,
+       7,
+       4,
+       3,
+       4
+      ]
+     }
+    ],
+    "whichMap": "graveyard1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 8,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme2",
+    "goldReward": 45,
+    "XPReward": 250,
+    "lootTable": 2,
+    "rareChance": 50,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Oozing Dark",
+    "description": "The walls of this cavern glisten with caustic\nslime, and a foul smell hangs in the air...",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 4,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 7,
+      "enemies": [
+       1,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2
+      ]
+     }
+    ],
+    "whichMap": "oozecave",
+    "enemySet": "oozeBoss",
+    "totalEnemyTypes": 2,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/bossTheme",
+    "goldReward": 50,
+    "XPReward": 295,
+    "lootTable": 3,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Whithered Hope Valley",
+    "description": "As the moon rises over these silent sands,\nthe native wildlife comes out to hunt.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 7,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 2,
+      "enemies": [
+       1,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.2,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       4,
+       1,
+       4,
+       1,
+       4,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       5,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 2,
+      "enemies": [
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       2,
+       4,
+       5,
+       2,
+       4,
+       1
+      ]
+     }
+    ],
+    "whichMap": "desert2",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 5,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme3",
+    "goldReward": 50,
+    "XPReward": 304,
+    "lootTable": 3,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Cho'yuk Ravine",
+    "description": "This winding pass seems to carve endlessly\ninto the rocky mountainside.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 8,
+    "prereqLoc": 1,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 5,
+      "enemies": [
+       4,
+       4,
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.9,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       2,
+       4,
+       5,
+       1,
+       2,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.7,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.3,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       4,
+       4,
+       2,
+       1,
+       5,
+       4
+      ]
+     }
+    ],
+    "whichMap": "ravine2",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 5,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme3",
+    "goldReward": 50,
+    "XPReward": 312,
+    "lootTable": 3,
+    "rareChance": 5,
+    "highScore": 0
+   },
+   {
+    "levelName": "Crimson Hollow",
+    "description": "Powerful mountain giants have made their\nhome amidst the crimson rocks.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 9,
+    "prereqLoc": 1,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       5,
+       4,
+       1,
+       5,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 5,
+      "enemies": [
+       4,
+       1,
+       4,
+       5,
+       4
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.4,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       1,
+       2,
+       2,
+       5,
+       4,
+       2,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 5.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       4,
+       4
+      ]
+     }
+    ],
+    "whichMap": "cave2",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 5,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme2",
+    "goldReward": 50,
+    "XPReward": 320,
+    "lootTable": 3,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "Brightstone Monster Arena",
+    "description": "Test your might!  How long can you survive?\nHigh Score: ",
+    "complete": false,
+    "arena": true,
+    "arenaTable": [
+     {
+      "requiredKills": 0,
+      "whichTable": 3
+     },
+     {
+      "requiredKills": 40,
+      "whichTable": 4
+     },
+     {
+      "requiredKills": 65,
+      "whichTable": 5
+     },
+     {
+      "requiredKills": 90,
+      "whichTable": 6
+     },
+     {
+      "requiredKills": 115,
+      "whichTable": 7
+     },
+     {
+      "requiredKills": 140,
+      "whichTable": 8
+     }
+    ],
+    "prereq": 10,
+    "prereqLoc": 2,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       3,
+       8,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       5,
+       4,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       4,
+       3,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.6,
+      "maxEnemies": 4,
+      "enemies": [
+       8,
+       5,
+       4,
+       4,
+       3,
+       7,
+       8,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       7,
+       3,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.7,
+      "maxEnemies": 4,
+      "enemies": [
+       3,
+       5,
+       8,
+       7,
+       7,
+       5,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 5,
+      "enemies": [
+       4,
+       4,
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       3,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       3,
+       7,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 6,
+      "enemies": [
+       1,
+       6,
+       1,
+       8,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       5,
+       7,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.1,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       7,
+       8,
+       3,
+       5,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.0,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       3,
+       5,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       5,
+       1,
+       6,
+       2,
+       7,
+       4,
+       4,
+       8,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       3,
+       3,
+       4,
+       4,
+       4,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       5,
+       5,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.2,
+      "maxEnemies": 4,
+      "enemies": [
+       5,
+       5,
+       4,
+       7,
+       4,
+       5,
+       4,
+       7,
+       5,
+       4
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.5,
+      "maxEnemies": 6,
+      "enemies": [
+       2,
+       2,
+       2,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.9,
+      "maxEnemies": 5,
+      "enemies": [
+       1,
+       6,
+       1,
+       6,
+       7
+      ]
+     }
+    ],
+    "whichMap": "arena",
+    "enemySet": "basic",
+    "totalEnemyTypes": 8,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme",
+    "goldReward": 0,
+    "XPReward": 0,
+    "lootTable": 2,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Firelands",
+    "description": "A volcanic eruption has left the terrain here\nscarred and lifeless.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 10,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       5,
+       1,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       1,
+       4,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       1,
+       4,
+       4,
+       2,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.8,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       4,
+       4,
+       3,
+       1,
+       5
+      ]
+     }
+    ],
+    "whichMap": "firelands",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 5,
+    "transition": -1,
+    "transitionDirection": 0,
+    "music": "Music/BattleTheme",
+    "goldReward": 50,
+    "XPReward": 330,
+    "lootTable": 3,
+    "rareChance": 15,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Earthen Gate",
+    "description": "An ancient stone golem stands vigilant here,\nwaiting for hapless adventurers to crush.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 12,
+    "prereqLoc": 0,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 1,
+      "enemies": [
+       1
+      ]
+     }
+    ],
+    "whichMap": "earthengate",
+    "enemySet": "golem",
+    "totalEnemyTypes": 1,
+    "transition": -1,
+    "transitionDirection": 2,
+    "music": "Music/bossTheme",
+    "goldReward": 55,
+    "XPReward": 355,
+    "lootTable": 4,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Transition to Map 3",
+    "description": "No Description.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 13,
+    "prereqLoc": 3,
+    "myPositionX": 0.0,
+    "myPositionY": 0.0,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 2,
+      "enemies": [
+       1,
+       2,
+       3
+      ]
+     }
+    ],
+    "whichMap": "catacombs1",
+    "enemySet": "basic",
+    "totalEnemyTypes": 4,
+    "transition": 3,
+    "transitionDirection": 2,
+    "music": "Music/BattleTheme",
+    "goldReward": 81,
+    "XPReward": 162,
+    "lootTable": 2,
+    "rareChance": 0,
+    "highScore": 0
+   }
+  ]
+ },
+ {
+  "id": 2,
+  "mapName": "TUTORIAL",
+  "mapScale": 1.0,
+  "whichLevel": [
+   {
+    "levelName": "Tutorial Level",
+    "description": "No Description.",
+    "complete": true,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": -1,
+    "prereqLoc": 0,
+    "myPositionX": 1.0,
+    "myPositionY": 1.0,
+    "waves": [],
+    "whichMap": "training",
+    "enemySet": "basic",
+    "totalEnemyTypes": 2,
+    "transition": 0,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 0,
+    "XPReward": 0,
+    "lootTable": 0,
+    "rareChance": 0,
+    "highScore": 0
+   }
+  ]
+ },
+ {
+  "id": 3,
+  "mapName": "Doomvale",
+  "mapScale": 0.9,
+  "whichLevel": [
+   {
+    "levelName": "Transition to Map 1",
+    "description": "No Description.",
+    "complete": true,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": -1,
+    "prereqLoc": 0,
+    "myPositionX": 2.68,
+    "myPositionY": 0.32,
+    "waves": [],
+    "whichMap": "training",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 5,
+    "transition": 1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 0,
+    "XPReward": 0,
+    "lootTable": 0,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Emerald Hinterlands",
+    "description": "The sky is clear, and the scent of the sea\nhangs in the air.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 0,
+    "prereqLoc": 3,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 2,
+      "enemies": [
+       6,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.7,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       1,
+       2,
+       6,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.2,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 2,
+      "enemies": [
+       6,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.7,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       6,
+       5,
+       2,
+       3,
+       1,
+       5
+      ]
+     }
+    ],
+    "whichMap": "plain1",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 55,
+    "XPReward": 365,
+    "lootTable": 4,
+    "rareChance": 5,
+    "highScore": 0
+   },
+   {
+    "levelName": "Everfrost Weald",
+    "description": "This ancient thicket remains in a perpetual\nstate of winter year-round.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 1,
+    "prereqLoc": 3,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.5,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       6,
+       2
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       5,
+       6,
+       1,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       2,
+       1,
+       6,
+       5,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.5,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       5,
+       1,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       2,
+       6,
+       1,
+       2,
+       6
+      ]
+     }
+    ],
+    "whichMap": "forest2",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 6,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 55,
+    "XPReward": 378,
+    "lootTable": 4,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "Seaside Ruins",
+    "description": "Brisk winter winds howl between the\ncrumbling columns of this necropolis.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 2,
+    "prereqLoc": 1,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.5,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.5,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       5,
+       7,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.8,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       7,
+       2,
+       2,
+       6,
+       1,
+       5
+      ]
+     }
+    ],
+    "whichMap": "ruin1",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 7,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 55,
+    "XPReward": 392,
+    "lootTable": 4,
+    "rareChance": 15,
+    "highScore": 0
+   },
+   {
+    "levelName": "Doomvale Monster Arena",
+    "description": "Test your might!  How long can you survive?\nHigh Score: ",
+    "complete": false,
+    "arena": true,
+    "arenaTable": [
+     {
+      "requiredKills": 0,
+      "whichTable": 4
+     },
+     {
+      "requiredKills": 15,
+      "whichTable": 5
+     },
+     {
+      "requiredKills": 30,
+      "whichTable": 6
+     },
+     {
+      "requiredKills": 50,
+      "whichTable": 7
+     },
+     {
+      "requiredKills": 70,
+      "whichTable": 8
+     }
+    ],
+    "prereq": 3,
+    "prereqLoc": 3,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       5,
+       1,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.5,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       6,
+       6,
+       2,
+       2,
+       3
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.5,
+      "maxEnemies": 5,
+      "enemies": [
+       6,
+       6,
+       2,
+       2,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       9,
+       6,
+       6,
+       3,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       7,
+       6,
+       6,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       2,
+       6,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       2,
+       5,
+       3,
+       6,
+       6,
+       2,
+       3
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       9,
+       6,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       8,
+       8,
+       6,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.1,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       8,
+       8
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       5,
+       7,
+       6,
+       6,
+       2,
+       3
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       3,
+       6,
+       6,
+       7
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       5,
+       7,
+       1,
+       1
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.5,
+      "maxEnemies": 5,
+      "enemies": [
+       6,
+       6,
+       6,
+       6,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       9,
+       7,
+       1,
+       5,
+       1,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       1,
+       5,
+       2,
+       2,
+       5,
+       1,
+       5
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       6,
+       6,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       2,
+       2,
+       8,
+       7,
+       9,
+       9,
+       6
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       6,
+       7,
+       8,
+       3
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       2,
+       3,
+       6,
+       1,
+       1
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 0.5,
+      "maxEnemies": 4,
+      "enemies": [
+       2,
+       1,
+       2,
+       5,
+       2,
+       5,
+       1
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 2.0,
+      "maxEnemies": 4,
+      "enemies": [
+       9,
+       9,
+       6,
+       6,
+       3,
+       3,
+       9
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       6,
+       6,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       1,
+       7,
+       9,
+       9,
+       7,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 1.5,
+      "spawnDelay": 1.4,
+      "maxEnemies": 4,
+      "enemies": [
+       9,
+       6,
+       1,
+       5,
+       1,
+       5
+      ]
+     }
+    ],
+    "whichMap": "arena",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 9,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 0,
+    "XPReward": 0,
+    "lootTable": 0,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Rimetooth Tundra",
+    "description": "Unrelenting snow and ice have turned this\nfrigid land into a tomb.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 2,
+    "prereqLoc": 3,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       6,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       2,
+       1,
+       2,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       2,
+       2,
+       6,
+       2,
+       5,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       6,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.5,
+      "maxEnemies": 3,
+      "enemies": [
+       1,
+       2,
+       7,
+       5,
+       6,
+       3,
+       2
+      ]
+     }
+    ],
+    "whichMap": "snowlands",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 7,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme3",
+    "goldReward": 55,
+    "XPReward": 395,
+    "lootTable": 4,
+    "rareChance": 25,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Frozen Abyss",
+    "description": "Threatening growls echo from deep within\nthe icy depths.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 5,
+    "prereqLoc": 0,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       6,
+       7,
+       6,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       2,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       6,
+       7,
+       6,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       6,
+       7,
+       6,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 4,
+      "enemies": [
+       6,
+       7,
+       6,
+       1
+      ]
+     }
+    ],
+    "whichMap": "cave1",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 7,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme3",
+    "goldReward": 60,
+    "XPReward": 408,
+    "lootTable": 5,
+    "rareChance": 0,
+    "highScore": 0
+   },
+   {
+    "levelName": "Time-Lost Canyon",
+    "description": "The first of the invading monster hordes\nemerged from beyond this very chasm.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 6,
+    "prereqLoc": 3,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       2,
+       2,
+       8,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       6,
+       6,
+       3,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 3.0,
+      "maxEnemies": 4,
+      "enemies": [
+       3,
+       7,
+       8,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       7,
+       8,
+       6,
+       1,
+       2,
+       2
+      ]
+     }
+    ],
+    "whichMap": "ravine2",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 8,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme3",
+    "goldReward": 60,
+    "XPReward": 416,
+    "lootTable": 5,
+    "rareChance": 5,
+    "highScore": 0
+   },
+   {
+    "levelName": "Dungeon of the Lost",
+    "description": "A sign outside warns of certain death to\nthose who press on.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 7,
+    "prereqLoc": 3,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 4,
+      "enemies": [
+       1,
+       5,
+       6,
+       6,
+       3
+      ]
+     },
+     {
+      "initialDelay": 2.0,
+      "spawnDelay": 0.5,
+      "maxEnemies": 4,
+      "enemies": [
+       2,
+       2,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.4,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       1,
+       6,
+       7,
+       3,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 0.2,
+      "maxEnemies": 5,
+      "enemies": [
+       1,
+       5,
+       1,
+       5,
+       1
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       8,
+       7,
+       6,
+       6,
+       3,
+       2,
+       2,
+       7
+      ]
+     }
+    ],
+    "whichMap": "catacombs1",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 8,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 60,
+    "XPReward": 428,
+    "lootTable": 5,
+    "rareChance": 10,
+    "highScore": 0
+   },
+   {
+    "levelName": "Molten Wastes",
+    "description": "On the horizon lies a black citadel, shrouded\nby volcanic fumes.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 8,
+    "prereqLoc": 1,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       6,
+       9
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.4,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       2,
+       2,
+       6,
+       1,
+       5
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.5,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       9,
+       6,
+       2,
+       2
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       6,
+       7,
+       8,
+       8,
+       3
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.5,
+      "maxEnemies": 3,
+      "enemies": [
+       9,
+       7,
+       6,
+       6,
+       8,
+       3,
+       7
+      ]
+     }
+    ],
+    "whichMap": "firelands",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 9,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme",
+    "goldReward": 60,
+    "XPReward": 436,
+    "lootTable": 5,
+    "rareChance": 15,
+    "highScore": 0
+   },
+   {
+    "levelName": "The Boneyard",
+    "description": "This wasteland is carpeted in the bones of\nwould-be heroes.",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 9,
+    "prereqLoc": 1,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 4,
+      "enemies": [
+       9,
+       9,
+       2,
+       2,
+       7
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       6,
+       8,
+       8,
+       2,
+       2,
+       6
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.0,
+      "maxEnemies": 3,
+      "enemies": [
+       3,
+       3,
+       3
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.2,
+      "maxEnemies": 3,
+      "enemies": [
+       2,
+       8,
+       7,
+       7,
+       9,
+       9
+      ]
+     },
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 2.9,
+      "maxEnemies": 4,
+      "enemies": [
+       3,
+       8,
+       7,
+       9,
+       7,
+       6,
+       6,
+       9
+      ]
+     }
+    ],
+    "whichMap": "boneyard",
+    "enemySet": "advanced",
+    "totalEnemyTypes": 9,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/BattleTheme2",
+    "goldReward": 60,
+    "XPReward": 445,
+    "lootTable": 5,
+    "rareChance": 20,
+    "highScore": 0
+   },
+   {
+    "levelName": "Throne of Ruin",
+    "description": "The Lord of the Dead awaits those foolish\nenough to challenge him...",
+    "complete": false,
+    "arena": false,
+    "arenaTable": [],
+    "prereq": 10,
+    "prereqLoc": 3,
+    "myPositionX": 2.68,
+    "myPositionY": 1.15,
+    "waves": [
+     {
+      "initialDelay": 3.0,
+      "spawnDelay": 1.0,
+      "maxEnemies": 1,
+      "enemies": [
+       1
+      ]
+     }
+    ],
+    "whichMap": "evilthrone",
+    "enemySet": "lich",
+    "totalEnemyTypes": 3,
+    "transition": -1,
+    "transitionDirection": 3,
+    "music": "Music/bossTheme",
+    "goldReward": 75,
+    "XPReward": 500,
+    "lootTable": 6,
+    "rareChance": 50,
+    "highScore": 0
+   }
+  ]
+ }
+]

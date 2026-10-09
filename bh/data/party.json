@@ -1,0 +1,436 @@
+[
+ {
+  "id": 0,
+  "playerName": "Lucille",
+  "characterClass": 1,
+  "level": 1,
+  "description": "No Description",
+  "recruited": true,
+  "available": true,
+  "gear": [
+   2,
+   6,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 65,
+  "defense": 4,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/lucille"
+ },
+ {
+  "id": 1,
+  "playerName": "Shepherd",
+  "characterClass": 2,
+  "level": 1,
+  "description": "No Description",
+  "recruited": true,
+  "available": true,
+  "gear": [
+   0,
+   4,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 20,
+  "defense": 15,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/shepherd"
+ },
+ {
+  "id": 2,
+  "playerName": "Gustav",
+  "characterClass": 3,
+  "level": 1,
+  "description": "A local mercenary, handy\nwith a dagger and \nmorally flexible.  If the\njob pays well, Gustav is\nin.  He hopes to recieve\na royal pardon for his\nextensive criminal record\nby assisting you.",
+  "recruited": false,
+  "available": true,
+  "gear": [
+   1,
+   5,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 26,
+  "defense": 8,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/gustav"
+ },
+ {
+  "id": 3,
+  "playerName": "Bromswell",
+  "characterClass": 4,
+  "level": 1,
+  "description": "Don't let his age fool\nyou, Bromswell was an\nadventurer in his day,\nand a wizened master of \nthe arcane arts.  While\ntechnically retired, he's\nstill willing to lend his\nskill to a worthy cause.",
+  "recruited": false,
+  "available": true,
+  "gear": [
+   3,
+   6,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 33,
+  "defense": 0,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/bromswell"
+ },
+ {
+  "id": 4,
+  "playerName": "Baelrosh",
+  "characterClass": 7,
+  "level": 2,
+  "description": "A traveler from the far\nnorth, frost still clinging\nto his beard, pelts and\nscars adorn him.  His\nweathered blades and\nwildly gleaming eyes\nspeak of countless foes\nslain...",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   11,
+   5,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 28,
+  "defense": 7,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/baelrosh"
+ },
+ {
+  "id": 5,
+  "playerName": "Wynter",
+  "characterClass": 5,
+  "level": 2,
+  "description": "An enigmatic sorceress,\ndistrusted by the locals.\nSome believe she traded\nher soul for the secrets\nof dark magic.  Rumors\nthey may be, she is no\ndoubt a powerful\npractitioner of forbidden\narts.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   3,
+   6,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 28,
+  "defense": 2,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/wynter"
+ },
+ {
+  "id": 6,
+  "playerName": "Feung",
+  "characterClass": 8,
+  "level": 3,
+  "description": "Member of an ancient\norder from a distant\nland. Their purpose - to\nprotect the innocent, and\nhone both body and\nspirit into the ultimate\nweapon.  Evil creatures\nflee at the sight of his\nrighteous fist!",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   43,
+   44,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 20,
+  "defense": 15,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/feung"
+ },
+ {
+  "id": 7,
+  "playerName": "Edwardo",
+  "characterClass": 6,
+  "level": 4,
+  "description": "A traveling minstrel who\ninspires courage in all\nwho hear his music.  It\nis said he was once a\nPrince, but fate robbed\nhim of both his kingdom,\nand his one true love.\nHe fights so that others\nwill not suffer as he has.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   45,
+   5,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 12,
+  "defense": 6,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/edwardo"
+ },
+ {
+  "id": 8,
+  "playerName": "Robin",
+  "characterClass": 3,
+  "level": 4,
+  "description": "The only daughter of a\nwealthy local merchant.  \nTo escape an arranged\nmarriage, she has fled\nfrom her life of luxury\nto pursue adventure,\nand study the unladylike\nart of combat.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   1,
+   5,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 25,
+  "defense": 9,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/robin"
+ },
+ {
+  "id": 9,
+  "playerName": "Thistle",
+  "characterClass": 4,
+  "level": 4,
+  "description": "An elven sorceress\nhailing from the distant\nsouthlands.  Her people\nare both respected and\nfeared in these parts,\ndue in part to their\nincomprehensible accent,\nand the fearsome magic\nthey command.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   3,
+   6,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 36,
+  "defense": 0,
+  "maxHealth": 800,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/thistle"
+ },
+ {
+  "id": 10,
+  "playerName": "The Black Knight",
+  "characterClass": 2,
+  "level": 5,
+  "description": "No one is quite sure \nwho he is, or from what\nkingdom he hails.  Still,\nnone doubt his resilience\nand strength.  There are\nrumors that he once\nsurvived having all of\nhis limbs dismembered.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   0,
+   4,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 19,
+  "defense": 16,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   2,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/blackknight"
+ },
+ {
+  "id": 11,
+  "playerName": "Garrick",
+  "characterClass": 7,
+  "level": 5,
+  "description": "A notorious pirate, he\nonce ruled the waters\nof Doomvale until his\nship was destroyed by a\nrampaging ninja.  He\nhopes to one day exact\nhis revenge.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   79,
+   5,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 28,
+  "defense": 7,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   2,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/garrick"
+ },
+ {
+  "id": 12,
+  "playerName": "Oakley",
+  "characterClass": 9,
+  "level": 2,
+  "description": "While his skills with a\nbow are unparalleled,\nhe is perhaps the laziest\nadventurer in all of\nHaggerdom.  He was\nsupposed to be helping\nthe party months ago,\nbut apparently had\noverslept.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   123,
+   5,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 35,
+  "defense": 9,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/oakley"
+ },
+ {
+  "id": 13,
+  "playerName": "Heleth",
+  "characterClass": 10,
+  "level": 3,
+  "description": "A holy warrior who\ncombines healing magic\nwith impressive defense.\nHer temper is short, and\nher tongue is as sharp\nas her blade... which has\nclaimed the heads of\ncountless trolls.",
+  "recruited": false,
+  "available": false,
+  "gear": [
+   0,
+   4,
+   -1,
+   -1
+  ],
+  "XP": 0,
+  "power": 19,
+  "defense": 18,
+  "maxHealth": 1000,
+  "abilities": [
+   1,
+   0,
+   0
+  ],
+  "passives": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "icon": "Icons/heleth"
+ }
+]

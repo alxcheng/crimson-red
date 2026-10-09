@@ -1,0 +1,812 @@
+[
+ {
+  "id": 0,
+  "whichClass": "Cleric",
+  "powerScale": 3.0,
+  "defenseScale": 1.0,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Group Heal",
+    "description": "Instantly heal the entire party for a substantial\namount.",
+    "icon": "Icons/groupheal",
+    "cooldown": 20
+   },
+   {
+    "powerName": "Shield",
+    "description": "Protects your target, reducing their damage taken\nby 75% for 10 sec.",
+    "icon": "Icons/shield",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Power Infusion",
+    "description": "Fills your target with holy might, doubling their\npower for 10 sec.",
+    "icon": "Icons/powerinfusion",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Passion",
+    "description": "Your auto-heals splash 30% of their total healing\nto allies near your target.",
+    "icon": "Icons/splash",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Discipline",
+    "description": "Your auto-heals recover 15% more health.\n",
+    "icon": "Icons/directheal",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Guardian Angel",
+    "description": "The cleric is filled with divine purpose, doubling\nhealing power for 15 sec.",
+    "icon": "Icons/guardianangel",
+    "cooldown": 60
+   },
+   {
+    "powerName": "Vengeful Angel",
+    "description": "The cleric explodes with righteous fury, dealing\ndamage around them for 15 sec.",
+    "icon": "Icons/vengefulangel",
+    "cooldown": 60
+   },
+   {
+    "powerName": "Empowering Words",
+    "description": "The recipient of your auto-heals has their power\nincreased by 15%.",
+    "icon": "Icons/inspire",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Holy Embrace",
+    "description": "Your auto-heals continue to heal the target over\ntime for 8 seconds.",
+    "icon": "Icons/healingstream",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Favored Soul",
+    "description": "While affected by Vengeful Angel or Guardian Angel,\nthe cleric is immune to damage.",
+    "icon": "Icons/favored",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Binding Heal",
+    "description": "Your auto-heals on others also heal you for 50%\nof the healing done.",
+    "icon": "Icons/binding",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Desperate Prayer",
+    "description": "Your Group Heal spell recovers 25% more health.\n",
+    "icon": "Icons/groupheal2",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 1,
+  "whichClass": "Knight",
+  "powerScale": 1.0,
+  "defenseScale": 1.2,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Shield Wall",
+    "description": "Take on a defensive stance, reducing damage taken\nby 50% for 15 sec.",
+    "icon": "Icons/shieldwall",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Cleave",
+    "description": "Lash out with a series of whirling attacks at all\nenemies around you.",
+    "icon": "Icons/cleave",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Intimidate",
+    "description": "The knight emits a terrible battle cry, forcing all\nadjacent enemies to run in fear. ",
+    "icon": "Icons/intimidate",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Chivalry",
+    "description": "Your armor is increased by 15%.",
+    "icon": "Icons/chivalry",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Might",
+    "description": "Your power is increased by 15%.",
+    "icon": "Icons/might",
+    "cooldown": 0
+   },
+   {
+    "powerName": "War Cry",
+    "description": "Attracts the attention of all enemies, forcing them to\nattack you instead of your allies.",
+    "icon": "Icons/warcry",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Shield Rush",
+    "description": "A fierce rushing attack that knocks the enemy off\ntheir feet.",
+    "icon": "Icons/shieldrush",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Crippling Blows",
+    "description": "Your normal attacks cripple the enemy, reducing\ntheir damage by 10%.",
+    "icon": "Icons/debilitate2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Sunder Armor",
+    "description": "Your normal attacks weaken your opponents armor,\nincreasing their damage taken by 10%.",
+    "icon": "Icons/sunder",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Blitz",
+    "description": "Activating your War Cry or Shield Rush instantly\nrefreshes your other abilities.",
+    "icon": "Icons/lightning2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Fortress",
+    "description": "Your Shield Wall lasts for 20 sec.",
+    "icon": "Icons/shieldwall",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Revenge",
+    "description": "Your Shield Wall now reflects 100% of the damage\ndone to you, but lasts only 10 sec.",
+    "icon": "Icons/thorns",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 2,
+  "whichClass": "Rogue",
+  "powerScale": 1.0,
+  "defenseScale": 1.0,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Sneak Attack",
+    "description": "A precision strike that deals 250% normal damage.\n",
+    "icon": "Icons/sneakattack",
+    "cooldown": 20
+   },
+   {
+    "powerName": "Expose Weakness",
+    "description": "Reveals flaws in your enemy's defenses, increasing\ndamage taken by 50% for 10 sec.",
+    "icon": "Icons/exposearmor",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Poisoned Knife",
+    "description": "Hurls a poisoned knife at the target, dealing damage\nover time.",
+    "icon": "Icons/poisonknife",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Flurry",
+    "description": "Your attacks are 15% faster.",
+    "icon": "Icons/flurry",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Critical Strikes",
+    "description": "Your melee attacks have a 20% chance to deal\ndouble damage.",
+    "icon": "Icons/crit",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Paralytic Knife",
+    "description": "Throws a knife coated in a toxin that renders its\nvictims helpless for 8 sec.",
+    "icon": "Icons/paralyticknife",
+    "cooldown": 45
+   },
+   {
+    "powerName": "Shadowstep",
+    "description": "Warp behind your target and deliver a precision\nstrike for 350% normal damage.",
+    "icon": "Icons/ambush",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Combat Tactics",
+    "description": "Your armor is increased by 15%.",
+    "icon": "Icons/tactics",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Pursuit",
+    "description": "You now move 15% faster.",
+    "icon": "Icons/sprint",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Envenomed Blades",
+    "description": "Your blades are permanently coated in paralytic\npoison, randomly stunning your foes.",
+    "icon": "Icons/envenomed",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Lethality",
+    "description": "Your Sneak Attack and Shadowstep both deal 40%\nmore damage.",
+    "icon": "Icons/sneakattack",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Aggression",
+    "description": "Your power is increased by 10%.",
+    "icon": "Icons/intimidate",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 3,
+  "whichClass": "Wizard",
+  "powerScale": 1.0,
+  "defenseScale": 1.0,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Meteor",
+    "description": "Summons a meteor on your target, dealing damage\nin a large radius.",
+    "icon": "Icons/meteor",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Blizzard",
+    "description": "Chilling winds damage and slow all enemies on the\nfield for 10 sec.",
+    "icon": "Icons/blizzard",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Time Stop",
+    "description": "All enemies are frozen in time, rendering them\nhelpless for 5 sec.",
+    "icon": "Icons/timestop",
+    "cooldown": 45
+   },
+   {
+    "powerName": "Enveloping Flames",
+    "description": "Your basic fireball attack deals 75% of its damage\nto nearby targets.",
+    "icon": "Icons/firesplash",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Impact",
+    "description": "Your basic fireball attack deals 20% increased\ndamage.",
+    "icon": "Icons/impact",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Conflagrate",
+    "description": "Your target is consumed with fire, dealing damage\nand disabling them for 6 sec.",
+    "icon": "Icons/conflag",
+    "cooldown": 40
+   },
+   {
+    "powerName": "Thunderbolt",
+    "description": "Lightning strikes the caster, dealing damage and\nknocking away nearby foes.",
+    "icon": "Icons/lightning",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Fire Shield",
+    "description": "Attacks made against you have a 20% chance to\nlaunch a fireball back at the attacker.",
+    "icon": "Icons/fireshield",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Mage Armor",
+    "description": "All attacks against you have a 20% chance to phase\nthrough you, doing no damage.",
+    "icon": "Icons/magearmor",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Teleport",
+    "description": "The Wizard can now teleport at will.",
+    "icon": "Icons/teleport",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Flaming Meteor",
+    "description": "Your Meteor spell ignites its victims, dealing 50%\nmore damage over 8 sec.",
+    "icon": "Icons/flames",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Concussive Shockwave",
+    "description": "Your Meteor spell knocks its victims to the ground\nfor 3 sec.",
+    "icon": "Icons/shockwave",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 4,
+  "whichClass": "Witch",
+  "powerScale": 1.0,
+  "defenseScale": 1.0,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Drain Life",
+    "description": "Dark magic that steals life from its victim, healing\nthe caster's most injured ally.",
+    "icon": "Icons/drainlife",
+    "cooldown": 20
+   },
+   {
+    "powerName": "Plague",
+    "description": "Unleashes toxic fumes in a large area, dealing\ndamage over time.",
+    "icon": "Icons/plague",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Debilitate",
+    "description": "An enfeebling curse that greatly reduces its victim's\nattack power for 10 sec.",
+    "icon": "Icons/debilitate",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Piercing Shadow",
+    "description": "Your basic shadowbolt attack deals 15% extra\ndamage.",
+    "icon": "Icons/impact2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Life Leech",
+    "description": "All of your attacks heal you for 30% of the damage\ndealt.",
+    "icon": "Icons/leech",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Horror",
+    "description": "Fear consumes all enemies - the severity of the effect\nincreases with proximity to you.",
+    "icon": "Icons/horror",
+    "cooldown": 40
+   },
+   {
+    "powerName": "Hex",
+    "description": "Your target is turned into a toad for 6 sec., rendering\nthem weak and harmless.",
+    "icon": "Icons/curse",
+    "cooldown": 40
+   },
+   {
+    "powerName": "Terrifying Presence",
+    "description": "Enemies who strike you have a 10% chance to be\nconsumed with fear.",
+    "icon": "Icons/intimidate",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Sudden Doom",
+    "description": "Attacks against you have a 5% chance to reset the\ncooldown on Drain Life.",
+    "icon": "Icons/shadowarmor",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Prey on the Weak",
+    "description": "Your Drain Life spell is increased in power against\nfoes who are feared, paralyzed or cursed.",
+    "icon": "Icons/drainlife2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Crushing Despair",
+    "description": "Your Drain Life spell deals 40% additional damage,\nbut still heals for the same amount.",
+    "icon": "Icons/crushing",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Dark Harvest",
+    "description": "Your Drain Life spell recovers 40% additional health,\nthough its damage is not increased.",
+    "icon": "Icons/blood",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 5,
+  "whichClass": "Bard",
+  "powerScale": 1.0,
+  "defenseScale": 1.0,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Song of Renewal",
+    "description": "An invigorating song that instantly heals your\ntarget.",
+    "icon": "Icons/song1",
+    "cooldown": 20
+   },
+   {
+    "powerName": "Song of Vigor",
+    "description": "The Bard's soothing melodies replenish the party's\nhealth over time.",
+    "icon": "Icons/song2",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Song of Sanctuary",
+    "description": "The entire party takes 25% less damage for 15 sec.\nafter hearing this tune.",
+    "icon": "Icons/song3",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Gusto",
+    "description": "The power bonus granted to your target is increased\nby 50%.",
+    "icon": "Icons/crit",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Stoicism",
+    "description": "The armor bonus granted to your target is increased\nby 50%.",
+    "icon": "Icons/chivalry",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Song of War",
+    "description": "The Bard's music empowers the party, increasing\ntheir damage by 25% for 15 sec.",
+    "icon": "Icons/song4",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Song of Inspiration",
+    "description": "The party is inspired in their darkest hour, resetting\nall of their cooldowns.",
+    "icon": "Icons/song5",
+    "cooldown": 60
+   },
+   {
+    "powerName": "Healing Chords",
+    "description": "Your healing songs are 25% more effective.\n",
+    "icon": "Icons/directheal",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Enduring Hope",
+    "description": "The lingering effects of your songs are extended by\n5 seconds.",
+    "icon": "Icons/healingstream2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Prestissimo",
+    "description": "Your target's cooldowns refresh 20% faster while\nunder the effects of your Lute.",
+    "icon": "Icons/timestop2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Vivace",
+    "description": "Your target's movement and attack/casting speeds\nare increased by 10%.",
+    "icon": "Icons/sprint2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Echo of Renewal",
+    "description": "Song of Renewal now effects the entire party.\n",
+    "icon": "Icons/song6",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 6,
+  "whichClass": "Barbarian",
+  "powerScale": 1.0,
+  "defenseScale": 1.0,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Enrage",
+    "description": "Fly into a rage, increasing damage dealt AND taken\nby 35% for 8 sec.",
+    "icon": "Icons/barb1",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Frenzy",
+    "description": "You become a human blur, attacking at a high rate\nof speed for 10 sec.",
+    "icon": "Icons/barb2",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Whirlwind",
+    "description": "You become a whirlwind of steel, striking out at\nall adjacent targets.",
+    "icon": "Icons/barb3",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Death Wish",
+    "description": "The positive and negative effects of your Enrage\nability are increased by another 15%.",
+    "icon": "Icons/deathwish",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Iron Skin",
+    "description": "Being enraged no longer has any penalty.",
+    "icon": "Icons/iron",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Reckless Blow",
+    "description": "A massive attack that deals damage to the barbarian\nas well as his target.",
+    "icon": "Icons/barb4",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Savage Pounce",
+    "description": "Pounce on your target, dealing massive damage in\nan area around them.",
+    "icon": "Icons/barb5",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Precision Strikes",
+    "description": "Your melee attacks have a 20% chance to deal\ncritical damage.",
+    "icon": "Icons/crit",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Bloodthirsty",
+    "description": "While enraged, the Barbarian gains an extra 75%\nlife-draining on all attacks.",
+    "icon": "Icons/blood2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Adrenaline Rush",
+    "description": "After delivering the finish blow on an enemy, you\nheal slightly and recieve a haste buff.",
+    "icon": "Icons/barb6",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Blunt Trauma",
+    "description": "Your Reckless Blow/Savage Pounce also knock the\nvictim down.",
+    "icon": "Icons/conc",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Dismemberment",
+    "description": "Your Reckless Blow/Savage Pounce deal 20% more\ndamage.",
+    "icon": "Icons/dismember",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 7,
+  "whichClass": "Monk",
+  "powerScale": 1.0,
+  "defenseScale": 1.2,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Wind Walk",
+    "description": "With blinding speed, the Monk attacks everything on\nthe battlefield at once.",
+    "icon": "Icons/windwalk",
+    "cooldown": 40
+   },
+   {
+    "powerName": "Evasion",
+    "description": "You become momentarily untouchable, evading all\nattacks for 8 sec.",
+    "icon": "Icons/evasion",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Ki Blast",
+    "description": "A shockwave of pure Ki erupts from the Monk,\nknocking foes to the ground.",
+    "icon": "Icons/ki",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Iron Hand",
+    "description": "Your basic attacks have a 5% chance to knock\nopponents to the ground.",
+    "icon": "Icons/ironfist2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Tiger Claw",
+    "description": "Your basic attacks have a 15% chance to deal\ncritical damage.",
+    "icon": "Icons/tiger",
+    "cooldown": 0
+   },
+   {
+    "powerName": "1000 Palms",
+    "description": "Unleash a flurry of blows, dealing heavy damage to\na single target.",
+    "icon": "Icons/1000",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Spirit Trance",
+    "description": "Enter a trance state, granting you increased speed\nand health regen for 15 sec.",
+    "icon": "Icons/spirit",
+    "cooldown": 40
+   },
+   {
+    "powerName": "Clarity",
+    "description": "All healing effects on you are increased by 10%.\n",
+    "icon": "Icons/spirit2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Dragon Style",
+    "description": "Your attack power is increased by 15%. ",
+    "icon": "Icons/dragon",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Counter",
+    "description": "Whenever you take damage in melee, you have a\n30% chance to instantly counterattack.",
+    "icon": "Icons/counter",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Sweep the Leg",
+    "description": "Your Wind Walk ability cripples foes, reducing their\nmovement speed for 6 sec.",
+    "icon": "Icons/debilitate2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Solar Strikes",
+    "description": "Your Wind Walk ability deals 50% more damage.\n",
+    "icon": "Icons/ironfist",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 8,
+  "whichClass": "Ranger",
+  "powerScale": 1.0,
+  "defenseScale": 1.0,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Aimed Shot",
+    "description": "A precisely aimed shot which deals more damage\nthe further away the target is.",
+    "icon": "Icons/aimedshot",
+    "cooldown": 20
+   },
+   {
+    "powerName": "Incendiary Arrow",
+    "description": "Ignites the ground, dealing continuous damage to\nenemies who remain in the blaze.",
+    "icon": "Icons/flameArrow",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Vile Bolt",
+    "description": "A poisoned arrow which deals continuous damage\nand leaves the victim slowed.",
+    "icon": "Icons/venomshot",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Sniper's Sense",
+    "description": "Your attacks have an additional 15% critical strike\nchance.",
+    "icon": "Icons/snipe",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Mortal Shots",
+    "description": "The Ranger's basic attacks deal grievous wounds,\nreducing healing recieved by 75%.",
+    "icon": "Icons/blood2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Barrage",
+    "description": "Unleash a salvo of arrows that deals damage to\nall enemies.",
+    "icon": "Icons/barrage",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Apollo Strike",
+    "description": "A brutal shot that throws its victim to the ground for\n8 seconds.",
+    "icon": "Icons/apolloarrow",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Critical Aim",
+    "description": "Your Aimed Shot ability deals an additional 50%\ndamage.",
+    "icon": "Icons/aimedshot2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Misdirection",
+    "description": "Your special shots force their victims to attack your\nmost armored ally.",
+    "icon": "Icons/misdirect",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Canine Ally",
+    "description": "You've befriended a hunting dog, who automatically\nattacks your target.",
+    "icon": "Icons/wolf",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Crippling Bite",
+    "description": "Your dog ally distracts and harasses your enemies,\nreducing their damage by 15%.",
+    "icon": "Icons/tiger",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Thrash",
+    "description": "Your dog companion becomes a whirlwind of terror,\ndealing damage to all nearby enemies.",
+    "icon": "Icons/dismember",
+    "cooldown": 0
+   }
+  ]
+ },
+ {
+  "id": 9,
+  "whichClass": "Paladin",
+  "powerScale": 1.0,
+  "defenseScale": 1.2,
+  "healthScale": 15,
+  "whichPower": [
+   {
+    "powerName": "Holy Word",
+    "description": "A wave of soothing light seeks out and heals your\nmost injured ally.",
+    "icon": "Icons/holyWord",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Wrath",
+    "description": "Imbues your sword with holy lightning for 10 sec.,\nwhich chains to nearby foes.",
+    "icon": "Icons/wrath",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Aura of Light",
+    "description": "Converts all damage taken into healing instead for\n10 seconds.",
+    "icon": "Icons/auraoflight2",
+    "cooldown": 40
+   },
+   {
+    "powerName": "Stalwart",
+    "description": "Increases the paladin's armor by 15%.",
+    "icon": "Icons/chivalry",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Swift Justice",
+    "description": "Both movement and attack speed are increased by\n10%.",
+    "icon": "Icons/sprint2",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Divine Intervention",
+    "description": "Redirects all damage from the group to the paladin\nfor 10 seconds.",
+    "icon": "Icons/auraoflight",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Radiance",
+    "description": "A blast of divine fury knocks all enemies to the\nground while healing the party.",
+    "icon": "Icons/radiance",
+    "cooldown": 30
+   },
+   {
+    "powerName": "Bastion",
+    "description": "Increases the paladin's maximum health by 20%.\n",
+    "icon": "Icons/tactics",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Power of the Word",
+    "description": "The power of your healing abilities is increased by\n20%.",
+    "icon": "Icons/directheal",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Sentinel",
+    "description": "The Paladin now grants 25% of their own armor\nvalue to all of their allies.",
+    "icon": "Icons/favored",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Word of Asylum",
+    "description": "Your Holy Word ability also leaves a lingering shield,\nnullifying damage for 5 sec.",
+    "icon": "Icons/holyWordBlue",
+    "cooldown": 0
+   },
+   {
+    "powerName": "Word of Retribution",
+    "description": "Holy Word now strengthens its target, boosting their\npower by 50% for 10 seconds.",
+    "icon": "Icons/holyWordRed",
+    "cooldown": 0
+   }
+  ]
+ }
+]
