@@ -50,14 +50,11 @@ of the right section.
 13. **Movement speeds are not BH's.** BH speeds are in world units/second
     (`bh/data/prefabs/PartyMember.json` `moveSpeed`); pick a pixels-per-unit factor first.
 14. **OPTIONS on the title screen opens the developer sprite viewer.**
-14b. **Long item names overlap the price in the SHOP sell list** (e.g. "Swordsman's Gauntlet").
-    Truncate or shrink the name in `drawSellSection` (`screens/shop.lua`); check the screenshot
-    `shop-rich-1-enter.png` from `./test_ui`.
 
 ## D. Cleanup (safe, good first tasks)
-15. **Duplicate UI helpers.** `displayName` and the hero-icon loader are copied in
-    `screens/equip.lua`, `shop.lua`, `talents.lua`, `party_select.lua`; item glyph/colour code
-    in `equip.lua` and `shop.lua`. Move one copy of each into `common.lua` and use it everywhere.
+15. **Duplicate hero-icon loader.** Each of `screens/equip.lua`, `shop.lua`, `talents.lua`,
+    `party_select.lua` loads and draws `assets/charicons/icon-<class>.png` itself. Move one
+    copy into `common.lua`. (Names, item tokens, tooltips and the top bar are already shared.)
 16. **Finish the file-by-file pass** on the files listed at the bottom of `docs/STATUS.md`.
 17. **Unused stats.** `RES`, `BOOST`, `CRIT_DEF` in `encounter/stats.lua` are barely used;
     decide whether BH's model needs them and remove what it does not.

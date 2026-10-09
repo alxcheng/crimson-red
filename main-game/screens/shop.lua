@@ -4,6 +4,7 @@
 --   GEAR: 3 items for sale (shopState.offers) with BUY buttons, plus a SELL
 --         list of the party's carried (unequipped) items. Buy at the item's
 --         value, sell for half (BH rule). Stock comes from items.rollOffers.
+--         Hovering a card or a sell row shows the item's details in a tooltip.
 --   HIRE: one hero for hire (shopState.hireOffer). Hiring pays
 --         progression.hireCost, recruits the hero with starter gear, and puts
 --         them in the first free party slot (or leaves them in reserve).
@@ -18,6 +19,7 @@ local common = require("common")
 local save   = require("save")
 
 local items       = require("items")
+local item_ui     = require("item_ui")
 local progression = require("progression")
 
 local VW = common.VW
@@ -27,52 +29,45 @@ local VH = common.VH
 -- LAYOUT (800x450 virtual px)
 -- ============================================================================
 
-local TOP_BAR_H    = 40
-local DESC_BAR_H   = 60
-local CONTENT_TOP  = TOP_BAR_H
-local CONTENT_BOT  = VH - DESC_BAR_H
-
-local BOX_PAD = 5
+local TOP_BAR_H = common.TOP_BAR_H
+local MARGIN    = 20                         -- gap between the content and the screen edges
+local BOX_PAD   = common.BOX_PAD
 
 -- Tab switcher (below the top bar)
-local TAB_Y        = 50
-local TAB_H        = 26
-local TAB_W        = 110
-local TAB1_X       = 20                     -- GEAR
-local TAB2_X       = TAB1_X + TAB_W + 14    -- HIRE
+local TAB_Y   = TOP_BAR_H + 12
+local TAB_H   = 26
+local TAB_W   = 110
+local TAB1_X  = MARGIN                       -- GEAR
+local TAB2_X  = TAB1_X + TAB_W + 12          -- HIRE
 
--- GEAR tab — 3 offer cards in a row (left/center)
-local OFFER_X      = 20
-local OFFER_Y      = 90
-local OFFER_W      = 160
-local OFFER_H      = 232
-local OFFER_GAP    = 12
-local OFFER_BTN_H  = 34
-local OFFER_BTN_Y  = OFFER_Y + OFFER_H - OFFER_BTN_H - 8
+local CONTENT_Y = TAB_Y + TAB_H + 14         -- everything under the tabs
+local CONTENT_H = VH - MARGIN - CONTENT_Y
 
--- GEAR tab — SELL section (right column)
-local SELL_X       = OFFER_X + 3 * OFFER_W + 2 * OFFER_GAP + 16
-local SELL_Y       = OFFER_Y
-local SELL_W       = VW - SELL_X - 20
-local SELL_H       = OFFER_H
-local SELL_ROWS    = 6                      -- owned-item rows shown
-local SELL_ROW_H   = 30
+-- GEAR tab: 3 offer cards on the left
+local OFFER_X     = MARGIN
+local OFFER_Y     = CONTENT_Y
+local OFFER_W     = 150
+local OFFER_H     = CONTENT_H
+local OFFER_GAP   = 12
+local OFFER_BTN_H = 34
+local OFFER_BTN_Y = OFFER_Y + OFFER_H - OFFER_BTN_H - 8
 
--- HIRE tab — one centered recruit card
-local HIRE_X       = math.floor((VW - 300) / 2)
-local HIRE_Y       = 120
-local HIRE_W       = 300
-local HIRE_H       = 240
-local HIRE_BTN_H   = 40
-local HIRE_BTN_Y   = HIRE_Y + HIRE_H - HIRE_BTN_H - 12
+-- GEAR tab: SELL list filling the rest of the row
+local SELL_X      = OFFER_X + 3 * OFFER_W + 2 * OFFER_GAP + 16
+local SELL_Y      = OFFER_Y
+local SELL_W      = VW - MARGIN - SELL_X
+local SELL_H      = OFFER_H
+local SELL_HEAD_H = 30                       -- "SELL" caption band
+local SELL_ROW_H  = 30
+local SELL_ROWS   = math.floor((SELL_H - SELL_HEAD_H - 24) / SELL_ROW_H)   -- rows shown; 24 px left for "+N more"
 
--- Bottom description bar
-local DESC_Y       = VH - DESC_BAR_H
-
-local AX      = common.ARROW_X
-local AY      = common.ARROW_Y
-local AW      = common.ARROW_W
-local AH      = common.ARROW_H
+-- HIRE tab: one recruit card centred in the content area
+local HIRE_W      = 360
+local HIRE_H      = 200
+local HIRE_X      = math.floor((VW - HIRE_W) / 2)
+local HIRE_Y      = CONTENT_Y + math.floor((CONTENT_H - HIRE_H) / 2)
+local HIRE_BTN_H  = 40
+local HIRE_BTN_Y  = HIRE_Y + HIRE_H - HIRE_BTN_H - 14
 
 local PARTS_SIZE = 56   -- recruit portrait
 
@@ -86,14 +81,16 @@ local saveData_ref, slot_ref
 local tab            = "gear"   -- "gear" | "hire"
 local hoveredTab     = nil      -- "gear" | "hire"
 local hoveredBack    = false
-local hoveredBuy     = nil      -- 1..3 offer index (GEAR)
+local hoveredBuy     = nil      -- 1..3 offer index whose BUY button is hovered (GEAR)
+local hoveredCard    = nil      -- 1..3 offer index whose card is hovered (tooltip)
+local hoveredHireCard = false   -- recruit card hovered (tooltip)
 local hoveredSell    = nil      -- 1..N owned-item index (GEAR)
 local hoveredHire    = false    -- HIRE button (HIRE tab)
 local pressedItem    = nil      -- {zone=...} while mouse is down
 local box            = common.newBox()
 
 local assetsLoaded = false
-local font16, font14, fontTitle
+local font16, font14
 
 -- ============================================================================
 -- DATA HELPERS
@@ -271,7 +268,7 @@ local function offerBuyRect(idx)
 end
 
 local function sellRowRect(idx)
-    return SELL_X, SELL_Y + 26 + (idx - 1) * SELL_ROW_H, SELL_W, SELL_ROW_H
+    return SELL_X, SELL_Y + SELL_HEAD_H + (idx - 1) * SELL_ROW_H, SELL_W, SELL_ROW_H
 end
 
 local function hireBtnRect()
@@ -288,8 +285,10 @@ local function detectHover(vmx, vmy)
     hoveredBuy     = nil
     hoveredSell    = nil
     hoveredHire    = false
+    hoveredCard    = nil
+    hoveredHireCard = false
 
-    if vmx >= AX and vmx < AX + AW and vmy >= AY and vmy < AY + AH then
+    if common.overBack(vmx, vmy) then
         hoveredBack = true
         return "back"
     end
@@ -307,6 +306,10 @@ local function detectHover(vmx, vmy)
 
     if tab == "gear" then
         for i = 1, 3 do
+            local cx, cy, cw, ch = offerCardRect(i)
+            if getShopState().offers[i] and vmx >= cx and vmx < cx + cw and vmy >= cy and vmy < cy + ch then
+                hoveredCard = i
+            end
             local bx, by, bw, bh = offerBuyRect(i)
             if getShopState().offers[i] and vmx >= bx and vmx < bx + bw and vmy >= by and vmy < by + bh then
                 hoveredBuy = i
@@ -325,6 +328,8 @@ local function detectHover(vmx, vmy)
     end
 
     -- HIRE tab
+    hoveredHireCard = getShopState().hireOffer ~= nil
+        and vmx >= HIRE_X and vmx < HIRE_X + HIRE_W and vmy >= HIRE_Y and vmy < HIRE_Y + HIRE_H
     local hx, hy, hw, hh = hireBtnRect()
     if getShopState().hireOffer and vmx >= hx and vmx < hx + hw and vmy >= hy and vmy < hy + hh then
         hoveredHire = true
@@ -362,7 +367,6 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
         assetsLoaded = true
         font16    = common.loadFont(16)
         font14    = common.loadFont(14)
-        fontTitle = common.loadFont(20)
     end
 
     -- Restock if a battle was won since the last visit.
@@ -388,7 +392,7 @@ function M.update(dt)
     local zone = detectHover(vmx, vmy)
 
     if zone == "back" then
-        common.setBoxTarget(box, AX - BOX_PAD, AY - BOX_PAD, AW + BOX_PAD * 2, AH + BOX_PAD * 2)
+        common.setBoxTarget(box, common.backBoxRect())
     elseif zone == "tab" then
         local tx, ty, tw, th = tabRect(hoveredTab)
         common.setBoxTarget(box, tx - BOX_PAD, ty - BOX_PAD, tw + BOX_PAD * 2, th + BOX_PAD * 2)
@@ -488,23 +492,11 @@ end
 -- DRAW HELPERS
 -- ============================================================================
 
-local GRADE_COLORS = {
-    [1] = {0.55, 0.55, 0.55, 1},   -- low: grey
-    [2] = {0.95, 0.55, 0.20, 1},   -- mid: orange
-    [3] = {0.95, 0.20, 0.35, 1},   -- high: crimson
-}
-
 local CRIMSON = {0.84, 0.07, 0.16, 1}
 local OFFRED  = {1.00, 0.42, 0.42, 1}
+local GOLD    = item_ui.GOLD
 
-local function displayName(name)
-    if not name then return "" end
-    local parts = {}
-    for part in name:gmatch("%S+") do
-        parts[#parts + 1] = part:sub(1, 1):upper() .. part:sub(2)
-    end
-    return table.concat(parts, " ")
-end
+local displayName = common.titleCase
 
 -- Small drawn coin glyph (Dedicool has no emoji). A gold circle + inner ring.
 local function drawCoin(cx, cy, r)
@@ -515,18 +507,18 @@ local function drawCoin(cx, cy, r)
     love.graphics.circle("line", cx, cy, r - 2)
 end
 
--- Draw an item instance's type glyph (letter) — matches equip's W/A/T tokens.
-local function drawItemGlyph(inst, x, y, size)
-    local GLYPHS = { weapon = "W", armor = "A", trinket = "T" }
-    local glyph = GLYPHS[inst.itemType] or "?"
-    local gc = GRADE_COLORS[inst.grade] or {0.55, 0.55, 0.55, 1}
-    love.graphics.setColor(gc)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", x + 2, y + 2, size - 4, size - 4)
+-- A filled button with a coin and "<verb> <price>" centred in it; dimmed when unaffordable.
+local function drawPriceButton(verb, price, bx, by, bw, bh)
+    local canAfford = goldValue() >= price
+    love.graphics.setColor(canAfford and CRIMSON or {0.30, 0.10, 0.12, 1})
+    love.graphics.rectangle("fill", bx, by, bw, bh)
+    local label = verb .. " " .. tostring(price)
+    local lw = font16:getWidth(label)
+    local startX = math.floor(bx + (bw - (16 + lw)) / 2)       -- coin (12) + gap (4) + label
+    drawCoin(startX + 6, by + bh / 2, 6)
     love.graphics.setFont(font16)
-    local gw, gh = font16:getWidth(glyph), font16:getHeight(glyph)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(glyph, x + (size - gw) / 2, y + (size - gh) / 2)
+    love.graphics.setColor(canAfford and {1, 1, 1, 1} or {0.5, 0.4, 0.4, 1})
+    love.graphics.print(label, startX + 16, math.floor(by + (bh - font16:getHeight()) / 2))
 end
 
 -- Recruit portrait: charicon image, or a name-fallback if absent.
@@ -539,13 +531,8 @@ local function drawRecruitPortrait(name, x, y, size)
         love.graphics.draw(img, x + (size - iw * sc) / 2, y + (size - ih * sc) / 2, 0, sc, sc)
         return
     end
-    local label = displayName(name)
-    love.graphics.setFont(font16)
-    local fw, fh = font16:getWidth(label), font16:getHeight()
-    local scale = 1
-    if fw > size - 4 then scale = (size - 4) / fw end
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(label, x + (size - fw * scale) / 2, y + (size - fh * scale) / 2, 0, scale, scale)
+    common.printCentered(font16, displayName(name), x, y, size, size)
 end
 
 local function drawGoldDisplay()
@@ -553,7 +540,7 @@ local function drawGoldDisplay()
     love.graphics.setFont(font16)
     local str = tostring(math.floor(g))
     local w = font16:getWidth(str)
-    local cx = VW - 18 - w
+    local cx = VW - MARGIN - w
     drawCoin(cx - 8, math.floor(TOP_BAR_H / 2), 7)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(str, cx, math.floor((TOP_BAR_H - font16:getHeight()) / 2))
@@ -581,7 +568,8 @@ local function drawTabs()
     end
 end
 
--- One offer card: grade-tinted frame, name, type/grade, mods, BUY button.
+-- One offer card: grade-tinted frame, glyph, name, type, bonuses, BUY button.
+-- Everything is centred in the card; the full description is in the hover tooltip.
 local function drawOfferCard(idx)
     local id = getShopState().offers[idx]
     local cx, cy, cw, ch = offerCardRect(idx)
@@ -591,54 +579,35 @@ local function drawOfferCard(idx)
 
     local inst = id and getItemsTable()[id]
     if type(inst) == "table" then
-        local gc = GRADE_COLORS[inst.grade] or {0.55, 0.55, 0.55, 1}
-        love.graphics.setColor(gc)
+        love.graphics.setColor(item_ui.gradeColor(inst))
         love.graphics.setLineWidth(2)
         love.graphics.rectangle("line", cx, cy, cw, ch)
 
-        drawItemGlyph(inst, cx + 12, cy + 12, 40)
+        item_ui.drawGlyph(inst, cx + (cw - 48) / 2, cy + 20, 48)
 
-        -- Name wraps to two lines beside the glyph so it never leaves the card.
+        -- Name: up to two centred lines.
         love.graphics.setFont(font14)
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.printf(inst.name or "(unnamed)", cx + 60, cy + 16, cw - 66, "left")
-
-        love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        love.graphics.print(tostring(inst.itemType or "?"),
-            cx + 12, cy + 62)
-
-        -- Mods (wrap up to 2 lines).
-        local mods = inst.mods or {}
-        local modParts = {}
-        for k, v in pairs(mods) do
-            modParts[#modParts + 1] = "+" .. tostring(v) .. " " .. k
-        end
-        if #modParts > 0 then
-            table.sort(modParts)
-            love.graphics.setColor(0.95, 0.55, 0.20, 1)
-            love.graphics.printf(table.concat(modParts, "\n"), cx + 12, cy + 86, cw - 24, "left")
+        local _, nameLines = font14:getWrap(inst.name or "(unnamed)", cw - 16)
+        for i = 1, math.min(2, #nameLines) do
+            local ln = (i == 2 and #nameLines > 2) and common.fitText(font14, nameLines[2] .. " " .. nameLines[3], cw - 16) or nameLines[i]
+            love.graphics.printf(ln, cx + 8, cy + 82 + (i - 1) * 18, cw - 16, "center")
         end
 
-        -- BUY button with the price.
-        local price = items.buyPrice(inst)
+        love.graphics.setColor(item_ui.GREY)
+        love.graphics.printf(displayName(inst.itemType or "?"), cx + 8, cy + 128, cw - 16, "center")
+        love.graphics.setColor(item_ui.BONUS)
+        love.graphics.printf(item_ui.modsText(inst, "\n"), cx + 8, cy + 150, cw - 16, "center")
+
         local bx, by, bw, bh = offerBuyRect(idx)
-        local canAfford = goldValue() >= price
-        love.graphics.setColor(canAfford and CRIMSON or {0.30, 0.10, 0.12, 1})
-        love.graphics.rectangle("fill", bx, by, bw, bh)
-        love.graphics.setColor(canAfford and {1, 1, 1, 1} or {0.5, 0.4, 0.4, 1})
-        love.graphics.setFont(font16)
-        drawCoin(bx + 14, by + bh / 2, 6)
-        love.graphics.print("BUY", bx + 26, by + (bh - font16:getHeight()) / 2)
-        love.graphics.print(tostring(price), bx + 64, by + (bh - font16:getHeight()) / 2)
+        drawPriceButton("BUY", items.buyPrice(inst), bx, by, bw, bh)
     else
         -- Empty slot.
         love.graphics.setColor(0.20, 0.05, 0.06, 1)
         love.graphics.setLineWidth(1)
         love.graphics.rectangle("line", cx, cy, cw, ch)
-        love.graphics.setFont(font14)
         love.graphics.setColor(0.4, 0.3, 0.3, 1)
-        local lbl = "SOLD OUT"
-        love.graphics.print(lbl, cx + (cw - font14:getWidth(lbl)) / 2, cy + ch / 2 - 8)
+        common.printCentered(font14, "SOLD OUT", cx, cy, cw, ch)
     end
 end
 
@@ -652,7 +621,7 @@ local function drawSellSection()
 
     love.graphics.setFont(font16)
     love.graphics.setColor(CRIMSON)
-    love.graphics.print("SELL (50%)", SELL_X + 12, SELL_Y + 6)
+    love.graphics.print("SELL", SELL_X + 12, math.floor(SELL_Y + (SELL_HEAD_H - font16:getHeight()) / 2) + 1)
 
     local inv = getInventory()
     local count = math.min(#inv, SELL_ROWS)
@@ -660,7 +629,7 @@ local function drawSellSection()
         love.graphics.setFont(font14)
         love.graphics.setColor(0.5, 0.5, 0.5, 1)
         local lbl = "No items to sell"
-        love.graphics.print(lbl, SELL_X + 12, SELL_Y + 40)
+        love.graphics.print(lbl, SELL_X + 12, SELL_Y + SELL_HEAD_H + 8)
         return
     end
 
@@ -674,21 +643,20 @@ local function drawSellSection()
         love.graphics.rectangle("line", sx, sy, sw, sh)
 
         if type(inst) == "table" then
-            local gc = GRADE_COLORS[inst.grade] or {0.55, 0.55, 0.55, 1}
-            love.graphics.setColor(gc)
+            love.graphics.setColor(item_ui.gradeColor(inst))
             love.graphics.setLineWidth(2)
-            love.graphics.rectangle("line", sx + 4, sy + 4, sh - 8, sh - 8)
+            love.graphics.rectangle("line", sx + 5, sy + 5, sh - 10, sh - 10)
 
+            -- Sell price right-aligned; the name gets whatever width is left.
+            local textY = math.floor(sy + (sh - font14:getHeight()) / 2)
+            local pstr  = tostring(items.sellValue(inst))
+            local priceX = sx + sw - 10 - font14:getWidth(pstr)
             love.graphics.setFont(font14)
+            love.graphics.setColor(GOLD)
+            love.graphics.print(pstr, priceX, textY)
             love.graphics.setColor(1, 1, 1, 1)
-            local nm = inst.name or "(unnamed)"
-            love.graphics.print(nm, sx + (sh + 8) + 6, sy + (sh - font14:getHeight()) / 2)
-
-            -- Sell price on the right.
-            local pay = items.sellValue(inst)
-            love.graphics.setColor(0.95, 0.78, 0.20, 1)
-            local pstr = tostring(pay)
-            love.graphics.print(pstr, sx + sw - 10 - font14:getWidth(pstr), sy + (sh - font14:getHeight()) / 2)
+            local nameX = sx + sh + 4
+            love.graphics.print(common.fitText(font14, inst.name or "(unnamed)", priceX - 10 - nameX), nameX, textY)
         end
     end
 
@@ -696,7 +664,7 @@ local function drawSellSection()
         love.graphics.setFont(font14)
         love.graphics.setColor(0.5, 0.5, 0.5, 1)
         love.graphics.print("+" .. tostring(#inv - SELL_ROWS) .. " more", SELL_X + 12,
-            SELL_Y + 26 + SELL_ROWS * SELL_ROW_H + 4)
+            SELL_Y + SELL_HEAD_H + SELL_ROWS * SELL_ROW_H + 5)
     end
 end
 
@@ -712,115 +680,66 @@ local function drawHireCard()
 
     love.graphics.setFont(font16)
     love.graphics.setColor(CRIMSON)
-    local ttl = "RECRUIT"
-    love.graphics.print(ttl, HIRE_X + 12, HIRE_Y + 8)
+    love.graphics.print("RECRUIT", HIRE_X + 14, HIRE_Y + 10)
 
     if not name then
-        love.graphics.setFont(font16)
         love.graphics.setColor(0.5, 0.5, 0.5, 1)
-        local lbl = "No recruits available"
-        love.graphics.print(lbl, HIRE_X + (HIRE_W - font16:getWidth(lbl)) / 2, HIRE_Y + HIRE_H / 2 - 8)
+        common.printCentered(font16, "No recruits available", HIRE_X, HIRE_Y, HIRE_W, HIRE_H)
         return
     end
 
-    local lvl   = progression.hireLevel(saveData_ref)
     local stats = progression.heroStats(saveData_ref, name)
-
-    drawRecruitPortrait(name, HIRE_X + 20, HIRE_Y + 40, PARTS_SIZE)
+    local px, py = HIRE_X + 20, HIRE_Y + 42
+    local tx = px + PARTS_SIZE + 14
+    love.graphics.setColor(0.45, 0.15, 0.20, 1)
+    love.graphics.setLineWidth(1)
+    love.graphics.rectangle("line", px, py, PARTS_SIZE, PARTS_SIZE)
+    drawRecruitPortrait(name, px, py, PARTS_SIZE)
 
     love.graphics.setFont(font16)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(displayName(name), HIRE_X + 20 + PARTS_SIZE + 14, HIRE_Y + 44)
+    love.graphics.print(displayName(name), tx, py)
     love.graphics.setFont(font14)
     love.graphics.setColor(OFFRED)
-    love.graphics.print("Lv " .. tostring(lvl), HIRE_X + 20 + PARTS_SIZE + 14, HIRE_Y + 66)
-
+    love.graphics.print("Lv " .. tostring(progression.hireLevel(saveData_ref)), tx, py + 20)
     if stats then
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.95, 0.55, 0.20, 1)
-        love.graphics.print("ATK " .. tostring(stats.ATK or 0)
-            .. "   DEF " .. tostring(stats.DEF or 0)
-            .. "   HP " .. tostring(stats.maxHP or 0),
-            HIRE_X + 20 + PARTS_SIZE + 14, HIRE_Y + 86)
+        love.graphics.setColor(item_ui.BONUS)
+        love.graphics.print(common.fitText(font14, ("ATK %d  DEF %d  HP %d"):format(stats.ATK or 0, stats.DEF or 0, stats.maxHP or 0),
+            HIRE_X + HIRE_W - 14 - tx), tx, py + 40)
     end
 
-    -- HIRE button with the cost; dimmed when the party cannot afford it.
     local hx, hy, hw, hh = hireBtnRect()
-    local cost  = progression.hireCost(saveData_ref)
-    local label = "HIRE  " .. tostring(cost)
-    local dim   = goldValue() < cost
-    love.graphics.setColor(dim and {0.30, 0.10, 0.12, 1} or CRIMSON)
-    love.graphics.rectangle("fill", hx, hy, hw, hh)
-    love.graphics.setFont(font16)
-    love.graphics.setColor(dim and {0.5, 0.4, 0.4, 1} or {1, 1, 1, 1})
-    if not dim then
-        drawCoin(hx + 22, hy + hh / 2, 6)
-        love.graphics.print("HIRE", hx + 34, hy + (hh - font16:getHeight()) / 2)
-        local costStr = label:match("(%d+)$") or ""
-        love.graphics.print(costStr, hx + 84, hy + (hh - font16:getHeight()) / 2)
-    else
-        love.graphics.print(label, hx + (hw - font16:getWidth(label)) / 2, hy + (hh - font16:getHeight()) / 2)
-    end
+    drawPriceButton("HIRE", progression.hireCost(saveData_ref), hx, hy, hw, hh)
 end
 
-local function drawDescBar()
-    love.graphics.setColor(0.05, 0.03, 0.03, 1)
-    love.graphics.rectangle("fill", 0, DESC_Y, VW, DESC_BAR_H)
-    love.graphics.setColor(0.6, 0.15, 0.20, 1)
-    love.graphics.setLineWidth(2)
-    love.graphics.line(0, DESC_Y, VW, DESC_Y)
-
-    -- Determine the focused item / recruit.
-    local inst, hireName = nil, nil
+-- Tooltip for whatever is under the mouse: an item for sale, an item to sell, the recruit.
+local function drawHoverTooltip()
     if tab == "gear" then
         if hoveredSell then
-            local id = getInventory()[hoveredSell]
-            inst = id and getItemsTable()[id]
-        elseif hoveredBuy then
-            local id = getShopState().offers[hoveredBuy]
-            inst = id and getItemsTable()[id]
+            local inst = getItemsTable()[getInventory()[hoveredSell]]
+            if type(inst) == "table" then
+                local x, y, w, h = sellRowRect(hoveredSell)
+                common.drawTooltip(item_ui.tooltipLines(inst, { price = { label = "Sells for", amount = items.sellValue(inst) } }),
+                    { x = x, y = y, w = w, h = h })
+            end
+        elseif hoveredCard then
+            local inst = getItemsTable()[getShopState().offers[hoveredCard]]
+            if type(inst) == "table" then
+                -- The card is large, so this one hangs under the mouse instead of under the card.
+                local vmx, vmy = common.virtualMouse()
+                common.drawTooltip(item_ui.tooltipLines(inst, { price = { label = "Costs", amount = items.buyPrice(inst) } }),
+                    { x = vmx, y = vmy, w = 12, h = 14 })
+            end
         end
-    elseif tab == "hire" then
-        hireName = getShopState().hireOffer
-    end
-
-    if type(inst) == "table" then
-        love.graphics.setFont(font16)
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print(inst.name or "(unnamed)", 12, DESC_Y + 6)
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        love.graphics.print(inst.desc or tostring(inst.itemType or "?"),
-            12, DESC_Y + 28)
-        local mods = inst.mods or {}
-        local modParts = {}
-        for k, v in pairs(mods) do
-            modParts[#modParts + 1] = "+" .. tostring(v) .. " " .. k
-        end
-        if #modParts > 0 then
-            love.graphics.setColor(0.95, 0.55, 0.20, 1)
-            love.graphics.print(table.concat(modParts, ", "), 12, DESC_Y + 44)
-        end
-        love.graphics.setColor(0.95, 0.78, 0.20, 1)
-        local pay = items.sellValue(inst)
-        love.graphics.print("sells for " .. tostring(pay), VW - 160, DESC_Y + 28)
-    elseif hireName then
-        local cd = (saveData_ref.unlockedCharacters or {})[hireName]
-        love.graphics.setFont(font16)
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print(displayName(hireName), 12, DESC_Y + 6)
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        love.graphics.print("Joins at Lv " .. tostring(progression.hireLevel(saveData_ref))
-            .. " with starter gear", 12, DESC_Y + 28)
-        local cost = progression.hireCost(saveData_ref)
-        love.graphics.setColor(0.95, 0.78, 0.20, 1)
-        love.graphics.print("hire cost " .. tostring(cost), VW - 160, DESC_Y + 28)
-    else
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.5, 0.5, 0.5, 1)
-        love.graphics.print("Hover an item or recruit for details.",
-            12, DESC_Y + (DESC_BAR_H - font14:getHeight()) / 2)
+    elseif hoveredHireCard then
+        local name = getShopState().hireOffer
+        local lines = {
+            { text = displayName(name), size = 16, color = OFFRED },
+            { text = "Joins at Lv " .. tostring(progression.hireLevel(saveData_ref)) .. " with starter gear.", color = {1, 1, 1, 1} },
+            { text = firstFreePartySlot() and "Goes straight into the party." or "Party is full: goes to the reserves.", color = item_ui.GREY },
+            { text = "Costs " .. tostring(progression.hireCost(saveData_ref)) .. " gold", color = GOLD },
+        }
+        common.drawTooltip(lines, { x = HIRE_X, y = HIRE_Y, w = HIRE_W, h = HIRE_H })
     end
 end
 
@@ -830,7 +749,7 @@ local function drawFlash()
     love.graphics.setColor(0.95, 0.2, 0.3, a)
     love.graphics.setFont(font16)
     local w = font16:getWidth(flash.text)
-    love.graphics.print(flash.text, (VW - w) / 2, 78)
+    love.graphics.print(flash.text, (VW - w) / 2, TAB_Y + math.floor((TAB_H - font16:getHeight()) / 2))
 end
 
 local function drawScene()
@@ -839,18 +758,8 @@ local function drawScene()
     love.graphics.rectangle("fill", 0, 0, VW, VH)
 
     -- 2. Top bar
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setLineWidth(1)
-    love.graphics.line(0, TOP_BAR_H, VW, TOP_BAR_H)
-
-    common.drawBackArrow(pressedItem and pressedItem.back and hoveredBack)
-
-    local title = "SHOP"
-    love.graphics.setFont(fontTitle)
-    love.graphics.setColor(common.COLOR_RED)
-    love.graphics.print(title, (VW - fontTitle:getWidth(title)) / 2,
-        math.floor((TOP_BAR_H - fontTitle:getHeight()) / 2))
-
+    local backPressed = pressedItem ~= nil and pressedItem.back and hoveredBack
+    common.drawTopBar("SHOP", backPressed)
     drawGoldDisplay()
 
     -- 3. Tabs
@@ -866,15 +775,13 @@ local function drawScene()
         drawHireCard()
     end
 
-    -- 5. Bottom description bar
-    drawDescBar()
+    -- 5. Red hover box (white when BACK is pressed), then BACK again on top of it
+    common.drawBox(box, backPressed)
+    common.drawBackButton(backPressed)
 
-    -- 6. Red hover box (on top)
-    local boxPressed = (pressedItem ~= nil and pressedItem.back and hoveredBack)
-    common.drawBox(box, boxPressed)
-
-    -- 7. Transient flash
+    -- 6. Transient flash, hover tooltip
     drawFlash()
+    drawHoverTooltip()
 
     love.graphics.setColor(1, 1, 1, 1)
 end

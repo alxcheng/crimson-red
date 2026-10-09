@@ -196,22 +196,19 @@ end
 
 local function buildTopBar()
     topbarItems = {}
-    local aW, aH = 24, 18
-    local aX = 12
-    local aY = math.floor((TOP_BAR_H - aH) / 2)
-    topbarItems[1] = {isArrow=true, x=aX, y=aY, w=aW, h=aH}
+    -- BACK (shared geometry), then the screen links at an even spacing.
+    topbarItems[1] = {isBack=true, x=common.BACK_X, y=common.BACK_Y, w=common.BACK_W, h=common.BACK_H}
 
-    local labels  = {"PARTY", "TALENTS", "EQUIP"}
-    local centers = {100, 205, 300}
-    for i, lbl in ipairs(labels) do
+    local x  = common.BACK_X + common.BACK_W + 32
+    local lh = font16:getHeight()
+    for i, lbl in ipairs({"PARTY", "TALENTS", "EQUIP"}) do
         local lw = font16:getWidth(lbl)
-        local lh = font16:getHeight()
         topbarItems[i+1] = {
             label = lbl,
-            x = math.floor(centers[i] - lw/2),
-            y = math.floor((TOP_BAR_H - lh)/2),
+            x = x, y = math.floor((TOP_BAR_H - lh)/2),
             w = lw, h = lh,
         }
+        x = x + lw + 32
     end
 end
 
@@ -579,14 +576,6 @@ local function drawTile(c, r)
     love.graphics.rectangle("line", sx+0.5, sy+0.5, TILE_SIZE-1, TILE_SIZE-1)
 end
 
-local function drawArrowTopBar(x, y, w, h, inBlack)
-    love.graphics.setColor(inBlack and common.COLOR_BLACK or common.COLOR_RED)
-    local headW  = math.floor(w * 0.45)
-    local shaftH = math.floor(h * 0.42)
-    love.graphics.polygon("fill", x, y+h/2, x+headW, y, x+headW, y+h)
-    love.graphics.rectangle("fill", x+headW-1, y+(h-shaftH)/2, w-headW+1, shaftH)
-end
-
 local function isItemPressed(zone, index)
     return pressedItem and pressedItem.zone == zone and
            (index == nil or pressedItem.index == index)
@@ -599,8 +588,7 @@ local function drawTopBar()
     love.graphics.setLineWidth(1)
     love.graphics.line(0, TOP_BAR_H, VW, TOP_BAR_H)
 
-    local it = topbarItems[1]
-    drawArrowTopBar(it.x, it.y, it.w, it.h, isItemPressed("topbar", 1))
+    common.drawBackButton(isItemPressed("topbar", 1))
 
     love.graphics.setFont(font16)
     for i = 2, #topbarItems do
@@ -612,7 +600,7 @@ local function drawTopBar()
     local lw = font16:getWidth(LOCATION_NAME)
     local lh = font16:getHeight()
     love.graphics.setColor(common.COLOR_RED)
-    love.graphics.print(LOCATION_NAME, VW - lw - 12, math.floor((TOP_BAR_H - lh) / 2))
+    love.graphics.print(LOCATION_NAME, VW - lw - 20, math.floor((TOP_BAR_H - lh) / 2))
 end
 
 local function drawPopupContent()

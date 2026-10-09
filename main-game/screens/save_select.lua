@@ -31,14 +31,10 @@ local DEL_BTN_H = 22
 local DEL_BTN_PAD = 6   -- gap between the button's right edge and the row's right edge
 local ROW_DEL_GAP = 8   -- gap between the row's hit-rect right edge and the button
 
-local AX      = common.ARROW_X
-local AY      = common.ARROW_Y
-local A_H     = common.ARROW_H
-local A_W     = common.ARROW_W
-local BOX_PAD = 5
+local BOX_PAD = common.BOX_PAD
 
 -- Item index map (shared by hover, hit-rect, box-target and release):
---   1        = back arrow
+--   1        = BACK
 --   2 .. 6   = rows 1..5          (index 2+si-1)
 --   7 .. 11  = delete 1..5        (index 7+si-1)
 local ITEM_COUNT = 11
@@ -62,7 +58,7 @@ end
 
 local function getBoxTarget(i)
     if i == 1 then
-        return AX - BOX_PAD, AY - BOX_PAD, A_W + BOX_PAD*2, A_H + BOX_PAD*2
+        return common.backBoxRect()
     elseif i <= 6 then
         local sx, sy, sw, sh = rowHitRect(i - 1)
         return sx, sy, sw, sh
@@ -74,7 +70,7 @@ end
 
 local function getHitRect(i)
     if i == 1 then
-        return AX, AY, A_W, A_H
+        return common.BACK_X, common.BACK_Y, common.BACK_W, common.BACK_H
     elseif i <= 6 then
         return rowHitRect(i - 1)
     else
@@ -241,8 +237,8 @@ local function drawScene()
     -- Red hover/press box (the only row indicator)
     common.drawBox(box, pressedItem ~= nil)
 
-    -- Back arrow
-    common.drawBackArrow(pressedItem == 1)
+    -- BACK
+    common.drawBackButton(pressedItem == 1)
 
     -- Rows
     for si = 1, SLOT_COUNT do
@@ -273,7 +269,8 @@ local function drawScene()
             else
                 love.graphics.setColor(0.75, 0.75, 0.75, 1)
             end
-            love.graphics.print(summary, rx + 90, ry + 32)
+            local maxW = delBtnRect(si) - ROW_DEL_GAP - (rx + 90)   -- stop short of DELETE
+            love.graphics.print(common.fitText(smallFont, summary, maxW), rx + 90, ry + 32)
         end
     end
 

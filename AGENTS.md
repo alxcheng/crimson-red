@@ -47,15 +47,17 @@ captures/      screenshots from test runs (not in git)
 ```bash
 ./playtest         # run the game (for the Director)
 ./test_headless    # battle-engine smoke test          -> HEADLESS_PASS, exit code 0
-./test_ui          # drives every screen + full battles -> UI_SMOKE_PASS, exit code 0
+./test_ui          # drives every screen + full battles -> UI_SMOKE_PASS, exit code 0  (~10 min)
+./test_ui quick    # same without the three whole battles (~3 min) - while iterating on menus
 ```
 
 - **Run both tests after every change and read the exit code** (`echo $?`), not just the last
   line. A change is not done until both exit 0.
 - `./test_ui` saves screenshots (it prints the folder). Copy them to `captures/ui_smoke/` and
   **look at them** when you changed anything visual.
-- Both tests briefly open a game window; `./test_ui` takes a few minutes. Neither touches real
-  save files.
+- Both tests briefly open a game window. The full `./test_ui` takes about 10 minutes: run it in
+  the background if your shell tool has a time limit, and always run the full one before
+  calling a change done. Neither test touches real save files.
 - This machine has no standalone `lua`; the tests are also the syntax check.
 
 ## Rules

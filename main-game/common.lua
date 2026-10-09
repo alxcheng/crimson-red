@@ -1,6 +1,6 @@
 -- common.lua — shared helpers for every screen: virtual resolution, the
 -- post-processing chain, letterboxing, the animated selection box, fonts,
--- hit-testing, the back arrow and UI sounds.
+-- text fitting, hit-testing, the top bar + BACK button, hover tooltips and UI sounds.
 --
 -- All drawing happens on an 800x450 canvas (M.VW x M.VH) that is scaled to the
 -- window with letterboxing; M.virtualMouse() converts the mouse to that space.
@@ -155,11 +155,44 @@ end
 -- FONT HELPER
 -- ============================================================================
 
--- Load the Dedicool font at the given size.
+local fontCache = {}
+
+-- The Dedicool font at the given size (each size is loaded once and shared).
 function M.loadFont(size)
-    local ok, f = pcall(love.graphics.newFont, "assets/dedicool/Dedicool.ttf", size)
-    if not ok then print("[common] Font load error:", f) end
-    return ok and f or love.graphics.newFont(size)
+    if not fontCache[size] then
+        local ok, f = pcall(love.graphics.newFont, "assets/dedicool/Dedicool.ttf", size)
+        if not ok then print("[common] Font load error:", f) end
+        fontCache[size] = ok and f or love.graphics.newFont(size)
+    end
+    return fontCache[size]
+end
+
+-- ============================================================================
+-- TEXT HELPERS
+-- ============================================================================
+
+-- "dark knight" -> "Dark Knight" (class keys are lower case; the UI shows them capitalised).
+function M.titleCase(name)
+    return (tostring(name or ""):gsub("(%a)([%w_']*)", function(a, b) return a:upper() .. b end))
+end
+
+-- `text` cut down to fit `maxW` pixels in `font`, ending in ".." when it had to be cut.
+-- Use it for any one-line label drawn inside a box.
+function M.fitText(font, text, maxW)
+    text = tostring(text or "")
+    if font:getWidth(text) <= maxW then return text end
+    while #text > 1 and font:getWidth(text .. "..") > maxW do
+        text = text:sub(1, -2)
+    end
+    return text .. ".."
+end
+
+-- Print `text` centred in the box x,y,w,h, shrunk to fit the width if needed.
+function M.printCentered(font, text, x, y, w, h)
+    local fw, fh = font:getWidth(text), font:getHeight()
+    local sc = math.min(1, (w - 4) / math.max(1, fw))
+    love.graphics.setFont(font)
+    love.graphics.print(text, math.floor(x + (w - fw * sc) / 2), math.floor(y + (h - fh * sc) / 2), 0, sc, sc)
 end
 
 -- ============================================================================
@@ -215,18 +248,27 @@ function M.setItemColor(isPressed)
 end
 
 -- ============================================================================
--- BACK ARROW
+-- TOP BAR + BACK BUTTON
 -- ============================================================================
--- Shared back-arrow geometry used by save_select, party_select, map top-bar.
--- Draws a left-pointing arrow at a fixed top-left position.
+-- Every menu screen has the same 40 px top bar: "BACK" at the left, the screen
+-- title centred, a white rule underneath. BACK_* is the button's hit rectangle.
 
-M.ARROW_X       = 18
-M.ARROW_Y       = 14
-M.ARROW_H       = 20
-M.ARROW_HEAD_W  = 12
-M.ARROW_SHAFT_H = 8
-M.ARROW_SHAFT_W = 16
-M.ARROW_W       = M.ARROW_HEAD_W + M.ARROW_SHAFT_W
+M.TOP_BAR_H = 40
+M.BOX_PAD   = 5      -- gap between an item and the red selection box around it
+
+M.BACK_X = 16
+M.BACK_Y = 10
+M.BACK_W = 48
+M.BACK_H = 20
+
+function M.overBack(vmx, vmy)
+    return vmx >= M.BACK_X and vmx < M.BACK_X + M.BACK_W and vmy >= M.BACK_Y and vmy < M.BACK_Y + M.BACK_H
+end
+
+-- The selection-box rectangle around the BACK button.
+function M.backBoxRect()
+    return M.BACK_X - M.BOX_PAD, M.BACK_Y - M.BOX_PAD, M.BACK_W + M.BOX_PAD * 2, M.BACK_H + M.BOX_PAD * 2
+end
 
 -- ============================================================================
 -- HOVER SOUND
@@ -251,13 +293,67 @@ function M.playClickSound()
     if _clickSnd then _clickSnd:stop(); _clickSnd:play() end
 end
 
-function M.drawBackArrow(isPressed)
-    local ax, ay, ah = M.ARROW_X, M.ARROW_Y, M.ARROW_H
-    local hw = M.ARROW_HEAD_W
-    local sh, sw = M.ARROW_SHAFT_H, M.ARROW_SHAFT_W
+function M.drawBackButton(isPressed)
     love.graphics.setColor(isPressed and M.COLOR_BLACK or M.COLOR_RED)
-    love.graphics.polygon("fill", ax, ay + ah/2, ax + hw, ay, ax + hw, ay + ah)
-    love.graphics.rectangle("fill", ax + hw - 2, ay + (ah - sh)/2, sw + 2, sh)
+    M.printCentered(M.loadFont(16), "BACK", M.BACK_X, M.BACK_Y, M.BACK_W, M.BACK_H)
+end
+
+-- The shared top bar. `title` may be nil (the map draws its own links instead).
+function M.drawTopBar(title, backPressed)
+    love.graphics.setColor(M.COLOR_WHITE)
+    love.graphics.setLineWidth(1)
+    love.graphics.line(0, M.TOP_BAR_H, M.VW, M.TOP_BAR_H)
+    M.drawBackButton(backPressed)
+    if title then
+        local f = M.loadFont(20)
+        love.graphics.setColor(M.COLOR_RED)
+        M.printCentered(f, title, 0, 0, M.VW, M.TOP_BAR_H)
+    end
+end
+
+-- ============================================================================
+-- HOVER TOOLTIP
+-- ============================================================================
+-- A small framed panel next to the hovered thing. `lines` is a list of
+-- { text = "...", color = {r,g,b,a}, size = 13 } (size: font size, default 13;
+-- long lines wrap). `anchor` is the hovered rectangle {x=, y=, w=, h=}: the
+-- panel goes below it, or above when there is no room, and never leaves the canvas.
+
+M.TIP_MAX_W = 300
+
+function M.drawTooltip(lines, anchor)
+    if not lines or #lines == 0 or not anchor then return end
+    local pad, gap = 8, 3
+    local rows, tw, th = {}, 0, pad * 2 - gap
+    for _, ln in ipairs(lines) do
+        local f = M.loadFont(ln.size or 13)
+        local w, wrapped = f:getWrap(ln.text, M.TIP_MAX_W)
+        for _, piece in ipairs(wrapped) do
+            rows[#rows + 1] = { text = piece, font = f, color = ln.color or M.COLOR_WHITE }
+            th = th + f:getHeight() + gap
+        end
+        tw = math.max(tw, w)
+    end
+    tw = tw + pad * 2
+
+    local tx = math.floor(anchor.x + anchor.w / 2 - tw / 2)
+    local ty = anchor.y + anchor.h + 8
+    if ty + th > M.VH - 6 then ty = anchor.y - th - 8 end
+    tx = math.max(6, math.min(tx, M.VW - 6 - tw))
+    ty = math.max(6, ty)
+
+    love.graphics.setColor(0.04, 0.02, 0.02, 1)
+    love.graphics.rectangle("fill", tx, ty, tw, th)
+    love.graphics.setColor(1.00, 0.42, 0.42, 1)
+    love.graphics.setLineWidth(1)
+    love.graphics.rectangle("line", tx, ty, tw, th)
+    local ly = ty + pad
+    for _, r in ipairs(rows) do
+        love.graphics.setFont(r.font)
+        love.graphics.setColor(r.color)
+        love.graphics.print(r.text, tx + pad, ly)
+        ly = ly + r.font:getHeight() + gap
+    end
 end
 
 return M

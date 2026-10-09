@@ -6,6 +6,7 @@
 -- saveData.unlockedCharacters[name].skillTree; the other branch locks for good.
 -- Bonuses take effect through progression.heroStats — this screen only records
 -- picks. Levels come from XP earned in battle (progression.lua).
+-- Hovering a row shows what it does (and whether it can be picked) in a tooltip.
 
 local common   = require("common")
 local save     = require("save")
@@ -31,40 +32,27 @@ local ladderFor    = talents_data.ladderFor
 -- LAYOUT
 -- ============================================================================
 
-local AX      = common.ARROW_X
-local AY      = common.ARROW_Y
-local A_H     = common.ARROW_H
-local A_W     = common.ARROW_W
-local BOX_PAD = 5
+local BOX_PAD = common.BOX_PAD
 
-local TITLE_Y      = 12
+-- Party chips (pick whose ladder is shown), centred under the top bar.
 local PARTY_SLOTS  = 4
-local ICON_SIZE    = 40
-local PARTY_GAP    = 14
+local ICON_SIZE    = 44
+local PARTY_GAP    = 12
 local PARTY_TOTAL_W = PARTY_SLOTS * ICON_SIZE + (PARTY_SLOTS - 1) * PARTY_GAP
-local PARTY_FRAME_PAD = 10
-local PARTY_FRAME_W = PARTY_TOTAL_W + PARTY_FRAME_PAD * 2
-local PARTY_FRAME_H = ICON_SIZE + 18 + PARTY_FRAME_PAD
-local PARTY_FRAME_X = math.floor((VW - PARTY_FRAME_W) / 2)
-local PARTY_FRAME_Y = TITLE_Y + 30
-local PARTY_X       = PARTY_FRAME_X + PARTY_FRAME_PAD
-local PARTY_Y       = PARTY_FRAME_Y + PARTY_FRAME_PAD + 14
+local PARTY_X      = math.floor((VW - PARTY_TOTAL_W) / 2)
+local PARTY_Y      = common.TOP_BAR_H + 12
 
-local DESC_Y   = PARTY_FRAME_Y + PARTY_FRAME_H + 10
-local DESC_H   = 20
-local DESC_X   = 40
-local DESC_W   = VW - 80
+local NAME_Y       = PARTY_Y + ICON_SIZE + 10   -- "Lv 3  Knight"
+local XP_Y         = NAME_Y + 18                -- "XP to next: 40"
 
-local DESC_BAR_Y    = VH - DESC_H - 10   -- parchment description strip, pinned to the bottom
-local LADDER_TOP    = DESC_Y + 40        -- first ladder row (below the name / XP readout)
-local LADDER_BOTTOM = DESC_BAR_Y - 8     -- ladder viewport lower bound
+local LADDER_TOP    = XP_Y + 26          -- first ladder row
+local LADDER_BOTTOM = VH - 16            -- ladder viewport lower bound
 local NODE_H        = 24
 local NODE_GAP      = 6
-local ROW_STRIDE    = NODE_H + NODE_GAP   -- uniform row pitch for scroll clamping
 local MAX_NODES_SHOWN = 21    -- highest level laid out (= the last choice level)
 
 local CENTERLINE_X  = math.floor(VW / 2)
-local BRANCH_BOX_W  = 180
+local BRANCH_BOX_W  = 200
 local FORK_HEIGHT   = 40                 -- vertical space a choice fork occupies
 local PLAIN_HEIGHT  = NODE_H             -- vertical space a plain level node occupies
 
@@ -81,7 +69,6 @@ local icons        = {}   -- { [charName] = Image }
 local assetsLoaded = false
 
 local font       -- size 13 node labels / misc
-local titleFont  -- size 18 banner
 local nameFont   -- size 14 branch names
 local smallFont  -- size 12 branch descriptions / tiny text
 
@@ -95,6 +82,7 @@ local box        = common.newBox()
 -- Computed layout cache, rebuilt when selectedChar / scroll changes:
 -- nodeRects[lvl] = {x,y,w,h, kind, ...} keyed by level number.
 local nodeRects  = {}
+local scrollInfo = { content = 0, view = 0 }   -- ladder height vs. viewport height (for the scrollbar)
 
 -- ============================================================================
 -- SAVE-RECORD HELPERS
@@ -119,7 +107,7 @@ end
 -- instead of the upvalue -> runtime "attempt to call a nil value" once the
 -- talents screen is actually driven (headless only loads, never drives it).
 local resolveOption, displayName
-local drawLadder, drawPlainRow, drawForkRow, drawBranchBox, drawDescBar
+local drawLadder, drawPlainRow, drawForkRow, drawBranchBox, drawHoverTooltip
 
 -- Read the chosen-branch map from skillTree, tolerant of the OLD shape
 -- ({1,1,1,1,1}) and partial arrays. Returns a fresh table keyed by the
@@ -264,6 +252,7 @@ local function rebuildLayout()
     local contentH = (y + scrollOff) - LADDER_TOP
     local viewportH = LADDER_BOTTOM - LADDER_TOP
     local maxScroll = math.max(0, contentH - viewportH)
+    scrollInfo.content, scrollInfo.view = contentH, viewportH
     scrollOff = math.max(0, math.min(scrollOff, maxScroll))
 end
 
@@ -298,7 +287,6 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
     if not assetsLoaded then
         assetsLoaded = true
         font       = common.loadFont(13)
-        titleFont  = common.loadFont(18)
         nameFont   = common.loadFont(14)
         smallFont  = common.loadFont(12)
     end
@@ -323,10 +311,9 @@ end
 function M.update(dt)
     local vmx, vmy = common.virtualMouse()
 
-    -- Hover: back arrow.
-    local backHover = (vmx >= AX and vmx < AX + A_W and vmy >= AY and vmy < AY + A_H)
-    if backHover then
-        common.setBoxTarget(box, AX - BOX_PAD, AY - BOX_PAD, A_W + BOX_PAD * 2, A_H + BOX_PAD * 2)
+    -- Hover: BACK.
+    if common.overBack(vmx, vmy) then
+        common.setBoxTarget(box, common.backBoxRect())
     end
 
     -- Hover: party strip (switch whose ladder is shown).
@@ -350,8 +337,9 @@ function M.update(dt)
         for lvl, nr in pairs(nodeRects) do
             local hitSub = nil
             if nr.kind == "fork" then
-                if nr.left and nr.left.state ~= "locked" and pointInRect(vmx, vmy, nr.left)  then hitSub = nr.left  end
-                if not hitSub and nr.right and nr.right.state ~= "locked" and pointInRect(vmx, vmy, nr.right) then hitSub = nr.right end
+                -- Locked branches can be hovered too (the tooltip previews them).
+                if pointInRect(vmx, vmy, nr.left) then hitSub = nr.left
+                elseif pointInRect(vmx, vmy, nr.right) then hitSub = nr.right end
             else
                 if pointInRect(vmx, vmy, nr) then hitSub = nr end
             end
@@ -364,7 +352,10 @@ function M.update(dt)
                 else
                     hx, hy, hw, hh = nr.hoverRect[1], nr.hoverRect[2], nr.hoverRect[3], nr.hoverRect[4]
                 end
-                common.setBoxTarget(box, hx, hy, hw, hh)
+                -- Keep the box inside the ladder viewport for half-scrolled rows.
+                local top = math.max(hy, LADDER_TOP - 8)
+                local bot = math.min(hy + hh, LADDER_BOTTOM + 4)
+                common.setBoxTarget(box, hx, top, hw, bot - top)
                 boxHit = true
                 break
             end
@@ -379,8 +370,8 @@ function M.mousepressed(x, y, button)
     if button ~= 1 then return end
     local vmx, vmy = common.virtualMouse()
 
-    -- Back arrow.
-    if vmx >= AX and vmx < AX + A_W and vmy >= AY and vmy < AY + A_H then
+    -- BACK.
+    if common.overBack(vmx, vmy) then
         pressedNode = {kind="back"}
         return
     end
@@ -423,8 +414,10 @@ function M.mousereleased(x, y, button)
     if not p then return end
 
     if p.kind == "back" then
-        common.playClickSound()
-        exit()
+        if common.overBack(common.virtualMouse()) then
+            common.playClickSound()
+            exit()
+        end
         return
     end
 
@@ -487,62 +480,30 @@ local function drawIconSmall(name, x, y, size, alpha)
         love.graphics.draw(img, x + (size - iw * sc) / 2, y + (size - ih * sc) / 2, 0, sc, sc)
         return
     end
-    local label = displayName(name)
-    local fw, fh = font:getWidth(label), font:getHeight()
-    local scale = 1
-    if fw > size - 4 then scale = (size - 4) / fw end
     love.graphics.setColor(1, 1, 1, alpha or 1)
-    love.graphics.print(label, x + (size - fw * scale) / 2, y + (size - fh * scale) / 2, 0, scale, scale)
+    common.printCentered(font, displayName(name), x, y, size, size)
 end
 
-displayName = function(name)
-    if not name then return "" end
-    local parts = {}
-    for part in name:gmatch("%S+") do
-        parts[#parts + 1] = part:sub(1, 1):upper() .. part:sub(2)
-    end
-    return table.concat(parts, " ")
-end
+displayName = common.titleCase
 
 local function drawScene()
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", 0, 0, VW, VH)
 
-    -- Title banner.
-    love.graphics.setFont(titleFont)
-    love.graphics.setColor(CRIMSON)
-    love.graphics.printf("TALENTS", 0, TITLE_Y, VW, "center")
-    love.graphics.setLineWidth(2)
-    local tw = titleFont:getWidth("TALENTS")
-    local ruleY = TITLE_Y + titleFont:getHeight() / 2
-    love.graphics.line(40, ruleY, VW/2 - tw/2 - 20, ruleY)
-    love.graphics.line(VW/2 + tw/2 + 20, ruleY, VW - 40, ruleY)
+    local backPressed = pressedNode ~= nil and pressedNode.kind == "back"
+    common.drawTopBar("TALENTS", backPressed)
 
-    -- Active-party strip (pick whose ladder to view).
-    love.graphics.setColor(WHITE)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", PARTY_FRAME_X, PARTY_FRAME_Y, PARTY_FRAME_W, PARTY_FRAME_H)
-    love.graphics.setColor(CRIMSON)
-    love.graphics.setLineWidth(1)
-    love.graphics.rectangle("line", PARTY_FRAME_X+3, PARTY_FRAME_Y+3, PARTY_FRAME_W-6, PARTY_FRAME_H-6)
-
+    -- Party chips: white = the hero whose ladder is shown.
     for i = 1, PARTY_SLOTS do
         local sx, sy = getPartyRect(i)
         local name = partyNames[i]
         love.graphics.setColor(0.05, 0.02, 0.02, 1)
         love.graphics.rectangle("fill", sx, sy, ICON_SIZE, ICON_SIZE)
-        local isSel = (name == selectedChar)
-        love.graphics.setColor(isSel and WHITE or CRIMSON)
-        love.graphics.setLineWidth(isSel and 3 or 2)
+        local isSel = name ~= nil and name == selectedChar
+        love.graphics.setColor(isSel and WHITE or (name and CRIMSON or FAINT))
+        love.graphics.setLineWidth(isSel and 2 or 1)
         love.graphics.rectangle("line", sx, sy, ICON_SIZE, ICON_SIZE)
-        if name then
-            drawIconSmall(name, sx, sy, ICON_SIZE, isSel and 1 or 0.8)
-        else
-            love.graphics.setFont(font)
-            love.graphics.setColor(0.35, 0.10, 0.12, 1)
-            love.graphics.print("—", sx + (ICON_SIZE - font:getWidth("—"))/2,
-                                sy + (ICON_SIZE - font:getHeight())/2)
-        end
+        if name then drawIconSmall(name, sx, sy, ICON_SIZE, isSel and 1 or 0.8) end
     end
 
     -- Character name + level under the strip.
@@ -552,31 +513,20 @@ local function drawScene()
         local pts = rec and rec.pointsToNextLevel
         love.graphics.setFont(nameFont)
         love.graphics.setColor(OFFRED)
-        love.graphics.printf(("Lv %d  ·  %s"):format(lvl, displayName(selectedChar)),
-                             0, DESC_Y, VW, "center")
+        love.graphics.printf(("Lv %d  %s"):format(lvl, displayName(selectedChar)), 0, NAME_Y, VW, "center")
         love.graphics.setFont(smallFont)
         love.graphics.setColor({0.5,0.5,0.5,1})
-        local xpTxt = pts and ("XP to next: " .. tostring(pts)) or "XP: —"
-        love.graphics.printf(xpTxt, 0, DESC_Y + 14, VW, "center")
+        local xpTxt = (pts and pts > 0) and ("XP to next level: " .. tostring(pts)) or "Max level"
+        love.graphics.printf(xpTxt, 0, XP_Y, VW, "center")
     end
-
-    -- Description bar (parchment-style strip) at the bottom of the screen: the
-    -- ladder viewport scrolls ABOVE it, so the readout never moves.
-    love.graphics.setColor(0.06, 0.04, 0.04, 1)
-    love.graphics.rectangle("fill", DESC_X, DESC_BAR_Y, DESC_W, DESC_H)
-    love.graphics.setColor(CRIMSON)
-    love.graphics.setLineWidth(1)
-    love.graphics.rectangle("line", DESC_X, DESC_BAR_Y, DESC_W, DESC_H)
 
     -- Ladder (scrolled).
     drawLadder()
 
-    -- Description text in the bar.
-    drawDescBar()
-
-    -- Animated red box + back arrow.
-    common.drawBox(box, pressedNode ~= nil and pressedNode.kind == "back")
-    common.drawBackArrow(pressedNode ~= nil and pressedNode.kind == "back")
+    -- Animated red box (white when BACK is pressed), BACK on top, tooltip last.
+    common.drawBox(box, backPressed)
+    common.drawBackButton(backPressed)
+    drawHoverTooltip()
 
     love.graphics.setColor(1, 1, 1, 1)
 end
@@ -607,6 +557,18 @@ drawLadder = function()
 
     love.graphics.setScissor()
     love.graphics.pop()
+
+    -- Scrollbar to the right of the ladder when it does not fit (mouse wheel scrolls).
+    if scrollInfo.content > scrollInfo.view then
+        local sx = CENTERLINE_X + BRANCH_BOX_W + 30
+        local trackY, trackH = LADDER_TOP, LADDER_BOTTOM - LADDER_TOP
+        local thumbH = math.max(20, trackH * scrollInfo.view / scrollInfo.content)
+        local thumbY = trackY + (trackH - thumbH) * scrollOff / (scrollInfo.content - scrollInfo.view)
+        love.graphics.setColor(FAINT)
+        love.graphics.rectangle("fill", sx, trackY, 4, trackH)
+        love.graphics.setColor(CRIMSON)
+        love.graphics.rectangle("fill", sx, thumbY, 4, thumbH)
+    end
 end
 
 drawPlainRow = function(nr)
@@ -673,70 +635,55 @@ drawBranchBox = function(b, opt, tag)
     love.graphics.setLineWidth(b.state == "chosen" and 3 or 2)
     love.graphics.rectangle("line", b.x, b.y, b.w, b.h)
 
-    -- Tag letter + name.
+    -- Name on the first line, bonus on the second; both cut to the box width
+    -- (the hover tooltip has the full text).
     love.graphics.setFont(smallFont)
     love.graphics.setColor(nameCol)
-    local tagStr = "[" .. tag .. "] "
-    local nameStr = opt.name
-    local full = tagStr .. nameStr
-    local fw = smallFont:getWidth(full)
-    local fxx = b.x + (b.w - fw)/2
-    love.graphics.print(full, fxx, b.y + 6)
-
-    -- Description (wrap-ish: just truncate if too wide).
-    love.graphics.setFont(smallFont)
+    love.graphics.printf(common.fitText(smallFont, opt.name, b.w - 12), b.x, b.y + 5, b.w, "center")
     love.graphics.setColor(descCol)
-    local d = opt.desc
-    if smallFont:getWidth(d) > b.w - 10 then
-        -- ASCII ellipsis: byte-wise trimming must never split a UTF-8 sequence.
-        while #d > 1 and smallFont:getWidth(d .. "...") > b.w - 10 do
-            d = d:sub(1, -2)
-        end
-        d = d .. "..."
-    end
-    love.graphics.print(d, b.x + (b.w - smallFont:getWidth(d))/2, b.y + b.h - 16)
+    love.graphics.printf(common.fitText(smallFont, opt.desc, b.w - 12), b.x, b.y + b.h - 17, b.w, "center")
 end
 
-drawDescBar = function()
-    local bx, by = DESC_X, DESC_BAR_Y
-    love.graphics.setFont(smallFont)
-    local txt, col
-
-    if hoveredNode then
-        local nr = hoveredNode
-        if nr.kind == "plain" then
-            if nr.state == "reached" then
-                txt, col = ("Level %d reached."):format(nr.level), {0.6,0.6,0.6,1}
-            else
-                txt, col = ("Reach Level %d to unlock."):format(nr.level), DIM
-            end
-        else
-            -- Fork: describe the hovered option (whichever half the mouse is in).
-            local ladder = ladderFor(selectedChar)
-            local ch = ladder.choices[nr.idx]
-            if ch then
-                local vmx, vmy = common.virtualMouse()
-                local optIdx = (vmx < CENTERLINE_X) and 1 or 2
-                local opt = ch.options[optIdx]
-                local b = (optIdx == 1) and nr.left or nr.right
-                if opt then
-                    if b.state == "selectable" then
-                        txt, col = ("> %s (%s) — CLICK TO CHOOSE. Locks the other option."):format(opt.name, opt.desc), OFFRED
-                    elseif b.state == "chosen" then
-                        txt, col = ("%s — CHOSEN. Locked in."):format(opt.name), WHITE
-                    elseif b.state == "lockedOther" then
-                        txt, col = ("%s — unavailable (other branch chosen)."):format(opt.name), DIM
-                    else
-                        txt, col = ("Reach Level %d to choose: %s (%s)."):format(nr.level, opt.name, opt.desc), DIM
-                    end
-                end
-            end
-        end
-    else
-        txt, col = "Hover a node to preview. Pick a branch at a reached choice level.", {0.45,0.45,0.45,1}
+-- Tooltip for the hovered ladder row or party chip.
+drawHoverTooltip = function()
+    if hoveredPartySlot and partyNames[hoveredPartySlot] then
+        local name = partyNames[hoveredPartySlot]
+        local x, y, w, h = getPartyRect(hoveredPartySlot)
+        common.drawTooltip({
+            { text = displayName(name), size = 16, color = OFFRED },
+            { text = "Lv " .. tostring(charLevel(charRecord(name))), color = WHITE },
+        }, { x = x, y = y, w = w, h = h })
+        return
     end
-    love.graphics.setColor(col or WHITE)
-    love.graphics.print(txt, bx + 10, by + (DESC_H - smallFont:getHeight())/2)
+
+    local nr, b = hoveredNode, hoveredOpt
+    if not (nr and b) then return end
+    local lines
+    if nr.kind == "plain" then
+        lines = { { text = (nr.state == "reached") and ("Level %d reached"):format(nr.level)
+                                                     or ("Reach level %d to unlock"):format(nr.level),
+                    color = (nr.state == "reached") and WHITE or OFFRED } }
+    else
+        local ch  = ladderFor(selectedChar).choices[nr.idx]
+        local opt = ch and ch.options[b.opt]
+        if not opt then return end
+        local status, col
+        if b.state == "selectable" then
+            status, col = "Click to choose. The other option locks for good.", OFFRED
+        elseif b.state == "chosen" then
+            status, col = "Chosen", WHITE
+        elseif b.state == "lockedOther" then
+            status, col = "Unavailable: the other option was chosen", {0.6, 0.6, 0.6, 1}
+        else
+            status, col = ("Reach level %d to choose"):format(nr.level), {0.6, 0.6, 0.6, 1}
+        end
+        lines = {
+            { text = opt.name, size = 16, color = OFFRED },
+            { text = opt.desc, color = WHITE },
+            { text = status, color = col },
+        }
+    end
+    common.drawTooltip(lines, { x = b.x, y = b.y, w = b.w, h = b.h })
 end
 
 function M.draw()

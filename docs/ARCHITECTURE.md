@@ -31,7 +31,8 @@ Flow: `title` → `save_select` → `map` ⇄ `party_select` / `talents` / `equi
 | File | Role |
 |---|---|
 | `main.lua`, `conf.lua` | Screen manager, window setup, test-mode switches (`CR_TEST_SCENE`). |
-| `common.lua` | Shared drawing/UI helpers: canvas + post-fx, letterbox, virtual mouse, the animated selection box, fonts, back arrow, UI sounds. |
+| `common.lua` | Shared drawing/UI helpers: canvas + post-fx, letterbox, virtual mouse, the animated selection box, fonts (`loadFont`, cached), text fitting (`fitText`, `printCentered`, `titleCase`), the top bar + BACK button (`drawTopBar`), hover tooltips (`drawTooltip`), UI sounds. |
+| `item_ui.lua` | How an item looks in menus: its W/A/T token, grade colours, tooltip lines. Used by shop + equip. |
 | `save.lua` | Save slots. **The save format is documented at the top of this file.** `migrate()` upgrades old saves. |
 | `items.lua` | Item instances, equip rules (`canUse`), gold, shop stock (`rollOffers`). |
 | `progression.lua` | Hero stats (`heroStats`), XP/level-ups, battle rewards, hiring. |
@@ -124,4 +125,17 @@ add a step to `migrate()` so old saves still load.
   hovers, clicks, random clicks, keys and wheel over it; plays three full battles with a simple
   bot through to victory; checks save invariants and progression maths. Any Lua error in any
   handler fails the run. Add a `check(...)` there for every rule you implement.
+  `drive(..., { hover = { {x, y}, ... } })` saves a screenshot with the mouse resting on each
+  point (`*-1h<n>-hover.png`): use it to look at tooltips.
 - `screens/encounter.lua` exposes `M.debugState()` so tests can read the live world.
+
+## Menu screen conventions
+Every menu screen (party, talents, equip, shop, save select, map) follows the same rules:
+- **Top bar**: `common.drawTopBar("TITLE", backPressed)` draws the 40 px bar: BACK (text) at the
+  left, the title centred, a white rule under it. Hit-test BACK with `common.overBack(x, y)`.
+- **Margins**: content sits 20 px from the screen edges and 12 px under the top bar; derive
+  sizes from those (see the LAYOUT block at the top of each screen) rather than typing numbers.
+- **No description bars**: details go in a hover tooltip, `common.drawTooltip(lines, anchorRect)`,
+  drawn last. It places itself under the hovered thing and stays on the canvas.
+- **Text never leaves its box**: one-line labels inside a box go through `common.fitText` or
+  `common.printCentered`. The font has ASCII glyphs only.

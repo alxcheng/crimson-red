@@ -162,9 +162,8 @@ function M.mousepressed(x, y, button)
     if button ~= 1 then return end
     local vmx, vmy = common.virtualMouse()
 
-    -- Back arrow
-    if vmx >= common.ARROW_X and vmx < common.ARROW_X + common.ARROW_W
-    and vmy >= common.ARROW_Y and vmy < common.ARROW_Y + common.ARROW_H then
+    -- BACK
+    if common.overBack(vmx, vmy) then
         switchFn("title"); return
     end
 
@@ -213,7 +212,7 @@ local function drawScene()
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", 0, 0, VW, VH)
 
-    common.drawBackArrow(false)
+    common.drawBackButton(false)
 
     -- Title
     love.graphics.setFont(font14)

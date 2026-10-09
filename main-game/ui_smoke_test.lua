@@ -151,6 +151,13 @@ local function drive(tag, screenName, sd, opts)
     for _ = 1, 3 do frame(true) end
     screenshot(tag .. "-1-enter")
 
+    -- Tooltip screenshots: opts.hover = { {x, y}, ... } points to rest the mouse on.
+    for i, pt in ipairs(opts.hover or {}) do
+        mouseX, mouseY = pt[1], pt[2]
+        for _ = 1, 30 do frame(true) end
+        screenshot(tag .. "-1h" .. i .. "-hover")
+    end
+
     -- Hover sweep (draw every frame at a coarse grid: hover states are where
     -- tooltip / desc-bar code paths live).
     for y = 4, VH, 12 do
@@ -596,7 +603,7 @@ end
 local function runAll()
     -- EQUIP
     local sd = fixtureRich()
-    drive("equip-rich", "equip", sd)
+    drive("equip-rich", "equip", sd, { hover = { {350, 130}, {60, 290}, {750, 400}, {130, 90} } })
     invariants("equip-rich", sd)
     check(countEquipped(sd) > 0, "equip-rich: fuzz equipped at least one item (" .. countEquipped(sd) .. " equipped)")
     drive("equip-fresh", "equip", fixtureFresh())
@@ -604,7 +611,7 @@ local function runAll()
     -- SHOP
     sd = fixtureRich()
     local gold0, inv0 = sd.gold, #sd.inventory
-    local exits = drive("shop-rich", "shop", sd)
+    local exits = drive("shop-rich", "shop", sd, { hover = { {95, 200}, {420, 410}, {650, 250} } })
     invariants("shop-rich", sd)
     check(sd.shopState.seeded == true and sd.shopState.pendingRestock ~= true, "shop-rich: shop stocked on entry")
     check(sd.gold ~= gold0 or #sd.inventory ~= inv0, "shop-rich: fuzz bought or sold something (gold "
@@ -619,7 +626,7 @@ local function runAll()
     sd = fixtureRich()
     local wiz0   = progression.heroStats(sd, "wizard")
     local champ0 = progression.heroStats(sd, "champion")
-    exits = drive("talents-rich", "talents", sd, { fuzz = 20000 })
+    exits = drive("talents-rich", "talents", sd, { fuzz = 20000, hover = { {290, 230}, {510, 230}, {400, 160}, {430, 70} } })
     invariants("talents-rich", sd)
     local uc = sd.unlockedCharacters
     check(countPicks(uc.knight) == 3, "talents-rich: Lv9 knight picked exactly 3 branches (got " .. countPicks(uc.knight) .. ")")
@@ -688,7 +695,7 @@ local function runAll()
 
     -- PARTY
     sd = fixtureRich()
-    drive("party-rich", "party_select", sd)
+    drive("party-rich", "party_select", sd, { hover = { {360, 115}, {240, 250} } })
     invariants("party-rich", sd)
     drive("party-fresh", "party_select", fixtureFresh())
 

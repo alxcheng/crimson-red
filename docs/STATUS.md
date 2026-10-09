@@ -3,7 +3,7 @@
 Update this whenever work lands. Keep it short: move finished detail to git history.
 
 **Branch:** `refactor` (off `master` @ 76a228d). Nothing here is merged or pushed.
-**Tests:** `./test_headless` PASS, `./test_ui` PASS (as of 2026-10-08).
+**Tests:** `./test_headless` PASS, `./test_ui` PASS (as of 2026-10-09).
 
 ## What the game is right now
 Title → save select → map (one hand-made forest floor) → battles on encounter tiles, a shop
@@ -12,6 +12,15 @@ Knight and a Cleric, 15 gold, and Battleheart's numbers throughout. Nine classes
 (knight, brigand, champion, duelist, nomad, cleric, paladin, wizard, rogue); one enemy type.
 
 ## Done on this branch (newest first)
+- **Menu clean-up (2026-10-09)**: the description bars at the bottom of TALENTS, SHOP and EQUIP
+  are gone; details now show in a hover tooltip (`common.drawTooltip`), as on the PARTY screen.
+  The back arrow is the word BACK everywhere. All menu screens share one top bar
+  (`common.drawTopBar`) and the same 20 px margins; text that used to spill out of its box
+  (sell-list names, hire stats, party slot numbers, talent names) is fitted. See "Menu screen
+  conventions" in `docs/ARCHITECTURE.md`. New shared `item_ui.lua`. `./test_ui quick` added.
+- **Dragged-duellist bug (2026-10-09)**: a unit standing on its slot was re-snapped to it every
+  frame, so it rode along with a walking target (even while knocked down). Now it snaps once
+  on arrival and knocked-down/stunned units do not follow (`systems.targetFollow`).
 - **Second playtest round (2026-10-08)**: auto-attack cooldowns were never applied (units
   swung every ~0.4 s) — fixed, intervals are now BH's and one knob scales them all
   (`AUTO_COOLDOWN_SCALE` in `encounter/abilities.lua`); attack-speed stat (`ATK_SPEED`) that
@@ -52,6 +61,12 @@ Everything above. In particular, choices the Lead made that the Director has not
    Spark of Inspiration stays free.
 
 ## Director said (verbatim, newest first)
+- 2026-10-09: "Remove description text at the bottom of talents, shop, and equip and put it as
+  hover text similar to the party screen when members are hovered" / "go through each screen
+  (encounter looks fine) and fix text clipping issues / also make it so that the dimensions
+  look clean" / "change the back arrow just to be BACK in text".
+- 2026-10-09: "two 'duelling' units were glued together, and when one of them was staggered,
+  they got 'dragged' with the other one moving to a new movement target" (fixed a37d35c).
 - 2026-10-08: "I want to set up a workflow in which the main thing I have to do (my only job
   if you will) is to provide feedback (bugs and tweaks) from playtests and provide new features
   to be implemented." / "go file by file and refactor it to remove unnecessary portions and

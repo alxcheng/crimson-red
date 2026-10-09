@@ -6,18 +6,20 @@
 --
 -- Clicks:
 --   * a party hero            -> select them (shows their gear and stats)
---   * an inventory item       -> select it (description bar shows it)
+--   * an inventory item       -> select it (white ring)
 --   * a gear slot, with an item selected -> equip it there, if it is that
 --     slot's type and the hero's class may use it (items.canUse). Whatever
 --     was in the slot goes back to the inventory.
 --   * an occupied gear slot, nothing selected -> unequip to the inventory
--- The save is written on exit.
+-- Hovering an item (in the inventory or in a gear slot) shows its details in a
+-- tooltip. The save is written on exit.
 
 local common = require("common")
 local save   = require("save")
 local progression = require("progression")
 
 local items  = require("items")
+local item_ui = require("item_ui")
 
 local VW = common.VW
 local VH = common.VH
@@ -26,58 +28,52 @@ local VH = common.VH
 -- LAYOUT (800x450 virtual px)
 -- ============================================================================
 
-local TOP_BAR_H    = 40
-local DESC_BAR_H   = 60
-local CONTENT_TOP  = TOP_BAR_H
-local CONTENT_BOT  = VH - DESC_BAR_H
+local TOP_BAR_H = common.TOP_BAR_H
+local MARGIN    = 20
+local BOX_PAD   = common.BOX_PAD
+local PANEL_Y   = TOP_BAR_H + 12
+local PANEL_H   = VH - MARGIN - PANEL_Y
+local PAD       = 14                          -- padding inside a panel
 
--- Active party strip (top bar): 4 character chips
-local PARTY_CHIPS    = 4
-local CHIP_SIZE      = 28
-local CHIP_GAP       = 10
-local CHIP_TOTAL_W   = PARTY_CHIPS * CHIP_SIZE + (PARTY_CHIPS - 1) * CHIP_GAP
-local CHIP_X         = 70
-local CHIP_Y         = math.floor((TOP_BAR_H - CHIP_SIZE) / 2)
+-- Left panel: party chips, the selected hero, their three gear slots
+local CHAR_PANEL_X = MARGIN
+local CHAR_PANEL_Y = PANEL_Y
+local CHAR_PANEL_W = 270
+local CHAR_PANEL_H = PANEL_H
 
--- Left/center: selected character panel
-local CHAR_PANEL_X   = 20
-local CHAR_PANEL_Y   = 55
-local CHAR_PANEL_W   = 270
-local CHAR_PANEL_H   = CONTENT_BOT - CHAR_PANEL_Y - 10
+local PARTY_CHIPS  = 4
+local CHIP_SIZE    = 48
+local CHIP_GAP     = math.floor((CHAR_PANEL_W - PAD * 2 - PARTY_CHIPS * CHIP_SIZE) / (PARTY_CHIPS - 1))
+local CHIP_X       = CHAR_PANEL_X + PAD
+local CHIP_Y       = CHAR_PANEL_Y + PAD
+local DIVIDER_Y    = CHIP_Y + CHIP_SIZE + 12
 
-local PORTRAIT_SIZE  = 110
-local PORTRAIT_X     = CHAR_PANEL_X + 14
-local PORTRAIT_Y     = CHAR_PANEL_Y + 22
+local PORTRAIT_SIZE = 96
+local PORTRAIT_X    = CHAR_PANEL_X + PAD
+local PORTRAIT_Y    = DIVIDER_Y + 12
+local STATS_X       = PORTRAIT_X + PORTRAIT_SIZE + 14
+local STATS_Y       = PORTRAIT_Y + 40
 
--- Equipment rail (3 slots stacked vertically below the portrait)
-local SLOT_SIZE      = 54
-local SLOT_GAP       = 10
-local SLOT_X         = CHAR_PANEL_X + 14
-local SLOT_Y0        = PORTRAIT_Y + PORTRAIT_SIZE + 8
-local SLOT_LABEL_W   = CHAR_PANEL_W - SLOT_X + CHAR_PANEL_X - 14 - SLOT_SIZE - 14
+local SLOT_SIZE    = 48
+local SLOT_GAP     = 12
+local SLOT_X       = CHAR_PANEL_X + PAD
+local SLOT_Y0      = PORTRAIT_Y + PORTRAIT_SIZE + 12
+local SLOT_TEXT_X  = SLOT_X + SLOT_SIZE + 12
+local SLOT_TEXT_W  = CHAR_PANEL_X + CHAR_PANEL_W - PAD - SLOT_TEXT_X
 
--- Stats readout (right of the portrait, under the name / level)
-local STATS_X        = PORTRAIT_X + PORTRAIT_SIZE + 12
-local STATS_Y        = PORTRAIT_Y + 46
-
--- Right: inventory grid
-local INV_X          = 310
-local INV_Y          = 55
-local INV_W          = 470
-local INV_H          = CONTENT_BOT - INV_Y - 10
-local INV_COLS       = 6
-local INV_ROWS       = 4
-local INV_CELL       = 64
-local INV_PAD        = 10
-local INV_GRID_W     = INV_COLS * INV_CELL
-local INV_GRID_H     = INV_ROWS * INV_CELL
-local INV_GRID_X     = INV_X + math.floor((INV_W - INV_GRID_W) / 2)
-local INV_GRID_Y     = INV_Y + math.floor((INV_H - INV_GRID_H) / 2)
-
--- Bottom description bar
-local DESC_Y         = VH - DESC_BAR_H
-
-local BOX_PAD = 5
+-- Right panel: inventory grid
+local INV_X        = CHAR_PANEL_X + CHAR_PANEL_W + 16
+local INV_Y        = PANEL_Y
+local INV_W        = VW - MARGIN - INV_X
+local INV_H        = PANEL_H
+local INV_HEAD_H   = 34                       -- "INVENTORY" caption band
+local INV_COLS     = 7
+local INV_ROWS     = 5
+local INV_CELL     = 64
+local INV_GRID_W   = INV_COLS * INV_CELL
+local INV_GRID_H   = INV_ROWS * INV_CELL
+local INV_GRID_X   = INV_X + math.floor((INV_W - INV_GRID_W) / 2)
+local INV_GRID_Y   = INV_Y + INV_HEAD_H + math.floor((INV_H - INV_HEAD_H - INV_GRID_H) / 2)
 
 -- ============================================================================
 -- MODULE STATE
@@ -100,7 +96,7 @@ local pressedItem = nil     -- {zone=..., ...} while mouse is down
 local box          = common.newBox()
 
 local assetsLoaded = false
-local font16, font14, fontTitle
+local font16, font14, font13
 
 -- ============================================================================
 -- DATA HELPERS
@@ -246,11 +242,7 @@ local function detectHover(vmx, vmy)
     hoveredItemId = nil
     hoveredBack   = false
 
-    local AX = common.ARROW_X
-    local AY = common.ARROW_Y
-    local AW = common.ARROW_W
-    local AH = common.ARROW_H
-    if vmx >= AX and vmx < AX + AW and vmy >= AY and vmy < AY + AH then
+    if common.overBack(vmx, vmy) then
         hoveredBack = true
         return "back"
     end
@@ -274,6 +266,7 @@ local function detectHover(vmx, vmy)
     end
 
     for idx, id in ipairs(getInventory()) do
+        if idx > INV_COLS * INV_ROWS then break end
         local ix, iy, iw, ih = invCellRect(idx)
         if vmx >= ix and vmx < ix + iw and vmy >= iy and vmy < iy + ih then
             hoveredItemId = id
@@ -313,7 +306,7 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
         assetsLoaded = true
         font16    = common.loadFont(16)
         font14    = common.loadFont(14)
-        fontTitle = common.loadFont(20)
+        font13    = common.loadFont(13)
     end
 
     -- Load any character icons not yet cached.
@@ -344,15 +337,12 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
     hoveredBack    = false
     pressedItem    = nil
 
-    -- Snap box to the first party chip (or the back arrow if no party).
+    -- Snap box to the first party chip (or BACK if no party).
     if party[1] then
         local cx, cy, cw, ch = chipRect(1)
         common.initBox(box, cx - BOX_PAD, cy - BOX_PAD, cw + BOX_PAD * 2, ch + BOX_PAD * 2)
     else
-        local AX = common.ARROW_X
-        local AY = common.ARROW_Y
-        common.initBox(box, AX - BOX_PAD, AY - BOX_PAD,
-                       common.ARROW_W + BOX_PAD * 2, common.ARROW_H + BOX_PAD * 2)
+        common.initBox(box, common.backBoxRect())
     end
 end
 
@@ -363,10 +353,7 @@ function M.update(dt)
     local newKey = nil
     if zone == "back" then
         newKey = "back"
-        local AX = common.ARROW_X
-        local AY = common.ARROW_Y
-        common.setBoxTarget(box, AX - BOX_PAD, AY - BOX_PAD,
-                            common.ARROW_W + BOX_PAD * 2, common.ARROW_H + BOX_PAD * 2)
+        common.setBoxTarget(box, common.backBoxRect())
     elseif zone == "chip" then
         newKey = "chip:" .. (hoveredChar or "")
         for i = 1, PARTY_CHIPS do
@@ -475,63 +462,28 @@ end
 -- DRAW HELPERS
 -- ============================================================================
 
-local GRADE_COLORS = {
-    [1] = {0.55, 0.55, 0.55, 1},   -- low: grey
-    [2] = {0.95, 0.55, 0.20, 1},   -- mid: orange
-    [3] = {0.95, 0.20, 0.35, 1},   -- high: crimson
-}
+local CRIMSON = {0.84, 0.07, 0.16, 1}
+local OFFRED  = {1.00, 0.42, 0.42, 1}
+local DIMRED  = {0.55, 0.20, 0.25, 1}
 
-local SLOT_COLORS = {
-    weapon  = {0.85, 0.85, 0.90, 1},
-    armor   = {0.55, 0.75, 0.95, 1},
-    trinket = {0.70, 0.90, 0.55, 1},
-}
-
-local function displayName(name)
-    if not name then return "" end
-    local parts = {}
-    for part in name:gmatch("%S+") do
-        parts[#parts + 1] = part:sub(1, 1):upper() .. part:sub(2)
-    end
-    return table.concat(parts, " ")
-end
+local displayName = common.titleCase
 
 local function drawCharIcon(name, x, y, size)
     local img = icons[name]
+    love.graphics.setColor(1, 1, 1, 1)
     if img then
         local iw, ih = img:getDimensions()
         local sc = math.min(size / iw, size / ih)
-        love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(img, x + (size - iw * sc) / 2, y + (size - ih * sc) / 2, 0, sc, sc)
         return
     end
-    local label = displayName(name)
-    local fw, fh = font16:getWidth(label), font16:getHeight()
-    local scale = 1
-    if fw > size - 4 then scale = (size - 4) / fw end
-    love.graphics.setFont(font16)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(label, x + (size - fw * scale) / 2, y + (size - fh * scale) / 2, 0, scale, scale)
+    common.printCentered(font14, displayName(name), x, y, size, size)
 end
 
--- Draw an item instance into a cell (icon glyph + grade tint border).
+-- An item instance drawn into a square cell.
 local function drawItemInCell(id, x, y, size)
     local inst = getItems()[id]
-    if type(inst) ~= "table" then return end
-
-    -- Grade tint border.
-    local gc = GRADE_COLORS[inst.grade] or {0.55, 0.55, 0.55, 1}
-    love.graphics.setColor(gc)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", x + 2, y + 2, size - 4, size - 4)
-
-    -- Item type glyph (letter) in the center, tinted by slot color.
-    local GLYPHS = { weapon = "W", armor = "A", trinket = "T" }
-    local glyph = GLYPHS[inst.itemType] or "?"
-    love.graphics.setFont(font16)
-    local gw, gh = font16:getWidth(glyph), font16:getHeight()
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(glyph, x + (size - gw) / 2, y + (size - gh) / 2)
+    if type(inst) == "table" then item_ui.drawGlyph(inst, x, y, size) end
 end
 
 -- Dashed empty slot.
@@ -569,10 +521,48 @@ local function drawDashedSlot(x, y, size, label)
         cy = cy + step
     end
 
-    love.graphics.setFont(font14)
-    love.graphics.setColor(0.55, 0.20, 0.25, 1)
-    local lw = font14:getWidth(label)
-    love.graphics.print(label, x + (size - lw) / 2, y + (size - font14:getHeight()) / 2)
+    love.graphics.setColor(DIMRED)
+    common.printCentered(font14, label, x, y, size, size)
+end
+
+-- Tooltip for the item under the mouse (inventory cell or gear slot) or the hovered hero chip.
+local function drawHoverTooltip()
+    if hoveredItemId then
+        local inst = getItems()[hoveredItemId]
+        for idx, id in ipairs(getInventory()) do
+            if id == hoveredItemId and type(inst) == "table" then
+                local x, y, w, h = invCellRect(idx)
+                common.drawTooltip(item_ui.tooltipLines(inst, {
+                    charName = selectedChar, price = { label = "Sells for", amount = items.sellValue(inst) } }),
+                    { x = x, y = y, w = w, h = h })
+                return
+            end
+        end
+    elseif hoveredSlot and selectedChar then
+        local eq = getEquipped(selectedChar)
+        local inst = eq and eq[hoveredSlot] and getItems()[eq[hoveredSlot]]
+        if type(inst) == "table" then
+            for i, s in ipairs(SLOTS) do
+                if s.key == hoveredSlot then
+                    local x, y, w, h = slotRect(i)
+                    local lines = item_ui.tooltipLines(inst)
+                    lines[#lines + 1] = { text = "Click to unequip", color = item_ui.GREY }
+                    common.drawTooltip(lines, { x = x, y = y, w = w, h = h })
+                end
+            end
+        end
+    elseif hoveredChar then
+        for i = 1, PARTY_CHIPS do
+            if party[i] == hoveredChar then
+                local cd = getCharData(hoveredChar)
+                local x, y, w, h = chipRect(i)
+                common.drawTooltip({
+                    { text = displayName(hoveredChar), size = 16, color = OFFRED },
+                    { text = "Lv " .. tostring(cd and cd.level or 1), color = common.COLOR_WHITE },
+                }, { x = x, y = y, w = w, h = h })
+            end
+        end
+    end
 end
 
 local function drawScene()
@@ -581,55 +571,34 @@ local function drawScene()
     love.graphics.rectangle("fill", 0, 0, VW, VH)
 
     -- 2. Top bar
+    local backPressed = pressedItem ~= nil and pressedItem.back and hoveredBack
+    common.drawTopBar("EQUIP", backPressed)
+
+    -- 3. Left panel
     love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", CHAR_PANEL_X, CHAR_PANEL_Y, CHAR_PANEL_W, CHAR_PANEL_H)
+    love.graphics.setColor(0.35, 0.35, 0.35, 1)
     love.graphics.setLineWidth(1)
-    love.graphics.line(0, TOP_BAR_H, VW, TOP_BAR_H)
+    love.graphics.line(CHAR_PANEL_X + PAD, DIVIDER_Y, CHAR_PANEL_X + CHAR_PANEL_W - PAD, DIVIDER_Y)
 
-    common.drawBackArrow(pressedItem and pressedItem.back and hoveredBack)
-
-    -- Title centered in the top bar (CR name for BH's Armory).
-    love.graphics.setFont(fontTitle)
-    local title = "EQUIP"
-    local tw = fontTitle:getWidth(title)
-    love.graphics.setColor(common.COLOR_RED)
-    love.graphics.print(title, (VW - tw) / 2, math.floor((TOP_BAR_H - fontTitle:getHeight()) / 2))
-
-    -- Active party strip (4 chips).
+    -- Party chips: white ring = the hero being edited.
     for i = 1, PARTY_CHIPS do
         local cx, cy, cw, ch = chipRect(i)
         local name = party[i]
         if name then
-            local isSel   = (name == selectedChar)
-            local isHover = (name == hoveredChar)
-            -- Chip background: white ring when selected, off-red hover, dim otherwise.
-            if isSel then
-                love.graphics.setColor(1, 1, 1, 1)
-                love.graphics.setLineWidth(2)
-                love.graphics.rectangle("line", cx - 1, cy - 1, cw + 2, ch + 2)
-            elseif isHover then
-                love.graphics.setColor(0.85, 0.30, 0.35, 1)
-                love.graphics.setLineWidth(2)
-                love.graphics.rectangle("line", cx - 1, cy - 1, cw + 2, ch + 2)
-            else
-                love.graphics.setColor(0.45, 0.15, 0.20, 1)
-                love.graphics.setLineWidth(1)
-                love.graphics.rectangle("line", cx, cy, cw, ch)
-            end
+            local isSel = (name == selectedChar)
+            love.graphics.setColor(isSel and common.COLOR_WHITE or {0.45, 0.15, 0.20, 1})
+            love.graphics.setLineWidth(isSel and 2 or 1)
+            love.graphics.rectangle("line", cx, cy, cw, ch)
             drawCharIcon(name, cx, cy, cw)
         else
-            -- Empty party slot: dashed.
-            drawDashedSlot(cx, cy, ch, "?")
+            drawDashedSlot(cx, cy, ch, "")
         end
     end
 
-    -- 3. Selected character panel (left/center)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setLineWidth(2)
-    love.graphics.rectangle("line", CHAR_PANEL_X, CHAR_PANEL_Y, CHAR_PANEL_W, CHAR_PANEL_H)
-
     if selectedChar then
         local cd = getCharData(selectedChar)
-        -- Portrait
         love.graphics.setColor(0.10, 0.10, 0.10, 1)
         love.graphics.rectangle("fill", PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE, PORTRAIT_SIZE)
         love.graphics.setColor(1, 1, 1, 1)
@@ -637,134 +606,98 @@ local function drawScene()
         love.graphics.rectangle("line", PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE, PORTRAIT_SIZE)
         drawCharIcon(selectedChar, PORTRAIT_X, PORTRAIT_Y, PORTRAIT_SIZE)
 
-        -- Class name + level
+        -- Name, level, stats to the right of the portrait.
+        local textW = CHAR_PANEL_X + CHAR_PANEL_W - PAD - STATS_X
         love.graphics.setFont(font16)
-        local cname = displayName(selectedChar)
-        local lvl   = cd and cd.level or 1
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print(cname, PORTRAIT_X + PORTRAIT_SIZE + 12, PORTRAIT_Y + 2)
+        love.graphics.print(common.fitText(font16, displayName(selectedChar), textW), STATS_X, PORTRAIT_Y)
         love.graphics.setColor(common.COLOR_RED)
-        love.graphics.print("Lv " .. tostring(lvl), PORTRAIT_X + PORTRAIT_SIZE + 12, PORTRAIT_Y + 20)
+        love.graphics.print("Lv " .. tostring(cd and cd.level or 1), STATS_X, PORTRAIT_Y + 18)
 
-        -- Equipment rail (3 slots)
-        local eq = getEquipped(selectedChar)
-        for i, s in ipairs(SLOTS) do
-            local sx, sy, sw, sh = slotRect(i)
-            local id = eq and eq[s.key]
-            if id then
-                drawItemInCell(id, sx, sy, sw)
-            else
-                drawDashedSlot(sx, sy, sh, s.label:sub(1, 1))
-            end
-            -- Slot label to the right of the slot
-            love.graphics.setFont(font14)
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.print(s.label, sx + sw + 8, sy + (sh - font14:getHeight()) / 2)
-        end
-
-        -- Stats readout (right of the portrait)
         local st = computeCharStats(selectedChar)
         local statLines = {
-            { label = "ATK",  value = st.atk,  color = {0.95, 0.55, 0.20, 1} },
-            { label = "DEF",  value = st.def,  color = {0.55, 0.75, 0.95, 1} },
-            { label = "HP",   value = st.hp,   color = {0.85, 0.30, 0.35, 1} },
+            { label = "ATK", value = st.atk, color = {0.95, 0.55, 0.20, 1} },
+            { label = "DEF", value = st.def, color = {0.55, 0.75, 0.95, 1} },
+            { label = "HP",  value = st.hp,  color = {0.85, 0.30, 0.35, 1} },
         }
-        love.graphics.setFont(font16)
         for i, line in ipairs(statLines) do
-            local ly = STATS_Y + (i - 1) * 22
+            local ly = STATS_Y + (i - 1) * 19
             love.graphics.setColor(line.color)
             love.graphics.print(line.label, STATS_X, ly)
             love.graphics.setColor(1, 1, 1, 1)
             love.graphics.print(tostring(line.value), STATS_X + 44, ly)
         end
+
+        -- Gear slots: the token, then the slot name and what is in it.
+        local eq = getEquipped(selectedChar)
+        for i, s in ipairs(SLOTS) do
+            local sx, sy, sw, sh = slotRect(i)
+            local inst = eq and eq[s.key] and getItems()[eq[s.key]]
+            if type(inst) == "table" then
+                item_ui.drawGlyph(inst, sx, sy, sw)
+            else
+                drawDashedSlot(sx, sy, sh, s.label:sub(1, 1))
+            end
+            love.graphics.setFont(font13)
+            love.graphics.setColor(CRIMSON)
+            love.graphics.print(s.label, SLOT_TEXT_X, sy + 7)
+            love.graphics.setFont(font14)
+            if type(inst) == "table" then
+                love.graphics.setColor(1, 1, 1, 1)
+                love.graphics.print(common.fitText(font14, inst.name or "(unnamed)", SLOT_TEXT_W), SLOT_TEXT_X, sy + 24)
+            else
+                love.graphics.setColor(0.45, 0.45, 0.45, 1)
+                love.graphics.print("empty", SLOT_TEXT_X, sy + 24)
+            end
+        end
     else
-        -- No selected character (empty party / no unlocked chars)
-        love.graphics.setFont(font16)
         love.graphics.setColor(0.6, 0.6, 0.6, 1)
-        love.graphics.print("No character", CHAR_PANEL_X + 14, CHAR_PANEL_Y + 14)
+        common.printCentered(font16, "No character", CHAR_PANEL_X, DIVIDER_Y, CHAR_PANEL_W, CHAR_PANEL_Y + CHAR_PANEL_H - DIVIDER_Y)
     end
 
-    -- 4. Inventory grid (right)
+    -- 4. Inventory panel
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(2)
     love.graphics.rectangle("line", INV_X, INV_Y, INV_W, INV_H)
 
     love.graphics.setFont(font16)
-    local invTitle = "INVENTORY"
     love.graphics.setColor(common.COLOR_RED)
-    love.graphics.print(invTitle, INV_X + 12, INV_Y + 8)
+    local headY = math.floor(INV_Y + (INV_HEAD_H - font16:getHeight()) / 2) + 2
+    love.graphics.print("INVENTORY", INV_X + PAD, headY)
 
-    -- Grid cell outlines
+    -- What a click will do next, right-aligned in the caption band.
+    local selInst = selectedItemId and getItems()[selectedItemId]
+    local hint = type(selInst) == "table"
+        and ("Now click the " .. tostring(selInst.itemType) .. " slot to equip it")
+        or "Click an item, then its slot"
+    local hintW = INV_W - PAD * 2 - font16:getWidth("INVENTORY") - 16
+    hint = common.fitText(font13, hint, hintW)
+    love.graphics.setFont(font13)
+    love.graphics.setColor(type(selInst) == "table" and OFFRED or {0.5, 0.5, 0.5, 1})
+    love.graphics.print(hint, INV_X + INV_W - PAD - font13:getWidth(hint), headY + 2)
+
     love.graphics.setColor(0.35, 0.35, 0.35, 1)
     love.graphics.setLineWidth(1)
     for idx = 1, INV_COLS * INV_ROWS do
-        local ix, iy, iw, ih = invCellRect(idx)
-        love.graphics.rectangle("line", ix, iy, iw, ih)
+        love.graphics.rectangle("line", invCellRect(idx))
     end
 
-    -- Items in inventory
     local inv = getInventory()
     for idx, id in ipairs(inv) do
         if idx > INV_COLS * INV_ROWS then break end
         local ix, iy, iw, ih = invCellRect(idx)
-        drawItemInCell(id, ix, iy, math.min(iw, ih))
-        -- Highlight: selected item gets a white ring.
+        drawItemInCell(id, ix + 6, iy + 6, iw - 12)
         if id == selectedItemId then
             love.graphics.setColor(1, 1, 1, 1)
             love.graphics.setLineWidth(2)
-            love.graphics.rectangle("line", ix - 1, iy - 1, iw + 2, ih + 2)
+            love.graphics.rectangle("line", ix + 1, iy + 1, iw - 2, ih - 2)
         end
     end
 
-    if #inv == 0 then
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.5, 0.5, 0.5, 1)
-        love.graphics.print("Empty", INV_X + (INV_W - font14:getWidth("Empty")) / 2,
-                            INV_Y + (INV_H - font14:getHeight()) / 2)
-    end
-
-    -- 5. Bottom description bar (parchment-style: dark with red border)
-    love.graphics.setColor(0.05, 0.03, 0.03, 1)
-    love.graphics.rectangle("fill", 0, DESC_Y, VW, DESC_BAR_H)
-    love.graphics.setColor(0.6, 0.15, 0.20, 1)
-    love.graphics.setLineWidth(2)
-    love.graphics.line(0, DESC_Y, VW, DESC_Y)
-
-    local descId = selectedItemId or hoveredItemId
-    local descInst = descId and getItems()[descId]
-    if type(descInst) == "table" then
-        love.graphics.setFont(font16)
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print(descInst.name or "(unnamed)", 12, DESC_Y + 6)
-
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        love.graphics.print(descInst.desc or tostring(descInst.itemType or "?"), 12, DESC_Y + 26)
-
-        -- What it adds, and whether the selected hero can use it.
-        local modParts = {}
-        for k, v in pairs(descInst.mods or {}) do
-            modParts[#modParts + 1] = "+" .. tostring(v) .. " " .. k
-        end
-        table.sort(modParts)
-        local line = table.concat(modParts, ", ")
-        local usable = selectedChar == nil or items.canUse(descInst, selectedChar)
-        if not usable then line = line .. "   (" .. displayName(selectedChar) .. " cannot use this)" end
-        love.graphics.setColor(usable and {0.95, 0.55, 0.20, 1} or {0.85, 0.30, 0.35, 1})
-        love.graphics.print(line, 12, DESC_Y + 42)
-
-        love.graphics.setColor(0.6, 0.6, 0.6, 1)
-        local sellStr = "sells for " .. tostring(items.sellValue(descInst))
-        love.graphics.print(sellStr, VW - font14:getWidth(sellStr) - 12, DESC_Y + 8)
-    else
-        love.graphics.setFont(font14)
-        love.graphics.setColor(0.5, 0.5, 0.5, 1)
-        love.graphics.print("Select an item to see details.", 12, DESC_Y + (DESC_BAR_H - font14:getHeight()) / 2)
-    end
-
-    -- 6. Red hover box (drawn on top)
-    local boxPressed = (pressedItem ~= nil and pressedItem.back and hoveredBack)
-    common.drawBox(box, boxPressed)
+    -- 5. Red hover box (white when BACK is pressed), BACK on top, tooltip last
+    common.drawBox(box, backPressed)
+    common.drawBackButton(backPressed)
+    drawHoverTooltip()
 
     love.graphics.setColor(1, 1, 1, 1)
 end
