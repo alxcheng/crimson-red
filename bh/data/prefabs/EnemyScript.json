@@ -1,0 +1,5714 @@
+[
+ {
+  "object": "advanced1",
+  "file": "0d5c89bf2f89b48d184485a58cc15b6b",
+  "id": 54,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "0d5c89bf2f89b48d184485a58cc15b6b",
+     "id": 51
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "0d5c89bf2f89b48d184485a58cc15b6b",
+     "id": 50
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "0d5c89bf2f89b48d184485a58cc15b6b",
+     "id": 49
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "0d5c89bf2f89b48d184485a58cc15b6b",
+     "id": 48
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "0d5c89bf2f89b48d184485a58cc15b6b",
+     "id": 47
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 175,
+   "impactForce": 0.8,
+   "health": 0.0,
+   "maxHealth": 1350,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.9,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.35,
+   "primaryActionCooldown": 1.3,
+   "standingAnimLength": 0.3,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced2",
+  "file": "ad88a6fba35d04f0f93d699b4b62a8db",
+  "id": 44,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "sound-hit1",
+     "file": "ad88a6fba35d04f0f93d699b4b62a8db",
+     "id": 41
+    },
+    {
+     "ref": "sound-hit2",
+     "file": "ad88a6fba35d04f0f93d699b4b62a8db",
+     "id": 40
+    },
+    {
+     "ref": "sound-hit3",
+     "file": "ad88a6fba35d04f0f93d699b4b62a8db",
+     "id": 39
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 200,
+   "impactForce": 0.0,
+   "health": 0.0,
+   "maxHealth": 1200,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 2.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 2,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.15,
+   "canBackpeddle": false,
+   "runSpeedScale": 1.4,
+   "primaryActionCooldown": 1.16,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.46,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced3",
+  "file": "1e01d37fe75d14ba0a8a11d02a82f8a8",
+  "id": 56,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio-hit1",
+     "file": "1e01d37fe75d14ba0a8a11d02a82f8a8",
+     "id": 53
+    },
+    {
+     "ref": "Audio-hit2",
+     "file": "1e01d37fe75d14ba0a8a11d02a82f8a8",
+     "id": 52
+    },
+    {
+     "ref": "Audio-hit3",
+     "file": "1e01d37fe75d14ba0a8a11d02a82f8a8",
+     "id": 51
+    },
+    {
+     "ref": "Audio-hit4",
+     "file": "1e01d37fe75d14ba0a8a11d02a82f8a8",
+     "id": 50
+    },
+    {
+     "ref": "Audio-hit5",
+     "file": "1e01d37fe75d14ba0a8a11d02a82f8a8",
+     "id": 49
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 310,
+   "impactForce": 1.7,
+   "health": 0.0,
+   "maxHealth": 5000,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.5,
+   "conflagScaleFactor": 1.2,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.5,
+   "canBackpeddle": true,
+   "runSpeedScale": 2.0,
+   "primaryActionCooldown": 1.5,
+   "standingAnimLength": 0.466,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.33,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced4",
+  "file": "1b676f9207790480f8f6262a911dff08",
+  "id": 60,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "SkellyArrow",
+     "file": "ac45c12ca2d614bcaad9b20cb0c06bcd",
+     "id": 6
+    },
+    {
+     "ref": "Impact",
+     "file": "f57f1f8b1771c47d2ab2dc251584656d",
+     "id": 12
+    }
+   ],
+   "myEffects": [
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "audio-hit1",
+     "file": "1b676f9207790480f8f6262a911dff08",
+     "id": 57
+    },
+    {
+     "ref": "audio-hit2",
+     "file": "1b676f9207790480f8f6262a911dff08",
+     "id": 56
+    },
+    {
+     "ref": "audio-hit3",
+     "file": "1b676f9207790480f8f6262a911dff08",
+     "id": 55
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 95,
+   "impactForce": 1.2,
+   "health": 0.0,
+   "maxHealth": 600,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 3,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 2,
+   "isMelee": false,
+   "chaotic": true,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.6,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.8,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 1.0,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced5",
+  "file": "b2969b4f6742f45b6bffabdcd2bf66a4",
+  "id": 54,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "b2969b4f6742f45b6bffabdcd2bf66a4",
+     "id": 51
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "b2969b4f6742f45b6bffabdcd2bf66a4",
+     "id": 50
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "b2969b4f6742f45b6bffabdcd2bf66a4",
+     "id": 49
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "b2969b4f6742f45b6bffabdcd2bf66a4",
+     "id": 48
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "b2969b4f6742f45b6bffabdcd2bf66a4",
+     "id": 47
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 175,
+   "impactForce": 0.8,
+   "health": 0.0,
+   "maxHealth": 1350,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 4,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.9,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.35,
+   "primaryActionCooldown": 1.3,
+   "standingAnimLength": 0.3,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced6",
+  "file": "5b93e27e47edf4c51af2784ad5ca2175",
+  "id": 60,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "SkellyArrow",
+     "file": "ac45c12ca2d614bcaad9b20cb0c06bcd",
+     "id": 6
+    },
+    {
+     "ref": "Impact",
+     "file": "f57f1f8b1771c47d2ab2dc251584656d",
+     "id": 12
+    }
+   ],
+   "myEffects": [
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "audio-hit1",
+     "file": "5b93e27e47edf4c51af2784ad5ca2175",
+     "id": 57
+    },
+    {
+     "ref": "audio-hit2",
+     "file": "5b93e27e47edf4c51af2784ad5ca2175",
+     "id": 56
+    },
+    {
+     "ref": "audio-hit3",
+     "file": "5b93e27e47edf4c51af2784ad5ca2175",
+     "id": 55
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 210,
+   "impactForce": 1.2,
+   "health": 0.0,
+   "maxHealth": 1750,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 3,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 2,
+   "isMelee": false,
+   "chaotic": true,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.6,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.8,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 1.0,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced7",
+  "file": "96a6f3a98425849fb882827f534c1206",
+  "id": 46,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Teleport",
+     "timer": 9.0,
+     "cooldownMin": 7.0,
+     "cooldownMax": 12.0
+    },
+    {
+     "moveName": "Evaluate Target",
+     "timer": 4.0,
+     "cooldownMin": 4.0,
+     "cooldownMax": 4.0
+    }
+   ],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "HealSparkle",
+     "file": "6ce74f1462b3344b9a6ae2b1907cf544",
+     "id": 12
+    },
+    {
+     "ref": "teleport",
+     "file": "28ad41220f9a746d99bc7ee72e175c58",
+     "id": 10
+    },
+    {
+     "ref": "teleport_streaks",
+     "file": "13c0fe203a3894ea0bfc762b7d4557a2",
+     "id": 8
+    },
+    {
+     "ref": "ConflagMain",
+     "file": "1217887a0e5344cde9cec52a5fcccc47",
+     "id": 10
+    }
+   ],
+   "myEffects": [
+    null,
+    null,
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio-HealHit",
+     "file": "96a6f3a98425849fb882827f534c1206",
+     "id": 43
+    },
+    {
+     "ref": "Audio-Teleport",
+     "file": "96a6f3a98425849fb882827f534c1206",
+     "id": 42
+    },
+    {
+     "ref": "Audio-Spawn",
+     "file": "96a6f3a98425849fb882827f534c1206",
+     "id": 41
+    }
+   ],
+   "totalMeleeSounds": 1,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 170,
+   "impactForce": 0.0,
+   "health": 0.0,
+   "maxHealth": 1800,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.3,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 6,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 5,
+   "isMelee": false,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.5,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 2.2,
+   "standingAnimLength": 0.367,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.45,
+     0.0
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.3,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced8",
+  "file": "59673f33704d14de1915f79f9d01ce8c",
+  "id": 46,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "sound-hit1",
+     "file": "59673f33704d14de1915f79f9d01ce8c",
+     "id": 43
+    },
+    {
+     "ref": "sound-hit2",
+     "file": "59673f33704d14de1915f79f9d01ce8c",
+     "id": 42
+    },
+    {
+     "ref": "sound-hit3",
+     "file": "59673f33704d14de1915f79f9d01ce8c",
+     "id": 41
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 700,
+   "impactForce": 6.0,
+   "health": 0.0,
+   "maxHealth": 4000,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.2,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.4,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.4,
+   "primaryActionCooldown": 1.4,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.4,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "advanced9",
+  "file": "0afa070778bbe42de9d6a42a7af3cb40",
+  "id": 58,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "0afa070778bbe42de9d6a42a7af3cb40",
+     "id": 55
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "0afa070778bbe42de9d6a42a7af3cb40",
+     "id": 54
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "0afa070778bbe42de9d6a42a7af3cb40",
+     "id": 53
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "0afa070778bbe42de9d6a42a7af3cb40",
+     "id": 52
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "0afa070778bbe42de9d6a42a7af3cb40",
+     "id": 51
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 250,
+   "impactForce": 1.05,
+   "health": 0.0,
+   "maxHealth": 2700,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 5,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.1,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.4,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.26,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic1",
+  "file": "4f06cf4309d4c4436ad73774b2347b85",
+  "id": 54,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "4f06cf4309d4c4436ad73774b2347b85",
+     "id": 51
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "4f06cf4309d4c4436ad73774b2347b85",
+     "id": 50
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "4f06cf4309d4c4436ad73774b2347b85",
+     "id": 49
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "4f06cf4309d4c4436ad73774b2347b85",
+     "id": 48
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "4f06cf4309d4c4436ad73774b2347b85",
+     "id": 47
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 70,
+   "impactForce": 0.75,
+   "health": 0.0,
+   "maxHealth": 500,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.9,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.35,
+   "primaryActionCooldown": 1.3,
+   "standingAnimLength": 0.3,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic2",
+  "file": "1891d5ffd731b4782a7a1c1290748285",
+  "id": 44,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "sound-hit1",
+     "file": "1891d5ffd731b4782a7a1c1290748285",
+     "id": 41
+    },
+    {
+     "ref": "sound-hit2",
+     "file": "1891d5ffd731b4782a7a1c1290748285",
+     "id": 40
+    },
+    {
+     "ref": "sound-hit3",
+     "file": "1891d5ffd731b4782a7a1c1290748285",
+     "id": 39
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 80,
+   "impactForce": 0.0,
+   "health": 0.0,
+   "maxHealth": 375,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 2.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 2,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.1,
+   "canBackpeddle": false,
+   "runSpeedScale": 1.4,
+   "primaryActionCooldown": 1.16,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.46,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic3",
+  "file": "b04673b8f3f854721bac155aad892503",
+  "id": 56,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio-hit1",
+     "file": "b04673b8f3f854721bac155aad892503",
+     "id": 53
+    },
+    {
+     "ref": "Audio-hit2",
+     "file": "b04673b8f3f854721bac155aad892503",
+     "id": 52
+    },
+    {
+     "ref": "Audio-hit3",
+     "file": "b04673b8f3f854721bac155aad892503",
+     "id": 51
+    },
+    {
+     "ref": "Audio-hit4",
+     "file": "b04673b8f3f854721bac155aad892503",
+     "id": 50
+    },
+    {
+     "ref": "Audio-hit5",
+     "file": "b04673b8f3f854721bac155aad892503",
+     "id": 49
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 165,
+   "impactForce": 1.7,
+   "health": 0.0,
+   "maxHealth": 2200,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.5,
+   "conflagScaleFactor": 1.2,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.5,
+   "canBackpeddle": true,
+   "runSpeedScale": 2.0,
+   "primaryActionCooldown": 1.5,
+   "standingAnimLength": 0.466,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.33,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic4",
+  "file": "796759f2f7ff74df5ab8a3bbe81699ea",
+  "id": 60,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "SkellyArrow",
+     "file": "ac45c12ca2d614bcaad9b20cb0c06bcd",
+     "id": 6
+    },
+    {
+     "ref": "Impact",
+     "file": "f57f1f8b1771c47d2ab2dc251584656d",
+     "id": 12
+    }
+   ],
+   "myEffects": [
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "audio-hit1",
+     "file": "796759f2f7ff74df5ab8a3bbe81699ea",
+     "id": 57
+    },
+    {
+     "ref": "audio-hit2",
+     "file": "796759f2f7ff74df5ab8a3bbe81699ea",
+     "id": 56
+    },
+    {
+     "ref": "audio-hit3",
+     "file": "796759f2f7ff74df5ab8a3bbe81699ea",
+     "id": 55
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 95,
+   "impactForce": 1.2,
+   "health": 0.0,
+   "maxHealth": 600,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 3,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 2,
+   "isMelee": false,
+   "chaotic": true,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.6,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.8,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 1.0,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic5",
+  "file": "f1247211086e0447892761d25f829668",
+  "id": 58,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "f1247211086e0447892761d25f829668",
+     "id": 55
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "f1247211086e0447892761d25f829668",
+     "id": 54
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "f1247211086e0447892761d25f829668",
+     "id": 53
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "f1247211086e0447892761d25f829668",
+     "id": 52
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "f1247211086e0447892761d25f829668",
+     "id": 51
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 100,
+   "impactForce": 1.05,
+   "health": 0.0,
+   "maxHealth": 800,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 5,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.1,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.4,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.26,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic6",
+  "file": "757c591fceb934dcb98e6fc56e76abfa",
+  "id": 54,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "757c591fceb934dcb98e6fc56e76abfa",
+     "id": 51
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "757c591fceb934dcb98e6fc56e76abfa",
+     "id": 50
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "757c591fceb934dcb98e6fc56e76abfa",
+     "id": 49
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "757c591fceb934dcb98e6fc56e76abfa",
+     "id": 48
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "757c591fceb934dcb98e6fc56e76abfa",
+     "id": 47
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 70,
+   "impactForce": 0.75,
+   "health": 0.0,
+   "maxHealth": 500,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 4,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.9,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.35,
+   "primaryActionCooldown": 1.3,
+   "standingAnimLength": 0.3,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic7",
+  "file": "7d4c616c1a98249e6bbc46d14bafaba6",
+  "id": 46,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Teleport",
+     "timer": 9.0,
+     "cooldownMin": 7.0,
+     "cooldownMax": 12.0
+    },
+    {
+     "moveName": "Evaluate Target",
+     "timer": 4.0,
+     "cooldownMin": 4.0,
+     "cooldownMax": 4.0
+    }
+   ],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "HealSparkle",
+     "file": "6ce74f1462b3344b9a6ae2b1907cf544",
+     "id": 12
+    },
+    {
+     "ref": "teleport",
+     "file": "28ad41220f9a746d99bc7ee72e175c58",
+     "id": 10
+    },
+    {
+     "ref": "teleport_streaks",
+     "file": "13c0fe203a3894ea0bfc762b7d4557a2",
+     "id": 8
+    },
+    {
+     "ref": "ConflagMain",
+     "file": "1217887a0e5344cde9cec52a5fcccc47",
+     "id": 10
+    }
+   ],
+   "myEffects": [
+    null,
+    null,
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio-HealHit",
+     "file": "7d4c616c1a98249e6bbc46d14bafaba6",
+     "id": 43
+    },
+    {
+     "ref": "Audio-Teleport",
+     "file": "7d4c616c1a98249e6bbc46d14bafaba6",
+     "id": 42
+    },
+    {
+     "ref": "Audio-Spawn",
+     "file": "7d4c616c1a98249e6bbc46d14bafaba6",
+     "id": 41
+    }
+   ],
+   "totalMeleeSounds": 1,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 130,
+   "impactForce": 0.0,
+   "health": 0.0,
+   "maxHealth": 650,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.3,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 6,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 5,
+   "isMelee": false,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.5,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 2.2,
+   "standingAnimLength": 0.367,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.45,
+     0.0
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.3,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "basic8",
+  "file": "d3c5c147f33cd4f7da940f3e349501aa",
+  "id": 46,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "sound-hit1",
+     "file": "d3c5c147f33cd4f7da940f3e349501aa",
+     "id": 43
+    },
+    {
+     "ref": "sound-hit2",
+     "file": "d3c5c147f33cd4f7da940f3e349501aa",
+     "id": 42
+    },
+    {
+     "ref": "sound-hit3",
+     "file": "d3c5c147f33cd4f7da940f3e349501aa",
+     "id": 41
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 300,
+   "impactForce": 6.0,
+   "health": 0.0,
+   "maxHealth": 1650,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.2,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.3,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.4,
+   "primaryActionCooldown": 1.4,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.4,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "boar1",
+  "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+  "id": 96,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Summon Adds",
+     "timer": 15.0,
+     "cooldownMin": 35.0,
+     "cooldownMax": 35.0
+    },
+    {
+     "moveName": "Throw Bomb",
+     "timer": 8.0,
+     "cooldownMin": 5.0,
+     "cooldownMax": 8.0
+    },
+    {
+     "moveName": "Stampede",
+     "timer": 23.0,
+     "cooldownMin": 35.0,
+     "cooldownMax": 35.0
+    }
+   ],
+   "oozeBoss": false,
+   "likeABoss": true,
+   "immuneToDeath": true,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    },
+    {
+     "ref": "Meteor2",
+     "file": "a84d5534879a941b881440e930370dde",
+     "id": 24
+    },
+    {
+     "ref": "Meteor3",
+     "file": "bd344d3ab0be34830abe67c8e0bd6649",
+     "id": 6
+    },
+    {
+     "ref": "Intimidate",
+     "file": "49f4d1e3c33054259b31622fef7a739b",
+     "id": 6
+    },
+    {
+     "ref": "Intimidate",
+     "file": "49f4d1e3c33054259b31622fef7a739b",
+     "id": 6
+    },
+    {
+     "ref": "Bomb",
+     "file": "ac842f208a43f460da674e4f2ce962c0",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 92
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 85
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 84
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 83
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 82
+    },
+    {
+     "ref": "Audio_explosion",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 81
+    },
+    {
+     "ref": "Audio_yell",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 86
+    },
+    {
+     "ref": "Audio_boar",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 90
+    },
+    {
+     "ref": "Audio_throwBomb",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 87
+    },
+    {
+     "ref": "Audio_death1",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 89
+    },
+    {
+     "ref": "Audio_flash",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 88
+    },
+    {
+     "ref": "Audio_rumble",
+     "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+     "id": 91
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 165,
+   "impactForce": 1.7,
+   "health": 0.0,
+   "maxHealth": 19000,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.4,
+   "conflagScaleFactor": 1.3,
+   "aoeRadiusBonus": 0.8,
+   "spawningStyle": 7,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 3,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.3,
+   "canBackpeddle": true,
+   "runSpeedScale": 0.7,
+   "primaryActionCooldown": 1.4,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 1,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -1.5,
+     0.0,
+     0.0
+    ],
+    [
+     1.5,
+     0.0,
+     0.0
+    ],
+    [
+     -1.2,
+     0.0,
+     0.5
+    ],
+    [
+     -1.7,
+     0.0,
+     -0.5
+    ],
+    [
+     1.2,
+     0.0,
+     0.5
+    ],
+    [
+     1.7,
+     0.0,
+     -0.5
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.36,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "boar2",
+  "file": "d78330a4d608f411b96fa95ca295af65",
+  "id": 54,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "d78330a4d608f411b96fa95ca295af65",
+     "id": 51
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "d78330a4d608f411b96fa95ca295af65",
+     "id": 50
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "d78330a4d608f411b96fa95ca295af65",
+     "id": 49
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "d78330a4d608f411b96fa95ca295af65",
+     "id": 48
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "d78330a4d608f411b96fa95ca295af65",
+     "id": 47
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 70,
+   "impactForce": 0.75,
+   "health": 0.0,
+   "maxHealth": 500,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.9,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.35,
+   "primaryActionCooldown": 1.3,
+   "standingAnimLength": 0.3,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "boar3",
+  "file": "a05351b7c94e84809b1dec7c28540873",
+  "id": 54,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "a05351b7c94e84809b1dec7c28540873",
+     "id": 51
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "a05351b7c94e84809b1dec7c28540873",
+     "id": 50
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "a05351b7c94e84809b1dec7c28540873",
+     "id": 49
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "a05351b7c94e84809b1dec7c28540873",
+     "id": 48
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "a05351b7c94e84809b1dec7c28540873",
+     "id": 47
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 70,
+   "impactForce": 0.75,
+   "health": 0.0,
+   "maxHealth": 500,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 4,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.9,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.35,
+   "primaryActionCooldown": 1.3,
+   "standingAnimLength": 0.3,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "dummy",
+  "file": "6765a23ab0ed34f3588d4d16ebe77d93",
+  "id": 23,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [],
+   "myEffects": [],
+   "mySounds": [],
+   "totalMeleeSounds": 0,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 30,
+   "impactForce": 1.2,
+   "health": 200.0,
+   "maxHealth": 200,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 0,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.1,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.3,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "golem1",
+  "file": "615133288bcb947dca732fb638ca425c",
+  "id": 71,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Quake",
+     "timer": 8.0,
+     "cooldownMin": 24.0,
+     "cooldownMax": 24.0
+    },
+    {
+     "moveName": "Omega Punch",
+     "timer": 15.0,
+     "cooldownMin": 15.0,
+     "cooldownMax": 15.0
+    },
+    {
+     "moveName": "Enrage",
+     "timer": 20.0,
+     "cooldownMin": 30.0,
+     "cooldownMax": 30.0
+    },
+    {
+     "moveName": "Quake Data",
+     "timer": 0.5,
+     "cooldownMin": 0.0,
+     "cooldownMax": 8.0
+    }
+   ],
+   "oozeBoss": false,
+   "likeABoss": true,
+   "immuneToDeath": true,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    },
+    {
+     "ref": "Meteor2",
+     "file": "a84d5534879a941b881440e930370dde",
+     "id": 24
+    },
+    {
+     "ref": "Meteor3",
+     "file": "bd344d3ab0be34830abe67c8e0bd6649",
+     "id": 6
+    },
+    {
+     "ref": "Enrage2",
+     "file": "c82ca858c65224af7bd037944c1335f0",
+     "id": 10
+    },
+    {
+     "ref": "Reckless",
+     "file": "eec5a58ee365849b3a9d65df89996957",
+     "id": 9
+    },
+    {
+     "ref": "Pounce",
+     "file": "25a7efe06d8e049b0a93cb9c0462c79c",
+     "id": 18
+    },
+    {
+     "ref": "Pounce",
+     "file": "25a7efe06d8e049b0a93cb9c0462c79c",
+     "id": 18
+    },
+    {
+     "ref": "Boulder",
+     "file": "bf8eae44bfd554db88c7ccd919dfa029",
+     "id": 5
+    },
+    {
+     "ref": "Boulder",
+     "file": "bf8eae44bfd554db88c7ccd919dfa029",
+     "id": 5
+    }
+   ],
+   "myEffects": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 61
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 60
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 59
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 58
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 57
+    },
+    {
+     "ref": "Audio_death1",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 67
+    },
+    {
+     "ref": "Audio_explosion",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 64
+    },
+    {
+     "ref": "Audio_flash",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 63
+    },
+    {
+     "ref": "Audio_rumble",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 62
+    },
+    {
+     "ref": "Audio_enrage",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 65
+    },
+    {
+     "ref": "Audio_megaPunch",
+     "file": "615133288bcb947dca732fb638ca425c",
+     "id": 66
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 240,
+   "impactForce": 1.2,
+   "health": 0.0,
+   "maxHealth": 32000,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.2,
+   "conflagScaleFactor": 1.4,
+   "aoeRadiusBonus": 0.8,
+   "spawningStyle": 7,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 8,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.2,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.4,
+   "primaryActionCooldown": 1.2,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 2,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -1.5,
+     0.0,
+     0.0
+    ],
+    [
+     1.5,
+     0.0,
+     0.0
+    ],
+    [
+     -1.2,
+     0.0,
+     0.5
+    ],
+    [
+     -1.7,
+     0.0,
+     -0.5
+    ],
+    [
+     1.2,
+     0.0,
+     0.5
+    ],
+    [
+     1.7,
+     0.0,
+     -0.5
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.28,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "lich1",
+  "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+  "id": 89,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Meteor Storm",
+     "timer": 10.0,
+     "cooldownMin": 20.0,
+     "cooldownMax": 20.0
+    },
+    {
+     "moveName": "Summon Adds",
+     "timer": 45.0,
+     "cooldownMin": 30.0,
+     "cooldownMax": 45.0
+    },
+    {
+     "moveName": "Electric Discharge",
+     "timer": 20.0,
+     "cooldownMin": 35.0,
+     "cooldownMax": 35.0
+    },
+    {
+     "moveName": "Meteor Data",
+     "timer": 0.5,
+     "cooldownMin": 0.0,
+     "cooldownMax": 8.0
+    },
+    {
+     "moveName": "Discharge Data",
+     "timer": 0.3,
+     "cooldownMin": 0.0,
+     "cooldownMax": 11.0
+    },
+    {
+     "moveName": "ThunderBolt",
+     "timer": 30.0,
+     "cooldownMin": 35.0,
+     "cooldownMax": 35.0
+    }
+   ],
+   "oozeBoss": false,
+   "likeABoss": true,
+   "immuneToDeath": true,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "Shadowbolt",
+     "file": "be12b53a08c1e4c538c30cc8a745811f",
+     "id": 14
+    },
+    {
+     "ref": "ShadowboltHit",
+     "file": "374ad9a93964b4e79be49d982e586366",
+     "id": 16
+    },
+    {
+     "ref": "Lightning",
+     "file": "f4b98f768dd6442d9b8332386c0a0e59",
+     "id": 6
+    },
+    {
+     "ref": "Lightning_FG",
+     "file": "6e927345db62748e8b4e81289dc34b70",
+     "id": 13
+    },
+    {
+     "ref": "Enrage_dark",
+     "file": "ce64e2d5ae90c4223b5231bb4560ef28",
+     "id": 10
+    },
+    {
+     "ref": "Meteor1",
+     "file": "643b85c9eca0b4995b25575de432d22c",
+     "id": 17
+    },
+    {
+     "ref": "Meteor2",
+     "file": "a84d5534879a941b881440e930370dde",
+     "id": 24
+    },
+    {
+     "ref": "Meteor3",
+     "file": "bd344d3ab0be34830abe67c8e0bd6649",
+     "id": 6
+    },
+    {
+     "ref": "Meteor1",
+     "file": "643b85c9eca0b4995b25575de432d22c",
+     "id": 17
+    },
+    {
+     "ref": "Meteor2",
+     "file": "a84d5534879a941b881440e930370dde",
+     "id": 24
+    },
+    {
+     "ref": "Meteor3",
+     "file": "bd344d3ab0be34830abe67c8e0bd6649",
+     "id": 6
+    },
+    {
+     "ref": "Horror",
+     "file": "2ad90fa6b2076496fb836766371ec6f9",
+     "id": 11
+    },
+    {
+     "ref": "Horror2",
+     "file": "14422fdb51a224854897a7dd98c9cd47",
+     "id": 15
+    }
+   ],
+   "myEffects": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio-FireballCast",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 79
+    },
+    {
+     "ref": "Audio-FireballHit",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 78
+    },
+    {
+     "ref": "Audio-Lightning",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 77
+    },
+    {
+     "ref": "Audio-Meteor",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 80
+    },
+    {
+     "ref": "Audio-Blizzard",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 86
+    },
+    {
+     "ref": "Audio-Meteor2",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 76
+    },
+    {
+     "ref": "Audio-Laugh",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 75
+    },
+    {
+     "ref": "Audio_death1",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 84
+    },
+    {
+     "ref": "Audio_flash",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 83
+    },
+    {
+     "ref": "Audio_rumble",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 82
+    },
+    {
+     "ref": "Audio_Horror",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 85
+    },
+    {
+     "ref": "Audio-Powerup",
+     "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+     "id": 81
+    }
+   ],
+   "totalMeleeSounds": 1,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 375,
+   "impactForce": 2.0,
+   "health": 0.0,
+   "maxHealth": 50000,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.0,
+   "conflagScaleFactor": 1.45,
+   "aoeRadiusBonus": 0.8,
+   "spawningStyle": 9,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 9,
+   "isMelee": false,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.1,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.6,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 4,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -1.5,
+     0.0,
+     0.0
+    ],
+    [
+     1.5,
+     0.0,
+     0.0
+    ],
+    [
+     -1.2,
+     0.0,
+     0.5
+    ],
+    [
+     -1.7,
+     0.0,
+     -0.5
+    ],
+    [
+     1.2,
+     0.0,
+     0.5
+    ],
+    [
+     1.7,
+     0.0,
+     -0.5
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.21,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "lich2",
+  "file": "c9cbd4f89b9ff4acea8fa92a0323764b",
+  "id": 58,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "VerticalSlash",
+     "file": "f13ff0acac4d74fe3b7603c9411f7941",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "c9cbd4f89b9ff4acea8fa92a0323764b",
+     "id": 55
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "c9cbd4f89b9ff4acea8fa92a0323764b",
+     "id": 54
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "c9cbd4f89b9ff4acea8fa92a0323764b",
+     "id": 53
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "c9cbd4f89b9ff4acea8fa92a0323764b",
+     "id": 52
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "c9cbd4f89b9ff4acea8fa92a0323764b",
+     "id": 51
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 250,
+   "impactForce": 1.05,
+   "health": 0.0,
+   "maxHealth": 2700,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 5,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.1,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.4,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.26,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "lich3",
+  "file": "eb092338dd7c94f78b75dc788be92637",
+  "id": 60,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "SkellyArrow",
+     "file": "ac45c12ca2d614bcaad9b20cb0c06bcd",
+     "id": 6
+    },
+    {
+     "ref": "Impact",
+     "file": "f57f1f8b1771c47d2ab2dc251584656d",
+     "id": 12
+    }
+   ],
+   "myEffects": [
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "audio-hit1",
+     "file": "eb092338dd7c94f78b75dc788be92637",
+     "id": 57
+    },
+    {
+     "ref": "audio-hit2",
+     "file": "eb092338dd7c94f78b75dc788be92637",
+     "id": 56
+    },
+    {
+     "ref": "audio-hit3",
+     "file": "eb092338dd7c94f78b75dc788be92637",
+     "id": 55
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 200,
+   "impactForce": 1.2,
+   "health": 0.0,
+   "maxHealth": 1750,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 1.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 3,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 2,
+   "isMelee": false,
+   "chaotic": true,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.6,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.8,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 1.0,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "oozeBoss1",
+  "file": "2c57d87abd292469797ccd39cea9c71e",
+  "id": 66,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Spit",
+     "timer": 5.0,
+     "cooldownMin": 4.0,
+     "cooldownMax": 6.0
+    },
+    {
+     "moveName": "Puddle Damage",
+     "timer": 1.0,
+     "cooldownMin": 1.0,
+     "cooldownMax": 0.5
+    },
+    {
+     "moveName": "Reform",
+     "timer": 1.0,
+     "cooldownMin": 1.0,
+     "cooldownMax": 1.0
+    }
+   ],
+   "oozeBoss": true,
+   "likeABoss": true,
+   "immuneToDeath": true,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    },
+    {
+     "ref": "Spit",
+     "file": "ca7934dad2a7f4be7b63448d5c1c12d5",
+     "id": 5
+    },
+    {
+     "ref": "Plague",
+     "file": "03a12923bac304e2e8e05fcbefa932bf",
+     "id": 14
+    },
+    {
+     "ref": "SpitPuddle",
+     "file": "7f179d48e783948f1a8d6d23c5ccdbdf",
+     "id": 6
+    },
+    {
+     "ref": "Spit2",
+     "file": "07eba7fca1f0a4363ab6f71a56d99ee1",
+     "id": 5
+    },
+    {
+     "ref": "SpitPuddle",
+     "file": "7f179d48e783948f1a8d6d23c5ccdbdf",
+     "id": 6
+    }
+   ],
+   "myEffects": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "2c57d87abd292469797ccd39cea9c71e",
+     "id": 62
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "2c57d87abd292469797ccd39cea9c71e",
+     "id": 60
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "2c57d87abd292469797ccd39cea9c71e",
+     "id": 59
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "2c57d87abd292469797ccd39cea9c71e",
+     "id": 58
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "2c57d87abd292469797ccd39cea9c71e",
+     "id": 57
+    },
+    {
+     "ref": "Audio_spitHit",
+     "file": "2c57d87abd292469797ccd39cea9c71e",
+     "id": 61
+    },
+    {
+     "ref": "Audio_death1",
+     "file": "2c57d87abd292469797ccd39cea9c71e",
+     "id": 63
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 230,
+   "impactForce": 1.0,
+   "health": 0.0,
+   "maxHealth": 9000,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.3,
+   "conflagScaleFactor": 1.4,
+   "aoeRadiusBonus": 0.8,
+   "spawningStyle": 7,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 6,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.9,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.0,
+   "primaryActionCooldown": 1.8,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 3,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -1.5,
+     0.0,
+     0.0
+    ],
+    [
+     1.5,
+     0.0,
+     0.0
+    ],
+    [
+     -1.2,
+     0.0,
+     0.5
+    ],
+    [
+     -1.7,
+     0.0,
+     -0.5
+    ],
+    [
+     1.2,
+     0.0,
+     0.5
+    ],
+    [
+     1.7,
+     0.0,
+     -0.5
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.33,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "oozeBoss2",
+  "file": "a9764dcc3a1f54f0fb2c8c9b9669b3b1",
+  "id": 46,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Stand",
+     "timer": 0.0,
+     "cooldownMin": 0.7,
+     "cooldownMax": 1.2
+    }
+   ],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": true,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "sound-hit1",
+     "file": "a9764dcc3a1f54f0fb2c8c9b9669b3b1",
+     "id": 43
+    },
+    {
+     "ref": "sound-hit2",
+     "file": "a9764dcc3a1f54f0fb2c8c9b9669b3b1",
+     "id": 42
+    },
+    {
+     "ref": "sound-hit3",
+     "file": "a9764dcc3a1f54f0fb2c8c9b9669b3b1",
+     "id": 41
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 300,
+   "impactForce": 6.0,
+   "health": 0.0,
+   "maxHealth": 2500,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.2,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 8,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 7,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 0.3,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.4,
+   "primaryActionCooldown": 1.4,
+   "standingAnimLength": 0.5,
+   "tauntable": false,
+   "invincible": false,
+   "specialDeath": 5,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.4,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "spider1",
+  "file": "e3aad33533fde4a7ab971643c18c9bb9",
+  "id": 75,
+  "fields": {
+   "specialMoves": [
+    {
+     "moveName": "Spider Pounce",
+     "timer": 10.0,
+     "cooldownMin": 25.0,
+     "cooldownMax": 25.0
+    },
+    {
+     "moveName": "Summon Babies",
+     "timer": 25.0,
+     "cooldownMin": 35.0,
+     "cooldownMax": 35.0
+    },
+    {
+     "moveName": "Web",
+     "timer": 40.0,
+     "cooldownMin": 30.0,
+     "cooldownMax": 30.0
+    }
+   ],
+   "oozeBoss": false,
+   "likeABoss": true,
+   "immuneToDeath": true,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    },
+    {
+     "ref": "Meteor2",
+     "file": "a84d5534879a941b881440e930370dde",
+     "id": 24
+    },
+    {
+     "ref": "Meteor3",
+     "file": "bd344d3ab0be34830abe67c8e0bd6649",
+     "id": 6
+    },
+    {
+     "ref": "Warcry",
+     "file": "d813dc078f26a46aaa0c35dec7423437",
+     "id": 4
+    },
+    {
+     "ref": "Warcry",
+     "file": "d813dc078f26a46aaa0c35dec7423437",
+     "id": 4
+    },
+    {
+     "ref": "Pounce",
+     "file": "25a7efe06d8e049b0a93cb9c0462c79c",
+     "id": 18
+    },
+    {
+     "ref": "SpiderShot",
+     "file": "4ee7ac00c3cb24b669e9b9d4d17ac3d4",
+     "id": 6
+    },
+    {
+     "ref": "WebRoot",
+     "file": "d4d01f610bedd4be39b43dbad11d2604",
+     "id": 4
+    }
+   ],
+   "myEffects": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "Audio_hit1",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 67
+    },
+    {
+     "ref": "Audio_hit2",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 66
+    },
+    {
+     "ref": "Audio_hit3",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 65
+    },
+    {
+     "ref": "Audio_hit4",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 64
+    },
+    {
+     "ref": "Audio_hit5",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 63
+    },
+    {
+     "ref": "Audio_death1",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 70
+    },
+    {
+     "ref": "Audio_explosion",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 71
+    },
+    {
+     "ref": "Audio_flash",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 72
+    },
+    {
+     "ref": "Audio_rumble",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 68
+    },
+    {
+     "ref": "Audio_yell",
+     "file": "e3aad33533fde4a7ab971643c18c9bb9",
+     "id": 69
+    }
+   ],
+   "totalMeleeSounds": 5,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 132,
+   "impactForce": 1.3,
+   "health": 0.0,
+   "maxHealth": 22000,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 0.3,
+   "conflagScaleFactor": 1.3,
+   "aoeRadiusBonus": 0.8,
+   "spawningStyle": 7,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 4,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.05,
+   "canBackpeddle": true,
+   "runSpeedScale": 1.2,
+   "primaryActionCooldown": 1.0,
+   "standingAnimLength": 0.5,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 2,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -1.5,
+     0.0,
+     0.0
+    ],
+    [
+     1.5,
+     0.0,
+     0.0
+    ],
+    [
+     -1.2,
+     0.0,
+     0.5
+    ],
+    [
+     -1.7,
+     0.0,
+     -0.5
+    ],
+    [
+     1.2,
+     0.0,
+     0.5
+    ],
+    [
+     1.7,
+     0.0,
+     -0.5
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.3,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "spider2",
+  "file": "7c678cd80c6fd49ac802f722a929f4e2",
+  "id": 46,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "sound-hit1",
+     "file": "7c678cd80c6fd49ac802f722a929f4e2",
+     "id": 43
+    },
+    {
+     "ref": "sound-hit2",
+     "file": "7c678cd80c6fd49ac802f722a929f4e2",
+     "id": 42
+    },
+    {
+     "ref": "sound-hit3",
+     "file": "7c678cd80c6fd49ac802f722a929f4e2",
+     "id": 41
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 45,
+   "impactForce": 0.5,
+   "health": 0.0,
+   "maxHealth": 400,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 2.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 1,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.7,
+   "canBackpeddle": true,
+   "runSpeedScale": 0.8,
+   "primaryActionCooldown": 0.9,
+   "standingAnimLength": 0.333,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.27,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ },
+ {
+  "object": "spider3",
+  "file": "4f1fb63e0608644d5bac1493fdb37a88",
+  "id": 46,
+  "fields": {
+   "specialMoves": [],
+   "oozeBoss": false,
+   "likeABoss": false,
+   "immuneToDeath": false,
+   "debuffs": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "myEffectsPrefabs": [
+    {
+     "ref": "PiercingSlash",
+     "file": "35161ac050a614baf9f7d0a3fe294e96",
+     "id": 7
+    }
+   ],
+   "myEffects": [
+    null
+   ],
+   "mySounds": [
+    {
+     "ref": "sound-hit1",
+     "file": "4f1fb63e0608644d5bac1493fdb37a88",
+     "id": 43
+    },
+    {
+     "ref": "sound-hit2",
+     "file": "4f1fb63e0608644d5bac1493fdb37a88",
+     "id": 42
+    },
+    {
+     "ref": "sound-hit3",
+     "file": "4f1fb63e0608644d5bac1493fdb37a88",
+     "id": 41
+    }
+   ],
+   "totalMeleeSounds": 3,
+   "motherBrain": null,
+   "attackers": 0,
+   "meleeSlot": 0,
+   "colorSpeed": 2.0,
+   "myRenderer": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "power": 45,
+   "impactForce": 0.5,
+   "health": 0.0,
+   "maxHealth": 400,
+   "healthTimer": 0.0,
+   "healthVisible": false,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "slideVector": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "frictionConstant": 10.0,
+   "myWeight": 2.0,
+   "conflagScaleFactor": 1.0,
+   "aoeRadiusBonus": 0.0,
+   "spawningStyle": 4,
+   "myTargetScript": null,
+   "myTarget": null,
+   "AIType": 1,
+   "isMelee": true,
+   "chaotic": false,
+   "AIState": 0,
+   "actionTimer": 0.0,
+   "moveSpeed": 1.7,
+   "canBackpeddle": true,
+   "runSpeedScale": 0.8,
+   "primaryActionCooldown": 0.9,
+   "standingAnimLength": 0.333,
+   "tauntable": true,
+   "invincible": false,
+   "specialDeath": 0,
+   "fearLocation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fearTimer": 0.0,
+   "redAnim": false,
+   "greenAnim": false,
+   "blueAnim": false,
+   "meleePositions": [
+    [
+     -0.9,
+     0.0,
+     0.0
+    ],
+    [
+     0.9,
+     0.0,
+     0.0
+    ],
+    [
+     -0.7,
+     0.0,
+     0.45
+    ],
+    [
+     -1.1,
+     0.0,
+     -0.45
+    ],
+    [
+     0.7,
+     0.0,
+     0.45
+    ],
+    [
+     1.1,
+     0.0,
+     -0.45
+    ]
+   ],
+   "meleeOccupants": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "meleeOffset": 0.27,
+   "mana": 50,
+   "debuffColor": [
+    0.25,
+    0.25,
+    0.25,
+    1.0
+   ],
+   "mostRecentDebuff": -1,
+   "poisonMagnitude": 0.0,
+   "meteorDotMagnitude": 0.0,
+   "conflagDotMagnitude": 0.0,
+   "baelDotMagnitude": 0.0,
+   "plagueDotMagnitude": 0.0,
+   "rangerDotMagnitude": 0.0
+  }
+ }
+]

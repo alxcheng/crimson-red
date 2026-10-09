@@ -1,0 +1,20 @@
+[
+ {
+  "object": "Main Camera",
+  "file": "mainData",
+  "id": 61,
+  "fields": {
+   "timer": 0.0,
+   "fader": {
+    "ref": "fader",
+    "file": "mainData",
+    "id": 40
+   },
+   "theCam": {
+    "ref": "Main Camera",
+    "file": "mainData",
+    "id": 36
+   }
+  }
+ }
+]

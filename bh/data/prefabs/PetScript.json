@@ -1,0 +1,28 @@
+[
+ {
+  "object": "Dog",
+  "file": "f266f09104a7d41c7a246bc91c4b58e0",
+  "id": 36,
+  "fields": {
+   "myOwner": null,
+   "myTarget": null,
+   "myTargetEnemyScript": null,
+   "myTransform": null,
+   "myAnimation": null,
+   "motherBrain": null,
+   "meleeSlot": 0,
+   "moveSpeed": 1.6,
+   "power": 0.0,
+   "movementTarget": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "movementVector": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  }
+ }
+]

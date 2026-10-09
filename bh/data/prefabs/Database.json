@@ -1,0 +1,8100 @@
+[
+ {
+  "object": "**DATABASE",
+  "file": "level0",
+  "id": 42,
+  "fields": {
+   "itemDB": [
+    {
+     "itemName": "Iron Sword",
+     "description": "A simple, unremarkable weapon used by\nKnights.",
+     "icon": "Icons/sword",
+     "itemType": "weapon",
+     "power": 15,
+     "upgrade": 9,
+     "sellPrice": 20,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword1"
+    },
+    {
+     "itemName": "Iron Dagger",
+     "description": "A cheap but effective piercing weapon used\nby Rogues.",
+     "icon": "Icons/dagger",
+     "itemType": "weapon",
+     "power": 19,
+     "upgrade": 49,
+     "sellPrice": 24,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger1"
+    },
+    {
+     "itemName": "Cleric's Rod",
+     "description": "A holy staff bestowed to all apprentice\nClerics.",
+     "icon": "Icons/rod",
+     "itemType": "weapon",
+     "power": 20,
+     "upgrade": 87,
+     "sellPrice": 18,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric1"
+    },
+    {
+     "itemName": "Oakwood Staff",
+     "description": "This crude wooden implement gently hums\nwith energy.",
+     "icon": "Icons/staff",
+     "itemType": "weapon",
+     "power": 23,
+     "upgrade": 95,
+     "sellPrice": 26,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard1"
+    },
+    {
+     "itemName": "Scale Mail",
+     "description": "Interlocking metal plates create this sturdy\nKnight's armor.",
+     "icon": "Icons/scale2",
+     "itemType": "armor",
+     "power": 20,
+     "upgrade": 103,
+     "sellPrice": 30,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Soft Leather Garb",
+     "description": "These weathered leather clothes offer slight\nprotection.",
+     "icon": "Icons/leather",
+     "itemType": "armor",
+     "power": 12,
+     "upgrade": 113,
+     "sellPrice": 25,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Cotton Cloak",
+     "description": "This lightweight cloak protects against the\nwind and little else.",
+     "icon": "Icons/robe",
+     "itemType": "armor",
+     "power": 8,
+     "upgrade": 108,
+     "sellPrice": 15,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Tome of Mastery",
+     "description": "The holder of this tome has their ability\ncooldowns shortened by 3 sec.",
+     "icon": "Icons/tome",
+     "itemType": "trinket",
+     "power": 3,
+     "upgrade": -1,
+     "sellPrice": 150,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Ring of Regeneration",
+     "description": "The wearer of this ring slowly regenerates\nhealth at all times.",
+     "icon": "Icons/ring",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 60,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Rusty Carver",
+     "description": "A crude but effective weapon.  Hope you've\nhad your shots!",
+     "icon": "Icons/sword_rusty",
+     "itemType": "weapon",
+     "power": 18,
+     "upgrade": 10,
+     "sellPrice": 36,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_rusty"
+    },
+    {
+     "itemName": "Longsword",
+     "description": "A versatile and well-made blade, widely\nused by Knights.",
+     "icon": "Icons/sword_long",
+     "itemType": "weapon",
+     "power": 21,
+     "upgrade": 57,
+     "sellPrice": 60,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_long"
+    },
+    {
+     "itemName": "Dual Hatchets",
+     "description": "These were designed for chopping trees, not\nfor battle.",
+     "icon": "Icons/hatchet",
+     "itemType": "weapon",
+     "power": 20,
+     "upgrade": 79,
+     "sellPrice": 25,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_hatchet"
+    },
+    {
+     "itemName": "Swordsman's Gauntlet",
+     "description": "Bestows upon the wearer a +3 bonus to\nattack power.",
+     "icon": "Icons/glove",
+     "itemType": "trinket",
+     "power": 3,
+     "upgrade": -1,
+     "sellPrice": 75,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Power Fist",
+     "description": "These rugged gauntlets provide a +6 power\nbonus to the wearer.",
+     "icon": "Icons/glove5",
+     "itemType": "trinket",
+     "power": 6,
+     "upgrade": -1,
+     "sellPrice": 140,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Titan's Glove",
+     "description": "Infused with the strength of demigods,\ngranting a +10 power bonus.",
+     "icon": "Icons/glove3",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 220,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Energy Ring",
+     "description": "A magic-infused ring that grants +3 magic\npower to its wearer.",
+     "icon": "Icons/ring2",
+     "itemType": "trinket",
+     "power": 3,
+     "upgrade": -1,
+     "sellPrice": 75,
+     "usableBy": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Firestorm Band",
+     "description": "This gemstone glistens with arcane fire.\nGrants +6 magic power.",
+     "icon": "Icons/ring4",
+     "itemType": "trinket",
+     "power": 6,
+     "upgrade": -1,
+     "sellPrice": 140,
+     "usableBy": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Kaimani's Bloodstone",
+     "description": "A powerful wizard's soul resides within the\ncrimson jewel... +10 magic power.",
+     "icon": "Icons/ring3",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 220,
+     "usableBy": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Sprint Shoes",
+     "description": "These nimble boots allow the wearer to run\n10% faster.",
+     "icon": "Icons/boots",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 100,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Trollskin Amulet",
+     "description": "The wearer of this amulet is granted rapid\nhealth regeneration.",
+     "icon": "Icons/necklace1",
+     "itemType": "trinket",
+     "power": 20,
+     "upgrade": -1,
+     "sellPrice": 150,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Warding Amulet",
+     "description": "Provides a 10% chance for attacks to deflect\noff of the wearer.",
+     "icon": "Icons/necklace3",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 150,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Phasing Lodestone",
+     "description": "A field of energy protects the wearer of this\ngem, negating 20% of attacks.",
+     "icon": "Icons/necklace2",
+     "itemType": "trinket",
+     "power": 20,
+     "upgrade": -1,
+     "sellPrice": 240,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Ancient Dragon Tooth",
+     "description": "A symbol of strength and luck - grants a 15%\ncritical strike chance.",
+     "icon": "Icons/dragontooth",
+     "itemType": "trinket",
+     "power": 15,
+     "upgrade": -1,
+     "sellPrice": 300,
+     "usableBy": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Truestrike Monocle",
+     "description": "This eye-piece grants impossibly accurate\nvision, and 10% critical chance.",
+     "icon": "Icons/monocle",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 200,
+     "usableBy": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Silver Armlet",
+     "description": "This bracer grants an armor bonus of +3.",
+     "icon": "Icons/armlet",
+     "itemType": "trinket",
+     "power": 3,
+     "upgrade": -1,
+     "sellPrice": 50,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Glyph of Stoneskin",
+     "description": "The bearer of this magic stone gains a +6\narmor bonus.",
+     "icon": "Icons/glyph",
+     "itemType": "trinket",
+     "power": 6,
+     "upgrade": -1,
+     "sellPrice": 120,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Sharkul's Skull",
+     "description": "The mighty soul of Sharkul lies within!\nIncreases armor by +10.",
+     "icon": "Icons/skull",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 200,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Hermes Charm",
+     "description": "Grants the wearer astounding swiftness, \nincreasing run speed by 20%.",
+     "icon": "Icons/hermes",
+     "itemType": "trinket",
+     "power": 20,
+     "upgrade": -1,
+     "sellPrice": 180,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Rabbit's Foot",
+     "description": "Lucky!  Grants 5% critical strike chance to\nyour attacks.",
+     "icon": "Icons/rabbit",
+     "itemType": "trinket",
+     "power": 5,
+     "upgrade": -1,
+     "sellPrice": 100,
+     "usableBy": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Ring of Haste",
+     "description": "Grants the wearer 5% increased attack or\ncasting speed.",
+     "icon": "Icons/ring5",
+     "itemType": "trinket",
+     "power": 5,
+     "upgrade": -1,
+     "sellPrice": 100,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Tempest Stone",
+     "description": "The swirling energy of this jewel grants 10%\nincreased attack/cast speed.",
+     "icon": "Icons/tempeststone",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 200,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Ninja Glove",
+     "description": "Behold the blinding speed of the ninja!  +15%\nattack/casting speed.",
+     "icon": "Icons/glove5",
+     "itemType": "trinket",
+     "power": 15,
+     "upgrade": -1,
+     "sellPrice": 300,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Codex of Jabe",
+     "description": "The secrets of this ancient text reduce the\nowner's cooldowns by 6 sec.",
+     "icon": "Icons/jabe",
+     "itemType": "trinket",
+     "power": 6,
+     "upgrade": -1,
+     "sellPrice": 300,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Broken Pocketwatch",
+     "description": "Grants a 5% chance for an activated power\nto invoke no cooldown.",
+     "icon": "Icons/watch",
+     "itemType": "trinket",
+     "power": 5,
+     "upgrade": -1,
+     "sellPrice": 70,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Monkey's Paw",
+     "description": "Grants a 10% chance for an activated power\nto invoke no cooldown.",
+     "icon": "Icons/paw",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 150,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Azamoth's Cursed Eyeball",
+     "description": "Grants a 15% chance for an activated power\nto invoke no cooldown.",
+     "icon": "Icons/eyeball",
+     "itemType": "trinket",
+     "power": 15,
+     "upgrade": -1,
+     "sellPrice": 250,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Glove of the Thief",
+     "description": "While worn, the party will receive 10% extra\ngold from battles.",
+     "icon": "Icons/glove2",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 60,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Bandit's Satchel",
+     "description": "While worn, the party will receive 20% extra\ngold from battles.",
+     "icon": "Icons/satchel",
+     "itemType": "trinket",
+     "power": 20,
+     "upgrade": -1,
+     "sellPrice": 150,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Mystic Journal",
+     "description": "Gives a bonus of +10% increased XP to the\nowner.",
+     "icon": "Icons/tome2",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 175,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Mystery Egg",
+     "description": "What's inside? A baby dragon? Cream filling?\nGrants +20% increased XP.",
+     "icon": "Icons/egg",
+     "itemType": "trinket",
+     "power": 20,
+     "upgrade": -1,
+     "sellPrice": 340,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Blood-soaked Sash",
+     "description": "Once worn by bloodthirsty berserkers, grants\n10% life-draining to attacks.",
+     "icon": "Icons/sash",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 100,
+     "usableBy": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Vampire Tooth Pendant",
+     "description": "This vile fang grants the wearer a 20% life-\ndraining effect on their attacks.",
+     "icon": "Icons/vamptooth",
+     "itemType": "trinket",
+     "power": 20,
+     "upgrade": -1,
+     "sellPrice": 220,
+     "usableBy": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Choker of the Red Feast",
+     "description": "Evil whispers emanate from the center jewel.\nGrants 30% life-draining to attacks.",
+     "icon": "Icons/necklace4",
+     "itemType": "trinket",
+     "power": 30,
+     "upgrade": -1,
+     "sellPrice": 340,
+     "usableBy": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Pugilist's Tape",
+     "description": "Popular among bare-fisted fighters, such as\nthe Monk.",
+     "icon": "Icons/tape",
+     "itemType": "weapon",
+     "power": 16,
+     "upgrade": 63,
+     "sellPrice": 22,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Karate Gi",
+     "description": "Designed for freedom of movement, allowing\nquick evasion.",
+     "icon": "Icons/gi",
+     "itemType": "armor",
+     "power": 18,
+     "upgrade": 118,
+     "sellPrice": 28,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Lute Strings",
+     "description": "Everyday lute strings, typically made from\nintestine linings, ew!",
+     "icon": "Icons/strings",
+     "itemType": "weapon",
+     "power": 5,
+     "upgrade": 71,
+     "sellPrice": 18,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Ring of Swift Recovery",
+     "description": "Grants a 5% bonus to all healing received\nby the wearer.",
+     "icon": "Icons/ring6",
+     "itemType": "trinket",
+     "power": 5,
+     "upgrade": -1,
+     "sellPrice": 50,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Medic's Charm",
+     "description": "Grants a 10% bonus to all healing received\nby the wearer.",
+     "icon": "Icons/necklace5",
+     "itemType": "trinket",
+     "power": 10,
+     "upgrade": -1,
+     "sellPrice": 130,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Zara's Signet",
+     "description": "Grants a 15% bonus to all healing received\nby the wearer.",
+     "icon": "Icons/ring7",
+     "itemType": "trinket",
+     "power": 15,
+     "upgrade": -1,
+     "sellPrice": 210,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Silver Dagger",
+     "description": "A finely crafted silver blade, from a well-\nknown smith.",
+     "icon": "Icons/dagger_silver",
+     "itemType": "weapon",
+     "power": 23,
+     "upgrade": 50,
+     "sellPrice": 40,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_silver"
+    },
+    {
+     "itemName": "Mugger's Shiv",
+     "description": "Most likely the former property of some\nne're-do-well.",
+     "icon": "Icons/dagger_serrated",
+     "itemType": "weapon",
+     "power": 27,
+     "upgrade": 51,
+     "sellPrice": 68,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_serrated"
+    },
+    {
+     "itemName": "Golden Dagger",
+     "description": "This blade hums with subtle magical energy\nand light.",
+     "icon": "Icons/dagger_gold",
+     "itemType": "weapon",
+     "power": 31,
+     "upgrade": 52,
+     "sellPrice": 88,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_gold"
+    },
+    {
+     "itemName": "Mithril Kris",
+     "description": "Blades such as these are said to be able to\nslay spirits...",
+     "icon": "Icons/dagger_kris",
+     "itemType": "weapon",
+     "power": 36,
+     "upgrade": 53,
+     "sellPrice": 115,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_kris"
+    },
+    {
+     "itemName": "Guro'ji Ritual Dagger",
+     "description": "A relic from a lost civilization, it still holds\nuntold power.",
+     "icon": "Icons/dagger_cross",
+     "itemType": "weapon",
+     "power": 41,
+     "upgrade": 54,
+     "sellPrice": 145,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_cross"
+    },
+    {
+     "itemName": "The Red Fang",
+     "description": "A savage weapon made from the teeth and\nbones of wyverns.",
+     "icon": "Icons/dagger_red",
+     "itemType": "weapon",
+     "power": 46,
+     "upgrade": -1,
+     "sellPrice": 185,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_redfang"
+    },
+    {
+     "itemName": "Frozen Doomspike",
+     "description": "As deadly and remorseless as winter itself.",
+     "icon": "Icons/dagger_ice",
+     "itemType": "weapon",
+     "power": 52,
+     "upgrade": -1,
+     "sellPrice": 230,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_ice"
+    },
+    {
+     "itemName": "Vardus, the Reaper",
+     "description": "Each of this cursed blade's owners have\nbeen driven mad.",
+     "icon": "Icons/dagger_onyx",
+     "itemType": "weapon",
+     "power": 58,
+     "upgrade": -1,
+     "sellPrice": 300,
+     "usableBy": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/dagger_onyx"
+    },
+    {
+     "itemName": "Silver Greatsword",
+     "description": "Typically wielded in two hands... but not if\nyou're a hero.",
+     "icon": "Icons/sword_zwei",
+     "itemType": "weapon",
+     "power": 24,
+     "upgrade": 58,
+     "sellPrice": 80,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_zwei"
+    },
+    {
+     "itemName": "Savage Ripsaw",
+     "description": "Serrated and razor sharp - carves monsters\ninto bits!",
+     "icon": "Icons/sword_carver",
+     "itemType": "weapon",
+     "power": 28,
+     "upgrade": 59,
+     "sellPrice": 108,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_carver"
+    },
+    {
+     "itemName": "Jade Edge",
+     "description": "Swords such as these are often forged by\nby fey spirits.",
+     "icon": "Icons/sword_jade",
+     "itemType": "weapon",
+     "power": 32,
+     "upgrade": 60,
+     "sellPrice": 130,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_jade"
+    },
+    {
+     "itemName": "Ancient Crystal Sword",
+     "description": "The blade glistens with otherworldly light\nand power.",
+     "icon": "Icons/sword_crystal",
+     "itemType": "weapon",
+     "power": 36,
+     "upgrade": -1,
+     "sellPrice": 155,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_crystal"
+    },
+    {
+     "itemName": "Holy Blade of M'ir",
+     "description": "Relic of the goddess, M'ir, vigilant protector\nof all good souls.",
+     "icon": "Icons/sword_holy",
+     "itemType": "weapon",
+     "power": 40,
+     "upgrade": -1,
+     "sellPrice": 205,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_holy"
+    },
+    {
+     "itemName": "Obsidian Soulcrusher",
+     "description": "This once evil blade has been cleansed by\nholy rites.",
+     "icon": "Icons/sword_mummy",
+     "itemType": "weapon",
+     "power": 45,
+     "upgrade": -1,
+     "sellPrice": 275,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "Weapons/sword_mummy"
+    },
+    {
+     "itemName": "Cestus",
+     "description": "These gloves provide increased punching\npower.",
+     "icon": "Icons/monkw2",
+     "itemType": "weapon",
+     "power": 19,
+     "upgrade": 64,
+     "sellPrice": 37,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Brass Knuckles",
+     "description": "Are these legal?  Probably not.",
+     "icon": "Icons/monkw3",
+     "itemType": "weapon",
+     "power": 22,
+     "upgrade": 65,
+     "sellPrice": 64,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Spiked Gloves",
+     "description": "Few can withstand a blow from these cruel\nimplements.",
+     "icon": "Icons/monkw4",
+     "itemType": "weapon",
+     "power": 26,
+     "upgrade": 66,
+     "sellPrice": 85,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Imbued Wristwraps",
+     "description": "A simple cloth that has been enchanted with\nelemental magics.",
+     "icon": "Icons/monkw5",
+     "itemType": "weapon",
+     "power": 30,
+     "upgrade": 67,
+     "sellPrice": 120,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Anointed Gauntlets",
+     "description": "Righteous fury fills these gloves with purpose\nand power.",
+     "icon": "Icons/monkw6",
+     "itemType": "weapon",
+     "power": 34,
+     "upgrade": 68,
+     "sellPrice": 140,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Fist of the North",
+     "description": "A relic from an ancient order of monks that\nhas since vanished.",
+     "icon": "Icons/monkw7",
+     "itemType": "weapon",
+     "power": 38,
+     "upgrade": -1,
+     "sellPrice": 165,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Gloves of the Long Death",
+     "description": "Crafted by assassins, these gloves hold\nmurderous power.",
+     "icon": "Icons/monkw8",
+     "itemType": "weapon",
+     "power": 43,
+     "upgrade": -1,
+     "sellPrice": 225,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Taizu's Hand of Justice",
+     "description": "Channels the might and fury of an ancient\nimperial dynasty.",
+     "icon": "Icons/monkw9",
+     "itemType": "weapon",
+     "power": 48,
+     "upgrade": -1,
+     "sellPrice": 290,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Silver Strings",
+     "description": "Not literally silver, but they shine with a\ndistinct luster.",
+     "icon": "Icons/strings2",
+     "itemType": "weapon",
+     "power": 8,
+     "upgrade": 72,
+     "sellPrice": 33,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Masterwork Strings",
+     "description": "These finely crafted strings provide superior\nclarity and tone.",
+     "icon": "Icons/strings2",
+     "itemType": "weapon",
+     "power": 11,
+     "upgrade": 73,
+     "sellPrice": 52,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Enchanted Strings",
+     "description": "Imbued with subtle magic that enhances\ntheir sound.",
+     "icon": "Icons/strings5",
+     "itemType": "weapon",
+     "power": 15,
+     "upgrade": 74,
+     "sellPrice": 70,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Strings of Swooning",
+     "description": "Grants an almost supernatural capacity to \nmake the ladies swoon.",
+     "icon": "Icons/strings6",
+     "itemType": "weapon",
+     "power": 19,
+     "upgrade": 75,
+     "sellPrice": 100,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Dragon Sinew",
+     "description": "Dragons don't just make great wallets, but\nalso lute strings?",
+     "icon": "Icons/strings3",
+     "itemType": "weapon",
+     "power": 23,
+     "upgrade": 76,
+     "sellPrice": 118,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Angel Hair",
+     "description": "Their origin unknown, these strings create\nunimaginable clarity.",
+     "icon": "Icons/strings5",
+     "itemType": "weapon",
+     "power": 28,
+     "upgrade": -1,
+     "sellPrice": 150,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Echoes of Love Lost",
+     "description": "These mysterious strings bear a curious aura\nof sadness about them.",
+     "icon": "Icons/strings4",
+     "itemType": "weapon",
+     "power": 33,
+     "upgrade": -1,
+     "sellPrice": 196,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "The Spirit of Battle",
+     "description": "These strings resonate with the very soul of\nall who hear them.",
+     "icon": "Icons/strings4",
+     "itemType": "weapon",
+     "power": 39,
+     "upgrade": -1,
+     "sellPrice": 260,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Dual Scimitars",
+     "description": "A popular choice amongst dual-wielding\nbarbarians.",
+     "icon": "Icons/scimitar",
+     "itemType": "weapon",
+     "power": 24,
+     "upgrade": 80,
+     "sellPrice": 42,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/scimitar"
+    },
+    {
+     "itemName": "Cold Iron Slashers",
+     "description": "These savage blades have a nasty serrated\nedge.",
+     "icon": "Icons/serrated",
+     "itemType": "weapon",
+     "power": 28,
+     "upgrade": 81,
+     "sellPrice": 74,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_serrated"
+    },
+    {
+     "itemName": "Ogre Maulers",
+     "description": "Absurdly heavy stones on sticks - primitive\nbut effective.",
+     "icon": "Icons/maul",
+     "itemType": "weapon",
+     "power": 32,
+     "upgrade": 82,
+     "sellPrice": 95,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_maul"
+    },
+    {
+     "itemName": "Twin Battleaxes",
+     "description": "Perfectly balanced, these axes are built for\ncombat.",
+     "icon": "Icons/goldaxe",
+     "itemType": "weapon",
+     "power": 37,
+     "upgrade": 83,
+     "sellPrice": 125,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_battleaxe"
+    },
+    {
+     "itemName": "Frost-Giant Crushers",
+     "description": "Petrified by a supernatural chill, they strike\nwith immense force.",
+     "icon": "Icons/maul2",
+     "itemType": "weapon",
+     "power": 42,
+     "upgrade": 84,
+     "sellPrice": 160,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_frost"
+    },
+    {
+     "itemName": "Wyvern's Bite",
+     "description": "It is said the wounds these blades leave are\ncursed to never heal.",
+     "icon": "Icons/jadeaxe",
+     "itemType": "weapon",
+     "power": 47,
+     "upgrade": -1,
+     "sellPrice": 215,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_wyvern"
+    },
+    {
+     "itemName": "Hammers of the Underkings",
+     "description": "Fashioned by dwarves, they exhibit long lost\ncrafstmanship.",
+     "icon": "Icons/dwarf",
+     "itemType": "weapon",
+     "power": 53,
+     "upgrade": -1,
+     "sellPrice": 250,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_dwarf"
+    },
+    {
+     "itemName": "Armageddon Blades",
+     "description": "Adorned with skulls, these towering swords\nherald the end times.",
+     "icon": "Icons/skullswords",
+     "itemType": "weapon",
+     "power": 60,
+     "upgrade": -1,
+     "sellPrice": 330,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/barb_skull"
+    },
+    {
+     "itemName": "Crystal Rod",
+     "description": "Helps to channel divine power with greater\nease.",
+     "icon": "Icons/rod2",
+     "itemType": "weapon",
+     "power": 24,
+     "upgrade": 88,
+     "sellPrice": 35,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric2"
+    },
+    {
+     "itemName": "Medicine Cane",
+     "description": "Crafted from the wood of ancient, blessed\ngroves.",
+     "icon": "Icons/rod3",
+     "itemType": "weapon",
+     "power": 28,
+     "upgrade": 89,
+     "sellPrice": 58,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric3"
+    },
+    {
+     "itemName": "Emerald Rod",
+     "description": "Favored amongst scryers, these staves can\npeer into the future.",
+     "icon": "Icons/rod4",
+     "itemType": "weapon",
+     "power": 32,
+     "upgrade": 90,
+     "sellPrice": 76,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric4"
+    },
+    {
+     "itemName": "Blessed Sceptre",
+     "description": "A symbol of the holy circle of M'ir and its\nhigh clerics.",
+     "icon": "Icons/rod5",
+     "itemType": "weapon",
+     "power": 36,
+     "upgrade": 91,
+     "sellPrice": 105,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric5"
+    },
+    {
+     "itemName": "Sceptre of the Just",
+     "description": "Granted only to those who show great\ncompassion and piety.",
+     "icon": "Icons/rod6",
+     "itemType": "weapon",
+     "power": 41,
+     "upgrade": 92,
+     "sellPrice": 128,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric6"
+    },
+    {
+     "itemName": "Rod of Singing Sapphires",
+     "description": "The floating crystals that form this rod gently\nhum with power.",
+     "icon": "Icons/rod7",
+     "itemType": "weapon",
+     "power": 46,
+     "upgrade": -1,
+     "sellPrice": 150,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric7"
+    },
+    {
+     "itemName": "Beacon of the Heavens",
+     "description": "This artifact is said to channel the very will\nof the Sun King.",
+     "icon": "Icons/rod8",
+     "itemType": "weapon",
+     "power": 52,
+     "upgrade": -1,
+     "sellPrice": 198,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric8"
+    },
+    {
+     "itemName": "Sanctuary",
+     "description": "It's origin unknown, this artifact emits waves\nof peace and calm.",
+     "icon": "Icons/rod9",
+     "itemType": "weapon",
+     "power": 58,
+     "upgrade": -1,
+     "sellPrice": 270,
+     "usableBy": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_cleric9"
+    },
+    {
+     "itemName": "Vined Heartwood Staff",
+     "description": "Often confused with a simple walking stick.",
+     "icon": "Icons/staff2",
+     "itemType": "weapon",
+     "power": 27,
+     "upgrade": 96,
+     "sellPrice": 50,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard2"
+    },
+    {
+     "itemName": "Pulsing Earthstone",
+     "description": "These staves channel natural energies with\nease.",
+     "icon": "Icons/staff3",
+     "itemType": "weapon",
+     "power": 31,
+     "upgrade": 97,
+     "sellPrice": 72,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard3"
+    },
+    {
+     "itemName": "Violet Sceptre",
+     "description": "Chaotic energy swirls within the focus stone.",
+     "icon": "Icons/staff4",
+     "itemType": "weapon",
+     "power": 35,
+     "upgrade": 98,
+     "sellPrice": 94,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard4"
+    },
+    {
+     "itemName": "Winged Staff of the Void",
+     "description": "This staff appears to house a malevolent\nspirit inside.",
+     "icon": "Icons/staff5",
+     "itemType": "weapon",
+     "power": 40,
+     "upgrade": 99,
+     "sellPrice": 130,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard5"
+    },
+    {
+     "itemName": "Elementalist's Sceptre",
+     "description": "Exhibits exceptional capacity for channeling\nthe elements.",
+     "icon": "Icons/staff6",
+     "itemType": "weapon",
+     "power": 45,
+     "upgrade": 100,
+     "sellPrice": 162,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard6"
+    },
+    {
+     "itemName": "Ill Omen",
+     "description": "This staff bears a terrible, cursed aura.",
+     "icon": "Icons/staff9",
+     "itemType": "weapon",
+     "power": 51,
+     "upgrade": -1,
+     "sellPrice": 200,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard9"
+    },
+    {
+     "itemName": "Pillar of the Venom Lord",
+     "description": "This staff is fashioned in the image of a\nserpent god.",
+     "icon": "Icons/staff8",
+     "itemType": "weapon",
+     "power": 57,
+     "upgrade": -1,
+     "sellPrice": 248,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard8"
+    },
+    {
+     "itemName": "Ivory Staff of the Archmage",
+     "description": "These staves are only bestowed to the most\npowerful of mages.",
+     "icon": "Icons/staff7",
+     "itemType": "weapon",
+     "power": 64,
+     "upgrade": -1,
+     "sellPrice": 345,
+     "usableBy": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "ingameModel": "Weapons/staff_wizard7"
+    },
+    {
+     "itemName": "Plate Mail",
+     "description": "Turns the wearer into a walking tank... a very\nslowly walking tank.",
+     "icon": "Icons/scale",
+     "itemType": "armor",
+     "power": 24,
+     "upgrade": 104,
+     "sellPrice": 70,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Mithril Plate",
+     "description": "Crafted from the finest mithril, known for its\nmagical strength.",
+     "icon": "Icons/scale4",
+     "itemType": "armor",
+     "power": 29,
+     "upgrade": 105,
+     "sellPrice": 120,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Templar's Armor",
+     "description": "The sanctified armor of the Templar order.",
+     "icon": "Icons/scale",
+     "itemType": "armor",
+     "power": 34,
+     "upgrade": 106,
+     "sellPrice": 180,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Valiant Plate",
+     "description": "Instills great courage in those who wear it.",
+     "icon": "Icons/scale3",
+     "itemType": "armor",
+     "power": 39,
+     "upgrade": -1,
+     "sellPrice": 250,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Aegis of the Lost City",
+     "description": "Empowers the wearer with the strength of\n100 fallen heroes.",
+     "icon": "Icons/scale5",
+     "itemType": "armor",
+     "power": 45,
+     "upgrade": -1,
+     "sellPrice": 340,
+     "usableBy": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Elven Cloak",
+     "description": "Crafted by wood-folk, these cloaks are light-\nweight and rugged.",
+     "icon": "Icons/robe2",
+     "itemType": "armor",
+     "power": 11,
+     "upgrade": 109,
+     "sellPrice": 40,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Mystic Robes",
+     "description": "Embroidered with runes and infused with\ndefensive magics.",
+     "icon": "Icons/robe3",
+     "itemType": "armor",
+     "power": 14,
+     "upgrade": 110,
+     "sellPrice": 80,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Crystalweave Cloak",
+     "description": "It shimmers with an unnatural light.",
+     "icon": "Icons/robe4",
+     "itemType": "armor",
+     "power": 18,
+     "upgrade": 111,
+     "sellPrice": 130,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Truth-Seeker's Wrap",
+     "description": "Grants divine protection to those who are\nsteadfast and resolute.",
+     "icon": "Icons/robe3",
+     "itemType": "armor",
+     "power": 22,
+     "upgrade": -1,
+     "sellPrice": 195,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Mantle of the Immortal",
+     "description": "Forbidden magic courses through the dark\nfabric.",
+     "icon": "Icons/robe6",
+     "itemType": "armor",
+     "power": 27,
+     "upgrade": -1,
+     "sellPrice": 265,
+     "usableBy": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Studded Leather",
+     "description": "Reinforced with metal studs for added\nprotection.",
+     "icon": "Icons/leather",
+     "itemType": "armor",
+     "power": 16,
+     "upgrade": 114,
+     "sellPrice": 65,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Enchanted Leather",
+     "description": "This lightweight armor was inscribed by\nclerics and mages.",
+     "icon": "Icons/leather5",
+     "itemType": "armor",
+     "power": 20,
+     "upgrade": 115,
+     "sellPrice": 110,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Berserker's Tunic",
+     "description": "Infuses the wearer with the crazed spirit of\nthe barbarian.",
+     "icon": "Icons/leather3",
+     "itemType": "armor",
+     "power": 24,
+     "upgrade": 116,
+     "sellPrice": 165,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Assassin's Garb",
+     "description": "These dark clothes course with sinister,\nshadowy magic.",
+     "icon": "Icons/leather2",
+     "itemType": "armor",
+     "power": 29,
+     "upgrade": -1,
+     "sellPrice": 230,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Battlegear of the Blademaster",
+     "description": "None can stand against the unyielding force\nof the blademaster.",
+     "icon": "Icons/leather4",
+     "itemType": "armor",
+     "power": 34,
+     "upgrade": -1,
+     "sellPrice": 310,
+     "usableBy": [
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Dragon Gi",
+     "description": "Emblazoned with the image of a mighty\ndragon spirit.",
+     "icon": "Icons/gi",
+     "itemType": "armor",
+     "power": 22,
+     "upgrade": 119,
+     "sellPrice": 68,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Sensei's Gi",
+     "description": "A symbol of one who has attained great skill\nand respect.",
+     "icon": "Icons/gi4",
+     "itemType": "armor",
+     "power": 27,
+     "upgrade": 120,
+     "sellPrice": 110,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Gi of the Iron Body",
+     "description": "Garments worn by the clan of the iron body,\nmasters of self defense.\n",
+     "icon": "Icons/gi2",
+     "itemType": "armor",
+     "power": 32,
+     "upgrade": 121,
+     "sellPrice": 170,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Garb of the West Wind",
+     "description": "Grants the wearer legendary swiftness and\nskill.",
+     "icon": "Icons/gi3",
+     "itemType": "armor",
+     "power": 37,
+     "upgrade": -1,
+     "sellPrice": 240,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Robe of the Master",
+     "description": "Worn only by true masters of the martial\narts.",
+     "icon": "Icons/gi5",
+     "itemType": "armor",
+     "power": 43,
+     "upgrade": -1,
+     "sellPrice": 325,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+     ],
+     "ingameModel": "none"
+    },
+    {
+     "itemName": "Hunter's Bow",
+     "description": "A simple bow used to hunt small game\nanimals.",
+     "icon": "Icons/bow1",
+     "itemType": "weapon",
+     "power": 23,
+     "upgrade": 124,
+     "sellPrice": 26,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow1"
+    },
+    {
+     "itemName": "Reflex Bow",
+     "description": "This compact bow is easy to handle and\npacks a punch.",
+     "icon": "Icons/bow2",
+     "itemType": "weapon",
+     "power": 27,
+     "upgrade": 125,
+     "sellPrice": 50,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow2"
+    },
+    {
+     "itemName": "Elven Recurve Bow",
+     "description": "Its design provides increased range and\npower.",
+     "icon": "Icons/bow3",
+     "itemType": "weapon",
+     "power": 31,
+     "upgrade": 126,
+     "sellPrice": 72,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow3"
+    },
+    {
+     "itemName": "Heartwood Longbow",
+     "description": "Fashioned from magical trees, this weapon\nglows with energy.",
+     "icon": "Icons/bow4",
+     "itemType": "weapon",
+     "power": 35,
+     "upgrade": 127,
+     "sellPrice": 94,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow4"
+    },
+    {
+     "itemName": "Midnight Striker",
+     "description": "Its lightweight, camouflaged design make it\nideal for assassins.",
+     "icon": "Icons/bow5",
+     "itemType": "weapon",
+     "power": 40,
+     "upgrade": 128,
+     "sellPrice": 130,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow5"
+    },
+    {
+     "itemName": "Dragonheart Bow",
+     "description": "Crafted from the bone and tissues of a fallen\ndragon.",
+     "icon": "Icons/bow6",
+     "itemType": "weapon",
+     "power": 45,
+     "upgrade": 129,
+     "sellPrice": 162,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow6"
+    },
+    {
+     "itemName": "Longbow of the Imperium",
+     "description": "These bows are typically only found in the\nhands of elite royal snipers.",
+     "icon": "Icons/bow7",
+     "itemType": "weapon",
+     "power": 51,
+     "upgrade": -1,
+     "sellPrice": 200,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow7"
+    },
+    {
+     "itemName": "Vash'Lian, the Huntress",
+     "description": "This weapon is engraved with elven songs\nof war.",
+     "icon": "Icons/bow8",
+     "itemType": "weapon",
+     "power": 57,
+     "upgrade": -1,
+     "sellPrice": 248,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow8"
+    },
+    {
+     "itemName": "Hurricane",
+     "description": "A bow said to house the force of 10,000\nunrelenting storms.",
+     "icon": "Icons/bow9",
+     "itemType": "weapon",
+     "power": 64,
+     "upgrade": -1,
+     "sellPrice": 345,
+     "usableBy": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+     ],
+     "ingameModel": "Weapons/bow9"
+    }
+   ],
+   "partyDB": [
+    {
+     "playerName": "Lucille",
+     "characterClass": 1,
+     "level": 1,
+     "description": "No Description",
+     "recruited": true,
+     "available": true,
+     "gear": [
+      2,
+      6,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 65,
+     "defense": 4,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/lucille"
+    },
+    {
+     "playerName": "Shepherd",
+     "characterClass": 2,
+     "level": 1,
+     "description": "No Description",
+     "recruited": true,
+     "available": true,
+     "gear": [
+      0,
+      4,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 20,
+     "defense": 15,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/shepherd"
+    },
+    {
+     "playerName": "Gustav",
+     "characterClass": 3,
+     "level": 1,
+     "description": "A local mercenary, handy\nwith a dagger and \nmorally flexible.  If the\njob pays well, Gustav is\nin.  He hopes to recieve\na royal pardon for his\nextensive criminal record\nby assisting you.",
+     "recruited": false,
+     "available": true,
+     "gear": [
+      1,
+      5,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 26,
+     "defense": 8,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/gustav"
+    },
+    {
+     "playerName": "Bromswell",
+     "characterClass": 4,
+     "level": 1,
+     "description": "Don't let his age fool\nyou, Bromswell was an\nadventurer in his day,\nand a wizened master of \nthe arcane arts.  While\ntechnically retired, he's\nstill willing to lend his\nskill to a worthy cause.",
+     "recruited": false,
+     "available": true,
+     "gear": [
+      3,
+      6,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 33,
+     "defense": 0,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/bromswell"
+    },
+    {
+     "playerName": "Baelrosh",
+     "characterClass": 7,
+     "level": 2,
+     "description": "A traveler from the far\nnorth, frost still clinging\nto his beard, pelts and\nscars adorn him.  His\nweathered blades and\nwildly gleaming eyes\nspeak of countless foes\nslain...",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      11,
+      5,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 28,
+     "defense": 7,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/baelrosh"
+    },
+    {
+     "playerName": "Wynter",
+     "characterClass": 5,
+     "level": 2,
+     "description": "An enigmatic sorceress,\ndistrusted by the locals.\nSome believe she traded\nher soul for the secrets\nof dark magic.  Rumors\nthey may be, she is no\ndoubt a powerful\npractitioner of forbidden\narts.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      3,
+      6,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 28,
+     "defense": 2,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/wynter"
+    },
+    {
+     "playerName": "Feung",
+     "characterClass": 8,
+     "level": 3,
+     "description": "Member of an ancient\norder from a distant\nland. Their purpose - to\nprotect the innocent, and\nhone both body and\nspirit into the ultimate\nweapon.  Evil creatures\nflee at the sight of his\nrighteous fist!",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      43,
+      44,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 20,
+     "defense": 15,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/feung"
+    },
+    {
+     "playerName": "Edwardo",
+     "characterClass": 6,
+     "level": 4,
+     "description": "A traveling minstrel who\ninspires courage in all\nwho hear his music.  It\nis said he was once a\nPrince, but fate robbed\nhim of both his kingdom,\nand his one true love.\nHe fights so that others\nwill not suffer as he has.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      45,
+      5,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 12,
+     "defense": 6,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/edwardo"
+    },
+    {
+     "playerName": "Robin",
+     "characterClass": 3,
+     "level": 4,
+     "description": "The only daughter of a\nwealthy local merchant.  \nTo escape an arranged\nmarriage, she has fled\nfrom her life of luxury\nto pursue adventure,\nand study the unladylike\nart of combat.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      1,
+      5,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 25,
+     "defense": 9,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/robin"
+    },
+    {
+     "playerName": "Thistle",
+     "characterClass": 4,
+     "level": 4,
+     "description": "An elven sorceress\nhailing from the distant\nsouthlands.  Her people\nare both respected and\nfeared in these parts,\ndue in part to their\nincomprehensible accent,\nand the fearsome magic\nthey command.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      3,
+      6,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 36,
+     "defense": 0,
+     "maxHealth": 800,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/thistle"
+    },
+    {
+     "playerName": "The Black Knight",
+     "characterClass": 2,
+     "level": 5,
+     "description": "No one is quite sure \nwho he is, or from what\nkingdom he hails.  Still,\nnone doubt his resilience\nand strength.  There are\nrumors that he once\nsurvived having all of\nhis limbs dismembered.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      0,
+      4,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 19,
+     "defense": 16,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      2,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/blackknight"
+    },
+    {
+     "playerName": "Garrick",
+     "characterClass": 7,
+     "level": 5,
+     "description": "A notorious pirate, he\nonce ruled the waters\nof Doomvale until his\nship was destroyed by a\nrampaging ninja.  He\nhopes to one day exact\nhis revenge.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      79,
+      5,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 28,
+     "defense": 7,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      2,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/garrick"
+    },
+    {
+     "playerName": "Oakley",
+     "characterClass": 9,
+     "level": 2,
+     "description": "While his skills with a\nbow are unparalleled,\nhe is perhaps the laziest\nadventurer in all of\nHaggerdom.  He was\nsupposed to be helping\nthe party months ago,\nbut apparently had\noverslept.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      123,
+      5,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 35,
+     "defense": 9,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/oakley"
+    },
+    {
+     "playerName": "Heleth",
+     "characterClass": 10,
+     "level": 3,
+     "description": "A holy warrior who\ncombines healing magic\nwith impressive defense.\nHer temper is short, and\nher tongue is as sharp\nas her blade... which has\nclaimed the heads of\ncountless trolls.",
+     "recruited": false,
+     "available": false,
+     "gear": [
+      0,
+      4,
+      -1,
+      -1
+     ],
+     "XP": 0,
+     "power": 19,
+     "defense": 18,
+     "maxHealth": 1000,
+     "abilities": [
+      1,
+      0,
+      0
+     ],
+     "passives": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "icon": "Icons/heleth"
+    }
+   ],
+   "powerDB": [
+    {
+     "whichClass": "Cleric",
+     "powerScale": 3.0,
+     "defenseScale": 1.0,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Group Heal",
+       "description": "Instantly heal the entire party for a substantial\namount.",
+       "icon": "Icons/groupheal",
+       "cooldown": 20
+      },
+      {
+       "powerName": "Shield",
+       "description": "Protects your target, reducing their damage taken\nby 75% for 10 sec.",
+       "icon": "Icons/shield",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Power Infusion",
+       "description": "Fills your target with holy might, doubling their\npower for 10 sec.",
+       "icon": "Icons/powerinfusion",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Passion",
+       "description": "Your auto-heals splash 30% of their total healing\nto allies near your target.",
+       "icon": "Icons/splash",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Discipline",
+       "description": "Your auto-heals recover 15% more health.\n",
+       "icon": "Icons/directheal",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Guardian Angel",
+       "description": "The cleric is filled with divine purpose, doubling\nhealing power for 15 sec.",
+       "icon": "Icons/guardianangel",
+       "cooldown": 60
+      },
+      {
+       "powerName": "Vengeful Angel",
+       "description": "The cleric explodes with righteous fury, dealing\ndamage around them for 15 sec.",
+       "icon": "Icons/vengefulangel",
+       "cooldown": 60
+      },
+      {
+       "powerName": "Empowering Words",
+       "description": "The recipient of your auto-heals has their power\nincreased by 15%.",
+       "icon": "Icons/inspire",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Holy Embrace",
+       "description": "Your auto-heals continue to heal the target over\ntime for 8 seconds.",
+       "icon": "Icons/healingstream",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Favored Soul",
+       "description": "While affected by Vengeful Angel or Guardian Angel,\nthe cleric is immune to damage.",
+       "icon": "Icons/favored",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Binding Heal",
+       "description": "Your auto-heals on others also heal you for 50%\nof the healing done.",
+       "icon": "Icons/binding",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Desperate Prayer",
+       "description": "Your Group Heal spell recovers 25% more health.\n",
+       "icon": "Icons/groupheal2",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Knight",
+     "powerScale": 1.0,
+     "defenseScale": 1.2,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Shield Wall",
+       "description": "Take on a defensive stance, reducing damage taken\nby 50% for 15 sec.",
+       "icon": "Icons/shieldwall",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Cleave",
+       "description": "Lash out with a series of whirling attacks at all\nenemies around you.",
+       "icon": "Icons/cleave",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Intimidate",
+       "description": "The knight emits a terrible battle cry, forcing all\nadjacent enemies to run in fear. ",
+       "icon": "Icons/intimidate",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Chivalry",
+       "description": "Your armor is increased by 15%.",
+       "icon": "Icons/chivalry",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Might",
+       "description": "Your power is increased by 15%.",
+       "icon": "Icons/might",
+       "cooldown": 0
+      },
+      {
+       "powerName": "War Cry",
+       "description": "Attracts the attention of all enemies, forcing them to\nattack you instead of your allies.",
+       "icon": "Icons/warcry",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Shield Rush",
+       "description": "A fierce rushing attack that knocks the enemy off\ntheir feet.",
+       "icon": "Icons/shieldrush",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Crippling Blows",
+       "description": "Your normal attacks cripple the enemy, reducing\ntheir damage by 10%.",
+       "icon": "Icons/debilitate2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Sunder Armor",
+       "description": "Your normal attacks weaken your opponents armor,\nincreasing their damage taken by 10%.",
+       "icon": "Icons/sunder",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Blitz",
+       "description": "Activating your War Cry or Shield Rush instantly\nrefreshes your other abilities.",
+       "icon": "Icons/lightning2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Fortress",
+       "description": "Your Shield Wall lasts for 20 sec.",
+       "icon": "Icons/shieldwall",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Revenge",
+       "description": "Your Shield Wall now reflects 100% of the damage\ndone to you, but lasts only 10 sec.",
+       "icon": "Icons/thorns",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Rogue",
+     "powerScale": 1.0,
+     "defenseScale": 1.0,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Sneak Attack",
+       "description": "A precision strike that deals 250% normal damage.\n",
+       "icon": "Icons/sneakattack",
+       "cooldown": 20
+      },
+      {
+       "powerName": "Expose Weakness",
+       "description": "Reveals flaws in your enemy's defenses, increasing\ndamage taken by 50% for 10 sec.",
+       "icon": "Icons/exposearmor",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Poisoned Knife",
+       "description": "Hurls a poisoned knife at the target, dealing damage\nover time.",
+       "icon": "Icons/poisonknife",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Flurry",
+       "description": "Your attacks are 15% faster.",
+       "icon": "Icons/flurry",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Critical Strikes",
+       "description": "Your melee attacks have a 20% chance to deal\ndouble damage.",
+       "icon": "Icons/crit",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Paralytic Knife",
+       "description": "Throws a knife coated in a toxin that renders its\nvictims helpless for 8 sec.",
+       "icon": "Icons/paralyticknife",
+       "cooldown": 45
+      },
+      {
+       "powerName": "Shadowstep",
+       "description": "Warp behind your target and deliver a precision\nstrike for 350% normal damage.",
+       "icon": "Icons/ambush",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Combat Tactics",
+       "description": "Your armor is increased by 15%.",
+       "icon": "Icons/tactics",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Pursuit",
+       "description": "You now move 15% faster.",
+       "icon": "Icons/sprint",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Envenomed Blades",
+       "description": "Your blades are permanently coated in paralytic\npoison, randomly stunning your foes.",
+       "icon": "Icons/envenomed",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Lethality",
+       "description": "Your Sneak Attack and Shadowstep both deal 40%\nmore damage.",
+       "icon": "Icons/sneakattack",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Aggression",
+       "description": "Your power is increased by 10%.",
+       "icon": "Icons/intimidate",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Wizard",
+     "powerScale": 1.0,
+     "defenseScale": 1.0,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Meteor",
+       "description": "Summons a meteor on your target, dealing damage\nin a large radius.",
+       "icon": "Icons/meteor",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Blizzard",
+       "description": "Chilling winds damage and slow all enemies on the\nfield for 10 sec.",
+       "icon": "Icons/blizzard",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Time Stop",
+       "description": "All enemies are frozen in time, rendering them\nhelpless for 5 sec.",
+       "icon": "Icons/timestop",
+       "cooldown": 45
+      },
+      {
+       "powerName": "Enveloping Flames",
+       "description": "Your basic fireball attack deals 75% of its damage\nto nearby targets.",
+       "icon": "Icons/firesplash",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Impact",
+       "description": "Your basic fireball attack deals 20% increased\ndamage.",
+       "icon": "Icons/impact",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Conflagrate",
+       "description": "Your target is consumed with fire, dealing damage\nand disabling them for 6 sec.",
+       "icon": "Icons/conflag",
+       "cooldown": 40
+      },
+      {
+       "powerName": "Thunderbolt",
+       "description": "Lightning strikes the caster, dealing damage and\nknocking away nearby foes.",
+       "icon": "Icons/lightning",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Fire Shield",
+       "description": "Attacks made against you have a 20% chance to\nlaunch a fireball back at the attacker.",
+       "icon": "Icons/fireshield",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Mage Armor",
+       "description": "All attacks against you have a 20% chance to phase\nthrough you, doing no damage.",
+       "icon": "Icons/magearmor",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Teleport",
+       "description": "The Wizard can now teleport at will.",
+       "icon": "Icons/teleport",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Flaming Meteor",
+       "description": "Your Meteor spell ignites its victims, dealing 50%\nmore damage over 8 sec.",
+       "icon": "Icons/flames",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Concussive Shockwave",
+       "description": "Your Meteor spell knocks its victims to the ground\nfor 3 sec.",
+       "icon": "Icons/shockwave",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Witch",
+     "powerScale": 1.0,
+     "defenseScale": 1.0,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Drain Life",
+       "description": "Dark magic that steals life from its victim, healing\nthe caster's most injured ally.",
+       "icon": "Icons/drainlife",
+       "cooldown": 20
+      },
+      {
+       "powerName": "Plague",
+       "description": "Unleashes toxic fumes in a large area, dealing\ndamage over time.",
+       "icon": "Icons/plague",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Debilitate",
+       "description": "An enfeebling curse that greatly reduces its victim's\nattack power for 10 sec.",
+       "icon": "Icons/debilitate",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Piercing Shadow",
+       "description": "Your basic shadowbolt attack deals 15% extra\ndamage.",
+       "icon": "Icons/impact2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Life Leech",
+       "description": "All of your attacks heal you for 30% of the damage\ndealt.",
+       "icon": "Icons/leech",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Horror",
+       "description": "Fear consumes all enemies - the severity of the effect\nincreases with proximity to you.",
+       "icon": "Icons/horror",
+       "cooldown": 40
+      },
+      {
+       "powerName": "Hex",
+       "description": "Your target is turned into a toad for 6 sec., rendering\nthem weak and harmless.",
+       "icon": "Icons/curse",
+       "cooldown": 40
+      },
+      {
+       "powerName": "Terrifying Presence",
+       "description": "Enemies who strike you have a 10% chance to be\nconsumed with fear.",
+       "icon": "Icons/intimidate",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Sudden Doom",
+       "description": "Attacks against you have a 5% chance to reset the\ncooldown on Drain Life.",
+       "icon": "Icons/shadowarmor",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Prey on the Weak",
+       "description": "Your Drain Life spell is increased in power against\nfoes who are feared, paralyzed or cursed.",
+       "icon": "Icons/drainlife2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Crushing Despair",
+       "description": "Your Drain Life spell deals 40% additional damage,\nbut still heals for the same amount.",
+       "icon": "Icons/crushing",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Dark Harvest",
+       "description": "Your Drain Life spell recovers 40% additional health,\nthough its damage is not increased.",
+       "icon": "Icons/blood",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Bard",
+     "powerScale": 1.0,
+     "defenseScale": 1.0,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Song of Renewal",
+       "description": "An invigorating song that instantly heals your\ntarget.",
+       "icon": "Icons/song1",
+       "cooldown": 20
+      },
+      {
+       "powerName": "Song of Vigor",
+       "description": "The Bard's soothing melodies replenish the party's\nhealth over time.",
+       "icon": "Icons/song2",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Song of Sanctuary",
+       "description": "The entire party takes 25% less damage for 15 sec.\nafter hearing this tune.",
+       "icon": "Icons/song3",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Gusto",
+       "description": "The power bonus granted to your target is increased\nby 50%.",
+       "icon": "Icons/crit",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Stoicism",
+       "description": "The armor bonus granted to your target is increased\nby 50%.",
+       "icon": "Icons/chivalry",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Song of War",
+       "description": "The Bard's music empowers the party, increasing\ntheir damage by 25% for 15 sec.",
+       "icon": "Icons/song4",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Song of Inspiration",
+       "description": "The party is inspired in their darkest hour, resetting\nall of their cooldowns.",
+       "icon": "Icons/song5",
+       "cooldown": 60
+      },
+      {
+       "powerName": "Healing Chords",
+       "description": "Your healing songs are 25% more effective.\n",
+       "icon": "Icons/directheal",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Enduring Hope",
+       "description": "The lingering effects of your songs are extended by\n5 seconds.",
+       "icon": "Icons/healingstream2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Prestissimo",
+       "description": "Your target's cooldowns refresh 20% faster while\nunder the effects of your Lute.",
+       "icon": "Icons/timestop2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Vivace",
+       "description": "Your target's movement and attack/casting speeds\nare increased by 10%.",
+       "icon": "Icons/sprint2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Echo of Renewal",
+       "description": "Song of Renewal now effects the entire party.\n",
+       "icon": "Icons/song6",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Barbarian",
+     "powerScale": 1.0,
+     "defenseScale": 1.0,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Enrage",
+       "description": "Fly into a rage, increasing damage dealt AND taken\nby 35% for 8 sec.",
+       "icon": "Icons/barb1",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Frenzy",
+       "description": "You become a human blur, attacking at a high rate\nof speed for 10 sec.",
+       "icon": "Icons/barb2",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Whirlwind",
+       "description": "You become a whirlwind of steel, striking out at\nall adjacent targets.",
+       "icon": "Icons/barb3",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Death Wish",
+       "description": "The positive and negative effects of your Enrage\nability are increased by another 15%.",
+       "icon": "Icons/deathwish",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Iron Skin",
+       "description": "Being enraged no longer has any penalty.",
+       "icon": "Icons/iron",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Reckless Blow",
+       "description": "A massive attack that deals damage to the barbarian\nas well as his target.",
+       "icon": "Icons/barb4",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Savage Pounce",
+       "description": "Pounce on your target, dealing massive damage in\nan area around them.",
+       "icon": "Icons/barb5",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Precision Strikes",
+       "description": "Your melee attacks have a 20% chance to deal\ncritical damage.",
+       "icon": "Icons/crit",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Bloodthirsty",
+       "description": "While enraged, the Barbarian gains an extra 75%\nlife-draining on all attacks.",
+       "icon": "Icons/blood2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Adrenaline Rush",
+       "description": "After delivering the finish blow on an enemy, you\nheal slightly and recieve a haste buff.",
+       "icon": "Icons/barb6",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Blunt Trauma",
+       "description": "Your Reckless Blow/Savage Pounce also knock the\nvictim down.",
+       "icon": "Icons/conc",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Dismemberment",
+       "description": "Your Reckless Blow/Savage Pounce deal 20% more\ndamage.",
+       "icon": "Icons/dismember",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Monk",
+     "powerScale": 1.0,
+     "defenseScale": 1.2,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Wind Walk",
+       "description": "With blinding speed, the Monk attacks everything on\nthe battlefield at once.",
+       "icon": "Icons/windwalk",
+       "cooldown": 40
+      },
+      {
+       "powerName": "Evasion",
+       "description": "You become momentarily untouchable, evading all\nattacks for 8 sec.",
+       "icon": "Icons/evasion",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Ki Blast",
+       "description": "A shockwave of pure Ki erupts from the Monk,\nknocking foes to the ground.",
+       "icon": "Icons/ki",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Iron Hand",
+       "description": "Your basic attacks have a 5% chance to knock\nopponents to the ground.",
+       "icon": "Icons/ironfist2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Tiger Claw",
+       "description": "Your basic attacks have a 15% chance to deal\ncritical damage.",
+       "icon": "Icons/tiger",
+       "cooldown": 0
+      },
+      {
+       "powerName": "1000 Palms",
+       "description": "Unleash a flurry of blows, dealing heavy damage to\na single target.",
+       "icon": "Icons/1000",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Spirit Trance",
+       "description": "Enter a trance state, granting you increased speed\nand health regen for 15 sec.",
+       "icon": "Icons/spirit",
+       "cooldown": 40
+      },
+      {
+       "powerName": "Clarity",
+       "description": "All healing effects on you are increased by 10%.\n",
+       "icon": "Icons/spirit2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Dragon Style",
+       "description": "Your attack power is increased by 15%. ",
+       "icon": "Icons/dragon",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Counter",
+       "description": "Whenever you take damage in melee, you have a\n30% chance to instantly counterattack.",
+       "icon": "Icons/counter",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Sweep the Leg",
+       "description": "Your Wind Walk ability cripples foes, reducing their\nmovement speed for 6 sec.",
+       "icon": "Icons/debilitate2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Solar Strikes",
+       "description": "Your Wind Walk ability deals 50% more damage.\n",
+       "icon": "Icons/ironfist",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Ranger",
+     "powerScale": 1.0,
+     "defenseScale": 1.0,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Aimed Shot",
+       "description": "A precisely aimed shot which deals more damage\nthe further away the target is.",
+       "icon": "Icons/aimedshot",
+       "cooldown": 20
+      },
+      {
+       "powerName": "Incendiary Arrow",
+       "description": "Ignites the ground, dealing continuous damage to\nenemies who remain in the blaze.",
+       "icon": "Icons/flameArrow",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Vile Bolt",
+       "description": "A poisoned arrow which deals continuous damage\nand leaves the victim slowed.",
+       "icon": "Icons/venomshot",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Sniper's Sense",
+       "description": "Your attacks have an additional 15% critical strike\nchance.",
+       "icon": "Icons/snipe",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Mortal Shots",
+       "description": "The Ranger's basic attacks deal grievous wounds,\nreducing healing recieved by 75%.",
+       "icon": "Icons/blood2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Barrage",
+       "description": "Unleash a salvo of arrows that deals damage to\nall enemies.",
+       "icon": "Icons/barrage",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Apollo Strike",
+       "description": "A brutal shot that throws its victim to the ground for\n8 seconds.",
+       "icon": "Icons/apolloarrow",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Critical Aim",
+       "description": "Your Aimed Shot ability deals an additional 50%\ndamage.",
+       "icon": "Icons/aimedshot2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Misdirection",
+       "description": "Your special shots force their victims to attack your\nmost armored ally.",
+       "icon": "Icons/misdirect",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Canine Ally",
+       "description": "You've befriended a hunting dog, who automatically\nattacks your target.",
+       "icon": "Icons/wolf",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Crippling Bite",
+       "description": "Your dog ally distracts and harasses your enemies,\nreducing their damage by 15%.",
+       "icon": "Icons/tiger",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Thrash",
+       "description": "Your dog companion becomes a whirlwind of terror,\ndealing damage to all nearby enemies.",
+       "icon": "Icons/dismember",
+       "cooldown": 0
+      }
+     ]
+    },
+    {
+     "whichClass": "Paladin",
+     "powerScale": 1.0,
+     "defenseScale": 1.2,
+     "healthScale": 15,
+     "whichPower": [
+      {
+       "powerName": "Holy Word",
+       "description": "A wave of soothing light seeks out and heals your\nmost injured ally.",
+       "icon": "Icons/holyWord",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Wrath",
+       "description": "Imbues your sword with holy lightning for 10 sec.,\nwhich chains to nearby foes.",
+       "icon": "Icons/wrath",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Aura of Light",
+       "description": "Converts all damage taken into healing instead for\n10 seconds.",
+       "icon": "Icons/auraoflight2",
+       "cooldown": 40
+      },
+      {
+       "powerName": "Stalwart",
+       "description": "Increases the paladin's armor by 15%.",
+       "icon": "Icons/chivalry",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Swift Justice",
+       "description": "Both movement and attack speed are increased by\n10%.",
+       "icon": "Icons/sprint2",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Divine Intervention",
+       "description": "Redirects all damage from the group to the paladin\nfor 10 seconds.",
+       "icon": "Icons/auraoflight",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Radiance",
+       "description": "A blast of divine fury knocks all enemies to the\nground while healing the party.",
+       "icon": "Icons/radiance",
+       "cooldown": 30
+      },
+      {
+       "powerName": "Bastion",
+       "description": "Increases the paladin's maximum health by 20%.\n",
+       "icon": "Icons/tactics",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Power of the Word",
+       "description": "The power of your healing abilities is increased by\n20%.",
+       "icon": "Icons/directheal",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Sentinel",
+       "description": "The Paladin now grants 25% of their own armor\nvalue to all of their allies.",
+       "icon": "Icons/favored",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Word of Asylum",
+       "description": "Your Holy Word ability also leaves a lingering shield,\nnullifying damage for 5 sec.",
+       "icon": "Icons/holyWordBlue",
+       "cooldown": 0
+      },
+      {
+       "powerName": "Word of Retribution",
+       "description": "Holy Word now strengthens its target, boosting their\npower by 50% for 10 seconds.",
+       "icon": "Icons/holyWordRed",
+       "cooldown": 0
+      }
+     ]
+    }
+   ],
+   "inventory": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1
+   ],
+   "party": [
+    1,
+    0,
+    -1,
+    -1
+   ],
+   "reserves": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1
+   ],
+   "gold": 15,
+   "timePlayed": 0.0,
+   "merchant": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1
+   ],
+   "levelDB": [
+    {
+     "mapName": "Haggerdom",
+     "mapScale": 0.9,
+     "whichLevel": [
+      {
+       "levelName": "The Gobwood",
+       "description": "Once a peaceful forest, it is now home to\ngoblins and other foul creatures.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": -1,
+       "prereqLoc": 0,
+       "myPosition": [
+        2.68,
+        -0.6
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 1.2,
+         "maxEnemies": 1,
+         "enemies": [
+          1
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 0.3,
+         "maxEnemies": 2,
+         "enemies": [
+          1,
+          1
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 2.4,
+         "maxEnemies": 2,
+         "enemies": [
+          2,
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 2,
+         "enemies": [
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 1.9,
+         "maxEnemies": 2,
+         "enemies": [
+          1,
+          2,
+          1,
+          2,
+          1
+         ]
+        }
+       ],
+       "whichMap": "forest1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 2,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme",
+       "goldReward": 27,
+       "XPReward": 35,
+       "lootTable": 0,
+       "rareChance": 20,
+       "highScore": 0
+      },
+      {
+       "levelName": "Westwylde Fields",
+       "description": "Much of the kingdom's sprawling farmland\nhas been claimed by roving goblin hordes.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 0,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 2.2,
+         "maxEnemies": 2,
+         "enemies": [
+          1,
+          1,
+          2
+         ]
+        },
+        {
+         "initialDelay": 2.8,
+         "spawnDelay": 0.3,
+         "maxEnemies": 2,
+         "enemies": [
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 2.8,
+         "spawnDelay": 2.4,
+         "maxEnemies": 2,
+         "enemies": [
+          1,
+          2,
+          1,
+          1,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 4.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          2,
+          1,
+          2
+         ]
+        },
+        {
+         "initialDelay": 4.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2
+         ]
+        }
+       ],
+       "whichMap": "plain1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 2,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme",
+       "goldReward": 32,
+       "XPReward": 43,
+       "lootTable": 0,
+       "rareChance": 25,
+       "highScore": 0
+      },
+      {
+       "levelName": "Eston Farmstead",
+       "description": "You've heard rumors of a huge cyclops that\nroams these fields at sundown...",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 1,
+       "prereqLoc": 1,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 2.1,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          2,
+          2,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 4.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.4,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          6,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 4.0,
+         "maxEnemies": 2,
+         "enemies": [
+          6,
+          3
+         ]
+        }
+       ],
+       "whichMap": "plain2",
+       "enemySet": "basic",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme",
+       "goldReward": 35,
+       "XPReward": 50,
+       "lootTable": 0,
+       "rareChance": 40,
+       "highScore": 0
+      },
+      {
+       "levelName": "Summersong Ruins",
+       "description": "All that lies here are the sun-bleached\nremains of an ancient culture.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 2,
+       "prereqLoc": 1,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          6,
+          1
+         ]
+        },
+        {
+         "initialDelay": 4.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          2,
+          6,
+          2,
+          1,
+          2,
+          6,
+          1,
+          1
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 4.0,
+         "spawnDelay": 3.5,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          2,
+          2,
+          6,
+          6
+         ]
+        }
+       ],
+       "whichMap": "ruin1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme3",
+       "goldReward": 40,
+       "XPReward": 58,
+       "lootTable": 0,
+       "rareChance": 50,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Squealing Bog",
+       "description": "The leader of the goblin horde makes his\nhome in this squalid wetland.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 2,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 1.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 1,
+         "enemies": [
+          1
+         ]
+        }
+       ],
+       "whichMap": "hovel",
+       "enemySet": "boar",
+       "totalEnemyTypes": 3,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/bossTheme",
+       "goldReward": 45,
+       "XPReward": 78,
+       "lootTable": 1,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Chillwind Field",
+       "description": "Few living souls have ventured across this\nglade in recent years.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 4,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 1,
+         "enemies": [
+          5
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 2,
+         "enemies": [
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          2,
+          4,
+          2,
+          4
+         ]
+        },
+        {
+         "initialDelay": 4.5,
+         "spawnDelay": 1.8,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          6,
+          5,
+          5,
+          4,
+          4,
+          1,
+          6,
+          3,
+          4
+         ]
+        }
+       ],
+       "whichMap": "plain3",
+       "enemySet": "basic",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme3",
+       "goldReward": 45,
+       "XPReward": 85,
+       "lootTable": 1,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "St. Argus Cemetery",
+       "description": "These once sacred grounds have been\ndefiled by necromancers.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 5,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 2.9,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          5,
+          4,
+          6,
+          6,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.5,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 4,
+         "enemies": [
+          2,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          5,
+          5
+         ]
+        }
+       ],
+       "whichMap": "graveyard1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme2",
+       "goldReward": 45,
+       "XPReward": 94,
+       "lootTable": 1,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Royal Crypt",
+       "description": "Houses the remains of kings, heroes, and\nmore than a few adventurers.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 6,
+       "prereqLoc": 1,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 2,
+         "enemies": [
+          3,
+          3
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          2,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.4,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          5,
+          4,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          4,
+          4,
+          5,
+          5,
+          3,
+          4
+         ]
+        }
+       ],
+       "whichMap": "catacombs1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme2",
+       "goldReward": 45,
+       "XPReward": 103,
+       "lootTable": 1,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "Marrowstone Ruins",
+       "description": "These ruins echo quietly with the creaks and\nclatters of walking skeletons.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 7,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.1,
+         "spawnDelay": 1.2,
+         "maxEnemies": 4,
+         "enemies": [
+          4,
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.2,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          5,
+          3,
+          4,
+          4,
+          5,
+          3
+         ]
+        },
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.4,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          5,
+          5,
+          4,
+          4,
+          3,
+          4
+         ]
+        }
+       ],
+       "whichMap": "ruin2",
+       "enemySet": "basic",
+       "totalEnemyTypes": 5,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme3",
+       "goldReward": 45,
+       "XPReward": 112,
+       "lootTable": 1,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Silken Wildwood",
+       "description": "The trees here are draped ominously with\ndisturbingly large spider webs...",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 8,
+       "prereqLoc": 0,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 1,
+         "enemies": [
+          1
+         ]
+        }
+       ],
+       "whichMap": "spider",
+       "enemySet": "spider",
+       "totalEnemyTypes": 3,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/bossTheme",
+       "goldReward": 50,
+       "XPReward": 150,
+       "lootTable": 2,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Shalestone Caverns",
+       "description": "The southern road leads directly through the\ndank recesses of this unstable cave.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 5,
+       "prereqLoc": 0,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.2,
+         "spawnDelay": 0.5,
+         "maxEnemies": 5,
+         "enemies": [
+          2,
+          2,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.2,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          2,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 5,
+         "enemies": [
+          1,
+          6,
+          1,
+          6,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.4,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          5,
+          1,
+          3,
+          2,
+          5,
+          6,
+          2
+         ]
+        }
+       ],
+       "whichMap": "cave1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme3",
+       "goldReward": 45,
+       "XPReward": 92,
+       "lootTable": 1,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "Haggerdom Monster Arena",
+       "description": "Test your might!  How long can you survive?\nHigh Score: ",
+       "complete": false,
+       "arena": true,
+       "arenaTable": [
+        {
+         "requiredKills": 0,
+         "whichTable": 1
+        },
+        {
+         "requiredKills": 40,
+         "whichTable": 2
+        },
+        {
+         "requiredKills": 70,
+         "whichTable": 3
+        },
+        {
+         "requiredKills": 85,
+         "whichTable": 4
+        },
+        {
+         "requiredKills": 100,
+         "whichTable": 5
+        },
+        {
+         "requiredKills": 115,
+         "whichTable": 6
+        }
+       ],
+       "prereq": 10,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.8,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          3,
+          1,
+          6,
+          3
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.2,
+         "maxEnemies": 5,
+         "enemies": [
+          2,
+          2,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.5,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.2,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          1,
+          6,
+          3,
+          5,
+          5,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.5,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          1,
+          6,
+          3,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.6,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          2,
+          5,
+          4,
+          3,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.3,
+         "maxEnemies": 6,
+         "enemies": [
+          1,
+          6,
+          1,
+          6,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.2,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          6,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          1,
+          2,
+          4,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.6,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          3,
+          2,
+          2,
+          6,
+          3,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          4,
+          5,
+          3,
+          6,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          5,
+          3,
+          5,
+          4
+         ]
+        }
+       ],
+       "whichMap": "arena",
+       "enemySet": "basic",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme",
+       "goldReward": 0,
+       "XPReward": 0,
+       "lootTable": 0,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Transition to Map 1",
+       "description": "No Description.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 9,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [],
+       "whichMap": "catacombs1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 4,
+       "transition": 1,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme",
+       "goldReward": 0,
+       "XPReward": 0,
+       "lootTable": 0,
+       "rareChance": 0,
+       "highScore": 0
+      }
+     ]
+    },
+    {
+     "mapName": "Brightstone",
+     "mapScale": 0.9,
+     "whichLevel": [
+      {
+       "levelName": "Transition to Map 0",
+       "description": "No Description.",
+       "complete": true,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": -1,
+       "prereqLoc": 0,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [],
+       "whichMap": "catacombs1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 4,
+       "transition": 0,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 0,
+       "XPReward": 0,
+       "lootTable": 0,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Carrion Canyon",
+       "description": "This hostile ravine was a dangerous place\neven before monsters moved in.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 0,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          1,
+          1,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.9,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          7,
+          5,
+          5,
+          7
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          4,
+          7,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          4,
+          3,
+          3,
+          4,
+          1,
+          6,
+          4
+         ]
+        },
+        {
+         "initialDelay": 0.2,
+         "spawnDelay": 0.1,
+         "maxEnemies": 4,
+         "enemies": [
+          2,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 4.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          7,
+          3,
+          7
+         ]
+        }
+       ],
+       "whichMap": "ravine",
+       "enemySet": "basic",
+       "totalEnemyTypes": 7,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme3",
+       "goldReward": 45,
+       "XPReward": 170,
+       "lootTable": 2,
+       "rareChance": 5,
+       "highScore": 0
+      },
+      {
+       "levelName": "Dusthide Badlands",
+       "description": "An arid, lifeless wasteland.  Why monsters\ninsist on living here is anyone's guess.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 1,
+       "prereqLoc": 0,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.7,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          5,
+          7,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.5,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          4,
+          7,
+          5,
+          5,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.3,
+         "maxEnemies": 4,
+         "enemies": [
+          4,
+          7,
+          5,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 3.5,
+         "maxEnemies": 4,
+         "enemies": [
+          3,
+          4,
+          7,
+          5,
+          7,
+          5
+         ]
+        }
+       ],
+       "whichMap": "desert",
+       "enemySet": "basic",
+       "totalEnemyTypes": 7,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme",
+       "goldReward": 45,
+       "XPReward": 184,
+       "lootTable": 2,
+       "rareChance": 5,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Lost Grotto",
+       "description": "This cave is said to house living slimes that\ncan devour even the most stalwart hero.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 2,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          5,
+          8
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.8,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          5,
+          7,
+          5,
+          4,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.2,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          7,
+          7,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 4.0,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          8,
+          3
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          5,
+          5,
+          4,
+          4,
+          8,
+          5
+         ]
+        }
+       ],
+       "whichMap": "cave3",
+       "enemySet": "basic",
+       "totalEnemyTypes": 8,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme2",
+       "goldReward": 45,
+       "XPReward": 200,
+       "lootTable": 2,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "Darkmoon Forest",
+       "description": "Oozes and the living dead have defiled this\nonce proud forest.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 3,
+       "prereqLoc": 0,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.5,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          8,
+          8
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          3,
+          5,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.2,
+         "maxEnemies": 3,
+         "enemies": [
+          5,
+          4,
+          7,
+          7,
+          5,
+          8,
+          7
+         ]
+        },
+        {
+         "initialDelay": 2.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          8,
+          7,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          7,
+          7,
+          8,
+          5,
+          7,
+          5
+         ]
+        }
+       ],
+       "whichMap": "forest1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 8,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme",
+       "goldReward": 45,
+       "XPReward": 218,
+       "lootTable": 2,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "Bloodrose Ruins",
+       "description": "Yet another shattered husk of a civilization,\nnow overgrown and lost to the ages.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 4,
+       "prereqLoc": 2,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          4,
+          4,
+          7,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          3
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.8,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          7,
+          5,
+          4,
+          5,
+          7,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 6,
+         "enemies": [
+          1,
+          6,
+          1,
+          6,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.7,
+         "maxEnemies": 4,
+         "enemies": [
+          3,
+          3,
+          3,
+          7
+         ]
+        }
+       ],
+       "whichMap": "ruin1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 8,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme",
+       "goldReward": 45,
+       "XPReward": 230,
+       "lootTable": 2,
+       "rareChance": 15,
+       "highScore": 0
+      },
+      {
+       "levelName": "St. Byron Sepulcher",
+       "description": "Not even looters have dared to visit these\nhaunted grounds in recent years.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 5,
+       "prereqLoc": 2,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          5,
+          8
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 4,
+         "enemies": [
+          3,
+          8,
+          4,
+          3,
+          8,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.8,
+         "spawnDelay": 0.3,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          4,
+          5,
+          4,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.5,
+         "spawnDelay": 1.8,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          5,
+          7,
+          7,
+          4,
+          4,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 4,
+         "enemies": [
+          8,
+          8,
+          3,
+          7,
+          7,
+          4,
+          3,
+          4
+         ]
+        }
+       ],
+       "whichMap": "graveyard1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 8,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme2",
+       "goldReward": 45,
+       "XPReward": 250,
+       "lootTable": 2,
+       "rareChance": 50,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Oozing Dark",
+       "description": "The walls of this cavern glisten with caustic\nslime, and a foul smell hangs in the air...",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 4,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 7,
+         "enemies": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+         ]
+        }
+       ],
+       "whichMap": "oozecave",
+       "enemySet": "oozeBoss",
+       "totalEnemyTypes": 2,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/bossTheme",
+       "goldReward": 50,
+       "XPReward": 295,
+       "lootTable": 3,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Whithered Hope Valley",
+       "description": "As the moon rises over these silent sands,\nthe native wildlife comes out to hunt.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 7,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 2,
+         "enemies": [
+          1,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.2,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          4,
+          1,
+          4,
+          1,
+          4,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          5,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 2,
+         "enemies": [
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          2,
+          4,
+          5,
+          2,
+          4,
+          1
+         ]
+        }
+       ],
+       "whichMap": "desert2",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 5,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme3",
+       "goldReward": 50,
+       "XPReward": 304,
+       "lootTable": 3,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Cho'yuk Ravine",
+       "description": "This winding pass seems to carve endlessly\ninto the rocky mountainside.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 8,
+       "prereqLoc": 1,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 5,
+         "enemies": [
+          4,
+          4,
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.9,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          2,
+          4,
+          5,
+          1,
+          2,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.7,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.3,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          4,
+          4,
+          2,
+          1,
+          5,
+          4
+         ]
+        }
+       ],
+       "whichMap": "ravine2",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 5,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme3",
+       "goldReward": 50,
+       "XPReward": 312,
+       "lootTable": 3,
+       "rareChance": 5,
+       "highScore": 0
+      },
+      {
+       "levelName": "Crimson Hollow",
+       "description": "Powerful mountain giants have made their\nhome amidst the crimson rocks.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 9,
+       "prereqLoc": 1,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          5,
+          4,
+          1,
+          5,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 5,
+         "enemies": [
+          4,
+          1,
+          4,
+          5,
+          4
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.4,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          1,
+          2,
+          2,
+          5,
+          4,
+          2,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 5.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          4,
+          4
+         ]
+        }
+       ],
+       "whichMap": "cave2",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 5,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme2",
+       "goldReward": 50,
+       "XPReward": 320,
+       "lootTable": 3,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "Brightstone Monster Arena",
+       "description": "Test your might!  How long can you survive?\nHigh Score: ",
+       "complete": false,
+       "arena": true,
+       "arenaTable": [
+        {
+         "requiredKills": 0,
+         "whichTable": 3
+        },
+        {
+         "requiredKills": 40,
+         "whichTable": 4
+        },
+        {
+         "requiredKills": 65,
+         "whichTable": 5
+        },
+        {
+         "requiredKills": 90,
+         "whichTable": 6
+        },
+        {
+         "requiredKills": 115,
+         "whichTable": 7
+        },
+        {
+         "requiredKills": 140,
+         "whichTable": 8
+        }
+       ],
+       "prereq": 10,
+       "prereqLoc": 2,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          3,
+          8,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          5,
+          4,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          4,
+          3,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.6,
+         "maxEnemies": 4,
+         "enemies": [
+          8,
+          5,
+          4,
+          4,
+          3,
+          7,
+          8,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          7,
+          3,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.7,
+         "maxEnemies": 4,
+         "enemies": [
+          3,
+          5,
+          8,
+          7,
+          7,
+          5,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 5,
+         "enemies": [
+          4,
+          4,
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          3,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          3,
+          7,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 6,
+         "enemies": [
+          1,
+          6,
+          1,
+          8,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          5,
+          7,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.1,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          7,
+          8,
+          3,
+          5,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.0,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          3,
+          5,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          5,
+          1,
+          6,
+          2,
+          7,
+          4,
+          4,
+          8,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          3,
+          3,
+          4,
+          4,
+          4,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          5,
+          5,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.2,
+         "maxEnemies": 4,
+         "enemies": [
+          5,
+          5,
+          4,
+          7,
+          4,
+          5,
+          4,
+          7,
+          5,
+          4
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.5,
+         "maxEnemies": 6,
+         "enemies": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.9,
+         "maxEnemies": 5,
+         "enemies": [
+          1,
+          6,
+          1,
+          6,
+          7
+         ]
+        }
+       ],
+       "whichMap": "arena",
+       "enemySet": "basic",
+       "totalEnemyTypes": 8,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme",
+       "goldReward": 0,
+       "XPReward": 0,
+       "lootTable": 2,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Firelands",
+       "description": "A volcanic eruption has left the terrain here\nscarred and lifeless.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 10,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          5,
+          1,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          1,
+          4,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          1,
+          4,
+          4,
+          2,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.8,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          4,
+          4,
+          3,
+          1,
+          5
+         ]
+        }
+       ],
+       "whichMap": "firelands",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 5,
+       "transition": -1,
+       "transitionDirection": 0,
+       "music": "Music/BattleTheme",
+       "goldReward": 50,
+       "XPReward": 330,
+       "lootTable": 3,
+       "rareChance": 15,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Earthen Gate",
+       "description": "An ancient stone golem stands vigilant here,\nwaiting for hapless adventurers to crush.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 12,
+       "prereqLoc": 0,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 1,
+         "enemies": [
+          1
+         ]
+        }
+       ],
+       "whichMap": "earthengate",
+       "enemySet": "golem",
+       "totalEnemyTypes": 1,
+       "transition": -1,
+       "transitionDirection": 2,
+       "music": "Music/bossTheme",
+       "goldReward": 55,
+       "XPReward": 355,
+       "lootTable": 4,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Transition to Map 3",
+       "description": "No Description.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 13,
+       "prereqLoc": 3,
+       "myPosition": [
+        0.0,
+        0.0
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 2,
+         "enemies": [
+          1,
+          2,
+          3
+         ]
+        }
+       ],
+       "whichMap": "catacombs1",
+       "enemySet": "basic",
+       "totalEnemyTypes": 4,
+       "transition": 3,
+       "transitionDirection": 2,
+       "music": "Music/BattleTheme",
+       "goldReward": 81,
+       "XPReward": 162,
+       "lootTable": 2,
+       "rareChance": 0,
+       "highScore": 0
+      }
+     ]
+    },
+    {
+     "mapName": "TUTORIAL",
+     "mapScale": 1.0,
+     "whichLevel": [
+      {
+       "levelName": "Tutorial Level",
+       "description": "No Description.",
+       "complete": true,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": -1,
+       "prereqLoc": 0,
+       "myPosition": [
+        1.0,
+        1.0
+       ],
+       "waves": [],
+       "whichMap": "training",
+       "enemySet": "basic",
+       "totalEnemyTypes": 2,
+       "transition": 0,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 0,
+       "XPReward": 0,
+       "lootTable": 0,
+       "rareChance": 0,
+       "highScore": 0
+      }
+     ]
+    },
+    {
+     "mapName": "Doomvale",
+     "mapScale": 0.9,
+     "whichLevel": [
+      {
+       "levelName": "Transition to Map 1",
+       "description": "No Description.",
+       "complete": true,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": -1,
+       "prereqLoc": 0,
+       "myPosition": [
+        2.68,
+        0.32
+       ],
+       "waves": [],
+       "whichMap": "training",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 5,
+       "transition": 1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 0,
+       "XPReward": 0,
+       "lootTable": 0,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Emerald Hinterlands",
+       "description": "The sky is clear, and the scent of the sea\nhangs in the air.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 0,
+       "prereqLoc": 3,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 2,
+         "enemies": [
+          6,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.7,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          1,
+          2,
+          6,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.2,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 2,
+         "enemies": [
+          6,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.7,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          6,
+          5,
+          2,
+          3,
+          1,
+          5
+         ]
+        }
+       ],
+       "whichMap": "plain1",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 55,
+       "XPReward": 365,
+       "lootTable": 4,
+       "rareChance": 5,
+       "highScore": 0
+      },
+      {
+       "levelName": "Everfrost Weald",
+       "description": "This ancient thicket remains in a perpetual\nstate of winter year-round.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 1,
+       "prereqLoc": 3,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.5,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          6,
+          2
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          5,
+          6,
+          1,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          2,
+          1,
+          6,
+          5,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.5,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          5,
+          1,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          2,
+          6,
+          1,
+          2,
+          6
+         ]
+        }
+       ],
+       "whichMap": "forest2",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 6,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 55,
+       "XPReward": 378,
+       "lootTable": 4,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "Seaside Ruins",
+       "description": "Brisk winter winds howl between the\ncrumbling columns of this necropolis.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 2,
+       "prereqLoc": 1,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.5,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.5,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          5,
+          7,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.8,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          7,
+          2,
+          2,
+          6,
+          1,
+          5
+         ]
+        }
+       ],
+       "whichMap": "ruin1",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 7,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 55,
+       "XPReward": 392,
+       "lootTable": 4,
+       "rareChance": 15,
+       "highScore": 0
+      },
+      {
+       "levelName": "Doomvale Monster Arena",
+       "description": "Test your might!  How long can you survive?\nHigh Score: ",
+       "complete": false,
+       "arena": true,
+       "arenaTable": [
+        {
+         "requiredKills": 0,
+         "whichTable": 4
+        },
+        {
+         "requiredKills": 15,
+         "whichTable": 5
+        },
+        {
+         "requiredKills": 30,
+         "whichTable": 6
+        },
+        {
+         "requiredKills": 50,
+         "whichTable": 7
+        },
+        {
+         "requiredKills": 70,
+         "whichTable": 8
+        }
+       ],
+       "prereq": 3,
+       "prereqLoc": 3,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          5,
+          1,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.5,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          6,
+          6,
+          2,
+          2,
+          3
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.5,
+         "maxEnemies": 5,
+         "enemies": [
+          6,
+          6,
+          2,
+          2,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          9,
+          6,
+          6,
+          3,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          7,
+          6,
+          6,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          2,
+          6,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          2,
+          5,
+          3,
+          6,
+          6,
+          2,
+          3
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          9,
+          6,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          8,
+          8,
+          6,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.1,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          8,
+          8
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          5,
+          7,
+          6,
+          6,
+          2,
+          3
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          3,
+          6,
+          6,
+          7
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          5,
+          7,
+          1,
+          1
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.5,
+         "maxEnemies": 5,
+         "enemies": [
+          6,
+          6,
+          6,
+          6,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          9,
+          7,
+          1,
+          5,
+          1,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          1,
+          5,
+          2,
+          2,
+          5,
+          1,
+          5
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          6,
+          6,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          2,
+          2,
+          8,
+          7,
+          9,
+          9,
+          6
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          6,
+          7,
+          8,
+          3
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          2,
+          3,
+          6,
+          1,
+          1
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 0.5,
+         "maxEnemies": 4,
+         "enemies": [
+          2,
+          1,
+          2,
+          5,
+          2,
+          5,
+          1
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 2.0,
+         "maxEnemies": 4,
+         "enemies": [
+          9,
+          9,
+          6,
+          6,
+          3,
+          3,
+          9
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          6,
+          6,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          1,
+          7,
+          9,
+          9,
+          7,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 1.5,
+         "spawnDelay": 1.4,
+         "maxEnemies": 4,
+         "enemies": [
+          9,
+          6,
+          1,
+          5,
+          1,
+          5
+         ]
+        }
+       ],
+       "whichMap": "arena",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 9,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 0,
+       "XPReward": 0,
+       "lootTable": 0,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Rimetooth Tundra",
+       "description": "Unrelenting snow and ice have turned this\nfrigid land into a tomb.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 2,
+       "prereqLoc": 3,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          6,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          2,
+          1,
+          2,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          2,
+          2,
+          6,
+          2,
+          5,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          6,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.5,
+         "maxEnemies": 3,
+         "enemies": [
+          1,
+          2,
+          7,
+          5,
+          6,
+          3,
+          2
+         ]
+        }
+       ],
+       "whichMap": "snowlands",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 7,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme3",
+       "goldReward": 55,
+       "XPReward": 395,
+       "lootTable": 4,
+       "rareChance": 25,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Frozen Abyss",
+       "description": "Threatening growls echo from deep within\nthe icy depths.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 5,
+       "prereqLoc": 0,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          6,
+          7,
+          6,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          2,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          6,
+          7,
+          6,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          6,
+          7,
+          6,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 4,
+         "enemies": [
+          6,
+          7,
+          6,
+          1
+         ]
+        }
+       ],
+       "whichMap": "cave1",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 7,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme3",
+       "goldReward": 60,
+       "XPReward": 408,
+       "lootTable": 5,
+       "rareChance": 0,
+       "highScore": 0
+      },
+      {
+       "levelName": "Time-Lost Canyon",
+       "description": "The first of the invading monster hordes\nemerged from beyond this very chasm.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 6,
+       "prereqLoc": 3,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          1,
+          6,
+          8
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          2,
+          2,
+          8,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          6,
+          6,
+          3,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 3.0,
+         "maxEnemies": 4,
+         "enemies": [
+          3,
+          7,
+          8,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          7,
+          8,
+          6,
+          1,
+          2,
+          2
+         ]
+        }
+       ],
+       "whichMap": "ravine2",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 8,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme3",
+       "goldReward": 60,
+       "XPReward": 416,
+       "lootTable": 5,
+       "rareChance": 5,
+       "highScore": 0
+      },
+      {
+       "levelName": "Dungeon of the Lost",
+       "description": "A sign outside warns of certain death to\nthose who press on.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 7,
+       "prereqLoc": 3,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 4,
+         "enemies": [
+          1,
+          5,
+          6,
+          6,
+          3
+         ]
+        },
+        {
+         "initialDelay": 2.0,
+         "spawnDelay": 0.5,
+         "maxEnemies": 4,
+         "enemies": [
+          2,
+          2,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.4,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          1,
+          6,
+          7,
+          3,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 0.2,
+         "maxEnemies": 5,
+         "enemies": [
+          1,
+          5,
+          1,
+          5,
+          1
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          8,
+          7,
+          6,
+          6,
+          3,
+          2,
+          2,
+          7
+         ]
+        }
+       ],
+       "whichMap": "catacombs1",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 8,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 60,
+       "XPReward": 428,
+       "lootTable": 5,
+       "rareChance": 10,
+       "highScore": 0
+      },
+      {
+       "levelName": "Molten Wastes",
+       "description": "On the horizon lies a black citadel, shrouded\nby volcanic fumes.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 8,
+       "prereqLoc": 1,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          6,
+          9
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.4,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          2,
+          2,
+          6,
+          1,
+          5
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.5,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          9,
+          6,
+          2,
+          2
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          6,
+          7,
+          8,
+          8,
+          3
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.5,
+         "maxEnemies": 3,
+         "enemies": [
+          9,
+          7,
+          6,
+          6,
+          8,
+          3,
+          7
+         ]
+        }
+       ],
+       "whichMap": "firelands",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 9,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme",
+       "goldReward": 60,
+       "XPReward": 436,
+       "lootTable": 5,
+       "rareChance": 15,
+       "highScore": 0
+      },
+      {
+       "levelName": "The Boneyard",
+       "description": "This wasteland is carpeted in the bones of\nwould-be heroes.",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 9,
+       "prereqLoc": 1,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 4,
+         "enemies": [
+          9,
+          9,
+          2,
+          2,
+          7
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          6,
+          8,
+          8,
+          2,
+          2,
+          6
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.0,
+         "maxEnemies": 3,
+         "enemies": [
+          3,
+          3,
+          3
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.2,
+         "maxEnemies": 3,
+         "enemies": [
+          2,
+          8,
+          7,
+          7,
+          9,
+          9
+         ]
+        },
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 2.9,
+         "maxEnemies": 4,
+         "enemies": [
+          3,
+          8,
+          7,
+          9,
+          7,
+          6,
+          6,
+          9
+         ]
+        }
+       ],
+       "whichMap": "boneyard",
+       "enemySet": "advanced",
+       "totalEnemyTypes": 9,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/BattleTheme2",
+       "goldReward": 60,
+       "XPReward": 445,
+       "lootTable": 5,
+       "rareChance": 20,
+       "highScore": 0
+      },
+      {
+       "levelName": "Throne of Ruin",
+       "description": "The Lord of the Dead awaits those foolish\nenough to challenge him...",
+       "complete": false,
+       "arena": false,
+       "arenaTable": [],
+       "prereq": 10,
+       "prereqLoc": 3,
+       "myPosition": [
+        2.68,
+        1.15
+       ],
+       "waves": [
+        {
+         "initialDelay": 3.0,
+         "spawnDelay": 1.0,
+         "maxEnemies": 1,
+         "enemies": [
+          1
+         ]
+        }
+       ],
+       "whichMap": "evilthrone",
+       "enemySet": "lich",
+       "totalEnemyTypes": 3,
+       "transition": -1,
+       "transitionDirection": 3,
+       "music": "Music/bossTheme",
+       "goldReward": 75,
+       "XPReward": 500,
+       "lootTable": 6,
+       "rareChance": 50,
+       "highScore": 0
+      }
+     ]
+    }
+   ],
+   "whichSaveSlot": 0,
+   "currentMap": 0,
+   "whichLevel": 0,
+   "tutorial": false,
+   "firstLevelXP": 30,
+   "XPscale": 1.35,
+   "XPtable": [
+    1.35,
+    1.35,
+    1.35,
+    1.35,
+    1.35,
+    1.35,
+    1.33,
+    1.3,
+    1.28,
+    1.25,
+    1.23,
+    1.2,
+    1.18,
+    1.15,
+    1.13,
+    1.1,
+    1.09,
+    1.09,
+    1.08,
+    1.08,
+    1.07,
+    1.07,
+    1.07,
+    1.06,
+    1.06,
+    1.06,
+    1.05
+   ],
+   "transferLevel": 0,
+   "lootTables": [
+    {
+     "tableName": "Tier 1 Gear",
+     "minLevel": 0,
+     "maxLevel": 4,
+     "tableContents": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      11,
+      43,
+      44,
+      45,
+      123
+     ]
+    },
+    {
+     "tableName": "Tier 2 Gear + 1.0 trinkets",
+     "minLevel": 2,
+     "maxLevel": 11,
+     "tableContents": [
+      49,
+      9,
+      63,
+      71,
+      79,
+      87,
+      95,
+      103,
+      108,
+      113,
+      118,
+      8,
+      24,
+      33,
+      36,
+      46,
+      124
+     ]
+    },
+    {
+     "tableName": "Tier 3 Gear + 1.0 & 1.5 trinkets",
+     "minLevel": 8,
+     "maxLevel": 16,
+     "tableContents": [
+      50,
+      10,
+      64,
+      72,
+      80,
+      88,
+      96,
+      104,
+      109,
+      114,
+      119,
+      8,
+      12,
+      15,
+      24,
+      28,
+      29,
+      33,
+      36,
+      40,
+      46,
+      125
+     ]
+    },
+    {
+     "tableName": "Tier 4 Gear + 1.5 and 2.0 trinks",
+     "minLevel": 14,
+     "maxLevel": 21,
+     "tableContents": [
+      51,
+      57,
+      65,
+      73,
+      81,
+      89,
+      97,
+      104,
+      109,
+      114,
+      119,
+      12,
+      15,
+      28,
+      29,
+      40,
+      18,
+      19,
+      20,
+      25,
+      34,
+      37,
+      38,
+      47,
+      126
+     ]
+    },
+    {
+     "tableName": "Tier 5 Gear + 2.0 & 2.5 trinkets",
+     "minLevel": 18,
+     "maxLevel": 27,
+     "tableContents": [
+      52,
+      58,
+      66,
+      74,
+      82,
+      90,
+      98,
+      105,
+      110,
+      115,
+      120,
+      18,
+      19,
+      20,
+      25,
+      34,
+      37,
+      38,
+      47,
+      7,
+      13,
+      16,
+      23,
+      30,
+      41,
+      127
+     ]
+    },
+    {
+     "tableName": "Tier 6 Gear + 2.5 & 3.0 trinkets",
+     "minLevel": 24,
+     "maxLevel": 34,
+     "tableContents": [
+      53,
+      59,
+      67,
+      75,
+      83,
+      91,
+      99,
+      105,
+      110,
+      115,
+      120,
+      7,
+      13,
+      16,
+      23,
+      30,
+      41,
+      21,
+      26,
+      27,
+      39,
+      48,
+      128
+     ]
+    },
+    {
+     "tableName": "Tier 7 Gear + 3.0 & 3.5 trinkets",
+     "minLevel": 28,
+     "maxLevel": 999,
+     "tableContents": [
+      54,
+      60,
+      68,
+      76,
+      84,
+      92,
+      100,
+      106,
+      111,
+      116,
+      121,
+      14,
+      17,
+      21,
+      22,
+      26,
+      27,
+      31,
+      32,
+      35,
+      39,
+      42,
+      48,
+      129
+     ]
+    },
+    {
+     "tableName": "Tier 8 Gear + 3.5 trinkets",
+     "minLevel": 0,
+     "maxLevel": 0,
+     "tableContents": [
+      55,
+      61,
+      69,
+      77,
+      85,
+      93,
+      101,
+      106,
+      111,
+      116,
+      121,
+      14,
+      17,
+      22,
+      31,
+      32,
+      35,
+      42,
+      130
+     ]
+    },
+    {
+     "tableName": "Tier 9 Gear",
+     "minLevel": 0,
+     "maxLevel": 0,
+     "tableContents": [
+      56,
+      62,
+      70,
+      78,
+      86,
+      94,
+      102,
+      107,
+      112,
+      117,
+      122,
+      131
+     ]
+    }
+   ],
+   "academyFirstVisit": 1,
+   "merchantFirstVisit": 1,
+   "armoryFirstVisit": 1,
+   "keepFirstVisit": 1,
+   "level5reminder": 1,
+   "arenaExplanation": 1,
+   "finalBossKill": 1,
+   "musicEnabled": true,
+   "soundEnabled": true,
+   "freshBoot": true
+  }
+ }
+]

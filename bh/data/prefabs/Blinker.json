@@ -1,0 +1,263 @@
+[
+ {
+  "object": "barbarian",
+  "file": "level1",
+  "id": 3006,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "barbarian",
+  "file": "level1",
+  "id": 3007,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "barbarian2",
+  "file": "level1",
+  "id": 2962,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "barbarian2",
+  "file": "level1",
+  "id": 2965,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "bard",
+  "file": "level1",
+  "id": 2997,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "bard",
+  "file": "level1",
+  "id": 3000,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "cleric",
+  "file": "level1",
+  "id": 3033,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "cleric",
+  "file": "level1",
+  "id": 3046,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "cleric_narrator",
+  "file": "level1",
+  "id": 2981,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "fighter",
+  "file": "level1",
+  "id": 3035,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "fighter",
+  "file": "level1",
+  "id": 3044,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "fighter2",
+  "file": "level1",
+  "id": 2966,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "fighter2",
+  "file": "level1",
+  "id": 2969,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "monk",
+  "file": "level1",
+  "id": 3002,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "monk",
+  "file": "level1",
+  "id": 3003,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "paladin",
+  "file": "level1",
+  "id": 2952,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "paladin",
+  "file": "level1",
+  "id": 2955,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "ranger",
+  "file": "level1",
+  "id": 2958,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "ranger",
+  "file": "level1",
+  "id": 2959,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "rogue",
+  "file": "level1",
+  "id": 3037,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "rogue",
+  "file": "level1",
+  "id": 3042,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "rogue2",
+  "file": "level1",
+  "id": 2978,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "rogue2",
+  "file": "level1",
+  "id": 2979,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "witch",
+  "file": "level1",
+  "id": 2993,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "witch",
+  "file": "level1",
+  "id": 2996,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "wizard",
+  "file": "level1",
+  "id": 3038,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "wizard",
+  "file": "level1",
+  "id": 3041,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "wizard2",
+  "file": "level1",
+  "id": 2973,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ },
+ {
+  "object": "wizard2",
+  "file": "level1",
+  "id": 2976,
+  "fields": {
+   "blinkingBone": null,
+   "blinkCooldown": 0.0
+  }
+ }
+]

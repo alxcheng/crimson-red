@@ -1,0 +1,200 @@
+[
+ {
+  "object": "copyright",
+  "file": "level0",
+  "id": 47,
+  "fields": {
+   "idleTime": 3.0,
+   "fadeType": true,
+   "startingAlpha": 0.0,
+   "fadeSpeed": 0.4,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "copyright",
+    "file": "level0",
+    "id": 21
+   }
+  }
+ },
+ {
+  "object": "fader",
+  "file": "level0",
+  "id": 46,
+  "fields": {
+   "idleTime": 6.3,
+   "fadeType": true,
+   "startingAlpha": 0.0,
+   "fadeSpeed": 0.7,
+   "loadSandbox": true,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "fader",
+    "file": "level0",
+    "id": 20
+   }
+  }
+ },
+ {
+  "object": "fader",
+  "file": "level0",
+  "id": 51,
+  "fields": {
+   "idleTime": 0.2,
+   "fadeType": false,
+   "startingAlpha": 1.0,
+   "fadeSpeed": 1.2,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "fader",
+    "file": "level0",
+    "id": 20
+   }
+  }
+ },
+ {
+  "object": "fader",
+  "file": "level4",
+  "id": 25,
+  "fields": {
+   "idleTime": 0.2,
+   "fadeType": false,
+   "startingAlpha": 1.0,
+   "fadeSpeed": 1.2,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "fader",
+    "file": "level4",
+    "id": 12
+   }
+  }
+ },
+ {
+  "object": "fader",
+  "file": "level4",
+  "id": 26,
+  "fields": {
+   "idleTime": 6.3,
+   "fadeType": true,
+   "startingAlpha": 0.0,
+   "fadeSpeed": 0.7,
+   "loadSandbox": true,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "fader",
+    "file": "level4",
+    "id": 12
+   }
+  }
+ },
+ {
+  "object": "fader_loadScreen",
+  "file": "level1",
+  "id": 2991,
+  "fields": {
+   "idleTime": 0.1,
+   "fadeType": false,
+   "startingAlpha": 1.0,
+   "fadeSpeed": 1.2,
+   "loadSandbox": false,
+   "destroyMe": true,
+   "myRenderer": {
+    "ref": "fader_loadScreen",
+    "file": "level1",
+    "id": 2176
+   }
+  }
+ },
+ {
+  "object": "fader_loadScreen2",
+  "file": "level1",
+  "id": 2990,
+  "fields": {
+   "idleTime": 0.1,
+   "fadeType": true,
+   "startingAlpha": 0.0,
+   "fadeSpeed": 1.2,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "fader_loadScreen2",
+    "file": "level1",
+    "id": 2159
+   }
+  }
+ },
+ {
+  "object": "fader_mainMenu",
+  "file": "level1",
+  "id": 3009,
+  "fields": {
+   "idleTime": 0.1,
+   "fadeType": false,
+   "startingAlpha": 1.0,
+   "fadeSpeed": 1.2,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "fader_mainMenu",
+    "file": "level1",
+    "id": 2182
+   }
+  }
+ },
+ {
+  "object": "flag",
+  "file": "level0",
+  "id": 50,
+  "fields": {
+   "idleTime": 1.3,
+   "fadeType": true,
+   "startingAlpha": 0.0,
+   "fadeSpeed": 1.1,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "flag",
+    "file": "level0",
+    "id": 24
+   }
+  }
+ },
+ {
+  "object": "letters",
+  "file": "level0",
+  "id": 48,
+  "fields": {
+   "idleTime": 2.4,
+   "fadeType": true,
+   "startingAlpha": 0.0,
+   "fadeSpeed": 4.0,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "letters",
+    "file": "level0",
+    "id": 23
+   }
+  }
+ },
+ {
+  "object": "letters_glow",
+  "file": "level0",
+  "id": 49,
+  "fields": {
+   "idleTime": 2.2,
+   "fadeType": false,
+   "startingAlpha": 1.0,
+   "fadeSpeed": 0.4,
+   "loadSandbox": false,
+   "destroyMe": false,
+   "myRenderer": {
+    "ref": "letters_glow",
+    "file": "level0",
+    "id": 22
+   }
+  }
+ }
+]

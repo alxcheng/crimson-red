@@ -1,0 +1,1450 @@
+[
+ {
+  "object": "**MOTHERBRAIN",
+  "file": "level2",
+  "id": 726,
+  "fields": {
+   "victoryMusic": {
+    "ref": "MUSIC_VICTORY",
+    "file": "level2",
+    "id": 614
+   },
+   "killsText": {
+    "ref": "KillsText",
+    "file": "level2",
+    "id": 303
+   },
+   "killsTextAnim": {
+    "ref": "KillsText",
+    "file": "level2",
+    "id": 666
+   },
+   "recordText": {
+    "ref": "newRecord!",
+    "file": "level2",
+    "id": 295
+   },
+   "recordTextAnim": {
+    "ref": "newRecord!",
+    "file": "level2",
+    "id": 664
+   },
+   "killCountText": {
+    "ref": "KillCountText",
+    "file": "level2",
+    "id": 300
+   },
+   "killCountAnim": {
+    "ref": "KillCountText",
+    "file": "level2",
+    "id": 665
+   },
+   "killCountTextText": [
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 626
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 627
+    }
+   ],
+   "arenaText": {
+    "ref": "ArenaVictoryText",
+    "file": "level2",
+    "id": 308
+   },
+   "arenaTextAnim": {
+    "ref": "ArenaVictoryText",
+    "file": "level2",
+    "id": 667
+   },
+   "bonusGold": 100.0,
+   "defeatText": {
+    "ref": "DefeatText",
+    "file": "level2",
+    "id": 313
+   },
+   "defeatTextAnim": {
+    "ref": "DefeatText",
+    "file": "level2",
+    "id": 668
+   },
+   "levelUpTextTimer": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "levelUpText": [
+    {
+     "ref": "LEVELUP1",
+     "file": "level2",
+     "id": 363
+    },
+    {
+     "ref": "LEVELUP2",
+     "file": "level2",
+     "id": 360
+    },
+    {
+     "ref": "LEVELUP3",
+     "file": "level2",
+     "id": 355
+    },
+    {
+     "ref": "LEVELUP4",
+     "file": "level2",
+     "id": 352
+    }
+   ],
+   "levelUpTextAnim": [
+    {
+     "ref": "LEVELUP1",
+     "file": "level2",
+     "id": 678
+    },
+    {
+     "ref": "LEVELUP2",
+     "file": "level2",
+     "id": 677
+    },
+    {
+     "ref": "LEVELUP3",
+     "file": "level2",
+     "id": 676
+    },
+    {
+     "ref": "LEVELUP4",
+     "file": "level2",
+     "id": 675
+    }
+   ],
+   "darkBar": [
+    {
+     "ref": "darkBarRight",
+     "file": "level2",
+     "id": 396
+    },
+    {
+     "ref": "darkBarRight",
+     "file": "level2",
+     "id": 410
+    },
+    {
+     "ref": "darkBarRight",
+     "file": "level2",
+     "id": 403
+    },
+    {
+     "ref": "darkBarRight",
+     "file": "level2",
+     "id": 389
+    }
+   ],
+   "lightBar": [
+    {
+     "ref": "lightBarRight",
+     "file": "level2",
+     "id": 395
+    },
+    {
+     "ref": "lightBarRight",
+     "file": "level2",
+     "id": 411
+    },
+    {
+     "ref": "lightBarRight",
+     "file": "level2",
+     "id": 402
+    },
+    {
+     "ref": "lightBarRight",
+     "file": "level2",
+     "id": 390
+    }
+   ],
+   "XPBars": [
+    {
+     "ref": "XPBar1",
+     "file": "level2",
+     "id": 369
+    },
+    {
+     "ref": "XPBar2",
+     "file": "level2",
+     "id": 368
+    },
+    {
+     "ref": "XPBar3",
+     "file": "level2",
+     "id": 367
+    },
+    {
+     "ref": "XPBar4",
+     "file": "level2",
+     "id": 366
+    }
+   ],
+   "XPTextText": [
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 649
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 648
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 645
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 644
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 650
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 647
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 646
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 643
+    }
+   ],
+   "XPBarAnim": [
+    {
+     "ref": "XPbar1",
+     "file": "level2",
+     "id": 684
+    },
+    {
+     "ref": "XPbar2",
+     "file": "level2",
+     "id": 686
+    },
+    {
+     "ref": "XPbar3",
+     "file": "level2",
+     "id": 685
+    },
+    {
+     "ref": "XPbar4",
+     "file": "level2",
+     "id": 683
+    }
+   ],
+   "XPTextAnim": [
+    {
+     "ref": "XP1",
+     "file": "level2",
+     "id": 682
+    },
+    {
+     "ref": "XP2",
+     "file": "level2",
+     "id": 681
+    },
+    {
+     "ref": "XP3",
+     "file": "level2",
+     "id": 680
+    },
+    {
+     "ref": "XP4",
+     "file": "level2",
+     "id": 679
+    }
+   ],
+   "lootFrame": {
+    "ref": "lootFrame",
+    "file": "level2",
+    "id": 419
+   },
+   "lootFrameAnim": {
+    "ref": "lootFrame",
+    "file": "level2",
+    "id": 688
+   },
+   "lootIcon": {
+    "ref": "icon",
+    "file": "level2",
+    "id": 584
+   },
+   "goldText": {
+    "ref": "GoldText",
+    "file": "level2",
+    "id": 421
+   },
+   "goldTextAnim": {
+    "ref": "GoldText",
+    "file": "level2",
+    "id": 689
+   },
+   "goldTextText": [
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 654
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 653
+    }
+   ],
+   "coinIcon": {
+    "ref": "goldIcon",
+    "file": "level2",
+    "id": 588
+   },
+   "spoilsText": {
+    "ref": "SpoilsText",
+    "file": "level2",
+    "id": 427
+   },
+   "spoilsTextAnim": {
+    "ref": "SpoilsText",
+    "file": "level2",
+    "id": 690
+   },
+   "lootText": {
+    "ref": "LootName",
+    "file": "level2",
+    "id": 416
+   },
+   "lootTextAnim": {
+    "ref": "LootName",
+    "file": "level2",
+    "id": 687
+   },
+   "lootTextText": [
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 651
+    },
+    {
+     "ref": "Victory!",
+     "file": "level2",
+     "id": 652
+    }
+   ],
+   "victoryText": {
+    "ref": "VictoryText",
+    "file": "level2",
+    "id": 430
+   },
+   "victoryTextAnim": {
+    "ref": "VictoryText",
+    "file": "level2",
+    "id": 691
+   },
+   "loadingText": {
+    "ref": "LoadingText",
+    "file": "level2",
+    "id": 593
+   },
+   "BGMusic": {
+    "ref": "MUSIC",
+    "file": "level2",
+    "id": 622
+   },
+   "whichMap": "catacombs1",
+   "enemySet": "basic",
+   "totalEnemyTypes": 4,
+   "waves": [],
+   "wavePosition": 0,
+   "spawnDelay": 0.0,
+   "spawnCooldown": 0.0,
+   "activeEnemies": 0,
+   "maxEnemies": 3,
+   "buffDurations": [
+    15.0,
+    100.0,
+    10.0,
+    0.0,
+    10.0,
+    15.0,
+    15.0,
+    15.0,
+    100.0,
+    100.0,
+    0.0,
+    100.0,
+    8.0,
+    3.0,
+    4.0,
+    8.0,
+    8.0,
+    10.0,
+    4.0,
+    15.0,
+    15.0,
+    15.0,
+    4.0,
+    8.0,
+    15.0,
+    5.0,
+    5.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0
+   ],
+   "buffMagnitudes": [
+    0.5,
+    2.5,
+    0.25,
+    2.0,
+    1.0,
+    0.0,
+    2.0,
+    0.75,
+    -1.0,
+    3.5,
+    0.7,
+    2.0,
+    0.125,
+    0.15,
+    -1.0,
+    0.35,
+    1.5,
+    2.0,
+    1.2,
+    -1.0,
+    0.75,
+    0.25,
+    1.15,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    1.5,
+    1.5,
+    1.5,
+    1.5
+   ],
+   "debuffDurations": [
+    10.0,
+    8.0,
+    10.0,
+    3.0,
+    -1.0,
+    8.0,
+    4.0,
+    4.0,
+    8.0,
+    6.0,
+    10.0,
+    5.0,
+    10.0,
+    6.0,
+    10.0,
+    10.0,
+    10.0,
+    5.0,
+    4.0
+   ],
+   "debuffMagnitudes": [
+    0.8,
+    0.0,
+    0.5,
+    -1.0,
+    -1.0,
+    -1.0,
+    0.1,
+    0.9,
+    0.0625,
+    0.5,
+    0.25,
+    -1.0,
+    0.2,
+    0.5,
+    0.5,
+    0.5,
+    0.15,
+    0.25,
+    0.85
+   ],
+   "actionBar": {
+    "ref": "actionBar",
+    "file": "level2",
+    "id": 492
+   },
+   "actionBarAnimation": {
+    "ref": "actionBar",
+    "file": "level2",
+    "id": 700
+   },
+   "actionButton1": {
+    "ref": "backdrop1",
+    "file": "level2",
+    "id": 500
+   },
+   "actionButton2": {
+    "ref": "backdrop2",
+    "file": "level2",
+    "id": 501
+   },
+   "actionButton3": {
+    "ref": "backdrop3",
+    "file": "level2",
+    "id": 499
+   },
+   "shades": [
+    {
+     "ref": "shBottom1",
+     "file": "level2",
+     "id": 458
+    },
+    {
+     "ref": "shBottom2",
+     "file": "level2",
+     "id": 457
+    },
+    {
+     "ref": "shBottom3",
+     "file": "level2",
+     "id": 456
+    }
+   ],
+   "flashers": [
+    {
+     "ref": "light1",
+     "file": "level2",
+     "id": 529
+    },
+    {
+     "ref": "light2",
+     "file": "level2",
+     "id": 528
+    },
+    {
+     "ref": "light3",
+     "file": "level2",
+     "id": 527
+    }
+   ],
+   "currentIcons": [
+    null,
+    null,
+    null
+   ],
+   "classIcons": [
+    {
+     "ref": "cleric1",
+     "file": "level2",
+     "id": 535
+    },
+    {
+     "ref": "cleric2",
+     "file": "level2",
+     "id": 534
+    },
+    {
+     "ref": "cleric3",
+     "file": "level2",
+     "id": 533
+    },
+    {
+     "ref": "cleric4",
+     "file": "level2",
+     "id": 532
+    },
+    {
+     "ref": "cleric5",
+     "file": "level2",
+     "id": 531
+    },
+    {
+     "ref": "warrior1",
+     "file": "level2",
+     "id": 510
+    },
+    {
+     "ref": "warrior2",
+     "file": "level2",
+     "id": 509
+    },
+    {
+     "ref": "warrior3",
+     "file": "level2",
+     "id": 508
+    },
+    {
+     "ref": "warrior4",
+     "file": "level2",
+     "id": 507
+    },
+    {
+     "ref": "warrior5",
+     "file": "level2",
+     "id": 491
+    },
+    {
+     "ref": "rogue1",
+     "file": "level2",
+     "id": 515
+    },
+    {
+     "ref": "rogue2",
+     "file": "level2",
+     "id": 514
+    },
+    {
+     "ref": "rogue3",
+     "file": "level2",
+     "id": 513
+    },
+    {
+     "ref": "rogue4",
+     "file": "level2",
+     "id": 512
+    },
+    {
+     "ref": "rogue5",
+     "file": "level2",
+     "id": 511
+    },
+    {
+     "ref": "mage1",
+     "file": "level2",
+     "id": 526
+    },
+    {
+     "ref": "mage2",
+     "file": "level2",
+     "id": 525
+    },
+    {
+     "ref": "mage3",
+     "file": "level2",
+     "id": 524
+    },
+    {
+     "ref": "mage4",
+     "file": "level2",
+     "id": 523
+    },
+    {
+     "ref": "mage5",
+     "file": "level2",
+     "id": 522
+    },
+    {
+     "ref": "witch1",
+     "file": "level2",
+     "id": 506
+    },
+    {
+     "ref": "witch2",
+     "file": "level2",
+     "id": 505
+    },
+    {
+     "ref": "witch3",
+     "file": "level2",
+     "id": 504
+    },
+    {
+     "ref": "witch4",
+     "file": "level2",
+     "id": 503
+    },
+    {
+     "ref": "witch5",
+     "file": "level2",
+     "id": 496
+    },
+    {
+     "ref": "bard1",
+     "file": "level2",
+     "id": 540
+    },
+    {
+     "ref": "bard2",
+     "file": "level2",
+     "id": 539
+    },
+    {
+     "ref": "bard3",
+     "file": "level2",
+     "id": 538
+    },
+    {
+     "ref": "bard4",
+     "file": "level2",
+     "id": 537
+    },
+    {
+     "ref": "bard5",
+     "file": "level2",
+     "id": 536
+    },
+    {
+     "ref": "barbarian1",
+     "file": "level2",
+     "id": 545
+    },
+    {
+     "ref": "barbarian2",
+     "file": "level2",
+     "id": 544
+    },
+    {
+     "ref": "barbarian3",
+     "file": "level2",
+     "id": 543
+    },
+    {
+     "ref": "barbarian4",
+     "file": "level2",
+     "id": 542
+    },
+    {
+     "ref": "barbarian5",
+     "file": "level2",
+     "id": 541
+    },
+    {
+     "ref": "monk1",
+     "file": "level2",
+     "id": 521
+    },
+    {
+     "ref": "monk2",
+     "file": "level2",
+     "id": 520
+    },
+    {
+     "ref": "monk3",
+     "file": "level2",
+     "id": 519
+    },
+    {
+     "ref": "monk4",
+     "file": "level2",
+     "id": 518
+    },
+    {
+     "ref": "monk5",
+     "file": "level2",
+     "id": 517
+    },
+    {
+     "ref": "ranger1",
+     "file": "level2",
+     "id": 292
+    },
+    {
+     "ref": "ranger2",
+     "file": "level2",
+     "id": 291
+    },
+    {
+     "ref": "ranger3",
+     "file": "level2",
+     "id": 290
+    },
+    {
+     "ref": "ranger4",
+     "file": "level2",
+     "id": 289
+    },
+    {
+     "ref": "ranger5",
+     "file": "level2",
+     "id": 288
+    },
+    {
+     "ref": "paladin1",
+     "file": "level2",
+     "id": 280
+    },
+    {
+     "ref": "paladin2",
+     "file": "level2",
+     "id": 530
+    },
+    {
+     "ref": "paladin3",
+     "file": "level2",
+     "id": 279
+    },
+    {
+     "ref": "paladin4",
+     "file": "level2",
+     "id": 278
+    },
+    {
+     "ref": "paladin5",
+     "file": "level2",
+     "id": 277
+    }
+   ],
+   "playerScripts": [
+    null,
+    null,
+    null,
+    null
+   ],
+   "enemyScripts": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "touchReleaseCheck": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "touchState": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "touchContactPosition": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "partyMask": 256,
+   "actionBarMask": 8192,
+   "groundMask": 512,
+   "enemyMask": 1024,
+   "cameraLens": {
+    "ref": "Main Camera",
+    "file": "level2",
+    "id": 553
+   },
+   "cameraShaker": {
+    "ref": "cameraShaker",
+    "file": "level2",
+    "id": 694
+   },
+   "leader": null,
+   "leaderScript": null,
+   "leaderCandidate": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "targetCandidate": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "selectionCircle": {
+    "ref": "*selectionCircle",
+    "file": "level2",
+    "id": 549
+   },
+   "selectionCircleAnim": {
+    "ref": "*selectionCircle",
+    "file": "level2",
+    "id": 701
+   },
+   "draggingThreshold": 20.0,
+   "drawnLine": [
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 461
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 485
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 479
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 473
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 467
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 341
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 336
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 329
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 324
+    },
+    {
+     "ref": "line",
+     "file": "level2",
+     "id": 317
+    }
+   ],
+   "drawnDot": [
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 490
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 487
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 481
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 475
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 469
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 339
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 338
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 327
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 326
+    },
+    {
+     "ref": "dot",
+     "file": "level2",
+     "id": 315
+    }
+   ],
+   "drawnTip": [
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 460
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 484
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 478
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 472
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 466
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 342
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 335
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 330
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 323
+    },
+    {
+     "ref": "tip",
+     "file": "level2",
+     "id": 318
+    }
+   ],
+   "lineRenderer": [
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 719
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 718
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 717
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 716
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 715
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 708
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 707
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 706
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 705
+    },
+    {
+     "ref": "geometry",
+     "file": "level2",
+     "id": 704
+    }
+   ],
+   "lineAnim": [
+    {
+     "ref": "movementLine_1",
+     "file": "level2",
+     "id": 699
+    },
+    {
+     "ref": "movementLine_2",
+     "file": "level2",
+     "id": 698
+    },
+    {
+     "ref": "movementLine_3",
+     "file": "level2",
+     "id": 697
+    },
+    {
+     "ref": "movementLine_4",
+     "file": "level2",
+     "id": 696
+    },
+    {
+     "ref": "movementLine_5",
+     "file": "level2",
+     "id": 695
+    },
+    {
+     "ref": "movementLine_6",
+     "file": "level2",
+     "id": 673
+    },
+    {
+     "ref": "movementLine_7",
+     "file": "level2",
+     "id": 672
+    },
+    {
+     "ref": "movementLine_8",
+     "file": "level2",
+     "id": 671
+    },
+    {
+     "ref": "movementLine_9",
+     "file": "level2",
+     "id": 670
+    },
+    {
+     "ref": "movementLine_10",
+     "file": "level2",
+     "id": 669
+    }
+   ],
+   "cieling": 4.3,
+   "edge": 3.42,
+   "floor": -2.8,
+   "backgroundRenderer": {
+    "ref": "dynamicBackground",
+    "file": "level2",
+    "id": 600
+   },
+   "interfaceRenderer": {
+    "ref": "polySurface15",
+    "file": "level2",
+    "id": 714
+   },
+   "selectionCircleRenderer": {
+    "ref": "geo",
+    "file": "level2",
+    "id": 599
+   },
+   "dimBackground": false,
+   "flashIcon": [
+    false,
+    false,
+    false
+   ],
+   "powerUpEffect": {
+    "ref": "powerUp",
+    "file": "level2",
+    "id": 454
+   },
+   "powerUpAnimation": {
+    "ref": "powerUp",
+    "file": "level2",
+    "id": 693
+   },
+   "audioPool": [
+    {
+     "ref": "Audio-Release",
+     "file": "level2",
+     "id": 620
+    },
+    {
+     "ref": "Audio-Click",
+     "file": "level2",
+     "id": 621
+    },
+    {
+     "ref": "Audio-Release2",
+     "file": "level2",
+     "id": 619
+    },
+    {
+     "ref": "Audio-Select",
+     "file": "level2",
+     "id": 618
+    },
+    {
+     "ref": "Audio-Levelup",
+     "file": "level2",
+     "id": 616
+    },
+    {
+     "ref": "Audio-PowerUp",
+     "file": "level2",
+     "id": 617
+    },
+    {
+     "ref": "Audio-Gold",
+     "file": "level2",
+     "id": 615
+    }
+   ],
+   "DB": null,
+   "pauseScreen": {
+    "ref": "pauseScreen",
+    "file": "level2",
+    "id": 438
+   },
+   "tutorialState": 0,
+   "fullScreenFlash": {
+    "ref": "fullScreenFlash",
+    "file": "level2",
+    "id": 722
+   },
+   "totalKills": 0,
+   "arenaMode": false,
+   "okayMask": 131072,
+   "cancelMask": 262144,
+   "freezeUI": false,
+   "baseFlashDelay": 0.05,
+   "fader": {
+    "ref": "FADER",
+    "file": "level2",
+    "id": 598
+   },
+   "fadeStatus": 1,
+   "levelComplete": false,
+   "disableSpecials": false,
+   "disableInput": false,
+   "tutorialStrings": [
+    "Alright!  Now that we're on the field\nof battle, let's begin!",
+    "The King has granted me one of his\nbest knights, Sir Shepherd, to help\nillustrate the art of combat.",
+    "Greetings.",
+    "First, let's go over movement.",
+    "Try directing Shepherd to move to the\ntarget area.  Simply place your finger\non him, and draw a line to the arrow.",
+    "Nice Job!  Pretty simple, right?",
+    "You're free to give me commands as\nwell.  A skilled tactician can command\nas many as 4 units at once!",
+    "Let's practice a little more - direct\neither me or Shepherd to move to the\nmarked zones.",
+    "You've got the idea, let's move on...",
+    "Let's try having Shepherd beat up this\ntraining dummy.  It's just like moving,\nsimply draw a line to your target!",
+    "As you can see, units will continue to\nattack their target until told otherwise,\nor the target is destroyed.",
+    "Wait a moment...  Shepherd, you look\ninjured!",
+    "Tis nothing, m'lady, just a scratch.  I\nmerely encountered some goblins on\nmy way here.",
+    "Commander, quickly tap Shepherd to\nselect him.  This will display his health\nbar above his head.",
+    "As you can see, he's badly hurt!\nFortunately, I happen to be a healer.",
+    "Try ordering me to heal Shepherd, it's\njust like an attack command - draw a\nline from me to him.",
+    "Thank you, m'lady.",
+    "Remember, I will continue to heal my\ntarget until given different orders.",
+    "As a cleric, this is my primary function\non the battlefield.  I have no attacks,\nand rely on other units to protect me.",
+    "And while my armor is strong, I too\nneed the help of others, or I would\nsurely perish.",
+    "Hey, what's that in the sky...?",
+    "Ouch, it's a monstrous bat!\nSir Shepherd, help!",
+    "My armor helps me withstand damage\nfar better than Lucille.  Direct me to\nstrike this bat to get it's attention!",
+    "Well done!  Don't forget, monsters are\ndumb creatures, and will prefer to\nattack your most armored units first.",
+    "If a melee unit like Shepherd strikes a\nmonster, it is forced to attack him in\nreturn.",
+    "Use this fact to your advantage to help\ncontrol your foes, and protect poorly\narmored units like myself!",
+    "We've both taken some damage... this\nwould be a good time to show you\nsome powerful healing magic!",
+    "First, select me by giving me a quick\ntap.",
+    "When you select a unit, you can see\ntheir special powers in the top-left\ncorner of the screen.",
+    "Give that icon a tap to activate my\ngroup heal spell!",
+    "Special powers have \"cooldowns\",\nmeaning they can only be used again\nafter some time has elapsed.",
+    "Each unit has their own powers, using\nthem at the right time can change the\ntide of battle.",
+    "You have now seen the basics of\ncombat - movement, attacking, healing\nand special powers!",
+    "It seems the commander is prepared\nenough.  Perhaps we should head into\ntown and make ready?",
+    "Let's."
+   ],
+   "animateXPBars": false,
+   "finalBrowniePoints": [
+    -1,
+    -1,
+    -1,
+    -1
+   ],
+   "partyFormUp": false,
+   "finalBossFirstKill": false,
+   "pauseTransform": {
+    "ref": "pause",
+    "file": "level2",
+    "id": 516
+   },
+   "score": {
+    "ref": "Score",
+    "file": "level2",
+    "id": 310
+   },
+   "scoreText": {
+    "ref": "Score",
+    "file": "level2",
+    "id": 632
+   }
+  }
+ }
+]

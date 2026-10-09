@@ -1,0 +1,1772 @@
+[
+ {
+  "object": "**MENUBRAIN",
+  "file": "level1",
+  "id": 3051,
+  "fields": {
+   "DB": null,
+   "merchantArrowsRoot": {
+    "ref": "menu_storeArrows",
+    "file": "level1",
+    "id": 1167
+   },
+   "merchantArrows": [
+    {
+     "ref": "up1",
+     "file": "level1",
+     "id": 1160
+    },
+    {
+     "ref": "up2",
+     "file": "level1",
+     "id": 1162
+    },
+    {
+     "ref": "up3",
+     "file": "level1",
+     "id": 1164
+    },
+    {
+     "ref": "up4",
+     "file": "level1",
+     "id": 1166
+    },
+    {
+     "ref": "down1",
+     "file": "level1",
+     "id": 1158
+    },
+    {
+     "ref": "down2",
+     "file": "level1",
+     "id": 1156
+    },
+    {
+     "ref": "down3",
+     "file": "level1",
+     "id": 1154
+    },
+    {
+     "ref": "down4",
+     "file": "level1",
+     "id": 1152
+    }
+   ],
+   "tutorialText": {
+    "ref": "TutorialText",
+    "file": "level1",
+    "id": 1322
+   },
+   "tutorialTextText": {
+    "ref": "TutorialText",
+    "file": "level1",
+    "id": 2766
+   },
+   "tutorialTextBG": {
+    "ref": "menu_tutorialScreen",
+    "file": "level1",
+    "id": 2121
+   },
+   "whichTutorial": 0,
+   "tutorialStrings": [
+    "Welcome to the Town Menu!\nFrom here, you can manage your party,\nequipment, and powers.",
+    "Your first stop should be the TAVERN,\nwhere you can hire additional party\nmembers to help your team!",
+    "This is the academy, where your party\nmembers can equip their class-specific\npowers prior to battle.",
+    "Every 5 levels, a character gains access\nto a new power!  Don't forget to choose\na new one every 5 levels!",
+    "This is the Armory, where you can equip\nyour party members.  To select a party\nmember, tap their portrait at the top\nof the screen.",
+    "Their equipment is shown on the left,\nand your inventory is shown on the right.",
+    "To change their equipment, simply drag\nthe item's icon where you want it!",
+    "Lastly, you can upgrade some items if\nyou have enough gold.  This is usually\nvery expensive though!  Just tap an item\nto see if it can be upgraded.",
+    "This is the merchant menu, where you\ncan buy new items, or sell things you\ndon't need.",
+    "Tapping an item will display information\nabout it, and light up the portraits of\nthe party members who can use it.",
+    "The merchant's wares are random,\nand will update after each battle, so\ncheck back often for new stuff!",
+    "This is the keep, where extra party\nmembers wait in reserve.  You can field\nonly 4 heroes at a time.",
+    "To add or remove units from your\nlineup, simply tap their portrait to swap\nthem in or out of the main group.",
+    "It looks like someone in your party has\nreached level 5.  You should visit the\nACADEMY to learn a new power!",
+    "This is an arena.  Here you can put your party\nto the ultimate test!",
+    "In the arena, monsters become more and\nmore powerful the more you defeat, until\nyou're inevitably overwhelmed.",
+    "The longer you can survive, the greater\nthe reward!  Some of the most powerful\nitems in the game can be found here.\nGive it a try!"
+   ],
+   "keepIcons": [
+    {
+     "ref": "icon1",
+     "file": "level1",
+     "id": 2138
+    },
+    {
+     "ref": "icon2",
+     "file": "level1",
+     "id": 2135
+    },
+    {
+     "ref": "icon3",
+     "file": "level1",
+     "id": 2134
+    },
+    {
+     "ref": "icon4",
+     "file": "level1",
+     "id": 2133
+    },
+    {
+     "ref": "icon5",
+     "file": "level1",
+     "id": 2132
+    },
+    {
+     "ref": "icon6",
+     "file": "level1",
+     "id": 2131
+    },
+    {
+     "ref": "icon7",
+     "file": "level1",
+     "id": 2130
+    },
+    {
+     "ref": "icon8",
+     "file": "level1",
+     "id": 2129
+    },
+    {
+     "ref": "icon9",
+     "file": "level1",
+     "id": 2128
+    },
+    {
+     "ref": "icon10",
+     "file": "level1",
+     "id": 2127
+    },
+    {
+     "ref": "icon11",
+     "file": "level1",
+     "id": 2126
+    },
+    {
+     "ref": "icon12",
+     "file": "level1",
+     "id": 2125
+    }
+   ],
+   "portraitButtons3": [
+    {
+     "ref": "PartyButton1",
+     "file": "level1",
+     "id": 1328
+    },
+    {
+     "ref": "PartyButton2",
+     "file": "level1",
+     "id": 1327
+    },
+    {
+     "ref": "PartyButton3",
+     "file": "level1",
+     "id": 1326
+    },
+    {
+     "ref": "PartyButton4",
+     "file": "level1",
+     "id": 1325
+    }
+   ],
+   "keepLevels": [
+    {
+     "ref": "menu_keepLv_1",
+     "file": "level1",
+     "id": 2765
+    },
+    {
+     "ref": "menu_keepLv_2",
+     "file": "level1",
+     "id": 2764
+    },
+    {
+     "ref": "menu_keepLv_3",
+     "file": "level1",
+     "id": 2763
+    },
+    {
+     "ref": "menu_keepLv_4",
+     "file": "level1",
+     "id": 2762
+    },
+    {
+     "ref": "menu_keepLv_5",
+     "file": "level1",
+     "id": 2761
+    },
+    {
+     "ref": "menu_keepLv_6",
+     "file": "level1",
+     "id": 2760
+    },
+    {
+     "ref": "menu_keepLv_7",
+     "file": "level1",
+     "id": 2754
+    },
+    {
+     "ref": "menu_keepLv_8",
+     "file": "level1",
+     "id": 2755
+    },
+    {
+     "ref": "menu_keepLv_9",
+     "file": "level1",
+     "id": 2756
+    },
+    {
+     "ref": "menu_keepLv_10",
+     "file": "level1",
+     "id": 2757
+    },
+    {
+     "ref": "menu_keepLv_11",
+     "file": "level1",
+     "id": 2758
+    },
+    {
+     "ref": "menu_keepLv_12",
+     "file": "level1",
+     "id": 2759
+    }
+   ],
+   "loadingText": {
+    "ref": "LoadingText",
+    "file": "level1",
+    "id": 1596
+   },
+   "battleButton": {
+    "ref": "menu_battleButton",
+    "file": "level1",
+    "id": 1598
+   },
+   "litSword": {
+    "ref": "litBlade",
+    "file": "level1",
+    "id": 2186
+   },
+   "currentMap": 0,
+   "mapIcons": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "mapJunk": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "mapGeo": {
+    "ref": "map",
+    "file": "level1",
+    "id": 1603
+   },
+   "mapAnim": {
+    "ref": "menu_map",
+    "file": "level1",
+    "id": 2873
+   },
+   "mapNameText": {
+    "ref": "MapName",
+    "file": "level1",
+    "id": 2786
+   },
+   "levelNameText": {
+    "ref": "LevelName",
+    "file": "level1",
+    "id": 3010
+   },
+   "levelDescText": {
+    "ref": "LevelDescription",
+    "file": "level1",
+    "id": 3011
+   },
+   "recruitGearIcons": [
+    {
+     "ref": "pasted__icon21",
+     "file": "level1",
+     "id": 2232
+    },
+    {
+     "ref": "pasted__icon22",
+     "file": "level1",
+     "id": 2231
+    },
+    {
+     "ref": "pasted__icon23",
+     "file": "level1",
+     "id": 2230
+    },
+    {
+     "ref": "pasted__icon24",
+     "file": "level1",
+     "id": 2229
+    }
+   ],
+   "recruitNameText": {
+    "ref": "RecruitName",
+    "file": "level1",
+    "id": 3013
+   },
+   "recruitDescText": {
+    "ref": "RecruitDescription",
+    "file": "level1",
+    "id": 3014
+   },
+   "recruitPriceText": {
+    "ref": "priceText",
+    "file": "level1",
+    "id": 3019
+   },
+   "recruitClassText": {
+    "ref": "classAndLevel",
+    "file": "level1",
+    "id": 3018
+   },
+   "goldText3": {
+    "ref": "GoldReadout",
+    "file": "level1",
+    "id": 2799
+   },
+   "powerText2": {
+    "ref": "PowerReadout",
+    "file": "level1",
+    "id": 2797
+   },
+   "armorText2": {
+    "ref": "DefenseReadout",
+    "file": "level1",
+    "id": 2798
+   },
+   "recruitNameSmall": {
+    "ref": "nameText_small",
+    "file": "level1",
+    "id": 2802
+   },
+   "recruitCoinIcon": {
+    "ref": "costIcon",
+    "file": "level1",
+    "id": 2219
+   },
+   "hireButtonAnim": {
+    "ref": "menu_hireButtons",
+    "file": "level1",
+    "id": 2875
+   },
+   "hireScreen": {
+    "ref": "menu_hireScreen",
+    "file": "level1",
+    "id": 1633
+   },
+   "hireScreenAnim": {
+    "ref": "menu_hireScreen",
+    "file": "level1",
+    "id": 2874
+   },
+   "hireScreenText": {
+    "ref": "DynamicText",
+    "file": "level1",
+    "id": 2793
+   },
+   "skillNameText": {
+    "ref": "SkillName",
+    "file": "level1",
+    "id": 3020
+   },
+   "skillDescText": {
+    "ref": "SkillDescription",
+    "file": "level1",
+    "id": 3021
+   },
+   "classText": {
+    "ref": "classText",
+    "file": "level1",
+    "id": 3022
+   },
+   "portraitButtons2": [
+    {
+     "ref": "PartyButton1",
+     "file": "level1",
+     "id": 1696
+    },
+    {
+     "ref": "PartyButton2",
+     "file": "level1",
+     "id": 1697
+    },
+    {
+     "ref": "PartyButton3",
+     "file": "level1",
+     "id": 1698
+    },
+    {
+     "ref": "PartyButton4",
+     "file": "level1",
+     "id": 1699
+    }
+   ],
+   "closeupGroup": {
+    "ref": "CharacterCloseups",
+    "file": "level1",
+    "id": 1911
+   },
+   "litLines": [
+    {
+     "ref": "litLines1",
+     "file": "level1",
+     "id": 2274
+    },
+    {
+     "ref": "litLines2",
+     "file": "level1",
+     "id": 2273
+    },
+    {
+     "ref": "litLines3",
+     "file": "level1",
+     "id": 2272
+    },
+    {
+     "ref": "litLines4",
+     "file": "level1",
+     "id": 2271
+    },
+    {
+     "ref": "litLines5",
+     "file": "level1",
+     "id": 2275
+    },
+    {
+     "ref": "litLines6",
+     "file": "level1",
+     "id": 2270
+    }
+   ],
+   "litSticks": [
+    {
+     "ref": "strick1",
+     "file": "level1",
+     "id": 1623
+    },
+    {
+     "ref": "stick2",
+     "file": "level1",
+     "id": 1622
+    },
+    {
+     "ref": "stick3",
+     "file": "level1",
+     "id": 1621
+    },
+    {
+     "ref": "stick4",
+     "file": "level1",
+     "id": 1620
+    },
+    {
+     "ref": "stick5",
+     "file": "level1",
+     "id": 1619
+    }
+   ],
+   "skillIcons": [
+    {
+     "ref": "icon1",
+     "file": "level1",
+     "id": 2254
+    },
+    {
+     "ref": "icon2",
+     "file": "level1",
+     "id": 2253
+    },
+    {
+     "ref": "icon3",
+     "file": "level1",
+     "id": 2252
+    },
+    {
+     "ref": "icon4",
+     "file": "level1",
+     "id": 2251
+    },
+    {
+     "ref": "icon5",
+     "file": "level1",
+     "id": 2250
+    },
+    {
+     "ref": "icon6",
+     "file": "level1",
+     "id": 2249
+    },
+    {
+     "ref": "icon7",
+     "file": "level1",
+     "id": 2248
+    },
+    {
+     "ref": "icon8",
+     "file": "level1",
+     "id": 2247
+    },
+    {
+     "ref": "icon9",
+     "file": "level1",
+     "id": 2246
+    },
+    {
+     "ref": "icon10",
+     "file": "level1",
+     "id": 2245
+    },
+    {
+     "ref": "icon11",
+     "file": "level1",
+     "id": 2244
+    },
+    {
+     "ref": "icon12",
+     "file": "level1",
+     "id": 2243
+    }
+   ],
+   "skillGreyouts": [
+    {
+     "ref": "joint1",
+     "file": "level1",
+     "id": 1678
+    },
+    {
+     "ref": "joint2",
+     "file": "level1",
+     "id": 1677
+    },
+    {
+     "ref": "joint3",
+     "file": "level1",
+     "id": 1676
+    },
+    {
+     "ref": "joint4",
+     "file": "level1",
+     "id": 1675
+    },
+    {
+     "ref": "joint5",
+     "file": "level1",
+     "id": 1674
+    },
+    {
+     "ref": "joint6",
+     "file": "level1",
+     "id": 1671
+    },
+    {
+     "ref": "joint7",
+     "file": "level1",
+     "id": 1670
+    },
+    {
+     "ref": "joint8",
+     "file": "level1",
+     "id": 1669
+    },
+    {
+     "ref": "joint9",
+     "file": "level1",
+     "id": 1668
+    },
+    {
+     "ref": "joint10",
+     "file": "level1",
+     "id": 1667
+    }
+   ],
+   "goldText2": {
+    "ref": "GoldReadout2",
+    "file": "level1",
+    "id": 2814
+   },
+   "itemNameText2": {
+    "ref": "ItemName",
+    "file": "level1",
+    "id": 3025
+   },
+   "itemDescText2": {
+    "ref": "ItemDescription",
+    "file": "level1",
+    "id": 3026
+   },
+   "inventoryIcons2": [
+    {
+     "ref": "icon1",
+     "file": "level1",
+     "id": 2334
+    },
+    {
+     "ref": "icon2",
+     "file": "level1",
+     "id": 2333
+    },
+    {
+     "ref": "icon3",
+     "file": "level1",
+     "id": 2332
+    },
+    {
+     "ref": "icon4",
+     "file": "level1",
+     "id": 2331
+    },
+    {
+     "ref": "icon5",
+     "file": "level1",
+     "id": 2330
+    },
+    {
+     "ref": "icon6",
+     "file": "level1",
+     "id": 2325
+    },
+    {
+     "ref": "icon7",
+     "file": "level1",
+     "id": 2326
+    },
+    {
+     "ref": "icon8",
+     "file": "level1",
+     "id": 2327
+    },
+    {
+     "ref": "icon9",
+     "file": "level1",
+     "id": 2328
+    },
+    {
+     "ref": "icon10",
+     "file": "level1",
+     "id": 2329
+    },
+    {
+     "ref": "icon11",
+     "file": "level1",
+     "id": 2320
+    },
+    {
+     "ref": "icon12",
+     "file": "level1",
+     "id": 2321
+    },
+    {
+     "ref": "icon13",
+     "file": "level1",
+     "id": 2322
+    },
+    {
+     "ref": "icon14",
+     "file": "level1",
+     "id": 2323
+    },
+    {
+     "ref": "icon15",
+     "file": "level1",
+     "id": 2324
+    },
+    {
+     "ref": "icon16",
+     "file": "level1",
+     "id": 2315
+    },
+    {
+     "ref": "icon17",
+     "file": "level1",
+     "id": 2316
+    },
+    {
+     "ref": "icon18",
+     "file": "level1",
+     "id": 2317
+    },
+    {
+     "ref": "icon19",
+     "file": "level1",
+     "id": 2318
+    },
+    {
+     "ref": "icon20",
+     "file": "level1",
+     "id": 2319
+    },
+    {
+     "ref": "icon21",
+     "file": "level1",
+     "id": 2308
+    },
+    {
+     "ref": "icon22",
+     "file": "level1",
+     "id": 2307
+    },
+    {
+     "ref": "icon23",
+     "file": "level1",
+     "id": 2306
+    },
+    {
+     "ref": "icon24",
+     "file": "level1",
+     "id": 2305
+    },
+    {
+     "ref": "icon25",
+     "file": "level1",
+     "id": 2304
+    },
+    {
+     "ref": "icon26",
+     "file": "level1",
+     "id": 2303
+    },
+    {
+     "ref": "icon27",
+     "file": "level1",
+     "id": 2302
+    },
+    {
+     "ref": "icon28",
+     "file": "level1",
+     "id": 2301
+    }
+   ],
+   "priceIcon2": {
+    "ref": "costIcon",
+    "file": "level1",
+    "id": 2312
+   },
+   "powerIcon2": {
+    "ref": "powerIcon",
+    "file": "level1",
+    "id": 2314
+   },
+   "defenseIcon2": {
+    "ref": "defenseIcon",
+    "file": "level1",
+    "id": 2313
+   },
+   "itemPowerText2": {
+    "ref": "powerText",
+    "file": "level1",
+    "id": 3027
+   },
+   "priceText2": {
+    "ref": "priceText",
+    "file": "level1",
+    "id": 3028
+   },
+   "portraitCovers": [
+    {
+     "ref": "joint1",
+     "file": "level1",
+     "id": 1748
+    },
+    {
+     "ref": "joint2",
+     "file": "level1",
+     "id": 1747
+    },
+    {
+     "ref": "joint3",
+     "file": "level1",
+     "id": 1746
+    },
+    {
+     "ref": "joint4",
+     "file": "level1",
+     "id": 1745
+    }
+   ],
+   "costLocation": {
+    "ref": "priceText",
+    "file": "level1",
+    "id": 1756
+   },
+   "vendorButton": {
+    "ref": "menu_buySellButton",
+    "file": "level1",
+    "id": 1728
+   },
+   "vendorButtonAnim": {
+    "ref": "menu_buySellButton",
+    "file": "level1",
+    "id": 2881
+   },
+   "vendorButtonLight": {
+    "ref": "buySellLight",
+    "file": "level1",
+    "id": 2281
+   },
+   "upgradeButton": {
+    "ref": "menu_upgradeButton",
+    "file": "level1",
+    "id": 1854
+   },
+   "upgradeButtonLight": {
+    "ref": "glow_anvil",
+    "file": "level1",
+    "id": 2379
+   },
+   "powerText": {
+    "ref": "PowerReadout",
+    "file": "level1",
+    "id": 2834
+   },
+   "armorText": {
+    "ref": "DefenseReadout",
+    "file": "level1",
+    "id": 2833
+   },
+   "goldText": {
+    "ref": "GoldReadout",
+    "file": "level1",
+    "id": 2832
+   },
+   "nameText": {
+    "ref": "nameText",
+    "file": "level1",
+    "id": 2829
+   },
+   "itemNameText": {
+    "ref": "ItemName",
+    "file": "level1",
+    "id": 3055
+   },
+   "itemDescText": {
+    "ref": "ItemDescription",
+    "file": "level1",
+    "id": 3054
+   },
+   "inventoryIcons": [
+    {
+     "ref": "icon1",
+     "file": "level1",
+     "id": 2420
+    },
+    {
+     "ref": "icon2",
+     "file": "level1",
+     "id": 2419
+    },
+    {
+     "ref": "icon3",
+     "file": "level1",
+     "id": 2418
+    },
+    {
+     "ref": "icon4",
+     "file": "level1",
+     "id": 2417
+    },
+    {
+     "ref": "icon5",
+     "file": "level1",
+     "id": 2416
+    },
+    {
+     "ref": "icon6",
+     "file": "level1",
+     "id": 2411
+    },
+    {
+     "ref": "icon7",
+     "file": "level1",
+     "id": 2412
+    },
+    {
+     "ref": "icon8",
+     "file": "level1",
+     "id": 2413
+    },
+    {
+     "ref": "icon9",
+     "file": "level1",
+     "id": 2414
+    },
+    {
+     "ref": "icon10",
+     "file": "level1",
+     "id": 2415
+    },
+    {
+     "ref": "icon11",
+     "file": "level1",
+     "id": 2406
+    },
+    {
+     "ref": "icon12",
+     "file": "level1",
+     "id": 2407
+    },
+    {
+     "ref": "icon13",
+     "file": "level1",
+     "id": 2408
+    },
+    {
+     "ref": "icon14",
+     "file": "level1",
+     "id": 2409
+    },
+    {
+     "ref": "icon15",
+     "file": "level1",
+     "id": 2410
+    },
+    {
+     "ref": "icon16",
+     "file": "level1",
+     "id": 2401
+    },
+    {
+     "ref": "icon17",
+     "file": "level1",
+     "id": 2402
+    },
+    {
+     "ref": "icon18",
+     "file": "level1",
+     "id": 2403
+    },
+    {
+     "ref": "icon19",
+     "file": "level1",
+     "id": 2404
+    },
+    {
+     "ref": "icon20",
+     "file": "level1",
+     "id": 2405
+    },
+    {
+     "ref": "icon21",
+     "file": "level1",
+     "id": 2400
+    },
+    {
+     "ref": "icon22",
+     "file": "level1",
+     "id": 2399
+    },
+    {
+     "ref": "icon23",
+     "file": "level1",
+     "id": 2398
+    },
+    {
+     "ref": "icon24",
+     "file": "level1",
+     "id": 2397
+    }
+   ],
+   "cameraLens": {
+    "ref": "Main Camera",
+    "file": "level1",
+    "id": 2097
+   },
+   "cameraTransform": {
+    "ref": "Main Camera",
+    "file": "level1",
+    "id": 2096
+   },
+   "wiperAnim": {
+    "ref": "menu_wiper",
+    "file": "level1",
+    "id": 2887
+   },
+   "itemMask": 16384,
+   "partyMask": 32768,
+   "upgradeMask": 65536,
+   "cancelMask": 262144,
+   "okayMask": 131072,
+   "exitMask": 524288,
+   "select": {
+    "ref": "menu_smallSelector",
+    "file": "level1",
+    "id": 1891
+   },
+   "selectAnim": {
+    "ref": "menu_smallSelector",
+    "file": "level1",
+    "id": 2901
+   },
+   "partySelect": {
+    "ref": "menu_largeSelector",
+    "file": "level1",
+    "id": 1889
+   },
+   "partySelectAnim": {
+    "ref": "menu_largeSelector",
+    "file": "level1",
+    "id": 2900
+   },
+   "heldIcon": {
+    "ref": "menu_heldItem",
+    "file": "level1",
+    "id": 1887
+   },
+   "heldIconRenderer": {
+    "ref": "HeldItem 1",
+    "file": "level1",
+    "id": 2386
+   },
+   "priceIcon": {
+    "ref": "costIcon",
+    "file": "level1",
+    "id": 2392
+   },
+   "anvilIcon": {
+    "ref": "upgradeIcon",
+    "file": "level1",
+    "id": 2395
+   },
+   "powerIcon": {
+    "ref": "powerIcon",
+    "file": "level1",
+    "id": 2396
+   },
+   "defenseIcon": {
+    "ref": "defenseIcon",
+    "file": "level1",
+    "id": 2394
+   },
+   "itemPowerText": {
+    "ref": "powerText",
+    "file": "level1",
+    "id": 3049
+   },
+   "priceText": {
+    "ref": "priceText",
+    "file": "level1",
+    "id": 3048
+   },
+   "portraitModels": [
+    {
+     "ref": "cleric",
+     "file": "level1",
+     "id": 2045
+    },
+    {
+     "ref": "fighter",
+     "file": "level1",
+     "id": 2027
+    },
+    {
+     "ref": "rogue",
+     "file": "level1",
+     "id": 2007
+    },
+    {
+     "ref": "wizard",
+     "file": "level1",
+     "id": 1988
+    },
+    {
+     "ref": "barbarian",
+     "file": "level1",
+     "id": 1594
+    },
+    {
+     "ref": "witch",
+     "file": "level1",
+     "id": 1472
+    },
+    {
+     "ref": "monk",
+     "file": "level1",
+     "id": 1515
+    },
+    {
+     "ref": "bard",
+     "file": "level1",
+     "id": 1512
+    },
+    {
+     "ref": "rogue2",
+     "file": "level1",
+     "id": 1302
+    },
+    {
+     "ref": "wizard2",
+     "file": "level1",
+     "id": 1266
+    },
+    {
+     "ref": "fighter2",
+     "file": "level1",
+     "id": 1226
+    },
+    {
+     "ref": "barbarian2",
+     "file": "level1",
+     "id": 1187
+    },
+    {
+     "ref": "ranger",
+     "file": "level1",
+     "id": 1114
+    },
+    {
+     "ref": "paladin",
+     "file": "level1",
+     "id": 1049
+    }
+   ],
+   "characterSheetModels": [
+    {
+     "ref": "cleric",
+     "file": "level1",
+     "id": 1894
+    },
+    {
+     "ref": "fighter",
+     "file": "level1",
+     "id": 1912
+    },
+    {
+     "ref": "rogue",
+     "file": "level1",
+     "id": 1932
+    },
+    {
+     "ref": "wizard",
+     "file": "level1",
+     "id": 1951
+    },
+    {
+     "ref": "barbarian",
+     "file": "level1",
+     "id": 1557
+    },
+    {
+     "ref": "witch",
+     "file": "level1",
+     "id": 1443
+    },
+    {
+     "ref": "monk",
+     "file": "level1",
+     "id": 1556
+    },
+    {
+     "ref": "bard",
+     "file": "level1",
+     "id": 1477
+    },
+    {
+     "ref": "rogue2",
+     "file": "level1",
+     "id": 1301
+    },
+    {
+     "ref": "wizard2",
+     "file": "level1",
+     "id": 1265
+    },
+    {
+     "ref": "fighter2",
+     "file": "level1",
+     "id": 1225
+    },
+    {
+     "ref": "barbarian2",
+     "file": "level1",
+     "id": 1186
+    },
+    {
+     "ref": "ranger",
+     "file": "level1",
+     "id": 1115
+    },
+    {
+     "ref": "paladin",
+     "file": "level1",
+     "id": 1090
+    }
+   ],
+   "characterSheetWeapons": [
+    null,
+    null
+   ],
+   "portraitButtons": [
+    {
+     "ref": "PartyButton1",
+     "file": "level1",
+     "id": 1971
+    },
+    {
+     "ref": "PartyButton2",
+     "file": "level1",
+     "id": 1970
+    },
+    {
+     "ref": "PartyButton3",
+     "file": "level1",
+     "id": 1969
+    },
+    {
+     "ref": "PartyButton4",
+     "file": "level1",
+     "id": 1968
+    }
+   ],
+   "redSquares": [
+    {
+     "ref": "joint1",
+     "file": "level1",
+     "id": 1885
+    },
+    {
+     "ref": "joint2",
+     "file": "level1",
+     "id": 1884
+    },
+    {
+     "ref": "joint3",
+     "file": "level1",
+     "id": 1883
+    },
+    {
+     "ref": "joint4",
+     "file": "level1",
+     "id": 1882
+    },
+    {
+     "ref": "joint5",
+     "file": "level1",
+     "id": 1881
+    },
+    {
+     "ref": "joint6",
+     "file": "level1",
+     "id": 1880
+    },
+    {
+     "ref": "joint7",
+     "file": "level1",
+     "id": 1879
+    },
+    {
+     "ref": "joint8",
+     "file": "level1",
+     "id": 1878
+    },
+    {
+     "ref": "joint9",
+     "file": "level1",
+     "id": 1877
+    },
+    {
+     "ref": "joint10",
+     "file": "level1",
+     "id": 1876
+    },
+    {
+     "ref": "joint11",
+     "file": "level1",
+     "id": 1875
+    },
+    {
+     "ref": "joint12",
+     "file": "level1",
+     "id": 1874
+    },
+    {
+     "ref": "joint13",
+     "file": "level1",
+     "id": 1873
+    },
+    {
+     "ref": "joint14",
+     "file": "level1",
+     "id": 1872
+    },
+    {
+     "ref": "joint15",
+     "file": "level1",
+     "id": 1871
+    },
+    {
+     "ref": "joint16",
+     "file": "level1",
+     "id": 1870
+    },
+    {
+     "ref": "joint17",
+     "file": "level1",
+     "id": 1869
+    },
+    {
+     "ref": "joint18",
+     "file": "level1",
+     "id": 1868
+    },
+    {
+     "ref": "joint19",
+     "file": "level1",
+     "id": 1867
+    },
+    {
+     "ref": "joint20",
+     "file": "level1",
+     "id": 1866
+    }
+   ],
+   "equipArrows": [
+    {
+     "ref": "arrow",
+     "file": "level1",
+     "id": 2382
+    },
+    {
+     "ref": "arrow1",
+     "file": "level1",
+     "id": 2383
+    },
+    {
+     "ref": "arrow2",
+     "file": "level1",
+     "id": 2384
+    },
+    {
+     "ref": "arrow3",
+     "file": "level1",
+     "id": 2385
+    }
+   ],
+   "audioFade": false,
+   "selectedPlayer": 0,
+   "sounds": [
+    {
+     "ref": "Audio_Pickup",
+     "file": "level1",
+     "id": 2751
+    },
+    {
+     "ref": "Audio_Drop",
+     "file": "level1",
+     "id": 2749
+    },
+    {
+     "ref": "Audio_Equip",
+     "file": "level1",
+     "id": 2750
+    },
+    {
+     "ref": "Audio_Click",
+     "file": "level1",
+     "id": 2748
+    },
+    {
+     "ref": "Audio_Buy",
+     "file": "level1",
+     "id": 2747
+    },
+    {
+     "ref": "Audio_Error",
+     "file": "level1",
+     "id": 2746
+    },
+    {
+     "ref": "Audio_Battlestart",
+     "file": "level1",
+     "id": 2745
+    },
+    {
+     "ref": "Audio_Talk",
+     "file": "level1",
+     "id": 2744
+    }
+   ],
+   "activeMenu": 0,
+   "battleStartEffect": {
+    "ref": "battlestart",
+    "file": "level1",
+    "id": 1429
+   },
+   "battleStartAnim": {
+    "ref": "battlestart",
+    "file": "level1",
+    "id": 2862
+   },
+   "musicRenderer": {
+    "ref": "music",
+    "file": "level1",
+    "id": 2120
+   },
+   "soundRenderer": {
+    "ref": "sound",
+    "file": "level1",
+    "id": 2119
+   },
+   "saveSlotRenderers": [
+    {
+     "ref": "menu_saveslot1",
+     "file": "level1",
+     "id": 2174
+    },
+    {
+     "ref": "menu_saveslot2",
+     "file": "level1",
+     "id": 2175
+    },
+    {
+     "ref": "menu_saveslot3",
+     "file": "level1",
+     "id": 2173
+    }
+   ],
+   "fadeOutLoadScreen": {
+    "ref": "fader_loadScreen2",
+    "file": "level1",
+    "id": 2990
+   },
+   "fadeInMainMenu": {
+    "ref": "fader_mainMenu",
+    "file": "level1",
+    "id": 3009
+   },
+   "warningScreen": {
+    "ref": "menu_deleteSaveScreen",
+    "file": "level1",
+    "id": 1393
+   },
+   "warningScreenAnim": {
+    "ref": "menu_deleteSaveScreen",
+    "file": "level1",
+    "id": 2857
+   },
+   "deleteRenderers": [
+    {
+     "ref": "delete1",
+     "file": "level1",
+     "id": 2157
+    },
+    {
+     "ref": "delete2",
+     "file": "level1",
+     "id": 2158
+    },
+    {
+     "ref": "delete3",
+     "file": "level1",
+     "id": 2156
+    }
+   ],
+   "newGame1": {
+    "ref": "NewGame1",
+    "file": "level1",
+    "id": 2172
+   },
+   "newGame2": {
+    "ref": "NewGame2",
+    "file": "level1",
+    "id": 2171
+   },
+   "newGame3": {
+    "ref": "NewGame3",
+    "file": "level1",
+    "id": 2170
+   },
+   "save1Name": {
+    "ref": "name1",
+    "file": "level1",
+    "id": 2165
+   },
+   "save2Name": {
+    "ref": "name2",
+    "file": "level1",
+    "id": 2162
+   },
+   "save3Name": {
+    "ref": "name3",
+    "file": "level1",
+    "id": 2161
+   },
+   "name1Transform": {
+    "ref": "name1",
+    "file": "level1",
+    "id": 1409
+   },
+   "name2Transform": {
+    "ref": "name2",
+    "file": "level1",
+    "id": 1406
+   },
+   "name3Transform": {
+    "ref": "name3",
+    "file": "level1",
+    "id": 1405
+   },
+   "save1Time": {
+    "ref": "time1",
+    "file": "level1",
+    "id": 2163
+   },
+   "save2Time": {
+    "ref": "time2",
+    "file": "level1",
+    "id": 2164
+   },
+   "save3Time": {
+    "ref": "time3",
+    "file": "level1",
+    "id": 2160
+   },
+   "save1NameText": {
+    "ref": "name1",
+    "file": "level1",
+    "id": 2777
+   },
+   "save2NameText": {
+    "ref": "name2",
+    "file": "level1",
+    "id": 2774
+   },
+   "save3NameText": {
+    "ref": "name3",
+    "file": "level1",
+    "id": 2773
+   },
+   "save1TimeText": {
+    "ref": "time1",
+    "file": "level1",
+    "id": 2775
+   },
+   "save2TimeText": {
+    "ref": "time2",
+    "file": "level1",
+    "id": 2776
+   },
+   "save3TimeText": {
+    "ref": "time3",
+    "file": "level1",
+    "id": 2772
+   },
+   "narrator": {
+    "ref": "cleric_narrator",
+    "file": "level1",
+    "id": 1391
+   },
+   "narratorAnim": {
+    "ref": "cleric_narrator",
+    "file": "level1",
+    "id": 2856
+   },
+   "speechBalloon": {
+    "ref": "geo",
+    "file": "level1",
+    "id": 2927
+   },
+   "corners": [
+    {
+     "ref": "bottomLeft",
+     "file": "level1",
+     "id": 1361
+    },
+    {
+     "ref": "bottomright",
+     "file": "level1",
+     "id": 1358
+    },
+    {
+     "ref": "topleft",
+     "file": "level1",
+     "id": 1360
+    },
+    {
+     "ref": "topright",
+     "file": "level1",
+     "id": 1359
+    }
+   ],
+   "speechText": {
+    "ref": "INTRO NARRATION",
+    "file": "level1",
+    "id": 2982
+   },
+   "speechTextTransform": {
+    "ref": "INTRO NARRATION",
+    "file": "level1",
+    "id": 1356
+   },
+   "dialogStrings": [
+    "Greetings!  My name is Lucille, and I've\nbeen sent to greet you by the King!",
+    "As you surely know, our land is besieged\nby a plague of terrible monsters!",
+    "M'lord seeks a commander who would\nlead an army of noble adventurers to\ncleanse these lands of evil.",
+    "I believe you are the champion he seeks!",
+    "... however you have only just arrived,\nand surely need practice commanding\ntroops in battle.",
+    "Follow me to the training grounds,\nand we shall begin!"
+   ],
+   "narratorRenderer": [
+    {
+     "ref": "clericGeo",
+     "file": "level1",
+     "id": 2929
+    },
+    {
+     "ref": "staff",
+     "file": "level1",
+     "id": 2928
+    }
+   ],
+   "upgradeWindowText": {
+    "ref": "DynamicText",
+    "file": "level1",
+    "id": 2826
+   },
+   "upgradeWindowIcon": {
+    "ref": "HeldItem 1",
+    "file": "level1",
+    "id": 2375
+   },
+   "upgradeWindow": {
+    "ref": "menu_upgradeScreen",
+    "file": "level1",
+    "id": 1838
+   },
+   "upgradeWindowAnim": {
+    "ref": "menu_upgradeScreen",
+    "file": "level1",
+    "id": 2895
+   },
+   "vendorWindow": {
+    "ref": "menu_vendorScreen",
+    "file": "level1",
+    "id": 1741
+   },
+   "vendorWindowAnim": {
+    "ref": "menu_vendorScreen",
+    "file": "level1",
+    "id": 2882
+   },
+   "vendorWindowIcon": {
+    "ref": "HeldItem 1",
+    "file": "level1",
+    "id": 2287
+   },
+   "vendorWindowName": {
+    "ref": "NameText",
+    "file": "level1",
+    "id": 2808
+   },
+   "vendorWindowPrice": {
+    "ref": "Price",
+    "file": "level1",
+    "id": 2811
+   },
+   "vendorWindowText": {
+    "ref": "Proceed",
+    "file": "level1",
+    "id": 2810
+   },
+   "vendorWindowText2": {
+    "ref": "CostText",
+    "file": "level1",
+    "id": 2809
+   },
+   "BGMusic": {
+    "ref": "**MENUBRAIN",
+    "file": "level1",
+    "id": 2752
+   }
+  }
+ }
+]

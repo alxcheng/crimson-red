@@ -1,0 +1,64 @@
+[
+ {
+  "object": "dynamicBackground",
+  "file": "level2",
+  "id": 725,
+  "fields": {
+   "myTransform": {
+    "ref": "dynamicBackground",
+    "file": "level2",
+    "id": 550
+   },
+   "motherBrain": {
+    "ref": "**MOTHERBRAIN",
+    "file": "level2",
+    "id": 726
+   },
+   "actionBar": {
+    "ref": "actionBar",
+    "file": "level2",
+    "id": 546
+   },
+   "pauseButton": {
+    "ref": "pause",
+    "file": "level2",
+    "id": 516
+   },
+   "leftSideMarker": {
+    "ref": "Left",
+    "file": "level2",
+    "id": 287
+   },
+   "cielingMarker": {
+    "ref": "Top",
+    "file": "level2",
+    "id": 286
+   },
+   "cielingFinder": {
+    "ref": "cielingFinder",
+    "file": "level2",
+    "id": 284
+   },
+   "cielingHelper": {
+    "ref": "CielingHelper",
+    "file": "level2",
+    "id": 283
+   },
+   "floorMarker": {
+    "ref": "floorFinder",
+    "file": "level2",
+    "id": 285
+   },
+   "edgeMarker": {
+    "ref": "edgeFinder",
+    "file": "level2",
+    "id": 282
+   },
+   "theCamera": {
+    "ref": "Main Camera",
+    "file": "level2",
+    "id": 553
+   }
+  }
+ }
+]

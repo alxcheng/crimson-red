@@ -1,0 +1,1874 @@
+[
+ {
+  "object": "InterfaceTextureLoader",
+  "file": "level1",
+  "id": 3030,
+  "fields": {
+   "textureName": "menu_main",
+   "shared": true
+  }
+ },
+ {
+  "object": "InterfaceTextureLoader2",
+  "file": "level1",
+  "id": 3029,
+  "fields": {
+   "textureName": "menu_secondary",
+   "shared": true
+  }
+ },
+ {
+  "object": "InterfaceTextureLoader3",
+  "file": "level1",
+  "id": 2985,
+  "fields": {
+   "textureName": "menu_main",
+   "shared": true
+  }
+ },
+ {
+  "object": "backdrop",
+  "file": "level0",
+  "id": 45,
+  "fields": {
+   "textureName": "titleScreen",
+   "shared": true
+  }
+ },
+ {
+  "object": "barb_battleaxe",
+  "file": "914b2f0e6103948498f662d060d4363e",
+  "id": 5,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "barb_dwarf",
+  "file": "98d7a12d6424e4a28aaa673bead91690",
+  "id": 5,
+  "fields": {
+   "textureName": "barbweapons",
+   "shared": false
+  }
+ },
+ {
+  "object": "barb_frost",
+  "file": "dfad28a4d13bd4aadb0ec3e2e8869f8d",
+  "id": 5,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "barb_hatchet",
+  "file": "30c66fbf11ef848aebf787a8d3c8f43a",
+  "id": 5,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "barb_maul",
+  "file": "205610d867b8f4fb3a42e1473993bdf1",
+  "id": 5,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "barb_serrated",
+  "file": "b948f6111a12d4befa30597016dcdbc1",
+  "id": 5,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "barb_skull",
+  "file": "909908bb2dcb5477ba3ad835df7cb639",
+  "id": 5,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "barb_wyvern",
+  "file": "31c07bf21d522485d85922180d3603d8",
+  "id": 5,
+  "fields": {
+   "textureName": "barbweapons",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow1",
+  "file": "783a962c3fd66466c95b33a505e6920f",
+  "id": 5,
+  "fields": {
+   "textureName": "ranger",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow2",
+  "file": "4850f7a4ecbd44bf4946abce552c9fb9",
+  "id": 5,
+  "fields": {
+   "textureName": "bows",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow3",
+  "file": "ad5d6fc11f54447c6aa237f02b1ab0d6",
+  "id": 5,
+  "fields": {
+   "textureName": "bows",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow4",
+  "file": "94f3d5b15810d48e099f0d408f757b15",
+  "id": 5,
+  "fields": {
+   "textureName": "bows",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow5",
+  "file": "d9d4dbd76e2444f8499a44bceabc7fc2",
+  "id": 5,
+  "fields": {
+   "textureName": "bows",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow6",
+  "file": "427ed7080c42849ecb1b2a6ca227e9ec",
+  "id": 5,
+  "fields": {
+   "textureName": "bows",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow7",
+  "file": "f86e0c223f19240bb8ba6bb44e9d5fe8",
+  "id": 5,
+  "fields": {
+   "textureName": "bows",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow8",
+  "file": "e6459d003ef46439fa47550042fb8c4a",
+  "id": 5,
+  "fields": {
+   "textureName": "bows",
+   "shared": false
+  }
+ },
+ {
+  "object": "bow9",
+  "file": "020edeb1f674b413785fe824a23635e8",
+  "id": 5,
+  "fields": {
+   "textureName": "bows2",
+   "shared": false
+  }
+ },
+ {
+  "object": "clericGeo",
+  "file": "level1",
+  "id": 2984,
+  "fields": {
+   "textureName": "cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "clericGeo",
+  "file": "level1",
+  "id": 3032,
+  "fields": {
+   "textureName": "cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "clericGeo",
+  "file": "level1",
+  "id": 3047,
+  "fields": {
+   "textureName": "cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger1",
+  "file": "bab474ab00b104d13970c0f917073357",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_cross",
+  "file": "245cce9a5836a4feda3ebe764c395a26",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_gold",
+  "file": "3b2a05ec8065549cdb9be89befc2fa93",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_ice",
+  "file": "a8d5519152b944112a9ba32ba3c03f30",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_kris",
+  "file": "2378e5bbfc3d449d4acf5bf79df44f1c",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_onyx",
+  "file": "e8e01c2b4b7b2407cb4ee741f242f62a",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_redfang",
+  "file": "a75d4ed9f06704d81907cdaf62068932",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_serrated",
+  "file": "f2562583af3924fdb987fad04dfcfbe8",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "dagger_silver",
+  "file": "3aa4309d67649451c9c7aa2a3683b098",
+  "id": 5,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "delete1",
+  "file": "level1",
+  "id": 2988,
+  "fields": {
+   "textureName": "delete",
+   "shared": false
+  }
+ },
+ {
+  "object": "delete2",
+  "file": "level1",
+  "id": 2989,
+  "fields": {
+   "textureName": "delete",
+   "shared": false
+  }
+ },
+ {
+  "object": "delete3",
+  "file": "level1",
+  "id": 2987,
+  "fields": {
+   "textureName": "delete",
+   "shared": false
+  }
+ },
+ {
+  "object": "fighterGeo",
+  "file": "level1",
+  "id": 3034,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "fighterGeo",
+  "file": "level1",
+  "id": 3045,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "geo",
+  "file": "0072f5fbf40d84cc08fc57024e5c0b91",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geo",
+  "file": "4ee7ac00c3cb24b669e9b9d4d17ac3d4",
+  "id": 11,
+  "fields": {
+   "textureName": "bosses1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geo",
+  "file": "level1",
+  "id": 3039,
+  "fields": {
+   "textureName": "wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geo",
+  "file": "level1",
+  "id": 3040,
+  "fields": {
+   "textureName": "wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "03a12923bac304e2e8e05fcbefa932bf",
+  "id": 30,
+  "fields": {
+   "textureName": "plague",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "06b98b85183324372b117bb4f92738d9",
+  "id": 34,
+  "fields": {
+   "textureName": "whirlwind",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "0afa070778bbe42de9d6a42a7af3cb40",
+  "id": 59,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "0aff1f47a0c9d4b25af90a74ee73d051",
+  "id": 30,
+  "fields": {
+   "textureName": "flamearrow",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "0c458c4bb842b4ec0a35a1f393c2c2e8",
+  "id": 95,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "0c4e977b87ad1461dbd57bd13e287ab6",
+  "id": 30,
+  "fields": {
+   "textureName": "debil",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "0d5c89bf2f89b48d184485a58cc15b6b",
+  "id": 55,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "0fe8fc98bcf0742e193c15b576e2e098",
+  "id": 34,
+  "fields": {
+   "textureName": "paladin",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "10f3d83fccd7d4c25b459c1e699cae82",
+  "id": 18,
+  "fields": {
+   "textureName": "guardianAngel",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "1217887a0e5344cde9cec52a5fcccc47",
+  "id": 22,
+  "fields": {
+   "textureName": "conflag2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "1375fd07e7c0843e79a626579d9b8cb8",
+  "id": 17,
+  "fields": {
+   "textureName": "conflag",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "13c0fe203a3894ea0bfc762b7d4557a2",
+  "id": 18,
+  "fields": {
+   "textureName": "teleport",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "14422fdb51a224854897a7dd98c9cd47",
+  "id": 32,
+  "fields": {
+   "textureName": "horror",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "175089710ce5746bfb625f6df751e4dd",
+  "id": 34,
+  "fields": {
+   "textureName": "wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "1891d5ffd731b4782a7a1c1290748285",
+  "id": 45,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "1b676f9207790480f8f6262a911dff08",
+  "id": 61,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "1e01d37fe75d14ba0a8a11d02a82f8a8",
+  "id": 57,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "1f4ba9f8d1cb94029a9790e4b45f7ee9",
+  "id": 24,
+  "fields": {
+   "textureName": "apolloShot",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "25a7efe06d8e049b0a93cb9c0462c79c",
+  "id": 38,
+  "fields": {
+   "textureName": "pounce",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "28ad41220f9a746d99bc7ee72e175c58",
+  "id": 22,
+  "fields": {
+   "textureName": "teleport",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "29b19a08a3bf64ae59ecccbc9ff7137c",
+  "id": 26,
+  "fields": {
+   "textureName": "flamearrow",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "2ad90fa6b2076496fb836766371ec6f9",
+  "id": 24,
+  "fields": {
+   "textureName": "horror",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "2bfa0b78a608c4103be3e1f5b6ae649f",
+  "id": 34,
+  "fields": {
+   "textureName": "song_HOT",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "2c57d87abd292469797ccd39cea9c71e",
+  "id": 67,
+  "fields": {
+   "textureName": "bosses2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "31c0dda53ae6d4942b3cecbe49ed8ebb",
+  "id": 27,
+  "fields": {
+   "textureName": "holyLightning2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "36a18b2c1eb60497bb5367b383474e5e",
+  "id": 18,
+  "fields": {
+   "textureName": "teleport2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "374ad9a93964b4e79be49d982e586366",
+  "id": 34,
+  "fields": {
+   "textureName": "witch",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "3e0dbef93abe4492c98d53cb4f30a882",
+  "id": 22,
+  "fields": {
+   "textureName": "apolloShot",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "49f4d1e3c33054259b31622fef7a739b",
+  "id": 10,
+  "fields": {
+   "textureName": "warcry",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "4f06cf4309d4c4436ad73774b2347b85",
+  "id": 55,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "4f1fb63e0608644d5bac1493fdb37a88",
+  "id": 47,
+  "fields": {
+   "textureName": "bosses1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "52bd006b00dce49068a7b0d5c8a2ab46",
+  "id": 22,
+  "fields": {
+   "textureName": "kiblast2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "55fd2f6fa25094716bc9ecfecde69825",
+  "id": 19,
+  "fields": {
+   "textureName": "reckless",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "59673f33704d14de1915f79f9d01ce8c",
+  "id": 47,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "5a8ca5385e6514602b45a8652f817a3d",
+  "id": 24,
+  "fields": {
+   "textureName": "radiance",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "615133288bcb947dca732fb638ca425c",
+  "id": 70,
+  "fields": {
+   "textureName": "bosses2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "6765a23ab0ed34f3588d4d16ebe77d93",
+  "id": 24,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "68bb325f941b141fa86d4953df7a1935",
+  "id": 43,
+  "fields": {
+   "textureName": "song_power",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "696c9cb2470414a8eb26d5c2442401ea",
+  "id": 38,
+  "fields": {
+   "textureName": "bardsong",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "6ce74f1462b3344b9a6ae2b1907cf544",
+  "id": 26,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "6e927345db62748e8b4e81289dc34b70",
+  "id": 28,
+  "fields": {
+   "textureName": "lightning2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "7159fcb3372b34509819034b7a46e295",
+  "id": 34,
+  "fields": {
+   "textureName": "wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "74ed7e3d296bb4957ae685a6bd88aae7",
+  "id": 33,
+  "fields": {
+   "textureName": "flamearrow",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "7570e4a0c410a4ce88966505d4fca35e",
+  "id": 14,
+  "fields": {
+   "textureName": "conflag2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "757c591fceb934dcb98e6fc56e76abfa",
+  "id": 55,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "77cddf18b470448e699225166cc3b3b5",
+  "id": 26,
+  "fields": {
+   "textureName": "kiblast",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "796759f2f7ff74df5ab8a3bbe81699ea",
+  "id": 61,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "79c1cb307ec174586b760171daeddf4e",
+  "id": 19,
+  "fields": {
+   "textureName": "reckless",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "7c61f0f210d924f54b95b6a133fdeabd",
+  "id": 18,
+  "fields": {
+   "textureName": "windwalk",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "7c678cd80c6fd49ac802f722a929f4e2",
+  "id": 47,
+  "fields": {
+   "textureName": "bosses1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "7d4c616c1a98249e6bbc46d14bafaba6",
+  "id": 47,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "7f179d48e783948f1a8d6d23c5ccdbdf",
+  "id": 13,
+  "fields": {
+   "textureName": "bosses2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "85ac2ad96e1b34fe385a856ae2157ca7",
+  "id": 28,
+  "fields": {
+   "textureName": "vengefulAngel",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "86c801c8a94d0449f8a27c44c391b486",
+  "id": 11,
+  "fields": {
+   "textureName": "teleport",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "8c467a03b2d224eebae8feefde643504",
+  "id": 11,
+  "fields": {
+   "textureName": "teleport2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "9174acd0f4e0c49ba8f09c0011d136a2",
+  "id": 30,
+  "fields": {
+   "textureName": "paladin",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "96a6f3a98425849fb882827f534c1206",
+  "id": 47,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "973e15ea1248945908863168c2bc48a5",
+  "id": 34,
+  "fields": {
+   "textureName": "song_defense",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "a05351b7c94e84809b1dec7c28540873",
+  "id": 55,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "a0c4e8eecea46435da2f4ac8771733d2",
+  "id": 13,
+  "fields": {
+   "textureName": "holyLightning",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "a84d5534879a941b881440e930370dde",
+  "id": 50,
+  "fields": {
+   "textureName": "meteor2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "a9764dcc3a1f54f0fb2c8c9b9669b3b1",
+  "id": 47,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ac58926c039ef426b9cd71aff5595f59",
+  "id": 34,
+  "fields": {
+   "textureName": "windwalk",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ac842f208a43f460da674e4f2ce962c0",
+  "id": 14,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ad88a6fba35d04f0f93d699b4b62a8db",
+  "id": 45,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ada7b25bb3ea54b0eaad31327f3fd9e1",
+  "id": 32,
+  "fields": {
+   "textureName": "radiance",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ae091ea95439044ac85a7032bd2b8820",
+  "id": 25,
+  "fields": {
+   "textureName": "hex",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "af05bf08402344d2f8aa7e72d3f25471",
+  "id": 22,
+  "fields": {
+   "textureName": "bardsong",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "b04673b8f3f854721bac155aad892503",
+  "id": 57,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "b0bb30b65238f40e8af03cb6f7cc7ee2",
+  "id": 36,
+  "fields": {
+   "textureName": "song_haste",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "b2969b4f6742f45b6bffabdcd2bf66a4",
+  "id": 55,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "bd344d3ab0be34830abe67c8e0bd6649",
+  "id": 14,
+  "fields": {
+   "textureName": "meteor1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "be12b53a08c1e4c538c30cc8a745811f",
+  "id": 26,
+  "fields": {
+   "textureName": "witch",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "bf8eae44bfd554db88c7ccd919dfa029",
+  "id": 12,
+  "fields": {
+   "textureName": "bosses2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "c82ca858c65224af7bd037944c1335f0",
+  "id": 22,
+  "fields": {
+   "textureName": "enrage",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "c9cbd4f89b9ff4acea8fa92a0323764b",
+  "id": 59,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ca76815bbd24a4fe881a166c2cdd9338",
+  "id": 34,
+  "fields": {
+   "textureName": "wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ce64e2d5ae90c4223b5231bb4560ef28",
+  "id": 22,
+  "fields": {
+   "textureName": "enrage_dark",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "d1b5851cacb8046e085152f622a46fe2",
+  "id": 22,
+  "fields": {
+   "textureName": "teleport2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "d3c5c147f33cd4f7da940f3e349501aa",
+  "id": 47,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "d46a86d4a45e84cf4bc4dafb6e77a11c",
+  "id": 34,
+  "fields": {
+   "textureName": "wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "d534f3ae21ccd45328a008e33a2a3bc5",
+  "id": 90,
+  "fields": {
+   "textureName": "enemies2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "d6dce1553c80d40c5a76be34766cc65d",
+  "id": 22,
+  "fields": {
+   "textureName": "enrage",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "d78330a4d608f411b96fa95ca295af65",
+  "id": 55,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "d813dc078f26a46aaa0c35dec7423437",
+  "id": 11,
+  "fields": {
+   "textureName": "warcry",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "db0cfbec561a94c4f8a9fa655769f7b6",
+  "id": 24,
+  "fields": {
+   "textureName": "kiblast",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "dcbb8311343d24d0eb51295f8948942c",
+  "id": 11,
+  "fields": {
+   "textureName": "flamearrow",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "e3aad33533fde4a7ab971643c18c9bb9",
+  "id": 76,
+  "fields": {
+   "textureName": "bosses1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "ee66b8e060b4e49a8906e1e089b49f83",
+  "id": 21,
+  "fields": {
+   "textureName": "frenzy",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "eec5a58ee365849b3a9d65df89996957",
+  "id": 20,
+  "fields": {
+   "textureName": "reckless",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "eeeb88bff0a36409babdd32de602a2b8",
+  "id": 44,
+  "fields": {
+   "textureName": "blizzard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "f1247211086e0447892761d25f829668",
+  "id": 59,
+  "fields": {
+   "textureName": "enemies1",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "f266f09104a7d41c7a246bc91c4b58e0",
+  "id": 35,
+  "fields": {
+   "textureName": "ranger",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "f292ca9c097584912a1c62241c11f035",
+  "id": 36,
+  "fields": {
+   "textureName": "spiritTrance",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "f4b98f768dd6442d9b8332386c0a0e59",
+  "id": 14,
+  "fields": {
+   "textureName": "lightning",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "f6139773d4539450fbcaadc188f6523d",
+  "id": 32,
+  "fields": {
+   "textureName": "hex",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2953,
+  "fields": {
+   "textureName": "paladin",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2954,
+  "fields": {
+   "textureName": "paladin",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2956,
+  "fields": {
+   "textureName": "ranger",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2961,
+  "fields": {
+   "textureName": "ranger",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2963,
+  "fields": {
+   "textureName": "barbarian2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2964,
+  "fields": {
+   "textureName": "barbarian2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2967,
+  "fields": {
+   "textureName": "fighter2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2968,
+  "fields": {
+   "textureName": "fighter2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2974,
+  "fields": {
+   "textureName": "wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2975,
+  "fields": {
+   "textureName": "wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2977,
+  "fields": {
+   "textureName": "rogue2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2980,
+  "fields": {
+   "textureName": "rogue2",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2994,
+  "fields": {
+   "textureName": "witch",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2995,
+  "fields": {
+   "textureName": "witch",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2998,
+  "fields": {
+   "textureName": "bard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 2999,
+  "fields": {
+   "textureName": "bard",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 3001,
+  "fields": {
+   "textureName": "monk",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 3004,
+  "fields": {
+   "textureName": "monk",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 3005,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 3008,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 3036,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry",
+  "file": "level1",
+  "id": 3043,
+  "fields": {
+   "textureName": "rogue",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry2",
+  "file": "level1",
+  "id": 2957,
+  "fields": {
+   "textureName": "ranger",
+   "shared": false
+  }
+ },
+ {
+  "object": "geometry2",
+  "file": "level1",
+  "id": 2960,
+  "fields": {
+   "textureName": "ranger",
+   "shared": false
+  }
+ },
+ {
+  "object": "home",
+  "file": "level1",
+  "id": 2970,
+  "fields": {
+   "textureName": "home",
+   "shared": false
+  }
+ },
+ {
+  "object": "joint1",
+  "file": "07eba7fca1f0a4363ab6f71a56d99ee1",
+  "id": 12,
+  "fields": {
+   "textureName": "bosses2",
+   "shared": false
+  }
+ },
+ {
+  "object": "joint1",
+  "file": "ca7934dad2a7f4be7b63448d5c1c12d5",
+  "id": 12,
+  "fields": {
+   "textureName": "bosses2",
+   "shared": false
+  }
+ },
+ {
+  "object": "music",
+  "file": "level1",
+  "id": 2972,
+  "fields": {
+   "textureName": "music",
+   "shared": false
+  }
+ },
+ {
+  "object": "pallyShield",
+  "file": "07e3a4c4453fd4e44b589e513b3b7384",
+  "id": 5,
+  "fields": {
+   "textureName": "paladin",
+   "shared": false
+  }
+ },
+ {
+  "object": "pauseScreen",
+  "file": "level2",
+  "id": 724,
+  "fields": {
+   "textureName": "pauseScreen",
+   "shared": false
+  }
+ },
+ {
+  "object": "polySurface1",
+  "file": "2703710e609f041158342bb785d8173c",
+  "id": 26,
+  "fields": {
+   "textureName": "wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "polySurface1",
+  "file": "5ead9de0d685242b287dbb23df7948b3",
+  "id": 24,
+  "fields": {
+   "textureName": "1000",
+   "shared": false
+  }
+ },
+ {
+  "object": "polySurface1",
+  "file": "72fdf10c91f174d3395e73a626f6a73c",
+  "id": 32,
+  "fields": {
+   "textureName": "drainlife",
+   "shared": false
+  }
+ },
+ {
+  "object": "polySurface1",
+  "file": "b4e7d6b7909ae4e488f7df79d65ae70c",
+  "id": 17,
+  "fields": {
+   "textureName": "drainlife",
+   "shared": false
+  }
+ },
+ {
+  "object": "polySurface1",
+  "file": "d674b3885853d452892f2a6c3fa374c1",
+  "id": 26,
+  "fields": {
+   "textureName": "wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "polySurface1",
+  "file": "f816661f3041b4f06a9fb150034c416d",
+  "id": 42,
+  "fields": {
+   "textureName": "1000",
+   "shared": false
+  }
+ },
+ {
+  "object": "polySurface1",
+  "file": "level1",
+  "id": 2992,
+  "fields": {
+   "textureName": "battlestart",
+   "shared": false
+  }
+ },
+ {
+  "object": "scimitar",
+  "file": "9e18cb00c020043b19d2c476457afc87",
+  "id": 5,
+  "fields": {
+   "textureName": "barbarian",
+   "shared": false
+  }
+ },
+ {
+  "object": "shield1",
+  "file": "26147742a029a42a385999c1ed1a35af",
+  "id": 5,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "shield2",
+  "file": "939f41a8797cd463d8d3d916c2907f5b",
+  "id": 5,
+  "fields": {
+   "textureName": "fighter2",
+   "shared": false
+  }
+ },
+ {
+  "object": "sound",
+  "file": "level1",
+  "id": 2971,
+  "fields": {
+   "textureName": "sound",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "1cae41118f78540fc8db86cf482fe8b9",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "2afc7d7b4302945e78f3b81cb0ca5063",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "2c38766a9134948b7bc6cf9b7923ef32",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "38b6ccc6e5a9e4d1cb6e45485d2755cb",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "470841e6c616d46c488a06e2e1dddae8",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "5272111876434428b962ae32829da454",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "71d5e56f106404fa0888cc162426402e",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "7d915ce893e004389822d1c27b8df143",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard2",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "7f3df4064d78f4cdb95886aefa2f52a8",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric2",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "7f802aa72c8d14fbc9a3c22099077bc7",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "8b2db8711d1a24bbf9ddb53a407d093d",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "bb6c6c4de7f214f239e77d4564117ef8",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "ce0752ada8b854d6ca7089f1e1fd6b60",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "e04953a17d3b44f84af87012fd5bb095",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "f3659817f6c694437934288ddd8eb44b",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "fe9c53ba4fdfb4a609168357736bf01c",
+  "id": 25,
+  "fields": {
+   "textureName": "staff_cleric2",
+   "shared": false
+  }
+ },
+ {
+  "object": "staff",
+  "file": "level1",
+  "id": 2983,
+  "fields": {
+   "textureName": "staff_cleric",
+   "shared": false
+  }
+ },
+ {
+  "object": "staffGeo",
+  "file": "94c8e1f83c9744b4f949be1c79790daf",
+  "id": 21,
+  "fields": {
+   "textureName": "staff_wizard",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword1",
+  "file": "a2a912eb4231342748d5e8c0f4b04431",
+  "id": 5,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_carver",
+  "file": "473103a72b40844d7b9c1470b2dc2aaf",
+  "id": 5,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_crystal",
+  "file": "63f472b800b894016b0bc23fc6d78766",
+  "id": 5,
+  "fields": {
+   "textureName": "swords",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_holy",
+  "file": "5625047b769d24774888347c8c0e1905",
+  "id": 5,
+  "fields": {
+   "textureName": "swords",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_jade",
+  "file": "0618fc4761566407d9e4f802ffa2b81e",
+  "id": 5,
+  "fields": {
+   "textureName": "swords",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_long",
+  "file": "f8a000e7071c5423d8e005cfd6c3c39e",
+  "id": 5,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_mummy",
+  "file": "8ab72176954424245ac1aae7295a195a",
+  "id": 5,
+  "fields": {
+   "textureName": "swords",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_rusty",
+  "file": "5cf7629d2a8b5498592303e43338e481",
+  "id": 5,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "sword_zwei",
+  "file": "1b96bcdb112304d6f84b074323deb007",
+  "id": 5,
+  "fields": {
+   "textureName": "fighter",
+   "shared": false
+  }
+ },
+ {
+  "object": "townImage",
+  "file": "level1",
+  "id": 2986,
+  "fields": {
+   "textureName": "cityscape",
+   "shared": false
+  }
+ },
+ {
+  "object": "webGeo",
+  "file": "d4d01f610bedd4be39b43dbad11d2604",
+  "id": 9,
+  "fields": {
+   "textureName": "bosses1",
+   "shared": false
+  }
+ }
+]

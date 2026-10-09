@@ -1,0 +1,23 @@
+[
+ {
+  "object": "TutorialHand",
+  "file": "1f91e95b745fc49fcadf2c797c909057",
+  "id": 8,
+  "fields": {
+   "myAnimation": null,
+   "myTransform": null,
+   "startPosition": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "endPosition": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "handState": 0,
+   "snapTarget": null
+  }
+ }
+]
