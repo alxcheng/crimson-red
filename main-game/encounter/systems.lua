@@ -296,6 +296,9 @@ function M.targetFollow(world)
         end
         local lk = world.locks[id]
         if hasActiveAction(world, id) or (lk and lk.moveLock > 0) then goto continue end
+        -- Knocked-down or stunned units cannot follow anything.
+        local sg, sn = world.stagger[id], world.stun[id]
+        if (sg and sg.staggered) or (sn and sn.stunned) then goto continue end
         local mt = world.moveTarget[id]; if not mt then goto continue end
         if world.isRanged[id] then goto continue end
 
@@ -328,13 +331,17 @@ function M.targetFollow(world)
         local atSlotX = math.abs(sp.x - tx) <= 4
         local atSlotY = math.abs(sp.y - ty) <= 4
         if atSlotX and atSlotY then
-            mt.active = false
-            -- Settle deadzone (BH's 0.07-settle analogue): once within the
-            -- arrival tolerance, snap EXACTLY onto the slot center. Without
-            -- this, the last sub-pixel approach in moveTarget (which stops at
-            -- dist<1) leaves the unit hovering ~1px off and re-triggering the
-            -- follow check every frame — micro-oscillation.
-            sp.x = tx; sp.y = ty
+            -- ARRIVING (was walking): stop and settle exactly on the slot, so
+            -- the last sub-pixel of the approach does not re-trigger the walk.
+            -- A unit that is already standing is left alone — its slot moves
+            -- with its target, and re-snapping every frame would drag the unit
+            -- along with a walking target as if glued to it, even while
+            -- knocked down. It walks again (at its own speed) only once the
+            -- slot has drifted out of tolerance.
+            if mt.active then
+                mt.active = false
+                sp.x = tx; sp.y = ty
+            end
         else
             mt.x = tx; mt.y = ty; mt.active = true
         end

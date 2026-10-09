@@ -10,7 +10,10 @@
 # Screenshots land in the LÖVE save dir under ui_smoke/ (path is printed).
 #
 # Env: CR_TEST_MODE=1 skips music; CR_TEST_SCENE=ui swaps the app entry for
-# ui_smoke_test.lua. Usage: ./test_ui
+# ui_smoke_test.lua.
+# Usage: ./test_ui         full run (about 10 minutes: three whole battles)
+#        ./test_ui quick   skips the whole battles (under a minute) - for UI-only work
 set -euo pipefail
 cd "$(dirname "$0")/main-game"
-exec env CR_TEST_MODE=1 CR_TEST_SCENE=ui love .
+quick=0; [ "${1:-}" = "quick" ] && quick=1
+exec env CR_TEST_MODE=1 CR_TEST_SCENE=ui CR_UI_QUICK=$quick love .

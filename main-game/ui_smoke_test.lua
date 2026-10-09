@@ -366,7 +366,7 @@ local function driveEncounter(tag, party, level)
         frame = frame + 1
         mouseX, mouseY = math.random(300, VW - 40), math.random(120, VH - 60)
         guard(tag .. " update", scr.update, 1 / 60)
-        if frame % 6 == 0 then guard(tag .. " draw", scr.draw) end
+        if frame % 30 == 0 then guard(tag .. " draw", scr.draw) end   -- drawing dominates the run time
         if frame % 20 == 0 then
             guard(tag .. " keypressed", scr.keypressed, keys[math.random(#keys)])
         end
@@ -471,6 +471,7 @@ local function checkCombatRules()
     world.stats[goblin].HP.base, world.stats[goblin].maxHP.base = 1e9, 1e9
     world.stats[goblin].ATK.base = 0              -- harmless
     world.stats[knight].MAX_STAGGER.base = 1e9
+    world.stats[goblin].MAX_STAGGER.base = 1e9    -- never knocked down by the knight's hits
 
     local hits = 0
     local realHit = combat.registerHit
@@ -543,7 +544,43 @@ local function checkCombatRules()
     while not actionEffect(1) and tries < 300 do step(1); tries = tries + 1 end
     check(actionEffect(1) ~= nil and #sk.abilityQueue == 0, tag .. ": it winds up again once the hero stands still in range")
 
-    -- 4. Every hero walks at the same speed.
+    -- 4. Units are never dragged by their target: a stunned enemy stays put when the hero it
+    --    was fighting walks away, and a free one follows at its own speed, not the hero's.
+    local function duelThenWalkAway()
+        standNextToGoblin()
+        world.entityTarget[goblin] = { id = knight }
+        step(240)                                  -- both settle into the duel
+        local gx, gy, kx = world.position[goblin].x, world.position[goblin].y, world.position[knight].x
+        mouseX = (kx > VW / 2) and 60 or (VW - 60)   -- order the hero to the far side of the arena
+        return gx, gy, kx
+    end
+    local gx, gy, kx = duelThenWalkAway()
+    combat.applyStun(world, goblin, 20 * 60)
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    step(90)
+    local gp = world.position[goblin]
+    check(math.abs(world.position[knight].x - kx) > 40, tag .. ": the hero walked away from the duel")
+    check(math.abs(gp.x - gx) < 2 and math.abs(gp.y - gy) < 2,
+          tag .. ": a stunned enemy is not dragged along (moved " .. string.format("%.1f", math.abs(gp.x - gx)) .. " px)")
+    world.stun[goblin].stunned, world.stun[goblin].timer = false, 0
+    world.locks[goblin].actionLock = 0
+    gx, gy, kx = duelThenWalkAway()
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    step(60)
+    gp = world.position[goblin]
+    local moved = math.sqrt((gp.x - gx) ^ 2 + (gp.y - gy) ^ 2)
+    local ownSpeed = world.stats[goblin].MOVE_SPEED.base * 30   -- px per second
+    check(moved <= ownSpeed + 6, tag .. ": a following enemy moves at its own speed (" ..
+          string.format("%.0f px in 1 s, limit %.0f", moved, ownSpeed) .. ")")
+
+    step(180)
+    local later = math.sqrt((world.position[goblin].x - gx) ^ 2 + (world.position[goblin].y - gy) ^ 2)
+    local mtg, lkg = world.moveTarget[goblin], world.locks[goblin]
+    check(later > 30, tag .. ": the enemy does chase the hero it is fighting (" ..
+          string.format("%.0f px after 4 s; mt.active=%s actionLock=%.1f stunned=%s", later,
+              tostring(mtg.active), lkg.actionLock, tostring(world.stun[goblin].stunned)) .. ")")
+
+    -- 5. Every hero walks at the same speed.
     local same = true
     for _, cls in ipairs({ "knight", "cleric", "wizard", "rogue", "paladin", "champion", "duelist", "nomad", "brigand" }) do
         local id = entities.createHero(world, battle, cls, -500, 200)
@@ -641,10 +678,13 @@ local function runAll()
 
     checkCombatRules()
 
-    -- ENCOUNTER (full battles through to the victory branch)
-    driveEncounter("battle-new-game", { "knight", "cleric", false, false })       -- the fresh-save party, level 1
-    driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" }, 3)
-    driveEncounter("battle-cr-classes", { "knight", "champion", "duelist", "nomad" }, 3)
+    -- ENCOUNTER (full battles through to the victory branch). These take minutes;
+    -- `./test_ui quick` (CR_UI_QUICK=1) skips them for UI-only work.
+    if os.getenv("CR_UI_QUICK") ~= "1" then
+        driveEncounter("battle-new-game", { "knight", "cleric", false, false })       -- the fresh-save party, level 1
+        driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" }, 3)
+        driveEncounter("battle-cr-classes", { "knight", "champion", "duelist", "nomad" }, 3)
+    end
 
     -- PARTY
     sd = fixtureRich()
