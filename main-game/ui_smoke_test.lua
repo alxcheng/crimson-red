@@ -434,6 +434,128 @@ local function driveEncounter(tag, party, level)
     check(leveled, tag .. ": victory grants XP to survivors")
 end
 
+-- Combat rules checked on a controlled duel: one knight, one unkillable goblin.
+local function checkCombatRules()
+    local tag = "combat-rules"
+    local abilities = require("encounter/abilities")
+    local combat    = require("encounter/combat")
+    local entities  = require("encounter/entities")
+    local scr       = require("screens/encounter")
+
+    -- Costs: whole bars only; BH abilities cost cd // 10 bars; default 3 bars / 15 s.
+    local costsOk, bhOk = true, true
+    for id, def in pairs(abilities.DB) do
+        local cost = abilities.costOf(def, 1)
+        if cost % abilities.RESOURCE_PER_BAR ~= 0 then costsOk = false end
+        if def.bh and cost ~= math.floor(def.cdMax / 10) * abilities.RESOURCE_PER_BAR then bhOk = false end
+    end
+    check(costsOk, tag .. ": every ability costs a whole number of bars")
+    check(bhOk, tag .. ": every Battleheart ability costs cd // 10 bars")
+    local sunder = abilities.make("KnightSunderArmor", 1)
+    check(sunder.cdMax == 15 and sunder.resourceCost == 15, tag .. ": default ability is 15 s and 3 bars")
+    check(abilities.make("ClericVengefulAngel", 4).resourceCost == 30 and abilities.make("WizardTimeStop", 3).resourceCost == 20,
+          tag .. ": 60 s costs 6 bars, 45 s costs 4 bars")
+
+    local sd = fixtureFresh()
+    sd.partyOrder = { "knight", false, false, false }
+    switched = nil
+    -- A huge spawn delay keeps the wave spawner out of the way.
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { spawnDelay = 100000 }) then return end
+    local world, battle = scr.debugState()
+    local knight = battle.partyIds[1]
+    mouseX, mouseY = 60, 300                      -- open ground, away from every unit
+    local function step(n) for _ = 1, n do guard(tag .. " update", scr.update, 1 / 60) end end
+    step(240)                                     -- walk in
+    local kp = world.position[knight]
+    local goblin = entities.createEnemy(world, battle, "skeleton", kp.x + 60, kp.y)
+    world.stats[goblin].HP.base, world.stats[goblin].maxHP.base = 1e9, 1e9
+    world.stats[goblin].ATK.base = 0              -- harmless
+    world.stats[knight].MAX_STAGGER.base = 1e9
+
+    local hits = 0
+    local realHit = combat.registerHit
+    combat.registerHit = function(w, b, src, ...)
+        if src == knight then hits = hits + 1 end
+        return realHit(w, b, src, ...)
+    end
+    local function engage()
+        world.entityTarget[knight] = { id = goblin }
+        local n = 0
+        while hits == 0 and n < 600 do step(1); n = n + 1 end
+    end
+    local function countHits(seconds)
+        local h0 = hits; step(seconds * 60); return hits - h0
+    end
+    local function actionEffect(slot)
+        for _, list in ipairs({ world.effects_comp[knight].active, world.effects_comp[knight].pending }) do
+            for _, eff in ipairs(list) do
+                if eff.isActionEffect and eff.skillSlot == slot then return eff end
+            end
+        end
+    end
+
+    -- 1. Attack interval and attack speed.
+    engage()
+    local n = countHits(11)
+    check(n >= 9 and n <= 11, tag .. ": knight swings every 1.1 s (BH) - " .. n .. " hits in 11 s")
+    world.stats[knight].ATK_SPEED.base = 2
+    n = countHits(11)
+    check(n >= 18 and n <= 21, tag .. ": doubled attack speed halves the interval - " .. n .. " hits in 11 s")
+    local frameLen = world.anim[knight].list[3].frameLength
+    check(math.abs(frameLen - 7 / 60) < 1e-6, tag .. ": attack speed leaves the swing animation's frame time alone")
+    world.stats[knight].ATK_SPEED.base = 1
+
+    -- 2. A move order during an auto-attack wind-up cancels the swing and the hero walks at once.
+    local tries = 0
+    while not actionEffect(0) and tries < 300 do step(1); tries = tries + 1 end
+    local h0, x0 = hits, world.position[knight].x
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    check(actionEffect(0) == nil and world.locks[knight].moveLock == 0,
+          tag .. ": move order discards the pending swing and clears the move lock")
+    step(12)
+    check(math.abs(world.position[knight].x - x0) > 3, tag .. ": the hero is walking within 12 frames of the order")
+    check(hits == h0, tag .. ": the cancelled swing deals no damage")
+    check(world.skills[knight].list[0].cd == 0, tag .. ": moving resets the auto-attack interval")
+
+    -- 3. A move order during an ability wind-up puts it back at the front of the queue, still paid for.
+    local function standNextToGoblin()
+        local gp = world.position[goblin]
+        world.position[knight].x, world.position[knight].y = gp.x - 45, gp.y
+        world.moveTarget[knight].active = false
+        world.entityTarget[knight] = { id = goblin }
+    end
+    standNextToGoblin()
+    step(30)
+    battle.resource = 50
+    guard(tag .. " keypressed", scr.keypressed, "q")
+    tries = 0
+    while not actionEffect(1) and tries < 300 do step(1); tries = tries + 1 end
+    check(actionEffect(1) ~= nil, tag .. ": Q ability starts its wind-up")
+    local res0 = battle.resource
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    local sk = world.skills[knight]
+    check(actionEffect(1) == nil and sk.abilityQueue[1] == 1, tag .. ": interrupted ability returns to the front of the queue")
+    check(sk.list[1].cd > 0 and battle.resource <= res0 + 0.1, tag .. ": it stays paid for (cooldown running, no refund)")
+    step(20)
+    check(actionEffect(1) == nil, tag .. ": it is held while the hero walks")
+    standNextToGoblin()
+    tries = 0
+    while not actionEffect(1) and tries < 300 do step(1); tries = tries + 1 end
+    check(actionEffect(1) ~= nil and #sk.abilityQueue == 0, tag .. ": it winds up again once the hero stands still in range")
+
+    -- 4. Every hero walks at the same speed.
+    local same = true
+    for _, cls in ipairs({ "knight", "cleric", "wizard", "rogue", "paladin", "champion", "duelist", "nomad", "brigand" }) do
+        local id = entities.createHero(world, battle, cls, -500, 200)
+        if world.stats[id].MOVE_SPEED.base ~= require("data/classes").HERO_MOVE_SPEED then same = false end
+        world:destroy(id)
+    end
+    check(same, tag .. ": every class has the same move speed")
+
+    combat.registerHit = realHit
+    if scr.onExit then guard(tag .. " onExit", scr.onExit) end
+end
+
 local function runAll()
     -- EQUIP
     local sd = fixtureRich()
@@ -516,6 +638,8 @@ local function runAll()
     progression.recruit(sd, hireName)
     check(sd.unlockedCharacters[hireName].recruited and sd.unlockedCharacters[hireName].equipped.weapon ~= nil,
           "progression: a recruit joins with starter gear (" .. tostring(hireName) .. ")")
+
+    checkCombatRules()
 
     -- ENCOUNTER (full battles through to the victory branch)
     driveEncounter("battle-new-game", { "knight", "cleric", false, false })       -- the fresh-save party, level 1

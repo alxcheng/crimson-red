@@ -25,7 +25,7 @@ local FRICTION      = 0.9
 local BATTLE_LINE_Y = VH * 0.2
 
 -- Resource bar layout constants
-local RES_PER_SEG        = 5
+local RES_PER_SEG        = require("encounter/abilities").RESOURCE_PER_BAR
 local RES_SEG_COUNT      = 10
 local RESOURCE_MAX       = RES_PER_SEG * RES_SEG_COUNT   -- 50
 local RESOURCE_BAR_AREA_H = 20   -- pixels reserved at bottom (physics clamp + bar)
@@ -495,7 +495,12 @@ function M.mousepressed(x, y, button)
     end
 
     if clicked then
+        -- A hero given a target while it had none attacks as soon as it is in
+        -- range (BH: actionTimer = 100 on a fresh target order).
+        local hadTarget = world.entityTarget[su] ~= nil
         world.entityTarget[su] = {id=clicked}
+        local skSu = world.skills[su]
+        if not hadTarget and skSu and skSu.list[0] then skSu.list[0].cd = 0 end
         if tSide == 1 then
             for id in pairs(world.entities) do
                 local sd = world.side[id]
@@ -520,9 +525,7 @@ function M.mousepressed(x, y, button)
             mt.y = vmy - suSz.h / 2
             mt.active = true
         end
-        local sk = world.skills[su]
-        if sk and sk.list[0] then sk.list[0].cd = 0 end
-        effects_mod.cancelActions(world, su)
+        skills_mod.interrupt(world, su)
     end
 end
 

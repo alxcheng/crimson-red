@@ -15,7 +15,6 @@
 --               (see progression.heroStats)
 --   starterGear {weapon, armor} BH item ids a new recruit comes with
 --               (data/bh_items.lua)
---   moveSpeed   optional MOVE_SPEED override (default 2.0)
 --   anims       name of an entry in M.ANIM_SETS (frame timing per action)
 --   tint        optional {r, g, b} persistent recolor of the sprite
 --   spriteOffsetY optional vertical sprite nudge in pixels
@@ -30,24 +29,31 @@ local M = {}
 
 -- Animation sets: list index = draw priority (highest active index wins; the
 -- LAST entry is the death animation). Each entry: {sheet suffix, seconds per
--- frame, loops, starts active}. The sheet name is <sprite><suffix>, looked up
+-- frame, loops, starts active}. Attack frames last 7/60 s (one tick longer
+-- than the other animations' 6/60) so swings read clearly; the hit `delay`
+-- values in data/abilities.lua are timed to these frames. The sheet name is <sprite><suffix>, looked up
 -- in data/sprites.lua.
 M.ANIM_SETS = {
     knight = { sprite = "Knight", list = {
-        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 6/60},
-        {"Attack2", 12/60}, {"TakeHit", 6/60}, {"Death", 6/60} } },
+        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 7/60},
+        {"Attack2", 13/60}, {"TakeHit", 6/60}, {"Death", 6/60} } },
     brigand = { sprite = "Brigand", list = {
-        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 6/60}, {"Death", 6/60} } },
+        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 7/60}, {"Death", 6/60} } },
     champion = { sprite = "Champion", list = {
-        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 6/60}, {"Death", 6/60} } },
+        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 7/60}, {"Death", 6/60} } },
     duelist = { sprite = "Duelist", list = {
-        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 6/60}, {"Death", 6/60} } },
+        {"Idle", 10/60, true, true}, {"Move", 6/60, true}, {"Attack1", 7/60}, {"Death", 6/60} } },
     nomad = { sprite = "Nomad", list = {
-        {"Idle", 8/60, true, true}, {"Move", 8/60, true}, {"Attack1", 6/60},
-        {"Attack2", 6/60}, {"Death", 6/60} } },
+        {"Idle", 8/60, true, true}, {"Move", 8/60, true}, {"Attack1", 7/60},
+        {"Attack2", 7/60}, {"Death", 6/60} } },
     skeleton = { sprite = "Skeleton", list = {
-        {"Idle", 8/60, true, true}, {"Move", 8/60, true}, {"Attack", 6/60}, {"Death", 6/60} } },
+        {"Idle", 8/60, true, true}, {"Move", 8/60, true}, {"Attack", 7/60}, {"Death", 6/60} } },
 }
+
+-- Every hero walks at the same speed (MOVE_SPEED units; x30 = pixels/second).
+-- 2.4 = 80% of 3.0, which is BH's standard hero speed (1.5 world units/s) at
+-- the 2x conversion the ported classes used.                          [tuned]
+M.HERO_MOVE_SPEED = 2.4
 
 M.CLASSES = {
     -- ---- Crimson Red originals -------------------------------------------
@@ -97,7 +103,7 @@ M.CLASSES = {
         name = "Cleric", size = {29.43, 38.97}, anims = "knight", tint = {1, 0.85, 0.2},
         base  = {hp = 1000, power = 65, defense = 4, crit = 0},   -- BH Cleric (Lucille)
         scale = {power = 3.0, defense = 1.0, hp = 15},
-        starterGear = {2, 6}, moveSpeed = 3.0,
+        starterGear = {2, 6},
         ranged = true, targetsAllies = true,
         auto = "ClericAutoHeal",
         actives = { "ClericGroupHeal", "ClericShield", "ClericPowerInfusion", "ClericVengefulAngel" },
@@ -106,7 +112,7 @@ M.CLASSES = {
         name = "Paladin", size = {30, 40}, anims = "knight", tint = {0.4, 1, 0.4},
         base  = {hp = 1000, power = 19, defense = 18, crit = 0},   -- BH Paladin (Heleth)
         scale = {power = 1.0, defense = 1.2, hp = 15},
-        starterGear = {0, 4}, moveSpeed = 2.8,
+        starterGear = {0, 4},
         drawsThreat = true,
         auto = "PaladinAutoAttack",
         actives = { "PaladinHolyWord", "PaladinDivineIntervention", "PaladinAuraOfLight", "PaladinWrath" },
@@ -115,7 +121,7 @@ M.CLASSES = {
         name = "Wizard", size = {29.43, 38.97}, anims = "knight", tint = {1, 0.5, 0.9},
         base  = {hp = 1000, power = 33, defense = 0, crit = 0},   -- BH Wizard (Bromswell)
         scale = {power = 1.0, defense = 1.0, hp = 15},
-        starterGear = {3, 6}, moveSpeed = 3.2,
+        starterGear = {3, 6},
         ranged = true,
         auto = "WizardAutoFireball",
         actives = { "WizardMeteor", "WizardBlizzard", "WizardTimeStop", "WizardConflagrate" },
@@ -124,7 +130,7 @@ M.CLASSES = {
         name = "Rogue", size = {30, 40}, anims = "knight", tint = {0.63, 0.09, 0.14},
         base  = {hp = 1000, power = 26, defense = 8, crit = 0.20},   -- BH Rogue (Gustav)
         scale = {power = 1.0, defense = 1.0, hp = 15},
-        starterGear = {1, 5}, moveSpeed = 3.4,
+        starterGear = {1, 5},
         auto = "RogueAutoAttack",
         actives = { "RogueSneakAttack", "RogueExposeWeakness", "RogueShadowstep", "RoguePoisonedKnife" },
     },

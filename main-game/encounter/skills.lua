@@ -15,6 +15,8 @@
 --                                    (at most one action per unit per frame)
 
 local combat      = require("encounter/combat")
+local abilities   = require("encounter/abilities")
+local stats_mod   = require("encounter/stats")
 
 local M = {}
 
@@ -118,7 +120,11 @@ function M.system(world, battle, dt)
         if q and #q > 0 then
             local frontSlot = q[1]
             local skill = sk.list[frontSlot]
-            if not skill then
+            local mt = world.moveTarget[id]
+            if mt and mt.active then
+                -- Still walking (a move order, or closing on its target):
+                -- queued abilities are held until the unit stands still.
+            elseif not skill then
                 -- Stale slot (ability removed); drop it.
                 table.remove(q, 1)
             elseif skill.noTargetRequired or targetInRange(world, id) then
@@ -151,7 +157,14 @@ function M.system(world, battle, dt)
             local skill = sk.list[slotIdx]
             if skill and skill.cd <= 0 and skill.use
                and (skill.noTargetRequired or targetInRange(world, id)) then
-                skill.use(world, battle, id, skill)
+                if skill.use(world, battle, id, skill) then
+                    -- The interval runs from the START of the action (BH:
+                    -- actionTimer = 0 when the swing begins). Attack speed
+                    -- shortens the interval; the animation is untouched.
+                    local st = world.stats[id]
+                    local speed = st and st.ATK_SPEED and math.max(0.1, stats_mod.get(st.ATK_SPEED)) or 1
+                    skill.cd = skill.cdMax * abilities.AUTO_COOLDOWN_SCALE / speed
+                end
                 sk.execGate = M.EXEC_GATE
             end
         end
@@ -199,6 +212,54 @@ function M.autoAttackSystem(world)
             table.insert(sk.queue, 0)
         end
         ::continue::
+    end
+end
+
+-- ============================================================================
+-- INTERRUPT — the player gave this unit a move order
+--
+-- Whatever the unit was winding up is stopped at once so it can walk away:
+--   * a default action (auto-attack / auto-heal) that has not landed yet is
+--     discarded, and its interval is reset so the next one is immediate when
+--     the unit next has a target in range (BH: actionTimer = 100);
+--   * an ability that has not landed yet goes back to the FRONT of the
+--     ability queue — still paid for, cooldown still running — and starts its
+--     wind-up again from the beginning once the unit stands still;
+--   * an ability that already landed just loses the rest of its animation.
+-- The move lock is cleared, so the unit starts walking this frame.
+-- ============================================================================
+
+function M.interrupt(world, id)
+    local sk, ec = world.skills[id], world.effects_comp[id]
+    if ec then
+        local requeue = {}
+        for _, list in ipairs({ ec.active, ec.pending }) do
+            for i = #list, 1, -1 do
+                local eff = list[i]
+                if eff.isActionEffect then
+                    table.remove(list, i)
+                    if (eff.skillSlot or 0) > 0 then requeue[#requeue + 1] = eff.skillSlot end
+                end
+            end
+        end
+        if sk then
+            for _, slot in ipairs(requeue) do table.insert(sk.abilityQueue, 1, slot) end
+        end
+    end
+    if sk then
+        if sk.list[0] then sk.list[0].cd = 0 end
+        sk.queue = {}
+    end
+    local lk = world.locks[id]
+    if lk then lk.moveLock = 0 end
+
+    -- Back to the idle animation (a knocked-down unit keeps its pose).
+    local sg, sn = world.stagger[id], world.stun[id]
+    if (sg and sg.staggered) or (sn and sn.stunned) then return end
+    local ac = world.anim[id]
+    if ac then
+        for _, a in pairs(ac.list) do a.active = false end
+        if ac.list[1] then ac.list[1].active = true; ac.list[1].timer = 0 end
     end
 end
 

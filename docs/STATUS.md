@@ -12,6 +12,13 @@ Knight and a Cleric, 15 gold, and Battleheart's numbers throughout. Nine classes
 (knight, brigand, champion, duelist, nomad, cleric, paladin, wizard, rogue); one enemy type.
 
 ## Done on this branch (newest first)
+- **Second playtest round (2026-10-08)**: auto-attack cooldowns were never applied (units
+  swung every ~0.4 s) — fixed, intervals are now BH's and one knob scales them all
+  (`AUTO_COOLDOWN_SCALE` in `encounter/abilities.lua`); attack-speed stat (`ATK_SPEED`) that
+  only shortens the interval; uniform hero move speed; slower attack frames; costs in whole
+  bars (BH abilities `cd // 10`, default 3 bars / 15 s); move orders interrupt immediately
+  (`skills.interrupt`); BH's "hold position" rule so a hero and the enemy attacking it stop
+  shuffling around each other.
 - **Battleheart numbers adopted**: derived hero stats (class base + scale × level + gear +
   talents), BH's 132-item catalog with class restrictions, loot-table shop stock, BH XP curve
   and per-floor rewards, hiring (10 gold × level, recruit joins with starter gear), BH goblin
@@ -33,12 +40,16 @@ Everything above. In particular, choices the Lead made that the Director has not
 2. **Classes without a BH original borrow BH base stats**: champion ← Barbarian, duelist ←
    Monk, nomad ← Bard, brigand ← Rogue (`data/classes.lua`).
 3. **Hire rule**: the recruit joins one level below your best hero; cost 10 × (that level + 1).
-4. **Floor-1 battle pacing**: waves of at most 2 goblins, 12 kills to win (~4 minutes with the
-   starting pair). Set in `screens/encounter.lua` (`waveMaxThreat`, `encounterGoal`).
+4. **Floor-1 battle pacing**: waves of at most 2 goblins, 12 kills to win. With attack
+   intervals now real, the test bot needs ~6.5 minutes with the starting pair — probably too long. Set in `screens/encounter.lua` (`waveMaxThreat`, `encounterGoal`).
 5. **Talent bonuses** keep their old sizes except HP, which was multiplied by 10 to match BH's
    ~1000-HP heroes (`data/talents.lua`).
 6. **Stagger** (knock-down) now triggers after a unit takes half its max HP (`encounter/stats.lua`).
 7. Old item instances in existing saves are dropped on load (they predate the BH catalog).
+8. **Hero move speed is 2.4** (72 px/s). The Director said "80% of the BH value"; BH heroes range
+   1.3–1.65 units/s, so this takes BH's standard 1.5 at the old ports' 2× conversion (3.0) × 0.8.
+9. **Knight and Nomad abilities now use the default 15 s / 3 bars** (were 10 s / 4 bars);
+   Spark of Inspiration stays free.
 
 ## Director said (verbatim, newest first)
 - 2026-10-08: "I want to set up a workflow in which the main thing I have to do (my only job

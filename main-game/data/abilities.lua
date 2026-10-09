@@ -8,8 +8,15 @@
 -- Row fields:
 --   name          display name
 --   iconName      "skill_iconsN" (assets/icons/); omit for default actions
---   cdMax         cooldown in seconds
---   resourceCost  shared-resource cost, paid when the key is pressed
+--   cdMax         cooldown in seconds (default 15). For a default action
+--                 (slot 0) this is the attack interval; "attack speed" shortens
+--                 it and never changes the animation.
+--   bars          cost in BARS of the shared resource (one bar = 5 resource),
+--                 paid when the key is pressed. ALWAYS A WHOLE NUMBER OF BARS —
+--                 never half a bar. Default 3. Default actions are free.
+--   bh            true = a Battleheart ability: cdMax is BH's cooldown
+--                 (bh/data/classes.json) and, unless `bars` is given, the cost
+--                 is  cd // 10  bars (20 s -> 2, 30 s -> 3, 45 s -> 4, 60 s -> 6)
 --   noTargetRequired  true = can fire without a selected target (self / group)
 --   animListIdx   which of the caster's animations to play (index into its
 --                 anim set in data/classes.lua; default 4)
@@ -30,7 +37,7 @@ local DB = {}
 -- Knight: Sunder Armor (slot 1)
 DB.KnightSunderArmor = {
     name = "SunderArmor", iconName = "skill_icons17",
-    cdMax = 10.0, resourceCost = 20,
+    -- default cooldown (15 s) and cost (3 bars; full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -46,7 +53,7 @@ DB.KnightSunderArmor = {
 DB.KnightDefend = {
     name = "KnightDefend", iconName = "skill_icons22",
     noTargetRequired = true,
-    cdMax = 10.0, resourceCost = 20,
+    -- default cooldown (15 s) and cost (3 bars; full bars only)
     animLock = 0, animListIdx = nil,
     delay = 0,  -- immediate
     effect = {
@@ -59,7 +66,7 @@ DB.KnightDefend = {
 DB.KnightChallengingShout = {
     name = "ChallengingShout", iconName = "skill_icons13",
     noTargetRequired = true,
-    cdMax = 10.0, resourceCost = 20,
+    -- default cooldown (15 s) and cost (3 bars; full bars only)
     animLock = 0, animListIdx = nil,
     delay = 0,
     -- Flat threat on every living enemy.
@@ -72,7 +79,7 @@ DB.KnightChallengingShout = {
 -- Nomad: Grant Power (slot 1)
 DB.NomadGrantPower = {
     name = "GrantPower", iconName = "skill_icons15",
-    cdMax = 10.0, resourceCost = 20,
+    -- default cooldown (15 s) and cost (3 bars; full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     -- ATK buff on the target ally (+50% outgoing, 10s) + red tint [data].
@@ -85,7 +92,7 @@ DB.NomadGrantPower = {
 -- Nomad: Mend Wounds (slot 2)
 DB.NomadMendWounds = {
     name = "MendWounds", iconName = "skill_icons11",
-    cdMax = 10.0, resourceCost = 20,
+    -- default cooldown (15 s) and cost (3 bars; full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -98,7 +105,7 @@ DB.NomadMendWounds = {
 -- Nomad: Spark of Inspiration (slot 3)
 DB.NomadSparkOfInspiration = {
     name = "SparkOfInspiration", iconName = "skill_icons46",
-    cdMax = 10.0, resourceCost = 0,
+    bars = 0,   -- free: it trades HP for resource (default 15 s cooldown)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -117,49 +124,49 @@ DB.NomadSparkOfInspiration = {
 
 DB.KnightAutoAttack = {
     name = "KnightAutoAttack",
-    cdMax = 1.1, resourceCost = 0,
-    animListIdx = 3, animLock = 4*6/60,
-    delay = 12/60,
+    cdMax = 1.1,
+    animListIdx = 3, animLock = 4*7/60,
+    delay = 14/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
 DB.SkeletonAutoAttack = {
     name = "SkeletonAutoAttack",
-    cdMax = 1.3,   -- BH basic1 primaryActionCooldown resourceCost = 0,
-    animListIdx = 3, animLock = 8*6/60,
-    delay = 21/60,
+    cdMax = 1.3,   -- BH basic1 primaryActionCooldown
+    animListIdx = 3, animLock = 8*7/60,
+    delay = 24.5/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
 DB.NomadAutoHeal = {
     name = "NomadAutoHeal",
-    cdMax = 2.8, resourceCost = 0,
-    animListIdx = 3, animLock = 8*6/60,
-    delay = 24/60,
+    cdMax = 2.8,
+    animListIdx = 3, animLock = 8*7/60,
+    delay = 28/60,
     effect = { kind = "heal", value = 1.0 },
 }
 
 DB.BrigandAutoAttack = {
     name = "BrigandAutoAttack",
-    cdMax = 0.9, resourceCost = 0,
-    animListIdx = 3, animLock = 7*6/60,
-    delay = 5*6/60,
+    cdMax = 0.9,
+    animListIdx = 3, animLock = 7*7/60,
+    delay = 5*7/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
 DB.ChampionAutoAttack = {
     name = "ChampionAutoAttack",
-    cdMax = 1.15, resourceCost = 0,
-    animListIdx = 3, animLock = 4*6/60,
-    delay = 3*6/60,
+    cdMax = 1.15,
+    animListIdx = 3, animLock = 4*7/60,
+    delay = 3*7/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
 DB.DuelistAutoAttack = {
     name = "DuelistAutoAttack",
-    cdMax = 0.9, resourceCost = 0,
-    animListIdx = 3, animLock = 6*6/60,
-    delay = 5*6/60,
+    cdMax = 0.9,
+    animListIdx = 3, animLock = 6*7/60,
+    delay = 5*7/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
@@ -180,9 +187,9 @@ DB.DuelistAutoAttack = {
 -- slot 0: Auto-Heal (default action, single-ally = selected target)
 DB.ClericAutoHeal = {
     name = "ClericAutoHeal",
-    cdMax = 1.75, resourceCost = 0,
-    animListIdx = 3, animLock = 8*6/60,
-    delay = 24/60,
+    cdMax = 1.75,
+    animListIdx = 3, animLock = 8*7/60,
+    delay = 28/60,
     effect = { kind = "heal", value = 1.15 },  -- passives[0]==-1 ⇒ ×1.15 (spec IL L88497)
 }
 
@@ -190,7 +197,7 @@ DB.ClericAutoHeal = {
 DB.ClericGroupHeal = {
     name = "GroupHeal", iconName = "skill_icons11",
     noTargetRequired = true,
-    cdMax = 20.0, resourceCost = 20,
+    cdMax = 20.0, bh = true,   -- BH cooldown; cost = cd // 10 = 2 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = { kind = "healGroup", value = 1.0 },
@@ -200,7 +207,7 @@ DB.ClericGroupHeal = {
 -- Index given by NAME so it resolves as soon as "SHIELD" is present.
 DB.ClericShield = {
     name = "Shield", iconName = "skill_icons22",
-    cdMax = 30.0, resourceCost = 20,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 12/60,
     effect = { kind = "status", isBuff = true, index = "SHIELD", magnitude = 0.75, duration = 10.0 },
@@ -209,7 +216,7 @@ DB.ClericShield = {
 -- Power Infusion: single-ally, ATK ×2 (=+100%) for 10s
 DB.ClericPowerInfusion = {
     name = "PowerInfusion", iconName = "skill_icons15",
-    cdMax = 30.0, resourceCost = 20,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 12/60,
     effect = { kind = "status", isBuff = true, index = "ATK_BUFF", magnitude = 1.0, duration = 10.0 },
@@ -222,7 +229,7 @@ DB.ClericPowerInfusion = {
 DB.ClericVengefulAngel = {
     name = "VengefulAngel", iconName = "skill_icons46",
     noTargetRequired = true,
-    cdMax = 60.0, resourceCost = 30,
+    cdMax = 60.0, bh = true,   -- BH cooldown; cost = cd // 10 = 6 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -240,9 +247,9 @@ DB.ClericVengefulAngel = {
 -- slot 0: Melee auto (tank swing)
 DB.PaladinAutoAttack = {
     name = "PaladinAutoAttack",
-    cdMax = 1.1, resourceCost = 0,
-    animListIdx = 3, animLock = 4*6/60,
-    delay = 8/60,
+    cdMax = 1.1,
+    animListIdx = 3, animLock = 4*7/60,
+    delay = 9.3/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
@@ -250,7 +257,7 @@ DB.PaladinAutoAttack = {
 DB.PaladinHolyWord = {
     name = "HolyWord", iconName = "skill_icons11",
     noTargetRequired = true,
-    cdMax = 30.0, resourceCost = 20,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = { kind = "healLowestAlly", value = 1.5 },
@@ -262,7 +269,7 @@ DB.PaladinHolyWord = {
 DB.PaladinDivineIntervention = {
     name = "DivineIntervention", iconName = "skill_icons22",
     noTargetRequired = true,
-    cdMax = 30.0, resourceCost = 30,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = nil,
     delay = 0,
     effect = {
@@ -280,7 +287,7 @@ DB.PaladinDivineIntervention = {
 DB.PaladinAuraOfLight = {
     name = "AuraOfLight", iconName = "skill_icons46",
     noTargetRequired = true,
-    cdMax = 40.0, resourceCost = 25,
+    cdMax = 40.0, bh = true,   -- BH cooldown; cost = cd // 10 = 4 bars (full bars only)
     animLock = 0, animListIdx = nil,
     delay = 0,
     effect = {
@@ -300,7 +307,7 @@ DB.PaladinAuraOfLight = {
 DB.PaladinWrath = {
     name = "Wrath", iconName = "skill_icons15",
     noTargetRequired = true,
-    cdMax = 30.0, resourceCost = 20,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 0,
     effect = {
@@ -321,9 +328,9 @@ DB.PaladinWrath = {
 -- slot 0: Auto Fireball (aimed-shot distance reward, ranged)
 DB.WizardAutoFireball = {
     name = "WizardAutoFireball",
-    cdMax = 1.5, resourceCost = 0,
+    cdMax = 1.5,
     animListIdx = 3, animLock = 0,
-    delay = 15/60,
+    delay = 17.5/60,
     effect = {
         -- vfx=false: the auto-fireball must NOT screen-shake on every hit —
         -- it fires on a 1.6s loop, so per-hit shake would be constant
@@ -338,7 +345,7 @@ DB.WizardAutoFireball = {
 -- Magnitude [wiki-only] ~ power·2.0 → buffMods{2.0}. Radius 90 px ≈ BH 2.0u.
 DB.WizardMeteor = {
     name = "Meteor", iconName = "skill_icons46",
-    cdMax = 30.0, resourceCost = 30,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -356,7 +363,7 @@ DB.WizardMeteor = {
 -- it resolves once "SLOW" exists).
 DB.WizardBlizzard = {
     name = "Blizzard", iconName = "skill_icons46",
-    cdMax = 30.0, resourceCost = 25,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -375,7 +382,7 @@ DB.WizardBlizzard = {
 DB.WizardTimeStop = {
     name = "TimeStop", iconName = "skill_icons46",
     noTargetRequired = true,
-    cdMax = 45.0, resourceCost = 30,
+    cdMax = 45.0, bh = true,   -- BH cooldown; cost = cd // 10 = 4 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = { kind = "stunAll", seconds = 5.0 },
@@ -386,7 +393,7 @@ DB.WizardTimeStop = {
 -- caster power at cast time.
 DB.WizardConflagrate = {
     name = "Conflagrate", iconName = "skill_icons46",
-    cdMax = 40.0, resourceCost = 20,
+    cdMax = 40.0, bh = true,   -- BH cooldown; cost = cd // 10 = 4 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -403,7 +410,7 @@ DB.WizardConflagrate = {
 DB.WizardThunderbolt = {
     name = "Thunderbolt", iconName = "skill_icons46",
     noTargetRequired = true,
-    cdMax = 30.0, resourceCost = 25,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 24/60,
     effect = {
@@ -425,9 +432,9 @@ DB.WizardThunderbolt = {
 -- slot 0: fastest melee swing
 DB.RogueAutoAttack = {
     name = "RogueAutoAttack",
-    cdMax = 0.9, resourceCost = 0,
-    animListIdx = 3, animLock = 4*6/60,
-    delay = 5/60,
+    cdMax = 0.9,
+    animListIdx = 3, animLock = 4*7/60,
+    delay = 5.8/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
 }
 
@@ -436,7 +443,7 @@ DB.RogueAutoAttack = {
 -- total) passed through the two-stage roll; the roll's own crit still doubles.
 DB.RogueSneakAttack = {
     name = "SneakAttack", iconName = "skill_icons17",
-    cdMax = 20.0, resourceCost = 20,
+    cdMax = 20.0, bh = true,   -- BH cooldown; cost = cd // 10 = 2 bars (full bars only)
     animLock = 4*6/60, animListIdx = 4,
     delay = 8/60,
     effect = {
@@ -449,7 +456,7 @@ DB.RogueSneakAttack = {
 -- Expose Weakness: single-enemy VULNERABILITY +50% for 10s
 DB.RogueExposeWeakness = {
     name = "ExposeWeakness", iconName = "skill_icons15",
-    cdMax = 30.0, resourceCost = 15,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 0, animListIdx = 4,
     delay = 8/60,
     effect = { kind = "status", isBuff = false, index = "VULNERABILITY", magnitude = 0.5, duration = 10.0 },
@@ -459,7 +466,7 @@ DB.RogueExposeWeakness = {
 -- the big hit). buffMods{[0]=2.5} (→ ×3.5 total); crits still apply.
 DB.RogueShadowstep = {
     name = "Shadowstep", iconName = "skill_icons17",
-    cdMax = 30.0, resourceCost = 20,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 6*6/60, animListIdx = 4,
     delay = 10/60,
     effect = {
@@ -475,7 +482,7 @@ DB.RogueShadowstep = {
 -- + DOT seed.
 DB.RoguePoisonedKnife = {
     name = "PoisonedKnife", iconName = "skill_icons11",
-    cdMax = 30.0, resourceCost = 15,
+    cdMax = 30.0, bh = true,   -- BH cooldown; cost = cd // 10 = 3 bars (full bars only)
     animLock = 4*6/60, animListIdx = 4,
     delay = 8/60,
     effect = {

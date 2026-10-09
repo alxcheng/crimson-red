@@ -63,7 +63,7 @@ function M.createHero(world, battle, classId, x, y, flat)
     if not def then return nil end
     local b = def.base
     local st = stats_mod.fromFlat(flat or {maxHP = b.hp, ATK = b.power, DEF = b.defense, CRIT = b.crit})
-    if def.moveSpeed then st.MOVE_SPEED.base = def.moveSpeed end
+    st.MOVE_SPEED.base = classes.HERO_MOVE_SPEED
 
     local id = world:new()
     addBaseComponents(world, id, def, x, y, battle.SCALE, SIDE_PARTY, st)

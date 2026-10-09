@@ -197,7 +197,7 @@ end
 -- RESOURCE BAR (Clash Royale style, shared party pool)
 -- ============================================================================
 
-local RES_PER_SEG   = 5
+local RES_PER_SEG   = require("encounter/abilities").RESOURCE_PER_BAR
 local RES_SEG_COUNT = 10
 local RES_BAR_H     = 8
 local RES_MARGIN_X  = 15

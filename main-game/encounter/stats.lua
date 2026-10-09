@@ -27,6 +27,10 @@ function M.fromFlat(flat)
         CRIT        = M.newStat(flat.CRIT or 0),
         CRIT_DEF    = M.newStat(0.05),
         MOVE_SPEED  = M.newStat(2.0),
+        -- Attack speed: 1.0 = normal. It divides the default-action interval
+        -- (skills.lua) and nothing else — animations never speed up (BH rule:
+        -- haste shortens primaryActionCooldown / speeds its timer).
+        ATK_SPEED   = M.newStat(1.0),
         STAGGER_RES = M.newStat(1.0),
         MAX_STAGGER = M.newStat(hp * 0.5),
         STAGGER_DUR = M.newStat(10),

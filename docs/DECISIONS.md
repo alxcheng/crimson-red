@@ -18,6 +18,18 @@ the bottom with the date, in the Director's own words where possible.
 9. **Use Battleheart's real numbers** wherever Crimson Red had placeholders (2026-10-08):
    item stats and prices, hero base stats and scaling, XP curve, gold/XP rewards, cooldowns.
 
+### Added 2026-10-08 (second playtest round)
+- **Every hero walks at the same speed**: "80% of the value that was pulled from the BH
+  characters" (`HERO_MOVE_SPEED` in `data/classes.lua`).
+- **Attack speed only shortens the auto-attack cooldown. The animation speed never changes.**
+  (Same as BH.)
+- Attack animations: each frame lasts one tick (1/60 s) longer than before.
+- **Ability costs are whole bars only — never half a bar.** A Battleheart ability costs
+  `cd // 10` bars. The default for any other ability is **3 bars and a 15 s cooldown**.
+- **A move order interrupts at once.** An auto-attack in progress is cancelled (no damage) and
+  its cooldown is reset. An ability still winding up goes back to the front of the queue and
+  restarts its wind-up when the hero stops. An ability that already fired just loses its animation.
+
 ## Controls / presentation
 10. Pause is **SPACE only** (plus the on-screen pause button). No helper text at the bottom of the battle screen.
 11. Screen shake: none on the wizard's auto-attack; a shake on every accepted ability press.

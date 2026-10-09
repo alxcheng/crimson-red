@@ -272,6 +272,23 @@ end
 -- Create the per-unit instance of ability `id` for skill slot `slot`
 -- (0 = default action, 1..4 = Q/W/E/R). The instance holds the live cooldown
 -- and a `use(world, battle, casterId, skill)` function.
+M.RESOURCE_PER_BAR    = 5     -- the shared resource bar is 10 bars of 5
+M.DEFAULT_COOLDOWN    = 15    -- seconds, when a row gives no cdMax
+M.DEFAULT_BARS        = 3     -- cost in bars, when a row gives no `bars`
+-- One knob for every default-action interval (auto-attacks and auto-heals,
+-- heroes and enemies): 1.0 = the intervals in data/abilities.lua, which are
+-- Battleheart's; 1.5 = everyone attacks 50% less often.               [tuned]
+M.AUTO_COOLDOWN_SCALE = 1.0
+
+-- Cost of an ability row in resource points. Costs are whole bars only.
+function M.costOf(def, slot)
+    if (slot or 0) == 0 then return 0 end   -- default actions are free
+    local cd   = def.cdMax or M.DEFAULT_COOLDOWN
+    local bars = def.bars or (def.bh and math.floor(cd / 10)) or M.DEFAULT_BARS
+    assert(bars == math.floor(bars) and bars >= 0, "ability cost must be a whole number of bars")
+    return bars * M.RESOURCE_PER_BAR
+end
+
 function M.make(id, slot)
     local def = M.DB[id]
     if not def then
@@ -285,8 +302,8 @@ function M.make(id, slot)
         iconScale      = 1.0,   -- animated by encounter/ui.lua
         iconScaleTarget = 1.0,
         cd             = 0,
-        cdMax          = def.cdMax or 10.0,
-        resourceCost   = def.resourceCost or 0,
+        cdMax          = def.cdMax or M.DEFAULT_COOLDOWN,
+        resourceCost   = M.costOf(def, slot),
         noTargetRequired = def.noTargetRequired or false,
         animListIdx    = def.animListIdx or 4,
         animLock       = def.animLock or 0,

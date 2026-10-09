@@ -172,26 +172,4 @@ function M.readTagSystem(world, battle, tag)
     end
 end
 
--- ============================================================================
--- CANCEL ACTION EFFECTS
--- ============================================================================
-
-function M.cancelActions(world, id)
-    local ec = world.effects_comp[id]; if not ec then return end
-    local sk = world.skills[id]
-    for _, eff in ipairs(ec.active) do
-        if eff.isActionEffect then
-            eff.cancelFlag = true
-            if eff.skillSlot ~= nil and sk and sk.list[eff.skillSlot] then
-                sk.list[eff.skillSlot].cd = 0
-            end
-        end
-    end
-    local sg = world.stagger[id]
-    if sg and sg.staggered then return end
-    local ac = world.anim[id]; if not ac then return end
-    for _, a in pairs(ac.list) do a.active = false end
-    if ac.list[1] then ac.list[1].active = true; ac.list[1].timer = 0 end
-end
-
 return M

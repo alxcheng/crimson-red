@@ -299,6 +299,19 @@ function M.targetFollow(world)
         local mt = world.moveTarget[id]; if not mt then goto continue end
         if world.isRanged[id] then goto continue end
 
+        -- BH "hold position" rule (bh/systems/party-member-stats-ai-damage.md
+        -- §7 F3): a hero whose target is a melee enemy that is attacking THIS
+        -- hero, and is already in reach, fights where it stands. Without it the
+        -- two keep stepping to each other's slot and neither ever swings.
+        do
+            local sd, tgtEt = world.side[id], world.entityTarget[et.id]
+            if sd and sd.s == 0 and tgtEt and tgtEt.id == id and not world.isRanged[et.id]
+               and combat.checkMeleeRange(world, id, et.id) then
+                mt.active = false
+                goto continue
+            end
+        end
+
         local tx, ty = getMeleeSlot(world, id, et.id)
         if not tx then goto continue end
 
