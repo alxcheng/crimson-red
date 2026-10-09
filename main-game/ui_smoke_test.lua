@@ -337,6 +337,65 @@ local function mapShopWalk(sd)
     return first, second
 end
 
+-- Drive a whole battle on screens/encounter.lua: enter with `party`, mash the
+-- ability keys, retarget with right-clicks, toggle pause, and run until the
+-- screen asks to leave (victory -> "map") or `maxSeconds` of game time pass.
+-- Party stats are inflated so the fight is winnable and reaches the victory
+-- branch (gold / XP / shop-restock latch).
+local function driveEncounter(tag, party)
+    local scr = require("screens/encounter")
+    local sd = fixtureFresh()
+    sd.partyOrder = party
+    local names = {}
+    for _, name in ipairs(party) do
+        if type(name) == "string" then names[#names + 1] = name end
+    end
+    for _, name in ipairs(names) do
+        local st = sd.unlockedCharacters[name].stats
+        st.maxHP, st.ATK, st.DEF = 4000, 60, 20
+    end
+    local gold0 = sd.gold
+    switched = nil
+    local cfg = { encounterGoal = 9, spawnDelay = 0.5 }
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, cfg) then return end
+    local keys = { "q", "w", "e", "r", "1", "2", "3", "4" }
+    local maxFrames, frame = 180 * 60, 0
+    while frame < maxFrames and not switched do
+        frame = frame + 1
+        mouseX, mouseY = math.random(300, VW - 40), math.random(120, VH - 60)
+        guard(tag .. " update", scr.update, 1 / 60)
+        if frame % 6 == 0 then guard(tag .. " draw", scr.draw) end
+        if frame % 20 == 0 then
+            guard(tag .. " keypressed", scr.keypressed, keys[math.random(#keys)])
+        end
+        -- Rare right-clicks: a move order cancels the unit's target, so frequent
+        -- ones would keep a solo hero wandering instead of fighting back.
+        if frame % 400 == 0 then
+            guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+            guard(tag .. " mousereleased", scr.mousereleased, mouseX, mouseY, 2)
+        end
+        if frame % 173 == 0 then
+            guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 1)
+        end
+        if frame == 300 or frame == 330 then   -- pause, then resume
+            guard(tag .. " keypressed(space)", scr.keypressed, "space")
+        end
+        if frame == 200 then screenshot(tag .. "-1-fighting") end
+    end
+    screenshot(tag .. "-2-end")
+    if scr.onExit then guard(tag .. " onExit", scr.onExit) end
+    check(switched ~= nil and switched.name == "map",
+          tag .. ": battle is won and returns to the map (" .. string.format("%.0fs", frame / 60) .. ")")
+    check(sd.gold > gold0, tag .. ": victory awards gold (" .. gold0 .. "->" .. sd.gold .. ")")
+    check(sd.shopState.pendingRestock == true, tag .. ": victory flags the shop restock")
+    local leveled = false
+    for _, name in ipairs(names) do
+        local rec = sd.unlockedCharacters[name]
+        if rec.level > 1 or rec.pointsToNextLevel < 50 then leveled = true end
+    end
+    check(leveled, tag .. ": victory grants XP to survivors")
+end
+
 local function runAll()
     -- EQUIP
     local sd = fixtureRich()
@@ -394,6 +453,11 @@ local function runAll()
     progression.onEncounterWon(sd, { "knight" })
     check(sd.unlockedCharacters.knight.level == 2 and sd.unlockedCharacters.cleric.level == 1,
           "progression: only survivors get the win's XP")
+
+    -- ENCOUNTER (full battles through to the victory branch)
+    driveEncounter("battle-knight-solo", { "knight", false, false, false })
+    driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" })
+    driveEncounter("battle-cr-classes", { "knight", "champion", "duelist", "nomad" })
 
     -- PARTY
     sd = fixtureRich()

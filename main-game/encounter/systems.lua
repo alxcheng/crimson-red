@@ -66,17 +66,17 @@ local function sideOf(world, tgtId, id, preferBack)
     return (sp.x < tp.x) and 1 or 2
 end
 
--- Displace the occupant of slot[tgtId][side] one ring further out (if a free
--- outer ring exists on that side). Returns true if it was displaced.
-local function displaceOutward(world, tgtId, side)
+-- Move the occupant of slot `idx` to the nearest free slot further out on the
+-- same side (slot indices on one side step by 2). Returns true if it moved.
+local function displaceOutward(world, tgtId, idx)
     local s = world.slots and world.slots[tgtId]
     if not s then return false end
-    local owner = s[side]
+    local owner = s[idx]
     if not owner then return false end
-    for r = 1, NUM_RINGS - 1 do
-        if s[r*2 + side] == nil then
-            s[r*2 + side] = owner
-            s[side] = nil
+    for outer = idx + 2, NUM_RINGS * 2, 2 do
+        if s[outer] == nil then
+            s[outer] = owner
+            s[idx] = nil
             return true
         end
     end
@@ -234,7 +234,7 @@ local function getMeleeSlot(world, id, tgtId)
     if t and t[tgtId] and t[tgtId] then
         ring, side = nil, nil
         for idx, owner in pairs(t[tgtId]) do
-            if owner == id then ring, side = math.floor(idx/2)+1, idx % 2 == 0 and 2 or 1 break end
+            if owner == id then ring, side = math.floor((idx-1)/2)+1, idx % 2 == 0 and 2 or 1 break end
         end
     end
     if not ring then
