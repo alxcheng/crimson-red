@@ -7,8 +7,14 @@
 -- Row fields:
 --   name        display name
 --   size        {w, h} body box in art pixels (multiplied by the battle SCALE)
---   stats       {hp, atk, def, crit} class base stats, used when a save record
---               carries no stats of its own            [tuned] unless tagged
+--   base        level-1 stats before gear: {hp, power, defense, crit}. hp/power/
+--               defense are Battleheart's values (bh/data/party.json); crit is a
+--               0..1 chance [tuned]
+--   scale       added per level above 1: {power, defense, hp} (bh/data/classes.json)
+--               stat = base + scale * (level - 1) + gear + talents
+--               (see progression.heroStats)
+--   starterGear {weapon, armor} BH item ids a new recruit comes with
+--               (data/bh_items.lua)
 --   moveSpeed   optional MOVE_SPEED override (default 2.0)
 --   anims       name of an entry in M.ANIM_SETS (frame timing per action)
 --   tint        optional {r, g, b} persistent recolor of the sprite
@@ -47,29 +53,39 @@ M.CLASSES = {
     -- ---- Crimson Red originals -------------------------------------------
     knight = {
         name = "Knight", size = {30, 40}, anims = "knight",
-        stats = {hp = 100, atk = 10, def = 5, crit = 0.10},
+        base  = {hp = 1000, power = 20, defense = 15, crit = 0.10},   -- BH Knight (Shepherd)
+        scale = {power = 1.0, defense = 1.2, hp = 15},
+        starterGear = {0, 4},
         drawsThreat = true, passive = "KnightRage",
         auto = "KnightAutoAttack",
         actives = { "KnightSunderArmor", "KnightDefend", "KnightChallengingShout" },
     },
     brigand = {
         name = "Brigand", size = {30, 40}, anims = "brigand", spriteOffsetY = 5,
-        stats = {hp = 100, atk = 10, def = 5, crit = 0.10},
+        base  = {hp = 1000, power = 26, defense = 8, crit = 0.10},   -- borrowed from BH Rogue [tuned]
+        scale = {power = 1.0, defense = 1.0, hp = 15},
+        starterGear = {1, 5},
         auto = "BrigandAutoAttack", actives = {},
     },
     champion = {
         name = "Champion", size = {32, 52}, anims = "champion", spriteOffsetY = -35,
-        stats = {hp = 100, atk = 10, def = 5, crit = 0.10},
+        base  = {hp = 1000, power = 28, defense = 7, crit = 0.10},   -- borrowed from BH Barbarian (Baelrosh) [tuned]
+        scale = {power = 1.0, defense = 1.0, hp = 15},
+        starterGear = {11, 5},
         auto = "ChampionAutoAttack", actives = {},
     },
     duelist = {
         name = "Duelist", size = {27.6, 41.88}, anims = "duelist",
-        stats = {hp = 100, atk = 10, def = 5, crit = 0.10},
+        base  = {hp = 1000, power = 20, defense = 15, crit = 0.10},   -- borrowed from BH Monk (Feung) [tuned]
+        scale = {power = 1.0, defense = 1.2, hp = 15},
+        starterGear = {43, 44},
         auto = "DuelistAutoAttack", actives = {},
     },
     nomad = {
         name = "Nomad", size = {29.43, 38.97}, anims = "nomad", spriteOffsetY = -18,
-        stats = {hp = 80, atk = 8, def = 2, crit = 0.05},
+        base  = {hp = 1000, power = 12, defense = 6, crit = 0.05},   -- borrowed from BH Bard (Edwardo) [tuned]
+        scale = {power = 1.0, defense = 1.0, hp = 15},
+        starterGear = {45, 5},
         ranged = true, targetsAllies = true,
         auto = "NomadAutoHeal",
         actives = { "NomadGrantPower", "NomadMendWounds", "NomadSparkOfInspiration" },
@@ -79,28 +95,36 @@ M.CLASSES = {
     -- These four reuse the Knight sprite with a tint until they get their own art.
     cleric = {   -- BH Cleric (Lucille): healer, no attack; default action is a heal
         name = "Cleric", size = {29.43, 38.97}, anims = "knight", tint = {1, 0.85, 0.2},
-        stats = {hp = 300, atk = 16, def = 9, crit = 0}, moveSpeed = 3.0,
+        base  = {hp = 1000, power = 65, defense = 4, crit = 0},   -- BH Cleric (Lucille)
+        scale = {power = 3.0, defense = 1.0, hp = 15},
+        starterGear = {2, 6}, moveSpeed = 3.0,
         ranged = true, targetsAllies = true,
         auto = "ClericAutoHeal",
         actives = { "ClericGroupHeal", "ClericShield", "ClericPowerInfusion", "ClericVengefulAngel" },
     },
     paladin = {  -- BH Paladin (Heleth): tank / off-healer
         name = "Paladin", size = {30, 40}, anims = "knight", tint = {0.4, 1, 0.4},
-        stats = {hp = 520, atk = 24, def = 24, crit = 0}, moveSpeed = 2.8,
+        base  = {hp = 1000, power = 19, defense = 18, crit = 0},   -- BH Paladin (Heleth)
+        scale = {power = 1.0, defense = 1.2, hp = 15},
+        starterGear = {0, 4}, moveSpeed = 2.8,
         drawsThreat = true,
         auto = "PaladinAutoAttack",
         actives = { "PaladinHolyWord", "PaladinDivineIntervention", "PaladinAuraOfLight", "PaladinWrath" },
     },
     wizard = {   -- BH Wizard (Bromswell): ranged damage + crowd control
         name = "Wizard", size = {29.43, 38.97}, anims = "knight", tint = {1, 0.5, 0.9},
-        stats = {hp = 260, atk = 28, def = 5, crit = 0}, moveSpeed = 3.2,
+        base  = {hp = 1000, power = 33, defense = 0, crit = 0},   -- BH Wizard (Bromswell)
+        scale = {power = 1.0, defense = 1.0, hp = 15},
+        starterGear = {3, 6}, moveSpeed = 3.2,
         ranged = true,
         auto = "WizardAutoFireball",
         actives = { "WizardMeteor", "WizardBlizzard", "WizardTimeStop", "WizardConflagrate" },
     },
     rogue = {    -- BH Rogue (Gustav): fast melee burst
         name = "Rogue", size = {30, 40}, anims = "knight", tint = {0.63, 0.09, 0.14},
-        stats = {hp = 300, atk = 31, def = 11, crit = 0.20}, moveSpeed = 3.4,
+        base  = {hp = 1000, power = 26, defense = 8, crit = 0.20},   -- BH Rogue (Gustav)
+        scale = {power = 1.0, defense = 1.0, hp = 15},
+        starterGear = {1, 5}, moveSpeed = 3.4,
         auto = "RogueAutoAttack",
         actives = { "RogueSneakAttack", "RogueExposeWeakness", "RogueShadowstep", "RoguePoisonedKnife" },
     },

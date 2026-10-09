@@ -1,42 +1,23 @@
--- screens/equip.lua — Armory / equip screen module (Battleheart Armory look)
+-- screens/equip.lua — EQUIP screen (BH's "Armory").
 --
--- The player picks a character from the active party, then equips/unequips
--- items from the shared party inventory into their 3 gear slots
--- (WEAPON / ARMOR / TRINET).
+-- Pick a hero from the party strip, then move items between the shared
+-- inventory (saveData.inventory) and the hero's three gear slots
+-- (weapon / armor / trinket — saveData.unlockedCharacters[name].equipped).
 --
--- Interaction (robust click scheme, no double-click timing):
---   * Click a PARTY char in the top strip -> select them (their gear + stats).
---   * Click an INVENTORY item             -> select it (description bar updates).
---   * With an item selected, click the MATCHING gear slot -> equip it there.
---     (Wrong-type item vs slot: ignored. Same-type slot already occupied:
---     swap — the previously equipped item returns to the inventory array.)
---   * Click an OCCUPIED gear slot with NO item selected -> unequip; the item
---     returns to the inventory array.
---   * On exit: save.write(slot, saveData) (same routine party_select uses).
---
--- Data contract (work/phase0-contract.md):
---   saveData.inventory            = flat array of item INSTANCE ids (un-equipped)
---   saveData.items[id]            = item instance
---       { id, itemType="weapon"|"armor"|"trinket", grade=1|2|3, name, icon,
---         sellPrice, usableBy={...}, mods={ ATK=3, ... } }
---   saveData.unlockedCharacters[name].equipped =
---       { weapon=ItemIdOrNil, armor=ItemIdOrNil, trinket=ItemIdOrNil }
---
--- The `items` module (main-game/items.lua) is being built in parallel by
--- economy-dev. We require it lazily via pcall and degrade gracefully to
--- base stats when it is absent.
+-- Clicks:
+--   * a party hero            -> select them (shows their gear and stats)
+--   * an inventory item       -> select it (description bar shows it)
+--   * a gear slot, with an item selected -> equip it there, if it is that
+--     slot's type and the hero's class may use it (items.canUse). Whatever
+--     was in the slot goes back to the inventory.
+--   * an occupied gear slot, nothing selected -> unequip to the inventory
+-- The save is written on exit.
 
 local common = require("common")
 local save   = require("save")
-local stats  = require("encounter/stats")
+local progression = require("progression")
 
--- Lazy require of items.lua: pcall so the screen loads even if the module
--- doesn't exist yet (integration order is independent).
-local items
-do
-    local ok, mod = pcall(require, "items")
-    items = (ok and type(mod) == "table") and mod or nil
-end
+local items  = require("items")
 
 local VW = common.VW
 local VH = common.VH
@@ -183,62 +164,11 @@ local function addToInventory(id)
     getInventory()[#getInventory() + 1] = id
 end
 
--- Compute displayed stats for the selected char, INCLUDING equipped gear.
--- Uses the contract: stats.fromSave(ss, gear) where gear is the resolved
--- instance tables. Degrades to base stats if items module or the optional
--- second fromSave arg is unavailable.
+-- Displayed stats for a hero, gear and talents included.
 local function computeCharStats(name)
-    local cd = getCharData(name)
-    if not cd then
-        return { atk = 0, def = 0, hp = 0 }
-    end
-    local base = cd.stats or {}
-    local atk = base.ATK or 0
-    local def = base.DEF or 0
-    local hp  = base.maxHP or 0
-
-    -- Try to fold in gear via the contract path (stats.fromSave(ss, gear)).
-    local gear = nil
-    if items and items.resolveGear then
-        local ok, g = pcall(items.resolveGear, saveData_ref, name)
-        if ok and type(g) == "table" then gear = g end
-    end
-
-    if gear and next(gear) ~= nil then
-        local ok, s = pcall(stats.fromSave, base, gear)
-        if ok and type(s) == "table" then
-            -- stats.fromSave(ss, gear) per contract: adds each gear.mods key
-            -- to the corresponding stat's .add. Fall back to manual sum if
-            -- the live fromSave still only takes one arg (gear ignored).
-            local sAtk = stats.get(s.ATK or stats.newStat(0))
-            local sDef = stats.get(s.DEF or stats.newStat(0))
-            local sHp  = stats.get(s.maxHP or stats.newStat(0))
-            -- Detect whether the live fromSave honored the gear arg: if the
-            -- result equals base exactly, the arg was ignored — sum mods manually.
-            if sAtk == (base.ATK or 0) and sDef == (base.DEF or 0) and sHp == (base.maxHP or 0) then
-                for _, inst in pairs(gear) do
-                    if type(inst) == "table" and inst.mods then
-                        atk = atk + (inst.mods.ATK     or 0)
-                        def = def + (inst.mods.DEF     or 0)
-                        hp  = hp  + (inst.mods.maxHP   or 0)
-                    end
-                end
-            else
-                atk, def, hp = sAtk, sDef, sHp
-            end
-        else
-            -- Manual fallback: sum mods directly.
-            for _, inst in pairs(gear) do
-                if type(inst) == "table" and inst.mods then
-                    atk = atk + (inst.mods.ATK   or 0)
-                    def = def + (inst.mods.DEF   or 0)
-                    hp  = hp  + (inst.mods.maxHP or 0)
-                end
-            end
-        end
-    end
-
-    return { atk = atk, def = def, hp = hp }
+    local st = progression.heroStats(saveData_ref, name)
+    if not st then return { atk = 0, def = 0, hp = 0 } end
+    return { atk = st.ATK, def = st.DEF, hp = st.maxHP }
 end
 
 -- ============================================================================
@@ -259,8 +189,9 @@ local function equipItem(itemId, slotKey)
     local inst = getItems()[id]
     if type(inst) ~= "table" then return false end
 
-    -- Wrong-type item: ignore.
+    -- Wrong slot for this item, or a class that cannot use it (BH usableBy).
     if inst.itemType ~= slotKey then return false end
+    if not items.canUse(inst, selectedChar) then return false end
 
     local eq = getEquipped(selectedChar)
     local prevId = eq[slotKey]
@@ -808,30 +739,23 @@ local function drawScene()
 
         love.graphics.setFont(font14)
         love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        local typeStr = tostring(descInst.itemType or "?")
-        local gradeStr = "grade " .. tostring(descInst.grade or "?")
-        love.graphics.print(typeStr .. " · " .. gradeStr, 12, DESC_Y + 28)
+        love.graphics.print(descInst.desc or tostring(descInst.itemType or "?"), 12, DESC_Y + 26)
 
-        -- Mods (right side of name)
-        local mods = descInst.mods or {}
+        -- What it adds, and whether the selected hero can use it.
         local modParts = {}
-        for k, v in pairs(mods) do
+        for k, v in pairs(descInst.mods or {}) do
             modParts[#modParts + 1] = "+" .. tostring(v) .. " " .. k
         end
-        if #modParts > 0 then
-            love.graphics.setColor(0.95, 0.55, 0.20, 1)
-            love.graphics.print(table.concat(modParts, ", "), 240, DESC_Y + 28)
-        end
+        table.sort(modParts)
+        local line = table.concat(modParts, ", ")
+        local usable = selectedChar == nil or items.canUse(descInst, selectedChar)
+        if not usable then line = line .. "   (" .. displayName(selectedChar) .. " cannot use this)" end
+        love.graphics.setColor(usable and {0.95, 0.55, 0.20, 1} or {0.85, 0.30, 0.35, 1})
+        love.graphics.print(line, 12, DESC_Y + 42)
 
-        -- sellPrice + usableBy (right side)
         love.graphics.setColor(0.6, 0.6, 0.6, 1)
-        local sellStr = "sell " .. tostring(descInst.sellPrice or 0)
-        local usable = descInst.usableBy or {}
-        if #usable > 0 then
-            sellStr = sellStr .. " · " .. table.concat(usable, "/")
-        end
-        local sw = font14:getWidth(sellStr)
-        love.graphics.print(sellStr, VW - sw - 12, DESC_Y + 28)
+        local sellStr = "sells for " .. tostring(items.sellValue(descInst))
+        love.graphics.print(sellStr, VW - font14:getWidth(sellStr) - 12, DESC_Y + 8)
     else
         love.graphics.setFont(font14)
         love.graphics.setColor(0.5, 0.5, 0.5, 1)

@@ -13,7 +13,6 @@ local entities_mod = require("encounter/entities")
 local systems      = require("encounter/systems")
 local enc_mgr      = require("encounter/encounter_mgr")
 local ui           = require("encounter/ui")
-local items        = require("items")
 local progression  = require("progression")
 
 local VW    = common.VW
@@ -240,8 +239,8 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
     battle.encounterMgr = {
         dangerThreshold  = cfg.dangerThreshold  or 3,
         waveMinThreat    = cfg.waveMinThreat    or 3,
-        waveMaxThreat    = cfg.waveMaxThreat    or 12,
-        encounterGoal    = cfg.encounterGoal    or 45,
+        waveMaxThreat    = cfg.waveMaxThreat    or 6,    -- at most 2 goblins per wave [tuned]
+        encounterGoal    = cfg.encounterGoal    or 36,   -- 12 kills to win            [tuned]
         spawnTimer       = spawnDelay,
         waveCooldown     = 0,
         currentDanger    = 0,
@@ -277,13 +276,11 @@ function M.onEnter(canvas, postfx, sw, sd, slot, encounterConfig)
         local charName = partyOrder[i]
         if type(charName) ~= "string" then goto spawnNext end
         partyRow = partyRow + 1
-        local charData = sd and sd.unlockedCharacters and sd.unlockedCharacters[charName]
-        local ss   = charData and charData.stats or nil
-        local gear = sd and items.resolveGear(sd, charName) or nil
         local pos = rhombusPos[partyRow] or {x = x1, y = y_hi}
         local spawnX = pos.x - WALK_IN
         local spawnY = pos.y - SLOT_H / 2
-        local id = entities_mod.createHero(world, battle, charName, spawnX, spawnY, ss, gear)
+        local id = entities_mod.createHero(world, battle, charName, spawnX, spawnY,
+                                           sd and progression.heroStats(sd, charName))
         if id then
             -- pos.x/pos.y is the GROUND/feet point for this slot ("midbottom Y").
             -- moveTarget treats mt.y as a CENTER coord, so convert: center.y =
@@ -395,18 +392,11 @@ function M.update(dt)
         -- battle.enemyDefeated already counts every kill.
         if not goldAwarded and saveData_ref then
             goldAwarded = true
-            items.onEncounterWon(saveData_ref, battle.enemyDefeated or 0)
-            -- The shop restocks after every WON encounter (Director rule):
-            -- flag it so the SHOP screen reshuffles its 3 offers + hire on entry.
-            local ss = saveData_ref.shopState
-            if ss then ss.pendingRestock = true end
-            -- XP: split among the party members still standing (see
-            -- progression.lua). Levels gained unlock TALENTS choices.
             local survivors = {}
             for i, name in ipairs(battle.partyNames or {}) do
                 if not battle.deadSlots[i] then survivors[#survivors + 1] = name end
             end
-            progression.onEncounterWon(saveData_ref, survivors)
+            progression.onEncounterWon(saveData_ref, survivors, battle.enemyDefeated)
         end
     end
 end

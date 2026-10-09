@@ -65,7 +65,7 @@ DB.KnightChallengingShout = {
     -- Flat threat on every living enemy.
     effect = {
         kind = "threat",
-        flat = 240,  -- [tuned] ~10x a mid-level party member's ATK
+        flat = 350,  -- [tuned] ~10 knight hits' worth of threat
     },
 }
 
@@ -90,7 +90,7 @@ DB.NomadMendWounds = {
     delay = 24/60,
     effect = {
         kind = "status", isBuff = true, index = "HOT",
-        magnitude = 7.5, duration = 10.0,  -- [tuned] ~5*ATK/10 for a mid party member
+        dotPerSec = 0.5, duration = 10.0,  -- heals 0.5 x caster power per second [tuned]
         tint = {0, 1, 0, 4.0},
     },
 }
@@ -117,7 +117,7 @@ DB.NomadSparkOfInspiration = {
 
 DB.KnightAutoAttack = {
     name = "KnightAutoAttack",
-    cdMax = 2.0, resourceCost = 0,
+    cdMax = 1.1, resourceCost = 0,
     animListIdx = 3, animLock = 4*6/60,
     delay = 12/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
@@ -125,7 +125,7 @@ DB.KnightAutoAttack = {
 
 DB.SkeletonAutoAttack = {
     name = "SkeletonAutoAttack",
-    cdMax = 2.0, resourceCost = 0,
+    cdMax = 1.3,   -- BH basic1 primaryActionCooldown resourceCost = 0,
     animListIdx = 3, animLock = 8*6/60,
     delay = 21/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
@@ -133,7 +133,7 @@ DB.SkeletonAutoAttack = {
 
 DB.NomadAutoHeal = {
     name = "NomadAutoHeal",
-    cdMax = 2.5, resourceCost = 0,
+    cdMax = 2.8, resourceCost = 0,
     animListIdx = 3, animLock = 8*6/60,
     delay = 24/60,
     effect = { kind = "heal", value = 1.0 },
@@ -141,7 +141,7 @@ DB.NomadAutoHeal = {
 
 DB.BrigandAutoAttack = {
     name = "BrigandAutoAttack",
-    cdMax = 2.0, resourceCost = 0,
+    cdMax = 0.9, resourceCost = 0,
     animListIdx = 3, animLock = 7*6/60,
     delay = 5*6/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
@@ -149,7 +149,7 @@ DB.BrigandAutoAttack = {
 
 DB.ChampionAutoAttack = {
     name = "ChampionAutoAttack",
-    cdMax = 2.0, resourceCost = 0,
+    cdMax = 1.15, resourceCost = 0,
     animListIdx = 3, animLock = 4*6/60,
     delay = 3*6/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
@@ -157,7 +157,7 @@ DB.ChampionAutoAttack = {
 
 DB.DuelistAutoAttack = {
     name = "DuelistAutoAttack",
-    cdMax = 2.0, resourceCost = 0,
+    cdMax = 0.9, resourceCost = 0,
     animListIdx = 3, animLock = 6*6/60,
     delay = 5*6/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },
@@ -321,7 +321,7 @@ DB.PaladinWrath = {
 -- slot 0: Auto Fireball (aimed-shot distance reward, ranged)
 DB.WizardAutoFireball = {
     name = "WizardAutoFireball",
-    cdMax = 1.6, resourceCost = 0,
+    cdMax = 1.5, resourceCost = 0,
     animListIdx = 3, animLock = 0,
     delay = 15/60,
     effect = {
@@ -425,7 +425,7 @@ DB.WizardThunderbolt = {
 -- slot 0: fastest melee swing
 DB.RogueAutoAttack = {
     name = "RogueAutoAttack",
-    cdMax = 0.85, resourceCost = 0,
+    cdMax = 0.9, resourceCost = 0,
     animListIdx = 3, animLock = 4*6/60,
     delay = 5/60,
     effect = { kind = "damage", tags = { "Melee" }, vfx = false },

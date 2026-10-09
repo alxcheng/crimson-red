@@ -1,6 +1,6 @@
 -- encounter/entities.lua — builds battle units from the data tables.
 --
---   M.createHero(world, battle, classId, x, y, saveStats, gear)  -> id | nil
+--   M.createHero(world, battle, classId, x, y, flatStats)         -> id | nil
 --   M.createEnemy(world, battle, enemyId, x, y)                  -> id | nil
 --
 -- A unit is an id plus one entry in each `world.<component>` table (see the
@@ -56,18 +56,13 @@ local function addBaseComponents(world, id, def, x, y, scale, side, st)
     world.skills[id] = {list = skills, queue = {}, abilityQueue = {}, execGate = 0}
 end
 
--- saveStats: the character's saved stat table (save.lua), or nil to use the
--- class base stats. gear: equipped item instances (items.resolveGear), or nil.
-function M.createHero(world, battle, classId, x, y, saveStats, gear)
+-- flat: { maxHP, ATK, DEF, CRIT } from progression.heroStats; nil = the class's
+-- level-1 base stats with no gear.
+function M.createHero(world, battle, classId, x, y, flat)
     local def = classes.CLASSES[classId]
     if not def then return nil end
-    local st
-    if saveStats then
-        st = stats_mod.fromSave(saveStats, gear)
-    else
-        local b = def.stats
-        st = stats_mod.newStats(b.hp, b.atk, b.def, b.crit)
-    end
+    local b = def.base
+    local st = stats_mod.fromFlat(flat or {maxHP = b.hp, ATK = b.power, DEF = b.defense, CRIT = b.crit})
     if def.moveSpeed then st.MOVE_SPEED.base = def.moveSpeed end
 
     local id = world:new()
@@ -83,8 +78,7 @@ end
 function M.createEnemy(world, battle, enemyId, x, y)
     local def = enemies.ENEMIES[enemyId]
     if not def then return nil end
-    local b = def.stats
-    local st = stats_mod.newStats(b.hp, b.atk, b.def, b.crit, b.atkSpeed)
+    local st = stats_mod.fromFlat({maxHP = def.stats.hp, ATK = def.stats.power})
     if def.moveSpeed then st.MOVE_SPEED.base = def.moveSpeed end
 
     local id = world:new()

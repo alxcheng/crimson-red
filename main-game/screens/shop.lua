@@ -1,41 +1,24 @@
--- screens/shop.lua — Merchant / shop screen module (Battleheart merchant look)
+-- screens/shop.lua — SHOP screen (BH's "Merchant" + "Tavern").
 --
--- A stall with TWO tabs:
---   GEAR tab (default): 3 gear offers (shopState.offers) with BUY buttons,
---     plus a SELL list of the party's owned (un-equipped) items at 50% value.
---   HIRE tab: one recruit card (shopState.hireOffer) with a HIRE button.
+-- Two tabs:
+--   GEAR: 3 items for sale (shopState.offers) with BUY buttons, plus a SELL
+--         list of the party's carried (unequipped) items. Buy at the item's
+--         value, sell for half (BH rule). Stock comes from items.rollOffers.
+--   HIRE: one hero for hire (shopState.hireOffer). Hiring pays
+--         progression.hireCost, recruits the hero with starter gear, and puts
+--         them in the first free party slot (or leaves them in reserve).
 --
--- Data contract (work/phase0-contract.md):
---   saveData.gold             = unspent gold
---   saveData.items[id]        = item instance { id, itemType, grade, name,
---                                     icon, sellPrice, usableBy, mods }
---   saveData.inventory        = flat array of item INSTANCE ids (un-equipped)
---   saveData.shopState        = { offers = {3 instance ids}, hireOffer = charKey|nil,
---                                 lastFloor, seeded, pendingRestock }
---   All gold economy goes through the items API (addGold / spendGold /
---   sellValue / hireCost / rollOffers / rollHire / makeInstance / nextId).
+-- Restock: on entry, if the shop was never stocked or a battle was won since
+-- (shopState.pendingRestock), the 3 offers and the hire are re-rolled.
+-- Re-entering without a new win does not reshuffle.
 --
--- RESTOCK (contract, Director-confirmed): on entry, if
---   shopState.pendingRestock == true  OR
---   shopState.seeded == false         OR
---   shopState.lastFloor ~= saveData.floor
--- then mint 3 fresh instances from rollOffers(floor), roll a new hire offer,
--- and mark lastFloor=floor / seeded=true / pendingRestock=false.
--- Re-entering the shop with no new win does NOT reshuffle.
---
--- On exit: save.write(slot, saveData) then switchFn("map", saveData, slot)
--- (same routine equip.lua / party_select.lua use).
+-- On exit the save is written and the game returns to the map.
 
 local common = require("common")
 local save   = require("save")
 
--- The `items` module (main-game/items.lua) exists (Foundation phase). pcall
--- guard is defensive only so the screen still loads if it is ever absent.
-local items
-do
-    local ok, mod = pcall(require, "items")
-    items = (ok and type(mod) == "table") and mod or nil
-end
+local items       = require("items")
+local progression = require("progression")
 
 local VW = common.VW
 local VH = common.VH
@@ -121,7 +104,6 @@ local function getShopState()
     sd.shopState = sd.shopState or {
         offers    = {},
         hireOffer = nil,
-        lastFloor = 1,
         seeded    = false,
     }
     local ss = sd.shopState
@@ -168,14 +150,6 @@ local function removeFromInventory(id)
     return false
 end
 
-local function inParty(name)
-    local po = saveData_ref.partyOrder or {}
-    for _, n in ipairs(po) do
-        if n == name then return true end
-    end
-    return false
-end
-
 -- Lowest-index empty party slot (1..4), or nil if full.
 local function firstFreePartySlot()
     local po = saveData_ref.partyOrder or {}
@@ -186,50 +160,25 @@ local function firstFreePartySlot()
 end
 
 -- ============================================================================
--- RESTOCK (contract § Shop restock rule)
+-- RESTOCK
 -- ============================================================================
 
--- If pendingRestock / not-seeded / floor-changed: mint 3 fresh instances from
--- rollOffers(floor) into saveData.items + shopState.offers, roll a new hire
--- offer, and mark stocked. Re-entering without a new win does NOT reshuffle.
+local OFFER_COUNT = 3
+
 local function restockIfNeeded()
-    if not items then return end
     local sd = saveData_ref
     local ss = getShopState()
-    local floor = sd.floor or 1
-
-    local need = (ss.pendingRestock == true)
-        or (ss.seeded == false)
-        or (ss.lastFloor ~= floor)
-    if not need then return end
+    if ss.seeded and not ss.pendingRestock then return end
 
     -- Unsold offers from the previous stock are discarded with it.
     for _, oldId in ipairs(ss.offers or {}) do
         sd.items[oldId] = nil
     end
-
-    -- Mint 3 fresh instances.
-    local newOffers = {}
-    local offers = items.rollOffers(floor)
-    for _, t in ipairs(offers or {}) do
-        if t and t.itemType and t.grade then
-            local id = items.nextId(sd)
-            local inst = items.makeInstance(id, t.itemType, t.grade)
-            sd.items[id] = inst
-            newOffers[#newOffers + 1] = id
-        end
+    ss.offers = {}
+    for _, bhId in ipairs(items.rollOffers(progression.highestLevel(sd), OFFER_COUNT)) do
+        ss.offers[#ss.offers + 1] = items.mint(sd, bhId)
     end
-    ss.offers = newOffers
-
-    -- Roll a new hire offer.
-    if items.rollHire then
-        local ok, name = pcall(items.rollHire, sd)
-        ss.hireOffer = (ok and type(name) == "string") and name or nil
-    else
-        ss.hireOffer = nil
-    end
-
-    ss.lastFloor      = floor
+    ss.hireOffer      = progression.rollHire(sd)
     ss.seeded         = true
     ss.pendingRestock = false
 end
@@ -254,12 +203,8 @@ local function buyOffer(idx)
     if not id then return end
     local inst = getItemsTable()[id]
     if type(inst) ~= "table" then return end
-    if not items or not items.spendGold then return end
 
-    local price = (inst.sellPrice or 0) * 2
-    if price <= 0 then price = 8 end   -- defensive floor (g1 value)
-
-    if items.spendGold(saveData_ref, price) then
+    if items.spendGold(saveData_ref, items.buyPrice(inst)) then
         removeFromOffers(id)
         getInventory()[#getInventory() + 1] = id
         -- Item instance stays in saveData.items (now owned by the party).
@@ -280,7 +225,6 @@ local function sellOwned(idx)
         removeFromInventory(id)
         return
     end
-    if not items or not items.addGold or not items.sellValue then return end
 
     local pay = items.sellValue(inst)
     if pay < 0 then pay = 0 end
@@ -290,34 +234,18 @@ local function sellOwned(idx)
     common.playClickSound()
 end
 
--- HIRE a recruit (HIRE tab): cost = items.hireCost(floor).
--- All 12 chars already exist in unlockedCharacters, so "hiring" = pay gold
--- and place the char into the active party (next free slot, 4 max).
--- If the party is full the char remains in the roster (no change) and the
--- button reads "IN ROSTER".
+-- HIRE the offered hero: pay the cost, recruit them (level + starter gear),
+-- and put them in the first free party slot. With a full party they go to
+-- the reserves and can be swapped in on the PARTY screen.
 local function hire()
     local ss = getShopState()
     local name = ss.hireOffer
     if not name then return end
-    if not items or not items.spendGold or not items.hireCost then return end
-
-    -- Already in the active party: nothing to do (no gold consumed).
-    if inParty(name) then
-        setFlash("ALREADY IN PARTY")
-        return
-    end
-
-    local slot = firstFreePartySlot()
-    if not slot then
-        -- Party full: the char is already in the roster; hiring is a no-op.
-        setFlash("PARTY FULL")
-        return
-    end
-
-    local cost = items.hireCost(saveData_ref.floor or 1)
-    if items.spendGold(saveData_ref, cost) then
-        saveData_ref.partyOrder[slot] = name
-        ss.hireOffer = nil   -- recruit is now in the party
+    if items.spendGold(saveData_ref, progression.hireCost(saveData_ref)) then
+        progression.recruit(saveData_ref, name)
+        local slot = firstFreePartySlot()
+        if slot then saveData_ref.partyOrder[slot] = name end
+        ss.hireOffer = nil
         common.playClickSound()
     else
         setFlash("NOT ENOUGH GOLD")
@@ -437,7 +365,7 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
         fontTitle = common.loadFont(20)
     end
 
-    -- Restock per the contract rule (no-op if already stocked this floor).
+    -- Restock if a battle was won since the last visit.
     restockIfNeeded()
 
     tab           = "gear"
@@ -676,7 +604,7 @@ local function drawOfferCard(idx)
         love.graphics.printf(inst.name or "(unnamed)", cx + 60, cy + 16, cw - 66, "left")
 
         love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        love.graphics.print(tostring(inst.itemType or "?") .. "  grade " .. tostring(inst.grade or "?"),
+        love.graphics.print(tostring(inst.itemType or "?"),
             cx + 12, cy + 62)
 
         -- Mods (wrap up to 2 lines).
@@ -691,9 +619,8 @@ local function drawOfferCard(idx)
             love.graphics.printf(table.concat(modParts, "\n"), cx + 12, cy + 86, cw - 24, "left")
         end
 
-        -- BUY button with price = value (2 * sellPrice).
-        local price = (inst.sellPrice or 0) * 2
-        if price <= 0 then price = 8 end
+        -- BUY button with the price.
+        local price = items.buyPrice(inst)
         local bx, by, bw, bh = offerBuyRect(idx)
         local canAfford = goldValue() >= price
         love.graphics.setColor(canAfford and CRIMSON or {0.30, 0.10, 0.12, 1})
@@ -758,7 +685,7 @@ local function drawSellSection()
             love.graphics.print(nm, sx + (sh + 8) + 6, sy + (sh - font14:getHeight()) / 2)
 
             -- Sell price on the right.
-            local pay = (items and items.sellValue) and items.sellValue(inst) or (inst.sellPrice or 0)
+            local pay = items.sellValue(inst)
             love.graphics.setColor(0.95, 0.78, 0.20, 1)
             local pstr = tostring(pay)
             love.graphics.print(pstr, sx + sw - 10 - font14:getWidth(pstr), sy + (sh - font14:getHeight()) / 2)
@@ -796,9 +723,8 @@ local function drawHireCard()
         return
     end
 
-    local cd = (saveData_ref.unlockedCharacters or {})[name]
-    local lvl = (cd and cd.level) or 1
-    local stats = cd and cd.stats or nil
+    local lvl   = progression.hireLevel(saveData_ref)
+    local stats = progression.heroStats(saveData_ref, name)
 
     drawRecruitPortrait(name, HIRE_X + 20, HIRE_Y + 40, PARTS_SIZE)
 
@@ -818,26 +744,16 @@ local function drawHireCard()
             HIRE_X + 20 + PARTS_SIZE + 14, HIRE_Y + 86)
     end
 
-    -- HIRE button: cost = hireCost(floor); "IN PARTY"/"PARTY FULL" variants.
+    -- HIRE button with the cost; dimmed when the party cannot afford it.
     local hx, hy, hw, hh = hireBtnRect()
-    local already = inParty(name)
-    local full    = firstFreePartySlot() == nil
-    local label, dim
-    if already then
-        label, dim = "IN PARTY", true
-    elseif full then
-        label, dim = "PARTY FULL", true
-    else
-        local cost = (items and items.hireCost) and items.hireCost(saveData_ref.floor or 1) or 0
-        local canAfford = goldValue() >= cost
-        label = "HIRE  " .. tostring(cost)
-        dim = not canAfford
-    end
+    local cost  = progression.hireCost(saveData_ref)
+    local label = "HIRE  " .. tostring(cost)
+    local dim   = goldValue() < cost
     love.graphics.setColor(dim and {0.30, 0.10, 0.12, 1} or CRIMSON)
     love.graphics.rectangle("fill", hx, hy, hw, hh)
     love.graphics.setFont(font16)
     love.graphics.setColor(dim and {0.5, 0.4, 0.4, 1} or {1, 1, 1, 1})
-    if not dim and not already and not full then
+    if not dim then
         drawCoin(hx + 22, hy + hh / 2, 6)
         love.graphics.print("HIRE", hx + 34, hy + (hh - font16:getHeight()) / 2)
         local costStr = label:match("(%d+)$") or ""
@@ -874,7 +790,7 @@ local function drawDescBar()
         love.graphics.print(inst.name or "(unnamed)", 12, DESC_Y + 6)
         love.graphics.setFont(font14)
         love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        love.graphics.print(tostring(inst.itemType or "?") .. " · grade " .. tostring(inst.grade or "?"),
+        love.graphics.print(inst.desc or tostring(inst.itemType or "?"),
             12, DESC_Y + 28)
         local mods = inst.mods or {}
         local modParts = {}
@@ -883,10 +799,10 @@ local function drawDescBar()
         end
         if #modParts > 0 then
             love.graphics.setColor(0.95, 0.55, 0.20, 1)
-            love.graphics.print(table.concat(modParts, ", "), 240, DESC_Y + 28)
+            love.graphics.print(table.concat(modParts, ", "), 12, DESC_Y + 44)
         end
         love.graphics.setColor(0.95, 0.78, 0.20, 1)
-        local pay = (items and items.sellValue) and items.sellValue(inst) or (inst.sellPrice or 0)
+        local pay = items.sellValue(inst)
         love.graphics.print("sells for " .. tostring(pay), VW - 160, DESC_Y + 28)
     elseif hireName then
         local cd = (saveData_ref.unlockedCharacters or {})[hireName]
@@ -895,8 +811,9 @@ local function drawDescBar()
         love.graphics.print(displayName(hireName), 12, DESC_Y + 6)
         love.graphics.setFont(font14)
         love.graphics.setColor(0.75, 0.75, 0.75, 1)
-        love.graphics.print("Lv " .. tostring((cd and cd.level) or 1), 12, DESC_Y + 28)
-        local cost = (items and items.hireCost) and items.hireCost(saveData_ref.floor or 1) or 0
+        love.graphics.print("Joins at Lv " .. tostring(progression.hireLevel(saveData_ref))
+            .. " with starter gear", 12, DESC_Y + 28)
+        local cost = progression.hireCost(saveData_ref)
         love.graphics.setColor(0.95, 0.78, 0.20, 1)
         love.graphics.print("hire cost " .. tostring(cost), VW - 160, DESC_Y + 28)
     else

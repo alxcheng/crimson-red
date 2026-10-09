@@ -1,7 +1,31 @@
--- save.lua — save slot I/O using love.filesystem + JSON
+-- save.lua — save slots (JSON files in LÖVE's save directory).
+--
+-- saveData = {
+--   floor       = 1,                       -- current floor (difficulty / reward tier)
+--   gold        = 0,
+--   partyOrder  = { name|false x4 },       -- the active party, by slot
+--   unlockedCharacters = { [name] = {      -- every hero in the game
+--       recruited = bool,                  -- owned (shown in PARTY); else hireable
+--       level, pointsToNextLevel,          -- progression.lua
+--       equipped  = { weapon=, armor=, trinket= },   -- item instance ids
+--       skillTree = { optionId, ... },     -- talent picks (data/talents.lua)
+--   } },
+--   items       = { [instanceId] = instance },   -- every owned item (items.lua)
+--   inventory   = { instanceId, ... },           -- carried, unequipped items
+--   shopState   = { offers = {instanceId..}, hireOffer = name|nil, seeded, pendingRestock },
+--   mapProgression = { playerCol, playerRow, revealedTiles, clearedEncounters },
+-- }
+-- Stats are NOT saved; progression.heroStats derives them.
 
 local M   = {}
 local json = require("json")
+
+local ALL_CHARACTERS = {
+    "knight", "champion", "duelist", "hunter", "jester", "nomad", "piper", "witch",
+    "cleric", "paladin", "wizard", "rogue",
+}
+-- A new game starts with BH's opening pair: a tank and a healer.
+local STARTING_PARTY = { "knight", "cleric" }
 
 local function filename(slot)
     return "save_" .. slot .. ".json"
@@ -11,26 +35,60 @@ function M.exists(slot)
     return love.filesystem.getInfo(filename(slot)) ~= nil
 end
 
+local function defaultShopState()
+    return { offers = {}, hireOffer = nil, seeded = false }
+end
+
+-- Bring a save written by an older version up to the current shape.
+local function migrate(data)
+    data.floor     = data.floor or 1
+    data.gold      = data.gold or 0
+    data.items     = data.items or {}
+    data.inventory = data.inventory or {}
+    data.shopState = data.shopState or defaultShopState()
+    data.unlockedCharacters = data.unlockedCharacters or {}
+
+    -- Before recruiting existed every character was usable: keep them all.
+    local hasFlag = false
+    for _, rec in pairs(data.unlockedCharacters) do
+        if rec.recruited ~= nil then hasFlag = true end
+    end
+    for _, rec in pairs(data.unlockedCharacters) do
+        if not hasFlag then rec.recruited = true end
+        rec.stats = nil                       -- stats are derived now
+        rec.equipped = rec.equipped or {}
+        if type(rec.skillTree) ~= "table" then rec.skillTree = {} end
+    end
+
+    -- Items from before the Battleheart catalog have no bhId and cannot be
+    -- interpreted any more: drop them (and any reference to them).
+    for id, inst in pairs(data.items) do
+        if type(inst) ~= "table" or not inst.bhId then data.items[id] = nil end
+    end
+    local kept = {}
+    for _, id in ipairs(data.inventory) do
+        if data.items[id] then kept[#kept + 1] = id end
+    end
+    data.inventory = kept
+    for _, rec in pairs(data.unlockedCharacters) do
+        for slot, id in pairs(rec.equipped) do
+            if not data.items[id] then rec.equipped[slot] = nil end
+        end
+    end
+    local offers = {}
+    for _, id in ipairs(data.shopState.offers or {}) do
+        if data.items[id] then offers[#offers + 1] = id end
+    end
+    data.shopState.offers = offers
+    return data
+end
+
 function M.load(slot)
     local raw = love.filesystem.read(filename(slot))
     if not raw then return nil end
     local ok, data = pcall(json.decode, raw)
-    if ok and type(data) == "table" then
-        -- Floor was added after the initial save format: old saves lack it,
-        -- so normalize to 1 so consumers never see a nil floor.
-        data.floor = data.floor or 1
-        -- Economy & item foundation fields (Phase 0). Old saves predate these,
-        -- so normalize to defaults so consumers never see nil gold/items/shopState.
-        data.gold      = data.gold or 0
-        data.items     = data.items or {}
-        data.shopState = data.shopState or {
-            offers    = {},
-            hireOffer = nil,
-            lastFloor = 1,
-            seeded    = false,
-        }
-    end
-    return ok and data or nil
+    if not (ok and type(data) == "table") then return nil end
+    return migrate(data)
 end
 
 function M.write(slot, data)
@@ -42,55 +100,17 @@ function M.delete(slot)
     love.filesystem.remove(filename(slot))
 end
 
-local DEFAULT_STATS = {
-    ATK=10, DEF=5, maxHP=100, SPD=80, ATKSPD=2.0,
-    CRIT=0.10, CRITDEF=0.05, RES=1.0, BOOST=1.0,
-    WGT=0, STR=0, maxSTAGGER=50, STAGGERdur=10, STAGGERres=1.0,
-}
-
-local function defaultChar()
-    -- Each character gets its OWN stats table: talents fold passives into
-    -- rec.stats in place, so a shared reference would leak one character's
-    -- picks into every other character until the next save/load round-trip.
-    local stats = {}
-    for k, v in pairs(DEFAULT_STATS) do stats[k] = v end
-    return {
-        level             = 1,
-        pointsToNextLevel = 50,   -- = progression.xpToNext(1)
-        stats             = stats,
-        equipped          = {},
-        skillTree         = {},
-    }
-end
-
 function M.defaultData()
-    return {
+    local progression = require("progression")
+    local items       = require("items")
+    local data = {
         floor = 1,
-        partyOrder = {"knight", false, false, false},
-        unlockedCharacters = {
-            knight   = defaultChar(),
-            champion = defaultChar(),
-            duelist  = defaultChar(),
-            hunter   = defaultChar(),
-            jester   = defaultChar(),
-            nomad    = defaultChar(),
-            piper    = defaultChar(),
-            witch    = defaultChar(),
-            -- 4 ported BH classes (proof-of-port, see handoff.md)
-            cleric   = defaultChar(),
-            paladin  = defaultChar(),
-            wizard   = defaultChar(),
-            rogue    = defaultChar(),
-        },
-        inventory = {},
-        gold = 0,
+        gold  = 15,   -- BH starting gold
+        partyOrder = { false, false, false, false },
+        unlockedCharacters = {},
         items = {},
-        shopState = {
-            offers    = {},
-            hireOffer = nil,
-            lastFloor = 1,
-            seeded    = false,
-        },
+        inventory = {},
+        shopState = defaultShopState(),
         mapProgression = {
             playerCol         = 9,
             playerRow         = 5,
@@ -98,6 +118,21 @@ function M.defaultData()
             clearedEncounters = {},
         },
     }
+    for _, name in ipairs(ALL_CHARACTERS) do
+        data.unlockedCharacters[name] = {
+            recruited         = false,
+            level             = 1,
+            pointsToNextLevel = progression.xpToNext(1),
+            equipped          = {},
+            skillTree         = {},
+        }
+    end
+    for i, name in ipairs(STARTING_PARTY) do
+        data.unlockedCharacters[name].recruited = true
+        data.partyOrder[i] = name
+        items.equipStarterGear(data, name)
+    end
+    return data
 end
 
 return M

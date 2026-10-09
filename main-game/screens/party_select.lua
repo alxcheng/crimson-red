@@ -202,8 +202,8 @@ function M.onEnter(canvas, postfx, sw, saveData, slot)
 
     roster = {}
     local uc = saveData.unlockedCharacters or {}
-    for name in pairs(uc) do
-        if not inParty[name] then
+    for name, rec in pairs(uc) do
+        if rec.recruited and not inParty[name] then   -- unrecruited heroes are hired in the SHOP
             roster[#roster + 1] = name
         end
     end
@@ -358,7 +358,7 @@ local function drawTooltip()
 
     local rec   = charRecord(hoveredChar)
     local lvl   = (rec and rec.level) or 1
-    local stats = rec and rec.stats or nil
+    local stats = require("progression").heroStats(saveData_ref, hoveredChar)
     local atk   = stats and stats.ATK
     local dfn   = stats and stats.DEF
 

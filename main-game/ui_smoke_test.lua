@@ -19,6 +19,7 @@ local common    = require("common")
 local moonshine = require("moonshine")
 local save      = require("save")
 local items     = require("items")
+local progression = require("progression")
 local music_mgr = require("music_mgr")
 
 local VW, VH = common.VW, common.VH
@@ -62,14 +63,14 @@ local function fixtureRich()
     sd.floor      = 2
     sd.gold       = 500
     sd.partyOrder = { "knight", "cleric", "wizard", "rogue" }
-    sd.unlockedCharacters.knight.level = 9
-    sd.unlockedCharacters.cleric.level = 4
-    sd.unlockedCharacters.wizard.level = 1
-    sd.unlockedCharacters.rogue.level  = 21
-    for _, spec in ipairs({ {"weapon",1}, {"weapon",3}, {"armor",1}, {"armor",2}, {"trinket",2}, {"trinket",3} }) do
-        local id = items.nextId(sd)
-        sd.items[id] = items.makeInstance(id, spec[1], spec[2])
-        table.insert(sd.inventory, id)
+    for name, level in pairs({ knight = 9, cleric = 4, wizard = 1, rogue = 21 }) do
+        local rec = sd.unlockedCharacters[name]
+        rec.recruited, rec.level = true, level
+        items.equipStarterGear(sd, name)
+    end
+    -- Longsword, Scale Mail, Soft Leather Garb, Silver Armlet, Swordsman's Gauntlet, Energy Ring
+    for _, bhId in ipairs({ 10, 4, 5, 24, 12, 15 }) do
+        table.insert(sd.inventory, items.mint(sd, bhId))
     end
     return sd
 end
@@ -340,9 +341,8 @@ end
 -- Drive a whole battle on screens/encounter.lua: enter with `party`, mash the
 -- ability keys, retarget with right-clicks, toggle pause, and run until the
 -- screen asks to leave (victory -> "map") or `maxSeconds` of game time pass.
--- Party stats are inflated so the fight is winnable and reaches the victory
--- branch (gold / XP / shop-restock latch).
-local function driveEncounter(tag, party)
+-- `level` (default 1) is every hero's level; heroes carry their starter gear.
+local function driveEncounter(tag, party, level)
     local scr = require("screens/encounter")
     local sd = fixtureFresh()
     sd.partyOrder = party
@@ -351,15 +351,17 @@ local function driveEncounter(tag, party)
         if type(name) == "string" then names[#names + 1] = name end
     end
     for _, name in ipairs(names) do
-        local st = sd.unlockedCharacters[name].stats
-        st.maxHP, st.ATK, st.DEF = 4000, 60, 20
+        local rec = sd.unlockedCharacters[name]
+        rec.recruited, rec.level = true, level or 1
+        items.equipStarterGear(sd, name)
     end
     local gold0 = sd.gold
     switched = nil
-    local cfg = { encounterGoal = 9, spawnDelay = 0.5 }
-    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, cfg) then return end
+    local xp0 = {}
+    for _, name in ipairs(names) do xp0[name] = sd.unlockedCharacters[name].pointsToNextLevel end
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { spawnDelay = 0.5 }) then return end
     local keys = { "q", "w", "e", "r" }
-    local maxFrames, frame = 180 * 60, 0
+    local maxFrames, frame = 420 * 60, 0
     while frame < maxFrames and not switched do
         frame = frame + 1
         mouseX, mouseY = math.random(300, VW - 40), math.random(120, VH - 60)
@@ -372,11 +374,25 @@ local function driveEncounter(tag, party)
         -- right-click a living enemy so idle heroes get a target. Every 10th
         -- order is a move to open ground instead.
         if frame % 60 == 0 then
-            local world = scr.debugState()
+            local world, battle = scr.debugState()
             local order = frame / 60
-            guard(tag .. " keypressed", scr.keypressed, tostring(order % 4 + 1))
+            local slot = order % #names + 1
+            guard(tag .. " keypressed", scr.keypressed, tostring(slot))
+            local hero = battle.partyIds[slot]
             local tx, ty
-            if order % 10 ~= 0 then
+            if order % 10 == 0 then
+                -- move order to open ground (mouseX/mouseY are already random)
+            elseif world.targetSide[hero] == 0 then
+                -- a healer: aim at the most injured living hero
+                local worst = math.huge
+                for i, id in ipairs(battle.partyIds) do
+                    local st, pos = world.stats[id], world.position[id]
+                    if st and pos and not battle.deadSlots[i] then
+                        local ratio = st.HP.base / st.maxHP.base
+                        if ratio < worst then worst, tx, ty = ratio, pos.x, pos.y end
+                    end
+                end
+            else
                 for id in pairs(world.entities) do
                     local sd, pos = world.side[id], world.position[id]
                     if sd and sd.s == 1 and pos and not world.deathState[id] and pos.x < VW then
@@ -398,6 +414,13 @@ local function driveEncounter(tag, party)
         if frame == 200 then screenshot(tag .. "-1-fighting") end
     end
     screenshot(tag .. "-2-end")
+    do  -- how it ended, for the log
+        local world, battle = scr.debugState()
+        local alive = 0
+        for i in ipairs(battle.partyIds) do if not battle.deadSlots[i] then alive = alive + 1 end end
+        print(string.format("UI_SMOKE %s: %.0fs, heroes alive %d/%d, kills %d", tag, frame / 60, alive,
+            #battle.partyIds, battle.enemyDefeated))
+    end
     if scr.onExit then guard(tag .. " onExit", scr.onExit) end
     check(switched ~= nil and switched.name == "map",
           tag .. ": battle is won and returns to the map (" .. string.format("%.0fs", frame / 60) .. ")")
@@ -406,7 +429,7 @@ local function driveEncounter(tag, party)
     local leveled = false
     for _, name in ipairs(names) do
         local rec = sd.unlockedCharacters[name]
-        if rec.level > 1 or rec.pointsToNextLevel < 50 then leveled = true end
+        if rec.level > (level or 1) or rec.pointsToNextLevel < xp0[name] then leveled = true end
     end
     check(leveled, tag .. ": victory grants XP to survivors")
 end
@@ -431,20 +454,24 @@ local function runAll()
     sd = fixtureFresh()
     drive("shop-fresh", "shop", sd)
     invariants("shop-fresh", sd)
-    check(sd.gold == 0, "shop-fresh: nothing can be bought with 0 gold")
+    check(sd.gold >= 0 and sd.gold <= 15 + 100, "shop-fresh: a new game's 15 gold never goes negative")
 
     -- TALENTS
     sd = fixtureRich()
-    local atk0 = sd.unlockedCharacters.knight.stats.ATK
-    local wizAtk0 = sd.unlockedCharacters.wizard.stats.ATK
+    local wiz0   = progression.heroStats(sd, "wizard")
+    local champ0 = progression.heroStats(sd, "champion")
     exits = drive("talents-rich", "talents", sd, { fuzz = 20000 })
     invariants("talents-rich", sd)
     local uc = sd.unlockedCharacters
     check(countPicks(uc.knight) == 3, "talents-rich: Lv9 knight picked exactly 3 branches (got " .. countPicks(uc.knight) .. ")")
     check(countPicks(uc.cleric) == 1, "talents-rich: Lv4 cleric picked exactly 1 branch (got " .. countPicks(uc.cleric) .. ")")
     check(countPicks(uc.wizard) == 0, "talents-rich: Lv1 wizard picked nothing (got " .. countPicks(uc.wizard) .. ")")
-    check(uc.wizard.stats.ATK == wizAtk0, "talents-rich: another character's picks did not leak into wizard stats")
-    check(uc.champion.stats.ATK == atk0, "talents-rich: picks did not leak into a benched character's stats")
+    local kn9 = progression.heroStats(sd, "knight")
+    local knBare = progression.heroStats(fixtureRich(), "knight")
+    check(kn9.ATK + kn9.DEF + kn9.maxHP > knBare.ATK + knBare.DEF + knBare.maxHP,
+          "talents-rich: the knight's picks raise its stats")
+    check(progression.heroStats(sd, "wizard").ATK == wiz0.ATK and progression.heroStats(sd, "champion").ATK == champ0.ATK,
+          "talents-rich: picks do not leak into other heroes' stats")
     check((exits.map or 0) > 0, "talents-rich: back/escape returns to map")
     drive("talents-fresh", "talents", fixtureFresh())
     sd = fixtureRich()
@@ -454,25 +481,46 @@ local function runAll()
           "talents-rogue: Lv21 rogue can reach all 7 branches by scrolling (got " .. countPicks(sd.unlockedCharacters.rogue) .. ")")
 
     -- PROGRESSION (XP grant that feeds the talent ladder)
-    local progression = require("progression")
     sd = fixtureFresh()
     local kn = sd.unlockedCharacters.knight
-    check(progression.addXP(kn, 49) == 0 and kn.level == 1 and kn.pointsToNextLevel == 1,
-          "progression: 49 XP leaves a fresh character 1 short of Lv2")
-    check(progression.addXP(kn, 1) == 1 and kn.level == 2 and kn.pointsToNextLevel == progression.xpToNext(2),
-          "progression: the 50th XP levels up and resets the counter")
-    check(progression.addXP(kn, 100000) == progression.MAX_LEVEL - 2 and kn.level == progression.MAX_LEVEL,
+    local bhCurve = { 30, 40, 54, 72, 97, 129, 167, 213, 266, 327 }
+    local curveOk = true
+    for lv, want in ipairs(bhCurve) do
+        if progression.xpToNext(lv) ~= want then curveOk = false end
+    end
+    check(curveOk, "progression: XP curve matches Battleheart's for levels 1-10")
+    check(progression.addXP(kn, 29) == 0 and kn.level == 1 and kn.pointsToNextLevel == 1,
+          "progression: 29 XP leaves a fresh hero 1 short of Lv2")
+    check(progression.addXP(kn, 1) == 1 and kn.level == 2 and kn.pointsToNextLevel == 40,
+          "progression: the 30th XP levels up and resets the counter")
+    check(progression.addXP(kn, 10000000) == progression.MAX_LEVEL - 2 and kn.level == progression.MAX_LEVEL,
           "progression: a huge grant multi-levels and stops at MAX_LEVEL")
     sd = fixtureFresh()
-    sd.partyOrder = { "knight", "cleric", false, false }
-    progression.onEncounterWon(sd, { "knight" })
-    check(sd.unlockedCharacters.knight.level == 2 and sd.unlockedCharacters.cleric.level == 1,
+    local r = progression.onEncounterWon(sd, { "knight" }, 3)
+    check(sd.unlockedCharacters.knight.level > 1 and sd.unlockedCharacters.cleric.level == 1,
           "progression: only survivors get the win's XP")
+    check(sd.gold == 15 + r.gold and r.gold >= 23 + 3 and r.gold <= 31 + 3,
+          "progression: floor-1 win pays BH's 27 gold +/-15% plus 1 per kill (got " .. r.gold .. ")")
+    sd = fixtureFresh()
+    local st = progression.heroStats(sd, "knight")
+    check(st.maxHP == 1000 and st.ATK == 20 + 15 and st.DEF == 15 + 20,
+          "progression: Lv1 knight = BH base + Iron Sword + Scale Mail (HP " .. st.maxHP .. " ATK " .. st.ATK .. " DEF " .. st.DEF .. ")")
+    sd.unlockedCharacters.knight.level = 11
+    sd.unlockedCharacters.knight.skillTree = { "guard" }
+    st = progression.heroStats(sd, "knight")
+    check(st.maxHP == 1150 and st.ATK == 45 and st.DEF == 15 + 12 + 20 + 6,
+          "progression: levels, gear and talent picks all add up (HP " .. st.maxHP .. " ATK " .. st.ATK .. " DEF " .. st.DEF .. ")")
+    sd = fixtureFresh()
+    sd.gold = 100
+    local hireName = progression.rollHire(sd)
+    progression.recruit(sd, hireName)
+    check(sd.unlockedCharacters[hireName].recruited and sd.unlockedCharacters[hireName].equipped.weapon ~= nil,
+          "progression: a recruit joins with starter gear (" .. tostring(hireName) .. ")")
 
     -- ENCOUNTER (full battles through to the victory branch)
-    driveEncounter("battle-knight-solo", { "knight", false, false, false })
-    driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" })
-    driveEncounter("battle-cr-classes", { "knight", "champion", "duelist", "nomad" })
+    driveEncounter("battle-new-game", { "knight", "cleric", false, false })       -- the fresh-save party, level 1
+    driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" }, 3)
+    driveEncounter("battle-cr-classes", { "knight", "champion", "duelist", "nomad" }, 3)
 
     -- PARTY
     sd = fixtureRich()
