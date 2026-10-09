@@ -50,6 +50,9 @@ of the right section.
 13. **Movement speeds are not BH's.** BH speeds are in world units/second
     (`bh/data/prefabs/PartyMember.json` `moveSpeed`); pick a pixels-per-unit factor first.
 14. **OPTIONS on the title screen opens the developer sprite viewer.**
+14b. **Long item names overlap the price in the SHOP sell list** (e.g. "Swordsman's Gauntlet").
+    Truncate or shrink the name in `drawSellSection` (`screens/shop.lua`); check the screenshot
+    `shop-rich-1-enter.png` from `./test_ui`.
 
 ## D. Cleanup (safe, good first tasks)
 15. **Duplicate UI helpers.** `displayName` and the hero-icon loader are copied in
