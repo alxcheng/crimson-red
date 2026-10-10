@@ -604,6 +604,12 @@ local function drawTopBar()
     love.graphics.print(LOCATION_NAME, VW - lw - 20, math.floor((TOP_BAR_H - lh) / 2))
 end
 
+local function drawEnterLabel()
+    love.graphics.setFont(font16)
+    love.graphics.setColor(isItemPressed("popup") and common.COLOR_BLACK or common.COLOR_WHITE)
+    love.graphics.print(ENTER_LABEL, enterX, enterY)
+end
+
 local function drawPopupContent()
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", POPUP_X+2, MAP_Y+2, POPUP_W-4, MAP_H-4)
@@ -628,22 +634,9 @@ local function drawPopupContent()
     love.graphics.setColor(1, 0, 0, 1)
     love.graphics.printf(visible, POPUP_X+10, MAP_Y+56, POPUP_W-20, "left")
 
-    local enterPressed = isItemPressed("popup")
-    if hoveredItem and hoveredItem.zone == "popup" then
-        if enterPressed then
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.rectangle("fill", enterX-BOX_PAD, enterY-BOX_PAD,
-                                    enterLabelW+BOX_PAD*2, enterLabelH+BOX_PAD*2)
-        else
-            love.graphics.setColor(1, 0, 0, 1)
-            love.graphics.setLineWidth(2)
-            love.graphics.rectangle("line", enterX-BOX_PAD, enterY-BOX_PAD,
-                                    enterLabelW+BOX_PAD*2, enterLabelH+BOX_PAD*2)
-        end
-    end
-    love.graphics.setFont(font16)
-    love.graphics.setColor(enterPressed and common.COLOR_BLACK or common.COLOR_WHITE)
-    love.graphics.print(ENTER_LABEL, enterX, enterY)
+    -- While the panel is still growing or shrinking, ENTER scales with it. Once
+    -- it is fully open drawScene draws ENTER itself, on top of the hover box.
+    if popup.scale < 1 then drawEnterLabel() end
 end
 
 local function drawPopup()
@@ -682,9 +675,12 @@ local function drawScene()
     love.graphics.draw(canvas_map, 0, MAP_Y)
     love.graphics.setShader()
 
-    common.drawBox(box, pressedItem ~= nil and pressedItem.zone ~= "popup")
-    drawTopBar()
+    -- The hover box goes above the popup panel (so it is never hidden behind
+    -- it) and below the labels it can sit behind.
     drawPopup()
+    common.drawBox(box, pressedItem ~= nil)
+    drawTopBar()
+    if popup.visible and popup.scale >= 1 then drawEnterLabel() end
 
     love.graphics.setColor(1, 1, 1, 1)
 end
