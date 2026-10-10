@@ -31,7 +31,7 @@ Flow: `title` → `save_select` → `map` ⇄ `party_select` / `talents` / `equi
 | File | Role |
 |---|---|
 | `main.lua`, `conf.lua` | Screen manager, window setup, test-mode switches (`CR_TEST_SCENE`). |
-| `common.lua` | Shared drawing/UI helpers: canvas + post-fx, letterbox, virtual mouse, the animated selection box, fonts (`loadFont`, cached), text fitting (`fitText`, `printCentered`, `titleCase`), the top bar + BACK button (`drawTopBar`), hover tooltips (`drawTooltip`), UI sounds. |
+| `common.lua` | Shared drawing/UI helpers: canvas + post-fx, letterbox, virtual mouse, the animated selection box, fonts (`loadFont`, cached), text fitting (`fitText`, `printCentered`, `titleCase`), the top bar + BACK button (`drawTopBar`), hover tooltips (`drawTooltip`), the mouse cursor (`drawCursor`), UI sounds. |
 | `item_ui.lua` | How an item looks in menus: its W/A/T token, grade colours, tooltip lines. Used by shop + equip. |
 | `save.lua` | Save slots. **The save format is documented at the top of this file.** `migrate()` upgrades old saves. |
 | `items.lua` | Item instances, equip rules (`canUse`), gold, shop stock (`rollOffers`). |

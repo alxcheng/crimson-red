@@ -96,6 +96,7 @@ function love.load()
     else
         -- VISIBLE DEFAULT — unchanged from before this feature.
         love.window.setMode(VW, VH, {resizable=true, minwidth=400, minheight=225})
+        love.mouse.setVisible(false)   -- the game draws its own cursor (common.drawCursor)
         math.randomseed(os.time())
 
         canvas = common.newSceneCanvas()
@@ -172,16 +173,18 @@ end
 
 function love.mousepressed(x, y, button)
     if trans.phase then return end
-    if button == 1 and love.keyboard.isDown('lctrl', 'rctrl') then button = 2 end
+    -- There is ONE click: left and right buttons do the same thing everywhere
+    -- (Director, 2026-10-09). Screens only ever see button 1.
+    if button ~= 1 and button ~= 2 then return end
     local s = screens[current]
-    if s.mousepressed then s.mousepressed(x, y, button) end
+    if s.mousepressed then s.mousepressed(x, y, 1) end
 end
 
 function love.mousereleased(x, y, button)
     if trans.phase then return end
-    if button == 1 and love.keyboard.isDown('lctrl', 'rctrl') then button = 2 end
+    if button ~= 1 and button ~= 2 then return end
     local s = screens[current]
-    if s.mousereleased then s.mousereleased(x, y, button) end
+    if s.mousereleased then s.mousereleased(x, y, 1) end
 end
 
 function love.wheelmoved(x, y)

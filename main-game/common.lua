@@ -205,6 +205,7 @@ function M.renderFrame(canvas, postfx, drawSceneFn)
     love.graphics.setCanvas(canvas)
     love.graphics.clear()
     drawSceneFn()
+    M.drawCursor()
     love.graphics.setCanvas()
 
     local ox, oy, scale = M.letterbox()
@@ -214,6 +215,41 @@ function M.renderFrame(canvas, postfx, drawSceneFn)
     postfx(function()
         love.graphics.draw(canvas, ox, oy, 0, scale, scale)
     end)
+end
+
+-- ============================================================================
+-- CURSOR
+-- ============================================================================
+-- The game draws its own mouse cursor on the virtual canvas (the system cursor
+-- is hidden in main.lua), so it gets the same post-processing as everything
+-- else. Art: Kenney "Cursor Pixel Pack" (CC0), 16x16 tiles, 20 per row. The
+-- Director chose them by row/column counted from 1 at the top left:
+--   tile number = (row - 1) * 20 + (column - 1)
+-- Every screen gets the hand through M.renderFrame; the battle screen draws its
+-- own frame and calls M.drawCursor(true) while the mouse is over a valid target.
+local CURSOR_DIR = "assets/icons/kenney_cursor-pixel-pack/Tiles/"
+local CURSORS = {
+    --                  tile  hot spot (the pixel that points), in tile pixels
+    idle          = { tile = 175, hx = 3, hy = 1 },   -- row 9, column 16: hand
+    pressed       = { tile = 137, hx = 5, hy = 1 },   -- row 7, column 18: hand pressing
+    target        = { tile =  55, hx = 8, hy = 8 },   -- row 3, column 16: crosshair
+    targetPressed = { tile =  54, hx = 8, hy = 8 },   -- row 3, column 15: crosshair, filled
+}
+M.CURSOR_SCALE = 1
+
+function M.drawCursor(onTarget)
+    local down = love.mouse.isDown(1, 2)
+    local c = CURSORS[onTarget and (down and "targetPressed" or "target") or (down and "pressed" or "idle")]
+    if not c.img then
+        c.img = love.graphics.newImage(string.format("%stile_%04d.png", CURSOR_DIR, c.tile))
+        c.img:setFilter("nearest", "nearest")
+    end
+    local x, y = M.virtualMouse()
+    -- Keep it on the canvas when the mouse is over the window's black bars.
+    x = math.max(0, math.min(M.VW - 1, math.floor(x)))
+    y = math.max(0, math.min(M.VH - 1, math.floor(y)))
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(c.img, x, y, 0, M.CURSOR_SCALE, M.CURSOR_SCALE, c.hx, c.hy)
 end
 
 -- ============================================================================

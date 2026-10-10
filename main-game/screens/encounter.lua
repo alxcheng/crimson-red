@@ -97,6 +97,29 @@ local function setPaused(on)
     common.playClickSound()
 end
 
+-- The unit the selected hero would be ordered onto by a click at (x, y): an
+-- enemy for attackers, an ally for healers (world.targetSide). nil = the click
+-- is a move order. The cursor turns into a crosshair over such a unit.
+local function orderTargetAt(x, y)
+    local su = battle.selectedUnit
+    if not su or world.deathState[su] then return nil end
+    local tSide = world.targetSide[su] or 1
+    for id in pairs(world.entities) do
+        if world.deathState[id]    then goto scanNext end
+        if id == su and tSide ~= 0 then goto scanNext end
+        do
+            local sd, pos, sz = world.side[id], world.position[id], world.size[id]
+            if sd and sd.s == tSide and pos and sz
+            and x >= pos.x-sz.w/2 and x <= pos.x+sz.w/2
+            and y >= pos.y-sz.h/2 and y <= pos.y+sz.h/2 then
+                return id
+            end
+        end
+        ::scanNext::
+    end
+    return nil
+end
+
 -- Leave a battle that was not won (defeat or RETREAT): no rewards. The map
 -- recorded this encounter as cleared when it was entered; put it back, so the
 -- party stands in front of it again exactly as before entering.
@@ -274,6 +297,11 @@ local function drawScene(dt)
         end
         love.graphics.setColor(1, 1, 1, 1)
     end
+
+    -- Mouse cursor: a crosshair over a unit the selected hero can be ordered
+    -- onto (enemy for attackers, ally for healers), the hand otherwise.
+    local live = not (paused or battle.victory or battle.defeat)
+    common.drawCursor(live and orderTargetAt(common.virtualMouse()) ~= nil)
 end
 
 -- ============================================================================
@@ -531,39 +559,17 @@ function M.mousepressed(x, y, button)
         return
     end
 
-    if button == 1 then
-        for i, id in ipairs(battle.partyIds) do
-            if not battle.deadSlots[i] then
-                local pos, sz = world.position[id], world.size[id]
-                if pos and sz and vmx >= pos.x-sz.w/2 and vmx <= pos.x+sz.w/2
-                and vmy >= pos.y-sz.h/2 and vmy <= pos.y+sz.h/2 then
-                    battle.selectedUnit = id; break
-                end
-            end
-        end
-        return
-    end
-
-    if button ~= 2 then return end
+    -- One click (either mouse button) orders the selected hero: onto a valid
+    -- target if one is under the cursor, otherwise a move to that spot. Heroes
+    -- are selected with keys 1-4 only; clicking a hero does not select it.
+    if button ~= 1 then return end
     local su = battle.selectedUnit; if not su then return end
     if battle.hoveredUnit and not world.deathState[battle.hoveredUnit] then
         battle.pressedUnit = battle.hoveredUnit
     end
 
     local tSide = world.targetSide[su] or 1
-    local clicked = nil
-    for id in pairs(world.entities) do
-        if world.deathState[id]           then goto scanNext end
-        if id == su and tSide ~= 0        then goto scanNext end
-        local sd, pos, sz = world.side[id], world.position[id], world.size[id]
-        if sd and sd.s == tSide and pos and sz then
-            if vmx >= pos.x-sz.w/2 and vmx <= pos.x+sz.w/2
-            and vmy >= pos.y-sz.h/2 and vmy <= pos.y+sz.h/2 then
-                clicked = id; break
-            end
-        end
-        ::scanNext::
-    end
+    local clicked = orderTargetAt(vmx, vmy)
 
     if clicked then
         -- A hero given a target while it had none attacks as soon as it is in
@@ -585,7 +591,7 @@ function M.mousepressed(x, y, button)
         if not (sgSu and sgSu.staggered) then
             world.entityTarget[su] = nil
         end
-        -- Right-click move: vmx/vmy is a GROUND/feet point (where the player
+        -- Move order: vmx/vmy is a GROUND/feet point (where the player
         -- clicked). moveTarget treats mt.x/mt.y as CENTER coords, so convert:
         -- center.y = groundY - size.h/2 (the feet rule). This makes the unit
         -- stop with its FEET at the clicked point.
@@ -613,7 +619,7 @@ function M.mousereleased(x, y, button)
         end
         return
     end
-    if button == 2 then battle.pressedUnit = nil end
+    battle.pressedUnit = nil
 end
 
 -- Test hook (ui_smoke_test.lua): the live world/battle tables, read-only use.

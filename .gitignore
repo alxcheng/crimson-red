@@ -19,3 +19,7 @@ work/
 
 # Agent-harness session exports (large zips, local only)
 harness-logs/
+
+# Downloaded asset archives (the unpacked folder is what the game uses)
+*.zip
+*.url

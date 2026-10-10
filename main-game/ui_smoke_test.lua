@@ -420,7 +420,7 @@ local function driveEncounter(tag, party, level, tier)
             guard(tag .. " keypressed", scr.keypressed, keys[math.random(#keys)])
         end
         -- Play like a person: once a second pick the next hero (keys 1-4) and
-        -- right-click a living enemy so idle heroes get a target. Every 10th
+        -- click a living enemy so idle heroes get a target. Every 10th
         -- order is a move to open ground instead.
         if frame % 60 == 0 then
             local world, battle = scr.debugState()
@@ -451,8 +451,8 @@ local function driveEncounter(tag, party, level, tier)
             end
             if tx then mouseX, mouseY = tx, ty end
             guard(tag .. " update", scr.update, 1 / 60)   -- refresh hover on the new mouse spot
-            guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
-            guard(tag .. " mousereleased", scr.mousereleased, mouseX, mouseY, 2)
+            guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 1)
+            guard(tag .. " mousereleased", scr.mousereleased, mouseX, mouseY, 1)
         end
         if frame % 173 == 0 then
             guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 1)
@@ -547,7 +547,21 @@ local function checkPauseMenu()
         guard(tag .. " mousereleased", scr.mousereleased, x, y, 1)
     end
     local hero = battle.partyIds[1]
-    run(120)
+    run(240)
+    -- One click, no click-to-select: with hero 2 (the cleric) selected, a click
+    -- on hero 1 is a heal order onto hero 1, not a change of selection.
+    guard(tag .. " keypressed", scr.keypressed, "2")
+    local hp = world.position[hero]
+    click(hp.x, hp.y)
+    check(battle.selectedUnit == battle.partyIds[2], tag .. ": clicking a hero does not select it (keys 1-4 only)")
+    check(world.entityTarget[battle.partyIds[2]] and world.entityTarget[battle.partyIds[2]].id == hero,
+          tag .. ": one click on an ally orders the healer onto it")
+    guard(tag .. " draw", scr.draw)
+    screenshot("cursor-1-target-ally")
+    mouseX, mouseY = 400, 120
+    run(1)
+    guard(tag .. " draw", scr.draw)
+    screenshot("cursor-2-idle")
     local x0 = world.position[hero].x
     guard(tag .. " keypressed", scr.keypressed, "escape")
     mouseX, mouseY = VW / 2, 242            -- over RETREAT
@@ -772,7 +786,7 @@ local function checkCombatRules()
     local tries = 0
     while not actionEffect(0) and tries < 300 do step(1); tries = tries + 1 end
     local h0, x0 = hits, world.position[knight].x
-    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 1)
     check(actionEffect(0) == nil and world.locks[knight].moveLock == 0,
           tag .. ": move order discards the pending swing and clears the move lock")
     step(12)
@@ -795,7 +809,7 @@ local function checkCombatRules()
     while not actionEffect(1) and tries < 300 do step(1); tries = tries + 1 end
     check(actionEffect(1) ~= nil, tag .. ": Q ability starts its wind-up")
     local res0 = battle.resource
-    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 1)
     local sk = world.skills[knight]
     check(actionEffect(1) == nil and sk.abilityQueue[1] == 1, tag .. ": interrupted ability returns to the front of the queue")
     check(sk.list[1].cd > 0 and battle.resource <= res0 + 0.1, tag .. ": it stays paid for (cooldown running, no refund)")
@@ -818,7 +832,7 @@ local function checkCombatRules()
     end
     local gx, gy, kx = duelThenWalkAway()
     combat.applyStun(world, goblin, 20 * 60)
-    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 1)
     step(90)
     local gp = world.position[goblin]
     check(math.abs(world.position[knight].x - kx) > 40, tag .. ": the hero walked away from the duel")
@@ -827,7 +841,7 @@ local function checkCombatRules()
     world.stun[goblin].stunned, world.stun[goblin].timer = false, 0
     world.locks[goblin].actionLock = 0
     gx, gy, kx = duelThenWalkAway()
-    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 2)
+    guard(tag .. " mousepressed", scr.mousepressed, mouseX, mouseY, 1)
     step(60)
     gp = world.position[goblin]
     local moved = math.sqrt((gp.x - gx) ^ 2 + (gp.y - gy) ^ 2)

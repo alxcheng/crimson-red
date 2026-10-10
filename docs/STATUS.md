@@ -12,6 +12,14 @@ Knight and a Cleric, 15 gold, and Battleheart's numbers throughout. Nine classes
 (knight, brigand, champion, duelist, nomad, cleric, paladin, wizard, rogue); one enemy type.
 
 ## Done on this branch (newest first)
+- **One click, own cursor (2026-10-09)**:
+  - *No left/right difference*: `main.lua` hands every screen button 1 for either mouse button.
+    In battle a click orders the selected hero (onto a valid target under the cursor, else a
+    move). Heroes are selected with keys 1-4 only; clicking a hero no longer selects it.
+  - *Cursor*: the system cursor is hidden and the game draws its own on the virtual canvas
+    (`common.drawCursor`, Kenney Cursor Pixel Pack, CC0, in `assets/icons/`). Hand / hand
+    pressed everywhere; in battle a crosshair / filled crosshair over a unit the selected hero
+    can be ordered onto (enemies for attackers, allies for healers). Size: `common.CURSOR_SCALE`.
 - **Pause menu (2026-10-09)**: ESC, SPACE or the corner icon pause the battle and show a small
   menu: RETURN (unpause) and RETREAT (leave with no rewards; the encounter is put back on the
   map, same as a defeat). No "PAUSED" label, no frame around the corner icon. Pausing is off
@@ -112,6 +120,11 @@ Confirmed by the Director (2026-10-09): hero move speed 2.4 (`HERO_MOVE_SPEED`);
 Nomad abilities on the 15 s / 3 bar default.
 
 ## Director said (verbatim, newest first)
+- 2026-10-09: "I want to remove the difference between left and right click for user clarity.
+  So now, there will be no left clicking on units to select them (you can only use 1,2,3,4)" /
+  cursor from the Kenney pack, rows/columns from the top left (1,1): "idle: row 9, column 16;
+  pressed: row 7, column 18; target idle: row 3, column 16; target pressed: row 3, column 15.
+  target occurs on valid target unit hover. for healers, allies, for attack units, enemies".
 - 2026-10-09: "pressing esc should also pause. There should be a small menu overlay. It should
   not say "Paused" in the top. On the top right, remove the white box around the pause" /
   "it should have the buttons RETREAT and RETURN. Retreat goes back to before the party entered
