@@ -372,7 +372,21 @@ local function driveEncounter(tag, party, level, tier)
     switched = nil
     local xp0 = {}
     for _, name in ipairs(names) do xp0[name] = sd.unlockedCharacters[name].pointsToNextLevel end
-    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { spawnDelay = 0.5 }) then return end
+    -- Waves are random. From tier 2 the battle is meant to exercise the ranged
+    -- enemy, so draw waves until a set contains a bat (do not leave it to luck).
+    local waves
+    if (tier or 1) >= 2 then
+        local wave_gen = require("encounter/wave_gen")
+        for _ = 1, 200 do
+            waves = wave_gen.generate(require("progression").battleTier(sd))
+            local hasBat = false
+            for _, w in ipairs(waves) do
+                for _, id in ipairs(w.enemies) do if id == "bat" then hasBat = true end end
+            end
+            if hasBat then break end
+        end
+    end
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { waves = waves, spawnDelay = 0.5 }) then return end
     local keys = { "q", "w", "e", "r" }
     local maxFrames, frame = 420 * 60, 0
     local seenTypes, shotStage, result = {}, {}, nil

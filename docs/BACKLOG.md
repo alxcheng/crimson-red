@@ -5,14 +5,14 @@ one, delete it here and add a line to `docs/STATUS.md`. New Director feedback go
 of the right section.
 
 ## A. Blocks or breaks a playthrough
-2. **Floors never advance.** `saveData.floor` is always 1 and there is one hand-made map
+1. **Floors never advance.** `saveData.floor` is always 1 and there is one hand-made map
    (`RAW_MAP` in `screens/map.lua`). Nothing happens when every encounter is cleared.
    Needs a Director decision on what a "floor clear" is, then: floor +1, new map. (Battles
    already get harder one by one within the floor: `progression.battleTier`.)
-3. **Idle heroes do not pick targets.** A hero only fights when ordered or when hit. BH heroes
+2. **Idle heroes do not pick targets.** A hero only fights when ordered or when hit. BH heroes
    auto-acquire nearby enemies (`bh/systems/party-member-stats-ai-damage.md` §7 "Idle").
    Code: `encounter/systems.lua` (`threat`, `targetFollow`).
-4. **Four heroes cannot fight**: hunter, jester, piper, witch have no row in `data/classes.lua`
+3. **Four heroes cannot fight**: hunter, jester, piper, witch have no row in `data/classes.lua`
    (they are never offered for hire; in old saves selecting one fields nobody). Port them
    (BH Ranger, —, Bard, Witch: `bh/systems/hero-abilities-part1.md` / `part2.md`) or remove them.
 
