@@ -5,9 +5,6 @@ one, delete it here and add a line to `docs/STATUS.md`. New Director feedback go
 of the right section.
 
 ## A. Blocks or breaks a playthrough
-1. **Retreating (ESC) skips an encounter for free.** The map records an encounter as cleared
-   when it is entered, and only a defeat puts it back (`screens/encounter.lua`). Needs a
-   Director decision: should a retreat count as a loss?
 2. **Floors never advance.** `saveData.floor` is always 1 and there is one hand-made map
    (`RAW_MAP` in `screens/map.lua`). Nothing happens when every encounter is cleared.
    Needs a Director decision on what a "floor clear" is, then: floor +1, new map. (Battles

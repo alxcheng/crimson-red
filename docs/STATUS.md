@@ -12,6 +12,11 @@ Knight and a Cleric, 15 gold, and Battleheart's numbers throughout. Nine classes
 (knight, brigand, champion, duelist, nomad, cleric, paladin, wizard, rogue); one enemy type.
 
 ## Done on this branch (newest first)
+- **Pause menu (2026-10-09)**: ESC, SPACE or the corner icon pause the battle and show a small
+  menu: RETURN (unpause) and RETREAT (leave with no rewards; the encounter is put back on the
+  map, same as a defeat). No "PAUSED" label, no frame around the corner icon. Pausing is off
+  once the battle is decided (VICTORY / DEFEAT). Code: `screens/encounter.lua` (`setPaused`,
+  `leaveUnfought`).
 - **Defeat, and enemies moving on after a kill (2026-10-09)**:
   - *Losing a battle*: when the last hero dies the word DEFEAT appears (BH timing: 1.8 s
     later, fade at 4.9 s, map at 6.4 s; a click skips to the fade). No rewards, nothing taken,
@@ -101,13 +106,16 @@ Everything above. In particular, choices the Lead made that the Director has not
     inventory is capped at 35 items (BH: 20); a won battle's item is lost if it is full (BH rule).
 12. **Recolour choices**: Cleric yellow, Paladin green, Wizard purple, Rogue dark red.
 13. **Defeat costs nothing** (as in BH): back to the map, same encounter waiting, same
-    difficulty. ESC (retreat) is unchanged: it still leaves the battle with the encounter
-    counted as cleared.
+    difficulty.
 
 Confirmed by the Director (2026-10-09): hero move speed 2.4 (`HERO_MOVE_SPEED`); Knight and
 Nomad abilities on the 15 s / 3 bar default.
 
 ## Director said (verbatim, newest first)
+- 2026-10-09: "pressing esc should also pause. There should be a small menu overlay. It should
+  not say "Paused" in the top. On the top right, remove the white box around the pause" /
+  "it should have the buttons RETREAT and RETURN. Retreat goes back to before the party entered
+  the encounter. return just unpauses" (done).
 - 2026-10-09: "Implement encounter lose feature. In addition. When an enemy finishes killing
   their target, they don't retarget" (both done, see the done list).
 - 2026-10-09: "small bug, the box hover goes under the popup for encounter and shop" (the map's

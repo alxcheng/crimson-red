@@ -512,6 +512,53 @@ local function checkDefeat()
     check(#sd.mapProgression.clearedEncounters == 1, tag .. ": the lost encounter is put back on the map")
 end
 
+-- Pause menu: ESC opens it and freezes the battle, RETURN resumes, RETREAT
+-- leaves with no rewards and the encounter back on the map.
+local function checkPauseMenu()
+    local tag = "pause"
+    local scr = require("screens/encounter")
+    local sd = fixtureFresh()
+    sd.partyOrder = { "knight", "cleric", false, false }
+    sd.mapProgression = sd.mapProgression or {}
+    sd.mapProgression.clearedEncounters = { { 1, 1 }, { 2, 1 } }
+    local gold0 = sd.gold
+    switched = nil
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { spawnDelay = 0.5 }) then return end
+    local world, battle = scr.debugState()
+    local function run(n) for _ = 1, n do guard(tag .. " update", scr.update, 1 / 60) end end
+    local function click(x, y)
+        mouseX, mouseY = x, y
+        run(1)
+        guard(tag .. " mousepressed", scr.mousepressed, x, y, 1)
+        guard(tag .. " mousereleased", scr.mousereleased, x, y, 1)
+    end
+    local hero = battle.partyIds[1]
+    run(120)
+    local x0 = world.position[hero].x
+    guard(tag .. " keypressed", scr.keypressed, "escape")
+    mouseX, mouseY = VW / 2, 242            -- over RETREAT
+    run(60)
+    check(world.position[hero].x == x0 and not switched, tag .. ": ESC freezes the battle and does not leave it")
+    guard(tag .. " draw", scr.draw)
+    screenshot(tag .. "-1-menu")
+    click(VW / 2, 208)                      -- RETURN
+    run(30)
+    check(world.position[hero].x ~= x0 and not switched, tag .. ": RETURN resumes the battle")
+    click(VW - 20, 20)                      -- the corner icon pauses...
+    x0 = world.position[hero].x
+    run(30)
+    local frozen = world.position[hero].x == x0
+    click(VW - 20, 20)                      -- ...and unpauses
+    run(30)
+    check(frozen and world.position[hero].x ~= x0, tag .. ": the corner icon pauses and unpauses")
+    guard(tag .. " keypressed", scr.keypressed, "escape")
+    click(VW / 2, 242)                      -- RETREAT
+    check(switched ~= nil and switched.name == "map", tag .. ": RETREAT returns to the map")
+    check(sd.gold == gold0 and #sd.mapProgression.clearedEncounters == 1,
+          tag .. ": RETREAT gives nothing and puts the encounter back on the map")
+    if scr.onExit then guard(tag .. " onExit", scr.onExit) end
+end
+
 -- Combat rules checked on a controlled duel: one knight, one unkillable goblin.
 -- Sprite alignment: every unit type in a row with its body box shown. Checks the
 -- maths (box = measured visible box x spriteScale) and saves a screenshot to LOOK at:
@@ -904,6 +951,7 @@ local function runAll()
     -- ENCOUNTER (full battles through to the victory branch). These take minutes;
     -- `./test_ui quick` (CR_UI_QUICK=1) skips them for UI-only work.
     checkDefeat()
+    checkPauseMenu()
     if os.getenv("CR_UI_QUICK") ~= "1" then
         driveEncounter("battle-new-game", { "knight", "cleric", false, false })       -- the fresh-save party, level 1
         driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" }, 4, 3)

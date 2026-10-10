@@ -45,10 +45,34 @@ local battle = {
 local iconImages = {}
 local assetsLoaded = false
 
--- Pause (Director's screenshot aid): freezes ALL simulation + animations.
--- Toggled by the top-right pause icon or the SPACE key. While paused, M.update
--- skips every system tick; draw still runs so the screen stays visible.
+-- Pause: freezes ALL simulation + animations and shows a small menu
+-- (RETURN = carry on, RETREAT = leave the battle as if it was never entered).
+-- Toggled by ESC, SPACE or the top-right icon. While paused, M.update skips
+-- every system tick; draw still runs so the screen stays visible.
 local paused = false
+local pauseHover, pausePressed = nil, nil     -- index into PAUSE_ITEMS
+
+local PAUSE_ITEMS  = { "RETURN", "RETREAT" }
+local PAUSE_MENU_W = 180
+local PAUSE_ITEM_H = 34
+local PAUSE_MENU_H = 20 + #PAUSE_ITEMS * PAUSE_ITEM_H + 20
+local PAUSE_MENU_X = math.floor((VW - PAUSE_MENU_W) / 2)
+local PAUSE_MENU_Y = math.floor((VH - PAUSE_MENU_H) / 2)
+
+-- The box around menu item i (what the hover box covers and a click hits).
+local function pauseItemRect(i)
+    local w, h = 120, 26
+    return math.floor(PAUSE_MENU_X + (PAUSE_MENU_W - w) / 2),
+           PAUSE_MENU_Y + 20 + (i - 1) * PAUSE_ITEM_H + (PAUSE_ITEM_H - h) / 2, w, h
+end
+
+local function pauseItemAt(x, y)
+    for i = 1, #PAUSE_ITEMS do
+        local ix, iy, iw, ih = pauseItemRect(i)
+        if x >= ix and x < ix + iw and y >= iy and y < iy + ih then return i end
+    end
+    return nil
+end
 
 -- Pause icon: top-right corner. 28x28 hit area, 4px from the edges.
 local PAUSE_BTN_SIZE = 28
@@ -61,6 +85,29 @@ end
 
 local switchFn
 local saveData_ref, slot_ref
+
+-- The battle can be paused until it is decided (no menu over VICTORY / DEFEAT).
+local function canPause()
+    return not (battle.victory or battle.victoryDelay or battle.defeat)
+end
+
+local function setPaused(on)
+    paused = on and canPause() or false
+    pauseHover, pausePressed = nil, nil
+    common.playClickSound()
+end
+
+-- Leave a battle that was not won (defeat or RETREAT): no rewards. The map
+-- recorded this encounter as cleared when it was entered; put it back, so the
+-- party stands in front of it again exactly as before entering.
+local function leaveUnfought()
+    local mp = saveData_ref and saveData_ref.mapProgression
+    if mp and mp.clearedEncounters and #mp.clearedEncounters > 0 then
+        table.remove(mp.clearedEncounters)
+        if slot_ref then require("save").write(slot_ref, saveData_ref) end
+    end
+    switchFn("map", saveData_ref, slot_ref)
+end
 
 -- ============================================================================
 -- WORLD INIT
@@ -180,24 +227,18 @@ local function drawScene(dt)
 
     love.graphics.setColor(1, 1, 1, 1)
 
-    -- Pause button (top-right): two bars when running, a play-triangle when
-    -- paused (the universal "click to resume" affordance).
+    -- Pause button (top-right, no frame): two bars when running, a
+    -- play-triangle when paused.
     do
         local px, py, pw, ph = pauseBtnRect()
-        love.graphics.setColor(0, 0, 0, 0.45)
-        love.graphics.rectangle("fill", px, py, pw, ph)
-        love.graphics.setColor(1, 1, 1, 0.9)
-        love.graphics.setLineWidth(1)
-        love.graphics.rectangle("line", px + 0.5, py + 0.5, pw - 1, ph - 1)
+        love.graphics.setColor(1, 1, 1, 1)
         if not paused then
-            -- Two pause bars.
             local barW, barH = 5, ph * 0.5
             local gap = 5
             local bx = px + (pw - (barW * 2 + gap)) / 2
             love.graphics.rectangle("fill", bx, py + (ph - barH) / 2, barW, barH)
             love.graphics.rectangle("fill", bx + barW + gap, py + (ph - barH) / 2, barW, barH)
         else
-            -- Play triangle (resume).
             local cx, cy = px + pw / 2, py + ph / 2
             local r = ph * 0.32
             love.graphics.polygon("fill",
@@ -207,16 +248,31 @@ local function drawScene(dt)
         end
     end
 
-    -- PAUSED overlay (subtle dim + label) so the Director knows the sim is
-    -- frozen and the screenshot is stable.
+    -- Pause menu: dim the battle, small panel in the middle.
     if paused then
-        love.graphics.setColor(0, 0, 0, 0.35)
+        love.graphics.setColor(0, 0, 0, 0.5)
         love.graphics.rectangle("fill", 0, 0, VW, VH)
-        love.graphics.setFont(battle.font)
-        local txt = "PAUSED"
-        local tw  = battle.font:getWidth(txt)
-        love.graphics.setColor(1, 1, 1, 0.9)
-        love.graphics.print(txt, (VW - tw) / 2, 14)
+        love.graphics.setColor(0, 0, 0, 1)
+        love.graphics.rectangle("fill", PAUSE_MENU_X, PAUSE_MENU_Y, PAUSE_MENU_W, PAUSE_MENU_H)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.setLineWidth(2)
+        love.graphics.rectangle("line", PAUSE_MENU_X, PAUSE_MENU_Y, PAUSE_MENU_W, PAUSE_MENU_H)
+        local f = common.loadFont(16)
+        for i, label in ipairs(PAUSE_ITEMS) do
+            local ix, iy, iw, ih = pauseItemRect(i)
+            local pressed = pausePressed == i and pauseHover == i
+            if pressed then
+                love.graphics.setColor(1, 1, 1, 1)
+                love.graphics.rectangle("fill", ix, iy, iw, ih)
+            elseif pauseHover == i then
+                love.graphics.setColor(1, 0, 0, 1)
+                love.graphics.setLineWidth(2)
+                love.graphics.rectangle("line", ix, iy, iw, ih)
+            end
+            love.graphics.setColor(pressed and common.COLOR_BLACK or common.COLOR_WHITE)
+            common.printCentered(f, label, ix, iy, iw, ih)
+        end
+        love.graphics.setColor(1, 1, 1, 1)
     end
 end
 
@@ -301,7 +357,12 @@ function M.update(dt)
     -- PAUSED: freeze all simulation + animations. Draw still runs (M.draw is
     -- separate), so the screen stays visible for screenshots. Only the pause
     -- toggle itself is still handled (in mousepressed/keypressed).
-    if paused then return end
+    if paused then
+        local hov = pauseItemAt(common.virtualMouse())
+        if hov and hov ~= pauseHover then common.playHoverSound() end
+        pauseHover = hov
+        return
+    end
 
     -- Victory screens (gold, item, XP); back to the map when dismissed.
     if battle.victory then
@@ -370,15 +431,8 @@ function M.update(dt)
 
     if battle.defeat then
         if defeat.update(battle, dt) then
-            -- Lost: no rewards, nothing taken (BH). The map recorded this
-            -- encounter as cleared when it was entered; put it back so it can
-            -- be fought again.
-            local mp = saveData_ref and saveData_ref.mapProgression
-            if mp and mp.clearedEncounters and #mp.clearedEncounters > 0 then
-                table.remove(mp.clearedEncounters)
-                if slot_ref then require("save").write(slot_ref, saveData_ref) end
-            end
-            switchFn("map", saveData_ref, slot_ref)
+            -- Lost: no rewards, nothing taken (BH); the encounter can be fought again.
+            leaveUnfought()
             return
         end
     elseif battle.victoryDelay then
@@ -412,20 +466,9 @@ function M.update(dt)
 end
 
 function M.keypressed(key)
-    -- SPACE toggles pause (works even while paused).
-    if key == "space" or key == " " then   -- LÖVE 11 reports the spacebar as "space"
-        paused = not paused
-        common.playClickSound()
-        return
-    end
-
-    if key == "escape" then
-        -- Esc unpauses if paused; otherwise retreats to the map.
-        if paused then
-            paused = false
-            return
-        end
-        switchFn("map", saveData_ref, slot_ref)
+    -- ESC or SPACE: open / close the pause menu.
+    if key == "escape" or key == "space" or key == " " then   -- LÖVE 11 reports the spacebar as "space"
+        if paused or canPause() then setPaused(not paused) end
         return
     end
 
@@ -469,13 +512,15 @@ function M.mousepressed(x, y, button)
     if button == 1 then
         local px, py, pw, ph = pauseBtnRect()
         if vmx >= px and vmx < px + pw and vmy >= py and vmy < py + ph then
-            paused = not paused
-            common.playClickSound()
+            if paused or canPause() then setPaused(not paused) end
             return
         end
     end
 
-    if paused then return end   -- while paused, ignore all other input
+    if paused then   -- while paused, only the menu takes input
+        if button == 1 then pausePressed = pauseItemAt(vmx, vmy) end
+        return
+    end
 
     if battle.victory then
         if button == 1 then victory.advance(battle) end
@@ -556,6 +601,18 @@ function M.mousepressed(x, y, button)
 end
 
 function M.mousereleased(x, y, button)
+    if paused then
+        local hit = button == 1 and pausePressed and pauseItemAt(common.virtualMouse()) == pausePressed and pausePressed
+        pausePressed = nil
+        if hit == 1 then
+            setPaused(false)                       -- RETURN
+        elseif hit == 2 then
+            common.playClickSound()                -- RETREAT
+            paused = false
+            leaveUnfought()
+        end
+        return
+    end
     if button == 2 then battle.pressedUnit = nil end
 end
 
