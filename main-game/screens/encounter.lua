@@ -14,6 +14,7 @@ local systems      = require("encounter/systems")
 local enc_mgr      = require("encounter/encounter_mgr")
 local wave_gen     = require("encounter/wave_gen")
 local victory      = require("encounter/victory")
+local defeat       = require("encounter/defeat")
 local ui           = require("encounter/ui")
 local progression  = require("progression")
 
@@ -84,6 +85,7 @@ local function initBattle(c, pfx)
     battle.deadSlots       = {}
     battle.iconScales      = {1.0, 1.0, 1.0, 1.0}
     battle.victory         = nil   -- encounter/victory.lua state once the battle is won
+    battle.defeat          = nil   -- encounter/defeat.lua state once every hero is dead
     battle.victoryDelay    = nil   -- short pause between the last kill and the victory screens
     battle.victorySnd      = nil
     battle.score           = {}    -- [unitId] = performance score (combat.addScore)
@@ -174,6 +176,7 @@ local function drawScene(dt)
     end
 
     victory.draw(battle)
+    defeat.draw(battle)
 
     love.graphics.setColor(1, 1, 1, 1)
 
@@ -365,7 +368,20 @@ function M.update(dt)
         end
     end
 
-    if battle.victoryDelay then
+    if battle.defeat then
+        if defeat.update(battle, dt) then
+            -- Lost: no rewards, nothing taken (BH). The map recorded this
+            -- encounter as cleared when it was entered; put it back so it can
+            -- be fought again.
+            local mp = saveData_ref and saveData_ref.mapProgression
+            if mp and mp.clearedEncounters and #mp.clearedEncounters > 0 then
+                table.remove(mp.clearedEncounters)
+                if slot_ref then require("save").write(slot_ref, saveData_ref) end
+            end
+            switchFn("map", saveData_ref, slot_ref)
+            return
+        end
+    elseif battle.victoryDelay then
         battle.victoryDelay = battle.victoryDelay - dt
         if battle.victoryDelay <= 0 then
             battle.victoryDelay = nil
@@ -381,6 +397,10 @@ function M.update(dt)
             if saveData_ref and slot_ref then require("save").write(slot_ref, saveData_ref) end
             victory.start(battle, result, battle.partyNames, battle.deadSlots)
         end
+    elseif enc_mgr.checkDefeat(world, battle) then
+        require("music_mgr").stop()
+        battle.selectedUnit = nil
+        defeat.start(battle)
     elseif enc_mgr.checkVictory(world, battle) then
         require("music_mgr").stop()
         if battle.victorySnd then
@@ -412,6 +432,7 @@ function M.keypressed(key)
     if paused then return end   -- while paused, ignore combat/selection keys
 
     if battle.victory then victory.advance(battle); return end
+    if battle.defeat then defeat.advance(battle); return end
 
     if key == "1" and battle.partyIds[1] and not battle.deadSlots[1] then battle.selectedUnit = battle.partyIds[1] end
     if key == "2" and battle.partyIds[2] and not battle.deadSlots[2] then battle.selectedUnit = battle.partyIds[2] end
@@ -458,6 +479,10 @@ function M.mousepressed(x, y, button)
 
     if battle.victory then
         if button == 1 then victory.advance(battle) end
+        return
+    end
+    if battle.defeat then
+        if button == 1 then defeat.advance(battle) end
         return
     end
 

@@ -17,6 +17,7 @@
 --   M.new(waves, firstDelay)  -> the manager state kept in battle.encounterMgr
 --   M.system(world, battle, dt, VW, VH)   call once per frame
 --   M.checkVictory(world, battle)
+--   M.checkDefeat(world, battle)
 
 local entities_mod = require("encounter/entities")
 local enemies      = require("data/enemies")
@@ -99,13 +100,24 @@ function M.system(world, battle, dt, VW, VH)
     end
 end
 
+local function livingHeroes(world, battle)
+    local n = 0
+    for _, pid in ipairs(battle.partyIds) do
+        -- (a dead hero's entity is destroyed after its death animation)
+        if world.entities[pid] and not world.deathState[pid] then n = n + 1 end
+    end
+    return n
+end
+
 function M.checkVictory(world, battle)
     local mgr = battle.encounterMgr
     if not (mgr and mgr.done) or livingEnemies(world) > 0 then return false end
-    for _, pid in ipairs(battle.partyIds) do
-        if not world.deathState[pid] then return true end
-    end
-    return false
+    return livingHeroes(world, battle) > 0
+end
+
+-- BH: the defeat sequence starts the moment the last hero dies.
+function M.checkDefeat(world, battle)
+    return #battle.partyIds > 0 and livingHeroes(world, battle) == 0
 end
 
 return M

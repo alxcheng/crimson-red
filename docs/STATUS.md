@@ -12,6 +12,16 @@ Knight and a Cleric, 15 gold, and Battleheart's numbers throughout. Nine classes
 (knight, brigand, champion, duelist, nomad, cleric, paladin, wizard, rogue); one enemy type.
 
 ## Done on this branch (newest first)
+- **Defeat, and enemies moving on after a kill (2026-10-09)**:
+  - *Losing a battle*: when the last hero dies the word DEFEAT appears (BH timing: 1.8 s
+    later, fade at 4.9 s, map at 6.4 s; a click skips to the fade). No rewards, nothing taken,
+    and the encounter is put back on the map to fight again (`encounter/defeat.lua`,
+    `encounter_mgr.checkDefeat`, `screens/encounter.lua`).
+  - *Bug*: an enemy stood still after its second kill. A dead hero's entity is destroyed after
+    its death animation, and code that asked "is this hero alive?" by `deathState` alone then
+    counted it as alive, so the enemy chose a hero that no longer existed. Fixed in
+    `encounter/systems.lua` (`isAlive`) and `encounter_mgr` (the same mistake could award a
+    victory to a dead party). `./test_headless` now checks it for all four enemy types.
 - **Sprite alignment, spacing, palette, background (2026-10-09)**:
   - *One size knob*: each unit row has `spriteScale`; body box, feet and sprite position are
     derived from the sprite's measured visible box (`./align_sprites` writes
@@ -90,11 +100,18 @@ Everything above. In particular, choices the Lead made that the Director has not
 11. **Shop is select-then-BUY/SELL** (one button at the bottom of the left panel), and the
     inventory is capped at 35 items (BH: 20); a won battle's item is lost if it is full (BH rule).
 12. **Recolour choices**: Cleric yellow, Paladin green, Wizard purple, Rogue dark red.
+13. **Defeat costs nothing** (as in BH): back to the map, same encounter waiting, same
+    difficulty. ESC (retreat) is unchanged: it still leaves the battle with the encounter
+    counted as cleared.
 
 Confirmed by the Director (2026-10-09): hero move speed 2.4 (`HERO_MOVE_SPEED`); Knight and
 Nomad abilities on the 15 s / 3 bar default.
 
 ## Director said (verbatim, newest first)
+- 2026-10-09: "Implement encounter lose feature. In addition. When an enemy finishes killing
+  their target, they don't retarget" (both done, see the done list).
+- 2026-10-09: "small bug, the box hover goes under the popup for encounter and shop" (the map's
+  ENCOUNTER / SHOP popup; fixed in `screens/map.lua`).
 - 2026-10-09: "shorten the stagger time for all units by 50%" (10 s -> 5 s, `STAGGER_DUR` in
   `encounter/stats.lua`) / "change the question mark icon on the map to just be the dedicool
   font ?" (done, `screens/map.lua`).

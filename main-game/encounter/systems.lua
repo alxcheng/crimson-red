@@ -185,6 +185,13 @@ local function slotGroundPoint(world, tgtId, ring, side, attackerW)
     return tp.x + ((side == 1) and -dx or dx), tp.y + ts.h / 2 + r.y
 end
 
+-- A unit is alive while it exists and is not dying. (A dead unit's entity is
+-- destroyed after its death animation, and its deathState goes with it — so
+-- "no deathState" alone does NOT mean alive.)
+local function isAlive(world, id)
+    return world.entities[id] ~= nil and not world.deathState[id]
+end
+
 local function hasActiveAction(world, id)
     local ec = world.effects_comp[id]; if not ec then return false end
     for _, eff in ipairs(ec.active) do
@@ -536,7 +543,7 @@ function M.threat(world, battle, dt)
             if ready or lost then
                 local alive = {}
                 for _, pid in ipairs(battle.partyIds) do
-                    if not world.deathState[pid] then alive[#alive + 1] = pid end
+                    if isAlive(world, pid) then alive[#alive + 1] = pid end
                 end
                 if #alive > 0 then world.entityTarget[id] = {id = alive[math.random(#alive)]} end
             end
@@ -557,7 +564,7 @@ function M.threat(world, battle, dt)
             world.entityTarget[id] = {id=bestId}
         elseif not world.entityTarget[id] then
             for _, pid in ipairs(battle.partyIds) do
-                if not world.deathState[pid] then world.entityTarget[id] = {id=pid}; break end
+                if isAlive(world, pid) then world.entityTarget[id] = {id=pid}; break end
             end
         end
         ::continue::

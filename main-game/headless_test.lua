@@ -322,6 +322,60 @@ local function tick(dt)
 end
 
 -- ============================================================================
+-- RETARGET CHECK: an enemy whose target dies must go and fight another hero,
+-- every time. One enemy, two 1-HP heroes (party slots 1 and 2) and a sturdy
+-- third far away: after killing both it has to walk over and hit the third.
+-- (Slot 1's body has vanished by the time slot 2 dies: a vanished hero must
+-- not be picked as a target.)
+-- ============================================================================
+local retargetFailed = nil
+local function checkRetarget(enemyName, verbose)
+    buildWorld(); buildBattle()
+    local victim = entities_mod.createHero(world, battle, "knight", 300, 230, nil)
+    local second = entities_mod.createHero(world, battle, "cleric", 150, 230, nil)
+    local other  = entities_mod.createHero(world, battle, "champion", 620, 300, nil)
+    battle.partyIds = {victim, second, other}
+    for _, pid in ipairs(battle.partyIds) do world.moveTarget[pid].active = false end
+    local foe = entities_mod.createEnemy(world, battle, enemyName, 340, 230)
+    world.targetSide[foe] = 0
+    world.spawnFade[foe]  = nil                -- (encounter_mgr normally finishes the fade-in)
+    world.stats[victim].HP.base = 1
+    world.stats[second].HP.base = 1
+    world.stats[other].HP.base, world.stats[other].maxHP.base = 99999, 99999
+    world.threatMap[foe].map[victim] = 50      -- as if the knight had been fighting it
+
+    local hitsOnOther, realHit = 0, combat.registerHit
+    combat.registerHit = function(w, b, src, tgt, ...)
+        if src == foe and tgt == other then hitsOnOther = hitsOnOther + 1 end
+        return realHit(w, b, src, tgt, ...)
+    end
+    for f = 1, 60 * 40 do
+        particles.updateBlood(battle, DT, GRAVITY)
+        systems.targetFollow(world)
+        skills_mod.autoAttackSystem(world)
+        skills_mod.system(world, battle, DT)
+        effects_mod.system(world, battle, DT)
+        status_mod.system(world, battle, DT)
+        systems.stagger(world, DT)
+        systems.stunSystem(world, DT)
+        systems.threat(world, battle, DT)
+        systems.moveTarget(world, DT)
+        systems.physics(world, DT, VW, VH - RES_BAR_AREA_H, BATTLE_LINE_Y, FRICTION, MASS)
+        systems.updateFacing(world)
+        systems.death(world, battle, DT)
+        if verbose and f % 60 == 0 then
+            local p, et, mt = world.position[foe], world.entityTarget[foe], world.moveTarget[foe]
+            print(string.format("  t=%2d foe=(%.0f,%.0f) target=%s moving=%s victimDead=%s hits=%d",
+                f / 60, p.x, p.y, tostring(et and et.id), tostring(mt and mt.active),
+                tostring(world.deathState[victim] ~= nil), hitsOnOther))
+        end
+        if hitsOnOther > 0 then break end
+    end
+    combat.registerHit = realHit
+    return hitsOnOther > 0
+end
+
+-- ============================================================================
 -- PUBLIC ENTRY (called by main.lua when CR_TEST_SCENE=headless)
 -- ============================================================================
 local M = {}
@@ -329,6 +383,16 @@ local M = {}
 function M.load()
     print("HEADLESS start: building world (SCALE=" .. string.format("%.3f", SCALE) .. " GRAVITY=" .. string.format("%.1f", GRAVITY) .. ")")
     math.randomseed(12345)   -- determinism: reproducible crits / random targets
+    for _, name in ipairs({"skeleton", "goblin", "mushroom", "bat"}) do
+        if not checkRetarget(name) then
+            retargetFailed = (retargetFailed and retargetFailed .. ", " or "") .. name
+        end
+    end
+    if retargetFailed then
+        errors = errors + 1
+        firstErr = "enemy did not move on to another hero after a kill: " .. retargetFailed
+    end
+    print("HEADLESS retarget after a kill: " .. (retargetFailed and ("FAIL " .. retargetFailed) or "ok"))
     buildWorld()
     buildBattle()
     instrumentCombat()

@@ -64,6 +64,7 @@ Flow: `title` → `save_select` → `map` ⇄ `party_select` / `talents` / `equi
 | `encounter_mgr.lua` | BH's wave spawner (one enemy at a time, `maxEnemies` cap, wave after wave) and the victory check. The rules are at the top of the file. |
 | `wave_gen.lua` | Makes up a battle's waves (procedural). All difficulty knobs are in its `TUNING` table. |
 | `victory.lua` | The three screens after a win: VICTORY, SPOILS (gold + the one item), EXPERIENCE (bars, level-ups). |
+| `defeat.lua` | When every hero is dead: DEFEAT, fade, back to the map. No rewards; the encounter can be fought again. |
 | `anim.lua`, `particles.lua`, `ui.lua` | Sprite animation, blood/heal particles, health bars + skill icons + resource bar. |
 
 `screens/encounter.lua` owns one battle: it creates the world, spawns the party, calls the

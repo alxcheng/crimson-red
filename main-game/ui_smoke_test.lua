@@ -475,6 +475,43 @@ local function driveEncounter(tag, party, level, tier)
     if (tier or 1) >= 2 then check(seenTypes.ranged, tag .. ": a ranged enemy (bat) appeared at tier " .. tier) end
 end
 
+-- Losing: one hero with 1 HP. DEFEAT must show, then the game returns to the
+-- map with no rewards and the encounter still there to fight again.
+local function checkDefeat()
+    local tag = "defeat"
+    local scr = require("screens/encounter")
+    local sd = fixtureFresh()
+    sd.partyOrder = { "knight", false, false, false }
+    sd.mapProgression = sd.mapProgression or {}
+    sd.mapProgression.clearedEncounters = { { 1, 1 }, { 2, 1 } }   -- the 2nd is the one being fought
+    local gold0, inv0 = sd.gold, #sd.inventory
+    local rec = sd.unlockedCharacters.knight
+    local level0, xp0 = rec.level, rec.pointsToNextLevel
+    switched = nil
+    if not guard(tag .. " onEnter", scr.onEnter, canvas, postfx, switchFn, sd, 99, { spawnDelay = 0.5 }) then return end
+    local world, battle = scr.debugState()
+    world.stats[battle.partyIds[1]].HP.base = 1
+    local frame, shot, sawVictory = 0, false, false
+    while frame < 120 * 60 and not switched do
+        frame = frame + 1
+        guard(tag .. " update", scr.update, 1 / 60)
+        if battle.victory or battle.victoryDelay then sawVictory = true end
+        if frame % 30 == 0 then guard(tag .. " draw", scr.draw) end
+        if battle.defeat and battle.defeat.t >= 2.6 and not shot then
+            shot = true
+            guard(tag .. " draw", scr.draw)
+            screenshot(tag .. "-1-banner")
+        end
+    end
+    if scr.onExit then guard(tag .. " onExit", scr.onExit) end
+    check(shot, tag .. ": DEFEAT is shown when every hero is dead")
+    check(switched ~= nil and switched.name == "map", tag .. ": defeat returns to the map (" .. string.format("%.0fs", frame / 60) .. ")")
+    check(not sawVictory, tag .. ": a lost battle never shows the victory screens")
+    check(sd.gold == gold0 and #sd.inventory == inv0 and rec.level == level0 and rec.pointsToNextLevel == xp0,
+          tag .. ": defeat gives no gold, item or XP and takes nothing")
+    check(#sd.mapProgression.clearedEncounters == 1, tag .. ": the lost encounter is put back on the map")
+end
+
 -- Combat rules checked on a controlled duel: one knight, one unkillable goblin.
 -- Sprite alignment: every unit type in a row with its body box shown. Checks the
 -- maths (box = measured visible box x spriteScale) and saves a screenshot to LOOK at:
@@ -866,6 +903,7 @@ local function runAll()
 
     -- ENCOUNTER (full battles through to the victory branch). These take minutes;
     -- `./test_ui quick` (CR_UI_QUICK=1) skips them for UI-only work.
+    checkDefeat()
     if os.getenv("CR_UI_QUICK") ~= "1" then
         driveEncounter("battle-new-game", { "knight", "cleric", false, false })       -- the fresh-save party, level 1
         driveEncounter("battle-bh-classes", { "paladin", "cleric", "wizard", "rogue" }, 4, 3)
